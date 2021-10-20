@@ -11,36 +11,18 @@ import importlib
 importlib.reload(conFig)
 from conFig import *
 
-def get():
-    '''
-    Refactor this code to get it from the batch number set in config.
-    '''
+batch_to_render = 1
 
-    ledger = json.load(open(batch_path))
+def getBatchData():
+    file_name = os.path.join(json_save_path, "Batch{}.json".format(batch_to_render))
+    batch = json.load(open(file_name))
+    NFTs_in_Batch = batch["NFTs_in_Batch"]
+    variantMetaData = batch["variantMetaData"]
+    BatchDNAList = batch["BatchDNAList"]
 
-    lastLognum = list(ledger)[-1]
+    return NFTs_in_Batch, variantMetaData, BatchDNAList
 
-    newestBatchDataDictionary = ledger[lastLognum]
-
-    numNFTs = newestBatchDataDictionary['numNFTs_in_Batch']
-
-    dnaDictionary = newestBatchDataDictionary['dnaDictionary']
-
-    variantMetaData = newestBatchDataDictionary['variantMetaData']
-
-    print("")
-    print("Generating PNGs of batch #" + str(lastLognum) + ".")
-    print("This batch contains " + str(numNFTs) + " strands of NFT DNA>")
-    print("")
-    print("The DNA strands and their attributes in this batch are as follows: ")
-    print("")
-    print(dnaDictionary)
-    print("")
-
-
-    return dnaDictionary, numNFTs, variantMetaData
-
-dnaDictionary, numNFTs, variantMetaData = getNumNFTs()
+NFTs_in_Batch, variantMetaData, BatchDNAList = getBatchData()
 
 def render_and_save_NFTs(name):
     '''
@@ -54,22 +36,37 @@ def render_and_save_NFTs(name):
         bpy.data.collections[i].hide_render = True
         bpy.data.collections[i].hide_viewport = True
 
+    def match_DNA_to_Variant():
 
-    for a in dnaDictionary:
-        ''' a is a single dna strand in dnaDictionary, attributeVarients are the variants of that DNA strand'''
-        attributeVariants = dnaDictionary[a]
+        for i in BatchDNAList:
+            dna_Decunstructed  = i.split('-')
+
+
+            print(dna_Decunstructed)
+            print("")
+        print("")
+        print(variantMetaData)
+    match_DNA_to_Variant()
+
+
+    '''
+
+
+
+
+
+
+    for a in BatchDNAList:
+        a is a single dna strand in dnaDictionary, attributeVarients are the variants of that DNA strand
+        attributeVariants = BatchDNAList[a]
         print("")
         print("----------NFT----------")
         print("DNA attribute list:")
-        print(dnaDictionary[a])
+        print(BatchDNAList[a])
         print("DNA Code:")
         print(a)
         print("")
 
-        x = list(dnaDictionary).index(a)
-        for i in variantMetaData:
-            bpy.data.collections[i].hide_render = True
-            bpy.data.collections[i].hide_viewport = True
 
         for b in list(attributeVariants):
             bpy.data.collections[b].hide_render = False
@@ -81,6 +78,7 @@ def render_and_save_NFTs(name):
 
     print("")
     print("All NFT PNGs generated, process finished.")
+    '''
 
 render_and_save_NFTs("NFTBattleStation")
 

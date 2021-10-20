@@ -147,6 +147,7 @@ def generateNFT_DNA(variantMetaData, possibleCombinations):
 
    #Data stored in batchDataDictionary:
    batchDataDictionary["numNFTsGenerated"] = possibleCombinations
+   batchDataDictionary["hierarchy"] = hierarchy
    batchDataDictionary["variantMetaData"] = variantMetaData
    batchDataDictionary["DNAList"] = allDNAstr
    return batchDataDictionary
@@ -206,5 +207,4 @@ def clearNFTRecord(AREYOUSURE):
       with open(file_name, 'w') as outfile:
          ledger.clear()
          outfile.close()
-
 #clearNFTRecord()

@@ -1,0 +1,127 @@
+{
+ "NFTs_in_Batch": 10,
+ "hierarchy": {
+  "AreaLight": [
+   "BobisAlive_1_0",
+   "AreaLight_2_0"
+  ],
+  "Cube": [
+   "Cube_1_0",
+   "Cube_2_0"
+  ],
+  "Curve": [
+   "Curve_1_0",
+   "Curve_2_0"
+  ],
+  "PointLight": [
+   "PointLight_1_0",
+   "PointLight_2_0"
+  ],
+  "Sphere": [
+   "Sphere_1_0",
+   "Sphere_2_0"
+  ],
+  "Text": [
+   "Text_1_0",
+   "Text_2_0"
+  ]
+ },
+ "variantMetaData": {
+  "AreaLight_2_0": {
+   "fullName": "AreaLight_2_0",
+   "name": "AreaLight",
+   "number": "2",
+   "rarity": "0",
+   "parentCollection": "AreaLight"
+  },
+  "BobisAlive_1_0": {
+   "fullName": "BobisAlive_1_0",
+   "name": "BobisAlive",
+   "number": "1",
+   "rarity": "0",
+   "parentCollection": "AreaLight"
+  },
+  "Cube_1_0": {
+   "fullName": "Cube_1_0",
+   "name": "Cube",
+   "number": "1",
+   "rarity": "0",
+   "parentCollection": "Cube"
+  },
+  "Cube_2_0": {
+   "fullName": "Cube_2_0",
+   "name": "Cube",
+   "number": "2",
+   "rarity": "0",
+   "parentCollection": "Cube"
+  },
+  "Curve_1_0": {
+   "fullName": "Curve_1_0",
+   "name": "Curve",
+   "number": "1",
+   "rarity": "0",
+   "parentCollection": "Curve"
+  },
+  "Curve_2_0": {
+   "fullName": "Curve_2_0",
+   "name": "Curve",
+   "number": "2",
+   "rarity": "0",
+   "parentCollection": "Curve"
+  },
+  "PointLight_1_0": {
+   "fullName": "PointLight_1_0",
+   "name": "PointLight",
+   "number": "1",
+   "rarity": "0",
+   "parentCollection": "PointLight"
+  },
+  "PointLight_2_0": {
+   "fullName": "PointLight_2_0",
+   "name": "PointLight",
+   "number": "2",
+   "rarity": "0",
+   "parentCollection": "PointLight"
+  },
+  "Sphere_1_0": {
+   "fullName": "Sphere_1_0",
+   "name": "Sphere",
+   "number": "1",
+   "rarity": "0",
+   "parentCollection": "Sphere"
+  },
+  "Sphere_2_0": {
+   "fullName": "Sphere_2_0",
+   "name": "Sphere",
+   "number": "2",
+   "rarity": "0",
+   "parentCollection": "Sphere"
+  },
+  "Text_1_0": {
+   "fullName": "Text_1_0",
+   "name": "Text",
+   "number": "1",
+   "rarity": "0",
+   "parentCollection": "Text"
+  },
+  "Text_2_0": {
+   "fullName": "Text_2_0",
+   "name": "Text",
+   "number": "2",
+   "rarity": "0",
+   "parentCollection": "Text"
+  }
+ },
+ "BatchDNAList": [
+  "2-2-1-1-1-2",
+  "1-1-1-2-1-2",
+  "1-2-2-2-1-1",
+  "2-2-1-1-2-1",
+  "1-2-1-1-1-2",
+  "2-2-2-2-1-2",
+  "2-1-2-1-2-2",
+  "1-1-1-2-2-2",
+  "1-1-2-2-2-2",
+  "2-1-1-2-2-2"
+ ]
+}
