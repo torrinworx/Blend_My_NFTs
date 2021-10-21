@@ -69,13 +69,3 @@ incompleteBatch = json.dumps(incompleteBatch, indent=1, ensure_ascii=True)
 
 with open(json_save_path + ("/Batch{}.json".format(i+1)), "w") as outfile2:
       outfile2.write(incompleteBatch)
-
-
-
-
-
-
-
-
-
-

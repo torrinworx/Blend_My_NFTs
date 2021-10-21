@@ -115,6 +115,13 @@ def returnData():
 
 listAllCollections, attributeCollections, attributeCollections1, hierarchy, variantMetaData, possibleCombinations = returnData()
 
+print("hierarchy:")
+print(hierarchy)
+print("")
+print("")
+
+
+
 def generateNFT_DNA(variantMetaData, possibleCombinations):
    '''
    :param variantMetaData: The variantMetaData
@@ -154,6 +161,10 @@ def generateNFT_DNA(variantMetaData, possibleCombinations):
 
 DataDictionary = generateNFT_DNA(variantMetaData, possibleCombinations)
 
+print(DataDictionary)
+print("")
+
+
 def sendToJSON():
    '''
    Sends 'batchDataDictionary' dictionary to the NFTRecord.json file.
@@ -178,7 +189,7 @@ def sendToJSON():
    print("༼ ºل͟º ༼ ºل͟º ༼ ºل͟º ༽ ºل͟º ༽ ºل͟º ༽")
    print("")
 
-sendToJSON()
+#sendToJSON()
 
 '''Utility functions:'''
 
