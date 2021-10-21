@@ -116,7 +116,7 @@ def returnData():
 listAllCollections, attributeCollections, attributeCollections1, hierarchy, variantMetaData, possibleCombinations = returnData()
 
 print("hierarchy:")
-print(hierarchy)
+#print(hierarchy)
 print("")
 print("")
 
@@ -161,7 +161,7 @@ def generateNFT_DNA(variantMetaData, possibleCombinations):
 
 DataDictionary = generateNFT_DNA(variantMetaData, possibleCombinations)
 
-print(DataDictionary)
+#print(DataDictionary)
 print("")
 
 
