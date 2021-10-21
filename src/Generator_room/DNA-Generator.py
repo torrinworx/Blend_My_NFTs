@@ -115,12 +115,6 @@ def returnData():
 
 listAllCollections, attributeCollections, attributeCollections1, hierarchy, variantMetaData, possibleCombinations = returnData()
 
-print("hierarchy:")
-#print(hierarchy)
-print("")
-print("")
-
-
 
 def generateNFT_DNA(variantMetaData, possibleCombinations):
    '''
@@ -160,10 +154,6 @@ def generateNFT_DNA(variantMetaData, possibleCombinations):
    return batchDataDictionary
 
 DataDictionary = generateNFT_DNA(variantMetaData, possibleCombinations)
-
-#print(DataDictionary)
-print("")
-
 
 def sendToJSON():
    '''
