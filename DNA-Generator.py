@@ -199,3 +199,6 @@ def clearNFTRecord(AREYOUSURE):
          ledger.clear()
          outfile.close()
 #clearNFTRecord()
+
+
+print("Testing if .gitignore works with the .blend file")
