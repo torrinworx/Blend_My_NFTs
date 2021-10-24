@@ -4,7 +4,9 @@
 
 # The number of NFTs desired to be minted:
 numNFTs = 96
-nftsPerBatch = None
+nftsPerBatch = 5
+renderBatch = 1
+imageName = "ThisCozyPlace"
 
 # The path to the "Blender_Image_Generator" file
 

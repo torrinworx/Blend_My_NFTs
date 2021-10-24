@@ -149,8 +149,6 @@ def generateNFT_DNA(possibleCombinations):
 
 DataDictionary = generateNFT_DNA(possibleCombinations)
 
-print(DataDictionary)
-
 def send_To_Record_JSON():
    '''
    Sends 'batchDataDictionary' dictionary to the NFTRecord.json file.

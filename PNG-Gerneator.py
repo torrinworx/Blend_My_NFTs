@@ -5,26 +5,26 @@ import sys
 dir = os.path.dirname(bpy.data.filepath)
 sys.path.append(dir)
 
+import time
 import json
 import conFig
 import importlib
 importlib.reload(conFig)
 from conFig import *
 
-batch_to_render = 1
-
 def getBatchData():
-    file_name = os.path.join(json_save_path, "Batch{}.json".format(batch_to_render))
+    file_name = os.path.join(batch_path, "Batch{}.json".format(renderBatch))
     batch = json.load(open(file_name))
+    
     NFTs_in_Batch = batch["NFTs_in_Batch"]
-    variantMetaData = batch["variantMetaData"]
+    hierarchy = batch["hierarchy"]
     BatchDNAList = batch["BatchDNAList"]
 
-    return NFTs_in_Batch, variantMetaData, BatchDNAList
+    return NFTs_in_Batch, hierarchy, BatchDNAList
 
-NFTs_in_Batch, variantMetaData, BatchDNAList = getBatchData()
+NFTs_in_Batch, hierarchy, BatchDNAList = getBatchData()
 
-def render_and_save_NFTs(name):
+def render_and_save_NFTs():
     '''
     This function will generate a set number of NFTs based on the number of DNA and DNAlist variables in the NFTBatch.json
     file. This function will write to the NFTLedger.json file with the produced batch of NFTs at the end. It will produce
@@ -32,53 +32,53 @@ def render_and_save_NFTs(name):
     made.
     '''
 
-    for i in variantMetaData:
-        bpy.data.collections[i].hide_render = True
-        bpy.data.collections[i].hide_viewport = True
-
-    def match_DNA_to_Variant():
-
-        for i in BatchDNAList:
-            dna_Decunstructed  = i.split('-')
-
-
-            print(dna_Decunstructed)
-            print("")
-        print("")
-        print(variantMetaData)
-    match_DNA_to_Variant()
-
-
-    '''
-
-
-
-
-
-
+    x = 1
     for a in BatchDNAList:
-        a is a single dna strand in dnaDictionary, attributeVarients are the variants of that DNA strand
-        attributeVariants = BatchDNAList[a]
+        time_start = time.time()
+
+        for i in hierarchy:
+            for j in hierarchy[i]:
+                bpy.data.collections[j].hide_render = True
+                bpy.data.collections[j].hide_viewport = True
+
+        def match_DNA_to_Variant(a):
+            listAttributes = list(hierarchy.keys())
+            listDnaDecunstructed  = a.split('-')
+            dnaDictionary = {}
+
+            for i,j in zip(listAttributes,listDnaDecunstructed):
+                dnaDictionary[i] = j
+
+            for x in dnaDictionary:
+                for k in hierarchy[x]:
+                    kNum = hierarchy[x][k]["number"]
+                    if kNum == dnaDictionary[x]:
+                        dnaDictionary.update({x:k})
+            return dnaDictionary
+        dnaDictionary = match_DNA_to_Variant(a)
+
+        name = imageName + str(x)
+
         print("")
-        print("----------NFT----------")
+        print("----------Rendering New NFT----------")
         print("DNA attribute list:")
-        print(BatchDNAList[a])
+        print(list(dnaDictionary.items()))
         print("DNA Code:")
         print(a)
         print("")
 
+        for c in dnaDictionary:
+            collection = dnaDictionary[c]
+            bpy.data.collections[collection].hide_render = False
+            bpy.data.collections[collection].hide_viewport = False
 
-        for b in list(attributeVariants):
-            bpy.data.collections[b].hide_render = False
-            bpy.data.collections[b].hide_viewport = False
-
-        bpy.context.scene.render.filepath = "/Users/torrinleonard/Desktop/Blender_Image_Generator/NFT-Images-Test-Folder/{}.jpeg".format(
-            name + str(x))
+        bpy.context.scene.render.filepath = images_path + "/{}.jpeg".format(name)
         bpy.ops.render.render(write_still=True)
+        print("Completed {} render. Time: ".format(name) + "%.4f seconds" % (time.time() - time_start))
+        x += 1
 
     print("")
     print("All NFT PNGs generated, process finished.")
-    '''
-
-render_and_save_NFTs("NFTBattleStation")
+    print("")
+render_and_save_NFTs()
 
