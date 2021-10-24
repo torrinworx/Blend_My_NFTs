@@ -46,15 +46,48 @@ def returnData():
    attributeVariants = [x for x in listAllCollections if x not in attributeCollections]
    attributeCollections1 = copy.deepcopy(attributeCollections)
 
+   def attributeData(attributeVariants):
+      allAttDataList = {}
+      for i in attributeVariants:
+
+         def getStr(i):
+            name_1 = re.sub(r'[^a-zA-Z]', "", i)
+            return name_1
+
+         def getOrder_rarity(i):
+            x = re.sub(r'[a-zA-Z]', "", i)
+            a = x.split("_")
+            del a[0]
+            return list(a)
+
+         name = getStr(i)
+         orderRarity = getOrder_rarity(i)
+         number = orderRarity[0]
+         rarity = orderRarity[1]
+
+         eachObject = {"name": name, "number": number, "rarity": rarity}
+
+         allAttDataList[i] = eachObject
+      return allAttDataList
+
+   variantMetaData = attributeData(attributeVariants)
+
    def getChildren():
-      parentDictionary = {}
+      hierarchy = {}
       for i in attributeCollections1:
          colParLong = list(bpy.data.collections[str(i)].children)
-         colParShort =[]
+         colParShort = {}
          for x in colParLong:
-            colParShort.append(x.name)
-         parentDictionary[i] = colParShort
-      return parentDictionary
+            colParShort[x.name] = None
+         hierarchy[i] = colParShort
+
+      for a in hierarchy:
+         for b in hierarchy[a]:
+            for x in variantMetaData:
+               if str(x) == str(b):
+                  (hierarchy[a])[b] = variantMetaData[x]
+
+      return hierarchy
 
    hierarchy = getChildren()
 
@@ -69,56 +102,18 @@ def returnData():
 
    possibleCombinations = numOfCombinations(hierarchy)
 
-   def attributeData(attributeVariants):
-      allAttDataList = {}
-      for i in attributeVariants:
-
-         def getParent(i):
-            parent = ""
-            for w in hierarchy:
-               listChild = hierarchy[w]
-               if i in listChild:
-                  parent = w
-
-            return parent
-
-         def getStr(i):
-            name_1 = re.sub(r'[^a-zA-Z]', "", i)
-            return name_1
-
-         def getOrder_rarity(i):
-            x = re.sub(r'[a-zA-Z]', "", i)
-            a = x.split("_")
-            del a[0]
-            return list(a)
-
-         fullName = i
-         name = getStr(i)
-         orderRarity = getOrder_rarity(i)
-         number = orderRarity[0]
-         rarity = orderRarity[1]
-         parentCollection = getParent(i)
-
-         eachObject = {"fullName": fullName, "name": name, "number": number, "rarity": rarity, "parentCollection": parentCollection}
-
-         allAttDataList[fullName] = eachObject
-      return allAttDataList
-
-   variantMetaData = attributeData(attributeVariants)
-
    for i in variantMetaData:
       def cameraToggle(i,toggle = True):
          bpy.data.collections[i].hide_render = toggle
          bpy.data.collections[i].hide_viewport = toggle
       cameraToggle(i)
-   return listAllCollections, attributeCollections, attributeCollections1, hierarchy, variantMetaData, possibleCombinations
 
-listAllCollections, attributeCollections, attributeCollections1, hierarchy, variantMetaData, possibleCombinations = returnData()
+   return listAllCollections, attributeCollections, attributeCollections1, hierarchy, possibleCombinations
 
+listAllCollections, attributeCollections, attributeCollections1, hierarchy, possibleCombinations = returnData()
 
-def generateNFT_DNA(variantMetaData, possibleCombinations):
+def generateNFT_DNA(possibleCombinations):
    '''
-   :param variantMetaData: The variantMetaData
    :return: the batch dictionary of the NFT's being created, there dna, and attributes
    '''
    batchDataDictionary = {}
@@ -149,28 +144,21 @@ def generateNFT_DNA(variantMetaData, possibleCombinations):
    #Data stored in batchDataDictionary:
    batchDataDictionary["numNFTsGenerated"] = possibleCombinations
    batchDataDictionary["hierarchy"] = hierarchy
-   batchDataDictionary["variantMetaData"] = variantMetaData
    batchDataDictionary["DNAList"] = allDNAstr
    return batchDataDictionary
 
-DataDictionary = generateNFT_DNA(variantMetaData, possibleCombinations)
+DataDictionary = generateNFT_DNA(possibleCombinations)
 
-def sendToJSON():
+def send_To_Record_JSON():
    '''
    Sends 'batchDataDictionary' dictionary to the NFTRecord.json file.
    '''
-   file_name = os.path.join(save_path, "NFTRecord.json")
-   ledger = json.load(open(file_name))
 
-   num = 1
-   for i in ledger:
-      num += 1
-   ledger[num] = DataDictionary
+   ledger = json.dumps(DataDictionary, indent=1, ensure_ascii=True)
 
-   ledger = json.dumps(ledger, indent=1, ensure_ascii=True)
-
-   with open(file_name, 'w') as outfile:
+   with open(os.path.join(save_path, "NFTRecord.json"), 'w') as outfile:
       outfile.write(ledger + '\n')
+
    print("")
    print("All possible combinations of DNA sent to NFTRecord.json with " + str(possibleCombinations) + "\nNFT DNA sequences generated in %.4f seconds" % (time.time() - time_start))
    print("")
@@ -179,7 +167,7 @@ def sendToJSON():
    print("༼ ºل͟º ༼ ºل͟º ༼ ºل͟º ༽ ºل͟º ༽ ºل͟º ༽")
    print("")
 
-#sendToJSON()
+send_To_Record_JSON()
 
 '''Utility functions:'''
 

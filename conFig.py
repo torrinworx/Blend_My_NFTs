@@ -4,11 +4,12 @@
 
 # The number of NFTs desired to be minted:
 numNFTs = 96
-batch_file_name = 'Batch1'
-nftsPerBatch = None
+nftsPerBatch = 5
+renderBatch = 1
+imageName = "ThisCozyPlace"
 
 # The path to the "Blender_Image_Generator" file
 
-save_path = '/Users/torrinleonard/Desktop/Blender_Image_Generator'
-json_save_path = '/Users/torrinleonard/Desktop/Blender_Image_Generator/Json-folder'
-batch_path = '/Users/torrinleonard/Desktop/Blender_Image_Generator/Json-folder/{}'.format(batch_file_name)
+save_path = '/Users/torrinleonard/Desktop/Blend_My_NFTs'
+batch_path = '/Users/torrinleonard/Desktop/Blend_My_NFTs/Batch_Json_files'
+images_path = '/Users/torrinleonard/Desktop/Blend_My_NFTs/Images from PNG Generator'
