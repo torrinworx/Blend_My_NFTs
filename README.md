@@ -4,6 +4,26 @@
 ## Description
 This project is a work in progress (as of Oct 24th, 2021) and will eventually be an add on to Blender. Blend_My_NFTs is bing developed to create the NFT project This Cozy Place. This Cozy Place will be an NFT collection with a total of 10000 unique NFTs all rendered in Blender with this add on. If you need help with your project please visit our discord server: https://discord.gg/UpZt5Un57t. If you are looking to buy your own Cozy Place NFT, please visit ThisCozyPlace.com
 
+## Disclaimer
+
+Nothing in this repository is financial advice. Create an NFT project/collection at your own risk, I am simply providing a means of acomplishing a goal, not investment/financial information about that goal. Do your own research before spending money on NFTs or any asset. 
+
+I do not garuntee this software will work with your setup. There are many variables and factors that go into running the scripts provided, it differs from system to system, and from blend file to blend file. I encourage you to do some trouble shooting, read the Blender API documentation, or if your desperate, risk it all on the Blender Stack Exchange. 
+
+If you need help I am available on the disord channel above for consulting. However! I am not a toutor, although I enjoy teaching people, I simply do not have the time to work, build this project, teach people Blender/Python, and live my life. So please respect my time, I'd love to help.
+
+If building an NFT collection in blender is something you really want to do and you have experience with Blender, I suggest you get familiar with Python and the Blender API. However if you don't use Blender, how did you find this repository? Like seriously, how? You must be lost... I think Reddit was the other way...
+
+To be honest I have no idea how to use Blender. I know some basic things, but I know the API a lot better. This is my first Blender/Python project, so you may be wondering "how is he making a NFT collection with Blender??" Well I'm not, I write the code for the image generator, my team has three other members; Devlin and Caelin, who create the scenes and models in Blender and do magic with it, and the third is Quinn who is the web developer for the our site and makes everything look all pretty. 
+
+This page is not finished! I don't know how long it will take to make this tutorial page, but it shouldn't be to long. (As of Oct 24th, 2021)
+
+I garuntee this will be an add on to Blender and not just a script you run through the script editor. This will take some time, as of Oct 24th 2020 I am still wrking out some user friendly issues with the software, and some kinks, but other than that we are a go for the add on phase. (I mostly just put this in here for motivation, please don't pester me about the date lol)
+
+If you are interested in helping out develop the image generator, please feel free to message me on the discord above would love to collaborate with you to improve my bad code! 
+
+# Guide to Blend_My_NFTs
+
 ## Blender API
 This Blender add on heaviliy relies on the Blender API and its documentation which you can find here: https://docs.blender.org/api/current/index.html
 
