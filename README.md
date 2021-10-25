@@ -4,6 +4,8 @@
 ## Description
 This project is a work in progress (as of Oct 24th, 2021) and will eventually be an add on to Blender. Blend_My_NFTs is bing developed to create the NFT project This Cozy Place. This Cozy Place will be an NFT collection with a total of 10000 unique NFTs all rendered in Blender with this add on. If you need help with your project please visit our discord server: https://discord.gg/UpZt5Un57t. If you are looking to buy your own Cozy Place NFT, please visit ThisCozyPlace.com
 
+## Blender API
+This Blender add on heaviliy relies on the Blender API and its documentation which you can find here: https://docs.blender.org/api/current/index.html
 
 ## Terminology 
 Before we can continue there are a few terms that I will be using to describe the process of this program and make it a bit easier to understand. Please refer to this section if you come accross an unfamiliar term. 
@@ -34,4 +36,14 @@ Here is an example of the collection format I used to create this script in my .
 <img width="422" alt="Screen Shot 2021-10-24 at 8 37 35 PM" src="https://user-images.githubusercontent.com/82110564/138619320-80a9f2a7-719a-46bc-b1cf-0e19dd4d640d.png">
 
 **Important Note**
-Your .blend file must be inside the Blend_My_NFTs folder. When you run the script, the .blend file must have the same directory of the Blend_My_NFTs folder. 
+Your .blend file must be inside the Blend_My_NFTs folder. When you run the script, the .blend file must have the same directory of the Blend_My_NFTs folder. The Blender text editor has some weird quirks that make finding the right directory a bit tricky, I suggest reading about it in the Blender API above. 
+
+## How to run scripts in Blender
+If you have no experience with Blender, python, or the Blender API, please watch this tutorial for basic Blender Python information: https://www.youtube.com/watch?v=cyt0O7saU4Q There is also helpful documentation in the Blender API about running scripts here: https://docs.blender.org/api/current/info_quickstart.html#running-scripts
+
+First open the Scripting tab in the menu of Blender: 
+<img width="1440" alt="Screen Shot 2021-10-24 at 9 51 25 PM" src="https://user-images.githubusercontent.com/82110564/138623488-9d0efc07-4004-4d3a-a7fe-25cb6050ac51.png">
+
+Next 
+
+
