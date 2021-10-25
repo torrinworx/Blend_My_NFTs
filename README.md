@@ -1,11 +1,11 @@
 # Blend_My_NFTs
 
 
-# Description
+## Description
 This project is a work in progress (as of Oct 24th, 2021) and will eventually be an add on to Blender. Blend_My_NFTs is bing developed to create the NFT project This Cozy Place. This Cozy Place will be an NFT collection with a total of 10000 unique NFTs all rendered in Blender with this add on. If you need help with your project please visit our discord server: https://discord.gg/UpZt5Un57t. If you are looking to buy your own Cozy Place NFT, please visit ThisCozyPlace.com
 
 
-# Terminology 
+## Terminology 
 Before we can continue there are a few terms that I will be using to describe the process of this program and make it a bit easier to understand. Please refer to this section if you come accross an unfamiliar term. 
 
 For the following two terms, lets say you have an NFT where the image is of a person wearing a hat:
@@ -17,7 +17,7 @@ For the following two terms, lets say you have an NFT where the image is of a pe
 **- DNA** - DNA is a sequence of numbers that determins what Variant from every Attribute to include in a single NFT image. 
 
 
-# How to set up Collections in your .Blend file
+## How to set up Collections in your .Blend file
 
 In order for Blend_My_NFTs to read your .blend file, you need to structure your scene in a certain way. Please follow all naming conventions exactly, otherwise the scripts will not run properly. 
 
