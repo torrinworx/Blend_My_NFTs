@@ -14,7 +14,7 @@ If you need help I am available on the disord channel above for consulting. Howe
 
 If building an NFT collection in blender is something you really want to do and you have experience with Blender, I suggest you get familiar with Python and the Blender API. However if you don't use Blender, how did you find this repository? Like seriously, how? You must be lost... I think Reddit was the other way...
 
-To be honest I have no idea how to use Blender. I know some basic things, but I know the API a lot better. This is my first Blender/Python project, so you may be wondering "how is he making a NFT collection with Blender??" Well I'm not, I write the code for the image generator, my team has three other members; Devlin and Caelin, who create the scenes and models in Blender and do magic with it, and the third is Quinn who is the web developer for the our site and makes everything look all pretty. 
+To be honest I have no idea how to use Blender. I know some basic things, but I know the API a lot better. This is my first Blender/Python project, so you may be wondering "how is he making a NFT collection with Blender??" Well I'm not, I write the code for the image generator, my team has three other members; Devlin and Caelin, who create the scenes and models in Blender and do magic with it, and the third is Quinn who is the web developer for our site and makes everything look all pretty. 
 
 This page is not finished! I don't know how long it will take to make this tutorial page, but it shouldn't be to long. (As of Oct 24th, 2021)
 
