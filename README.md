@@ -17,7 +17,7 @@ For the following two terms, lets say you have an NFT where the image is of a pe
 **- DNA** - DNA is a sequence of numbers that determins what Variant from every Attribute to include in a single NFT image. This program generates a uniqe DNA sequence for every possible combination of Variants in Attributes. 
 
 
-## How to set up Collections in your .Blend file
+## How to set up your .Blend file
 
 In order for Blend_My_NFTs to read your .blend file, you need to structure your scene in a certain way. Please follow all naming conventions exactly, otherwise the scripts will not run properly. 
 
@@ -33,3 +33,5 @@ Here is an example of the collection format I used to create this script in my .
 
 <img width="422" alt="Screen Shot 2021-10-24 at 8 37 35 PM" src="https://user-images.githubusercontent.com/82110564/138619320-80a9f2a7-719a-46bc-b1cf-0e19dd4d640d.png">
 
+**Important Note**
+Your .blend file must be inside the Blend_My_NFTs folder. When you run the script, the .blend file must have the same directory of the Blend_My_NFTs folder. 
