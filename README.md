@@ -14,7 +14,7 @@ For the following two terms, lets say you have an NFT where the image is of a pe
 
 **- Variants** - These are the types of hats; red hat, blue hat, cat hat, etc. These can be swapped into the hat Attribute one at a time to create different NFTs. 
 
-**- DNA** - DNA is a sequence of numbers that determins what Variant from every Attribute to include in a single NFT image. 
+**- DNA** - DNA is a sequence of numbers that determins what Variant from every Attribute to include in a single NFT image. This program generates a uniqe DNA sequence for every possible combination of Variants in Attributes. 
 
 
 ## How to set up Collections in your .Blend file
