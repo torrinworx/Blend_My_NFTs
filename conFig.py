@@ -1,15 +1,21 @@
-'''Configure all parameters for NFT generatoin in this file'''
+import platform
 
-#DOES NOTHING GO TO BLENDER "STARTUP" FILE
+mac = "Darwin"
+windows = "Windows"
+slash = ""
 
-# The number of NFTs desired to be minted:
-numNFTs = 96
-nftsPerBatch = 5
-renderBatch = 1
-imageName = "ThisCozyPlace"
+if platform.system() == mac:
+    slash = "/"
+elif platform.system() == windows:
+    slash = '\\'
 
-# The path to the "Blender_Image_Generator" file
+numNFTs = 96 # Not yet in code - does nothing
 
-save_path = '/Users/torrinleonard/Desktop/Blend_My_NFTs'
-batch_path = '/Users/torrinleonard/Desktop/Blend_My_NFTs/Batch_Json_files'
-images_path = '/Users/torrinleonard/Desktop/Blend_My_NFTs/Images from PNG Generator'
+nftsPerBatch = 5 # Number of NFTs per batch
+renderBatch = 1 # The number of the batch to render in PNG-Generator
+imageName = "ThisCozyPlace" # The name of the NFT image produces by PNG-Generator
+
+
+save_path = '/Users/torrinleonard/Desktop/Blend_My_NFTs' # The path to the "Blender_Image_Generator" folder
+batch_path = save_path + slash + 'Batch_Json_files'
+images_path = save_path + slash + 'Images from PNG Generator'

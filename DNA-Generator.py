@@ -27,7 +27,19 @@ def returnData():
    for i in bpy.data.collections:
       listAllCollections.append(i.name)
 
-   listAllCollections.remove("Script_Ignore")
+   exclude = bpy.data.collections["Script_Ignore"]
+
+   inScriptIgnore = list(exclude.children)
+
+   inScriptIgnoreName = []
+
+   for i in inScriptIgnore:
+      inScriptIgnoreName.append(i.name)
+
+   for i in inScriptIgnoreName:
+      listAllCollections.remove(i)
+
+   listAllCollections.remove(exclude.name)
 
    exclude = ["_","1","2","3","4","5","6","7","8","9","0"]
    attributeCollections = copy.deepcopy(listAllCollections)
