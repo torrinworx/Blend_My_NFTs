@@ -47,7 +47,7 @@ In order for Blend_My_NFTs to read your .blend file, you need to structure your 
 
 Rules for .blend structure: 
 
-- All Objects, collections, light sources, cameras, or anything else you want to stay constant for each NFT insert it into a collection named "Script_Ignore" exactly. This collection must be located directly beneath the 'Scene Collection' in your .blend file. 
+- All Objects, collections, light sources, cameras, or anything else you want to stay constant for each NFT insert it into a collection named "Script_Ignore" exactly. This collection must be located directly beneath the 'Scene Collection' in your .blend file. Every thing in this Script_Ignore collection will be ignored by the porogram and will be rendered. Note - any object whose render or viewport camera is turned off in this folder will remain that way during the scripts operation, the script will not turn these on/off automatically.
 
 - Every Attribute of your NFT must be represented by a collection directly beneath the 'Scene Collection' in your .blend file. DO NOT USE NUMBERS IN THE NAME, this will mess with the script. Only use capital letters and lowercase letters, no numbers or the underscore symbol. 
 
