@@ -20,6 +20,8 @@ This page is not finished! I don't know how long it will take to make this tutor
 
 I garuntee this will be an add on to Blender and not just a script you run through the script editor. This will take some time, as of Oct 24th 2020 I am still wrking out some user friendly issues with the software, and some kinks, but other than that we are a go for the add on phase. (I mostly just put this in here for motivation, please don't pester me about the date lol)
 
+The scripts are a bit of a mess right now, I mostly have them set up so I know the main processes will work. I will consolodate them whenever I begin the add on phase where I will implement Blender UI to make the porcess of generating thousnds of NFTs more user friendly. 
+
 If you are interested in helping out develop the image generator, please feel free to message me on the discord above would love to collaborate with you to improve my bad code! 
 
 # Guide to Blend_My_NFTs
