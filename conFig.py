@@ -1,5 +1,9 @@
 import platform
 
+nftsPerBatch = 5 # Number of NFTs per batch
+renderBatch = 1 # The number of the batch to render in PNG-Generator
+imageName = "ThisCozyPlace_" # The name of the NFT image produces by PNG-Generator
+
 mac = 'Darwin'
 windows = 'Windows'
 slash = ''
@@ -13,10 +17,6 @@ if platform.system() == mac:
 elif platform.system() == windows:
     save_path = save_path_windows
     slash = '\\'
-
-nftsPerBatch = 5 # Number of NFTs per batch
-renderBatch = 1 # The number of the batch to render in PNG-Generator
-imageName = "ThisCozyPlace_" # The name of the NFT image produces by PNG-Generator
 
 batch_path = save_path + slash + 'Batch_Json_files'
 images_path = save_path + slash + 'Images from PNG Generator'
