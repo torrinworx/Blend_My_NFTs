@@ -72,7 +72,7 @@ def render_and_save_NFTs():
             bpy.data.collections[collection].hide_render = False
             bpy.data.collections[collection].hide_viewport = False
 
-        bpy.context.scene.render.filepath = images_path + "/{}.jpeg".format(name)
+        bpy.context.scene.render.filepath = images_path + slash + "{}.jpeg".format(name)
         bpy.ops.render.render(write_still=True)
         print("Completed {} render. Time: ".format(name) + "%.4f seconds" % (time.time() - time_start))
         x += 1

@@ -27,19 +27,20 @@ def returnData():
    for i in bpy.data.collections:
       listAllCollections.append(i.name)
 
-   exclude = bpy.data.collections["Script_Ignore"]
+   scriptIgnore = bpy.data.collections["Script_Ignore"]
+   listAllCollections.remove(scriptIgnore.name)
 
-   inScriptIgnore = list(exclude.children)
+   def allScriptIgnore(collection):
+      for coll in list(collection.children):
+         print(coll.name)
+         print("")
+         listAllCollections.remove(coll.name)
+         listColl = list(coll.children)
 
-   inScriptIgnoreName = []
+         if len(listColl) > 0:
+            allScriptIgnore(coll)
 
-   for i in inScriptIgnore:
-      inScriptIgnoreName.append(i.name)
-
-   for i in inScriptIgnoreName:
-      listAllCollections.remove(i)
-
-   listAllCollections.remove(exclude.name)
+   allScriptIgnore(scriptIgnore)
 
    exclude = ["_","1","2","3","4","5","6","7","8","9","0"]
    attributeCollections = copy.deepcopy(listAllCollections)
@@ -175,8 +176,6 @@ def send_To_Record_JSON():
    print("All possible combinations of DNA sent to NFTRecord.json with " + str(possibleCombinations) + "\nNFT DNA sequences generated in %.4f seconds" % (time.time() - time_start))
    print("")
    print("If you want the number of NFT DNA sequences to be higher, please add more variants or attributes to your .blend file")
-   print("")
-   print("༼ ºل͟º ༼ ºل͟º ༼ ºل͟º ༽ ºل͟º ༽ ºل͟º ༽")
    print("")
 
 send_To_Record_JSON()

@@ -9,8 +9,6 @@ if platform.system() == mac:
 elif platform.system() == windows:
     slash = '\\'
 
-numNFTs = 96 # Not yet in code - does nothing
-
 nftsPerBatch = 5 # Number of NFTs per batch
 renderBatch = 1 # The number of the batch to render in PNG-Generator
 imageName = "ThisCozyPlace" # The name of the NFT image produces by PNG-Generator
