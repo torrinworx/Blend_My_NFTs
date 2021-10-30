@@ -7,10 +7,10 @@ sys.path.append(dir)
 
 import time
 import json
-import conFig
+import config
 import importlib
-importlib.reload(conFig)
-from conFig import *
+importlib.reload(config)
+from config import *
 
 def getBatchData():
     file_name = os.path.join(batch_path, "Batch{}.json".format(renderBatch))

@@ -8,10 +8,10 @@ sys.path.append(dir)
 import time
 import json
 import random
-import conFig
+import config
 import importlib
-importlib.reload(conFig)
-from conFig import *
+importlib.reload(config)
+from config import *
 
 time_start = time.time()
 
