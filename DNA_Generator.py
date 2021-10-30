@@ -22,6 +22,12 @@ from config import *
 importlib.reload(Rarity_Sorter)
 from Rarity_Sorter import *
 
+class bcolors:
+   OK = '\033[92m'  # GREEN
+   WARNING = '\033[93m'  # YELLOW
+   FAIL = '\033[91m'  # RED
+   RESET = '\033[0m'  # RESET COLOR
+
 time_start = time.time()
 
 def returnData():
@@ -92,10 +98,17 @@ def returnData():
 
          name = getName(i)
          orderRarity = getOrder_rarity(i)
-         number = orderRarity[0]
-         rarity = orderRarity[1]
-         eachObject = {"name": name, "number": number, "rarity": rarity}
-         allAttDataList[i] = eachObject
+
+         if len(orderRarity) == 0:
+            print(bcolors.WARNING + "Warning" + bcolors.RESET)
+            print("The collection " + str(i) + " doesn't follow the naming conventions of attributes. Please move this \n"
+                  "colleciton to Script_Ignore or review proper collection format in README.md")
+            return
+         elif len(orderRarity) > 0:
+            number = orderRarity[0]
+            rarity = orderRarity[1]
+            eachObject = {"name": name, "number": number, "rarity": rarity}
+            allAttDataList[i] = eachObject
       return allAttDataList
 
    variantMetaData = attributeData(attributeVariants)
@@ -132,6 +145,17 @@ def returnData():
       combinations = 1
       for i in hierarchyByNum:
          combinations = combinations*i
+
+      if combinations == 0:
+         print(bcolors.WARNING + "Warning!" + bcolors.RESET)
+         print("The number of all possible combinations is equal to 0. Please review your collection hierarchy \n "
+               "and ensure it is formatted correctly.")
+         print("Please review README.md for more information.")
+         print("")
+         print("Here is the hierarchy of all collections the DNA_Generator gathered from your .blend file, excluding "
+               "\nthose in Script_Ignore:")
+         print(hierarchy)
+
       return combinations
 
    possibleCombinations = numOfCombinations(hierarchy)
