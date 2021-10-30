@@ -46,6 +46,8 @@ For the following two terms, lets say you have an NFT where in the image there i
 
 **- DNA** - DNA is a sequence of numbers that determins what Variant from every Attribute to include in a single NFT image. This program generates a uniqe DNA sequence for every possible combination of Variants in Attributes. 
 
+**- Batch** - A Batch is a randomly selected subset of NFT DNA. It is a smaller portion of the total number of NFTs you want to generate. This makes the work load of rendering thousands of images easier to manage, and gives you the option to render on multiple computers and ensures each computer renders seperate images. 
+
 ## How to set up your .Blend file
 
 In order for Blend_My_NFTs to read your .blend file, you need to structure your scene in a certain way. Please follow all naming and collection conventions exactly, otherwise the scripts will not run properly. 
