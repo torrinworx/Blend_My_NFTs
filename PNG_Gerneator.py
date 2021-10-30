@@ -85,9 +85,10 @@ def render_and_save_NFTs():
         print("Completed {} render. Time: ".format(name) + "%.4f seconds" % (time.time() - time_start_2))
 
         def imageMetaData():
+            '''
+            This function adds meta data to the image that was just generated.
+            '''
             meta = {}
-            
-
 
         x += 1
 

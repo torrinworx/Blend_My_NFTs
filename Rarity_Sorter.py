@@ -10,13 +10,19 @@ import time
 import copy
 import re
 import json
+import importlib
 
 import config
-import importlib
 importlib.reload(config)
 from config import *
 
 import DNA_Generator
-import importlib
 importlib.reload(DNA_Generator)
 from DNA_Generator import *
+
+def sortRarityWeights(DataDictionary):
+    '''
+    Sorts through DataDictionary and appropriately weights each variant based on their rarity percentage set in Blender
+    ("rarity" in DNA_Generator). Then
+    '''
+    return DataDictionary

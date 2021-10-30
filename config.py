@@ -1,14 +1,15 @@
 import platform
 
 # NFT configurations:
-nftsPerBatch = 5    # Number of NFTs per batch
-renderBatch = 1     # The batch number to render in PNG-Generator
+maxNFTs = 0    # The maximum number of NFTs you want to generate
+nftsPerBatch = 0    # Number of NFTs per batch
+renderBatch = 0     # The batch number to render in PNG-Generator
 imageName = "ThisCozyPlace_"    # The name of the NFT image produces by PNG-Generator
 
 # Save path of Blend_My_NFTs folder:
 # Example mac: /Users/Path/to/Blend_My_NFTs
 # Example windows: C:\Users\Path\to\Blend_My_NFTs
-save_path_mac = '/Users/torrinleonard/Desktop/Blend_My_NFTs'
+save_path_mac = ''
 save_path_windows = ''
 
 mac = 'Darwin' # Mac OS

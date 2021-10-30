@@ -10,10 +10,15 @@ import time
 import copy
 import re
 import json
-import config
 import importlib
+
+import config
 importlib.reload(config)
 from config import *
+
+import Rarity_Sorter
+importlib.reload(Rarity_Sorter)
+from Rarity_Sorter import *
 
 time_start = time.time()
 
@@ -175,6 +180,8 @@ def generateNFT_DNA(possibleCombinations):
    return batchDataDictionary
 
 DataDictionary = generateNFT_DNA(possibleCombinations)
+
+rareDataDictionary = sortRarityWeights(DataDictionary)
 
 def send_To_Record_JSON():
    '''
