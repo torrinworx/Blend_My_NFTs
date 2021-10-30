@@ -1,10 +1,6 @@
 import bpy
 import os
 import sys
-
-dir = os.path.dirname(bpy.data.filepath)
-sys.path.append(dir)
-
 import itertools
 import time
 import copy
@@ -12,9 +8,16 @@ import re
 import json
 import importlib
 
+sys.modules.values()
+
 import config
+import Rarity_Sorter
+
 importlib.reload(config)
 from config import *
+
+importlib.reload(Rarity_Sorter)
+from Rarity_Sorter import *
 
 time_start = time.time()
 
