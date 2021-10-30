@@ -104,4 +104,4 @@ In the Blend_My_NFTs open the config.py file. Here you can customize some aspect
 
 Run the scripts in the following order: 
 1. main.py - Generates NFTRecord.json, a list of all possible NFT combinations then randomly selects NFTs from NFTReocord.json and adds them to a specified number of Batch#.json files
-3. PNG-Generator.py - Renders the NFTs from a specified Batch #number and exmports the image to "Images from PNG Generator"
+3. PNG_Generator.py - Renders the NFTs from a specified Batch #number and exmports the image to "Images from PNG Generator"
