@@ -66,6 +66,10 @@ If you have no experience with Blender, python, or the Blender API, please watch
 First open the Scripting tab in the menu of Blender: 
 <img width="1440" alt="Screen Shot 2021-10-24 at 9 51 25 PM" src="https://user-images.githubusercontent.com/82110564/138623488-9d0efc07-4004-4d3a-a7fe-25cb6050ac51.png">
 
-Next 
+## The order to run scripts
+Run the scripts in the following order: 
+1. DNA-Generator.py - Generates NFTRecord.json, a list of all possible NFT combinations
+2. Batch-Sorter.py - Randomly selects NFTs from NFTReocord.json and adds them to a specified number of Batch#.json files
+3. PNG-Generator.py - Renders the NFTs from a specified Batch #number and exmports the image to "Images from PNG Generator"
 
 
