@@ -6,6 +6,9 @@ nftsPerBatch = 5    # Number of NFTs per batch
 renderBatch = 1     # The batch number to render in PNG-Generator
 imageName = "ThisCozyPlace_"    # The name of the NFT image produces by PNG-Generator
 
+includeRarity = False # True = include weighted rarity percentages in NFTRecord.json calculations,
+                      # False = Pure random selection of variants
+
 # The path to Blend_My_NFTs folder:
 # Example mac: /Users/Path/to/Blend_My_NFTs
 # Example windows: C:\Users\Path\to\Blend_My_NFTs

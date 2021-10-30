@@ -183,7 +183,8 @@ def generateNFT_DNA(possibleCombinations):
 
 DataDictionary = generateNFT_DNA(possibleCombinations)
 
-# rareDataDictionary = sortRarityWeights(DataDictionary)
+if includeRarity == True:
+   rareDataDictionary = sortRarityWeights(DataDictionary)
 
 def send_To_Record_JSON():
    '''
