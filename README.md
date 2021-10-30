@@ -76,6 +76,8 @@ https://docs.blender.org/api/current/info_quickstart.html#running-scripts
 
 Note - You will need to install the Icon Viewer add on for Blender: https://docs.blender.org/manual/en/latest/addons/development/icon_viewer.html 
 
+In the Blend_My_NFTs open the config.py file. Here you can customize some aspects of Blend_My_NFTs. The most important thing to do here is to add the path of Blend_My_NFTs on your computer to either save_path_mac or save_path_windows.
+
 1. Open the Scripting tab in the menu of Blender: 
 
 <img width="1440" alt="Screen Shot 2021-10-24 at 9 51 25 PM" src="https://user-images.githubusercontent.com/82110564/138623488-9d0efc07-4004-4d3a-a7fe-25cb6050ac51.png">
