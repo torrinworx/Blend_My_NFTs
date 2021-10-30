@@ -7,8 +7,10 @@ sys.path.append(dir)
 
 import time
 import json
-import config
 import importlib
+
+import config
+
 importlib.reload(config)
 from config import *
 

@@ -1,12 +1,15 @@
 import bpy
 import os
-import sys
-import itertools
-import time
-import copy
 import re
+import sys
+import copy
+import time
 import json
+import itertools
 import importlib
+
+dir = os.path.dirname(bpy.data.filepath)
+sys.path.append(dir)
 
 sys.modules.values()
 
@@ -199,8 +202,6 @@ def send_To_Record_JSON():
    print("")
    print("If you want the number of NFT DNA sequences to be higher, please add more variants or attributes to your .blend file")
    print("")
-
-send_To_Record_JSON()
 
 '''Utility functions:'''
 
