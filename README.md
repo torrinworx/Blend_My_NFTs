@@ -4,7 +4,9 @@
 
 ## Description
 
-Blend_My_NFTs is a work in progress (as of Oct 29th, 2021)and my goal is to eventually turn it into a Blender add on complete with UI. It is bing developed to create the NFT project This Cozy Place. This Cozy Place will be an NFT collection with a total of 10000 unique NFTs all rendered in Blender via Blend_My_NFTs. If you need help with your project please visit our discord server: https://discord.gg/UpZt5Un57t. If you are looking to buy your own Cozy Place NFT, please visit ThisCozyPlace.com or our discord server: https://discord.gg/UpZt5Un57t.
+Blend_My_NFTs is a work in progress (as of Oct 29th, 2021)and my goal is to eventually turn it into a Blender add on complete with UI. It is bing developed to create the NFT project This Cozy Place. This Cozy Place will be an NFT collection with a total of 10000 unique NFTs all rendered in Blender via Blend_My_NFTs. If you need help with your project please visit our discord server: https://discord.gg/UpZt5Un57t. 
+
+If you are looking to buy your own Cozy Place NFT, please visit ThisCozyPlace.com or our discord server: https://discord.gg/UpZt5Un57t.
 
 ## Disclaimer
 
@@ -72,21 +74,26 @@ https://docs.blender.org/api/current/info_quickstart.html#running-scripts
 
 Note - You will need to install the Icon Viewer add on for Blender: https://docs.blender.org/manual/en/latest/addons/development/icon_viewer.html 
 
-First open the Scripting tab in the menu of Blender: 
+1. Open the Scripting tab in the menu of Blender: 
+
 <img width="1440" alt="Screen Shot 2021-10-24 at 9 51 25 PM" src="https://user-images.githubusercontent.com/82110564/138623488-9d0efc07-4004-4d3a-a7fe-25cb6050ac51.png">
 
-Next click the "Open" button in the Blender Text Editor
+2. Click the "Open" button in the Blender Text Editor
+
 <img width="1422" alt="Screen Shot 2021-10-29 at 11 31 38 PM" src="https://user-images.githubusercontent.com/82110564/139518856-7798ea86-0be0-4511-bc87-fa09ce2f6538.png">
 
-With the Blender File View open, navigate to the Blend_My_NFTs folder, select DNA_Generator.py and click "Open" in the bottom right corner:
+3. With the Blender File View open, navigate to the Blend_My_NFTs folder, select DNA_Generator.py and click "Open" in the bottom right corner:
+
 <img width="1061" alt="Screen Shot 2021-10-29 at 11 35 03 PM" src="https://user-images.githubusercontent.com/82110564/139518920-a987d72a-a213-4579-a682-79e8d55fedca.png">
 
-Repeat the previous step with Batch_Sorter.py and PNG_Generator.py.
+4. Repeat the previous step with Batch_Sorter.py and PNG_Generator.py.
 
-To navigate to the a script click the drop down button shown circled below:
+5. To navigate to the a script click the drop down button shown circled below:
+
 <img width="274" alt="Screen Shot 2021-10-29 at 11 48 13 PM" src="https://user-images.githubusercontent.com/82110564/139519232-20891a2f-041f-4fa7-8f8a-b467e02de503.png">
 
-Finally to run a script click the run button shown circled below:
+6. To run a script click the run button shown circled below:
+
 <img width="263" alt="Screen Shot 2021-10-29 at 11 51 08 PM" src="https://user-images.githubusercontent.com/82110564/139519277-4e02ee15-d97c-4f30-83e4-5837a3388d66.png">
 
 ## The order to run scripts
