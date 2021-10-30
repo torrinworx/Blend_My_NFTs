@@ -13,6 +13,10 @@ importlib.reload(config)
 from config import *
 
 def getBatchData():
+    '''
+    Retrieves a given batches data determined by renderBatch in config.py
+    '''
+
     file_name = os.path.join(batch_path, "Batch{}.json".format(renderBatch))
     batch = json.load(open(file_name))
     
@@ -26,22 +30,22 @@ NFTs_in_Batch, hierarchy, BatchDNAList = getBatchData()
 
 def render_and_save_NFTs():
     '''
-    This function will generate a set number of NFTs based on the number of DNA and DNAlist variables in the NFTBatch.json
-    file. This function will write to the NFTLedger.json file with the produced batch of NFTs at the end. It will produce
-    the NFT images and store them in a file. It will also add DNA and DNAList variables to the Meta Data of each image
-    made.
+    Renders the NFT DNA in a Batch#.json, where # is renderBatch in config.py. Turns off the viewport camera and
+    the render camera for all items in hierarchy.
     '''
 
     x = 1
     for a in BatchDNAList:
-        time_start = time.time()
-
         for i in hierarchy:
             for j in hierarchy[i]:
                 bpy.data.collections[j].hide_render = True
                 bpy.data.collections[j].hide_viewport = True
 
         def match_DNA_to_Variant(a):
+            '''
+            Matches each DNA number sepearted by "-" to its attribute, then its variant.
+            '''
+
             listAttributes = list(hierarchy.keys())
             listDnaDecunstructed  = a.split('-')
             dnaDictionary = {}
@@ -55,8 +59,8 @@ def render_and_save_NFTs():
                     if kNum == dnaDictionary[x]:
                         dnaDictionary.update({x:k})
             return dnaDictionary
-        dnaDictionary = match_DNA_to_Variant(a)
 
+        dnaDictionary = match_DNA_to_Variant(a)
         name = imageName + str(x)
 
         print("")
@@ -72,13 +76,25 @@ def render_and_save_NFTs():
             bpy.data.collections[collection].hide_render = False
             bpy.data.collections[collection].hide_viewport = False
 
-        bpy.context.scene.render.filepath = images_path + slash + "{}.jpeg".format(name)
+        time_start_2 = time.time()
+
+        fullImagePath = images_path + slash + "{}.jpeg".format(name)
+
+        bpy.context.scene.render.filepath = fullImagePath
         bpy.ops.render.render(write_still=True)
-        print("Completed {} render. Time: ".format(name) + "%.4f seconds" % (time.time() - time_start))
+        print("Completed {} render. Time: ".format(name) + "%.4f seconds" % (time.time() - time_start_2))
+
+        def imageMetaData():
+            meta = {}
+            
+
+
         x += 1
 
     print("")
-    print("All NFT PNGs generated, process finished.")
+    print("All NFT PNGs rendered, process finished.")
+    print("Time to complete all renders in Batch{}.json:".format(renderBatch) + "%.4f seconds" % (time.time() - time_start_2))
     print("")
+
 render_and_save_NFTs()
 
