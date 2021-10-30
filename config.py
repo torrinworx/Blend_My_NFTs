@@ -1,7 +1,7 @@
 import platform
 
 # NFT configurations:
-maxNFTs = 0    # The maximum number of NFTs you want to generate
+maxNFTs = 0    # The maximum number of NFTs you want to generate - doesn't do anything yet
 nftsPerBatch = 0    # Number of NFTs per batch
 renderBatch = 0     # The batch number to render in PNG-Generator
 imageName = "ThisCozyPlace_"    # The name of the NFT image produces by PNG-Generator
