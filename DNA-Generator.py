@@ -10,10 +10,10 @@ import time
 import copy
 import re
 import json
-import conFig
+import config
 import importlib
-importlib.reload(conFig)
-from conFig import *
+importlib.reload(config)
+from config import *
 
 time_start = time.time()
 
@@ -22,31 +22,32 @@ def returnData():
    Generates important variables, dictionaries, and lists needed to be stored to catalog the NFTs.
    :return: listAllCollections, attributeCollections, attributeCollections1, hierarchy, variantMetaData, possibleCombinations
    '''
+
    listAllCollections = []
+   scriptIgnore = bpy.data.collections["Script_Ignore"]
 
    for i in bpy.data.collections:
       listAllCollections.append(i.name)
 
-   scriptIgnore = bpy.data.collections["Script_Ignore"]
    listAllCollections.remove(scriptIgnore.name)
 
    def allScriptIgnore(collection):
+      '''
+      Removes all collections, sub collections in Script_Ignore" collection from listAllCollections.
+      '''
       for coll in list(collection.children):
-         print(coll.name)
-         print("")
          listAllCollections.remove(coll.name)
          listColl = list(coll.children)
-
          if len(listColl) > 0:
             allScriptIgnore(coll)
-
    allScriptIgnore(scriptIgnore)
 
    exclude = ["_","1","2","3","4","5","6","7","8","9","0"]
    attributeCollections = copy.deepcopy(listAllCollections)
 
    def filter_num():
-      """This function removes items from 'attributeCollections' if they include values from the 'exclude' variable.
+      """
+      This function removes items from 'attributeCollections' if they include values from the 'exclude' variable.
       It removes child collections from the parent collections in from the "listAllCollections" list.
       """
       for x in attributeCollections:
@@ -60,32 +61,42 @@ def returnData():
    attributeCollections1 = copy.deepcopy(attributeCollections)
 
    def attributeData(attributeVariants):
+      '''
+      Creates a dictionary of each attribute
+      '''
       allAttDataList = {}
       for i in attributeVariants:
 
-         def getStr(i):
-            name_1 = re.sub(r'[^a-zA-Z]', "", i)
-            return name_1
+         def getName(i):
+            '''
+            Returns the name of "i" attribute variant
+            '''
+            name = re.sub(r'[^a-zA-Z]', "", i)
+            return name
 
          def getOrder_rarity(i):
+            '''
+            Returns the "order" and "rarity" of i attribute variant in a list
+            '''
             x = re.sub(r'[a-zA-Z]', "", i)
             a = x.split("_")
             del a[0]
             return list(a)
 
-         name = getStr(i)
+         name = getName(i)
          orderRarity = getOrder_rarity(i)
          number = orderRarity[0]
          rarity = orderRarity[1]
-
          eachObject = {"name": name, "number": number, "rarity": rarity}
-
          allAttDataList[i] = eachObject
       return allAttDataList
 
    variantMetaData = attributeData(attributeVariants)
 
-   def getChildren():
+   def getHierarchy():
+      '''
+      Constructs the hierarchy dictionary from attributeCollections1 and variantMetaData.
+      '''
       hierarchy = {}
       for i in attributeCollections1:
          colParLong = list(bpy.data.collections[str(i)].children)
@@ -102,9 +113,12 @@ def returnData():
 
       return hierarchy
 
-   hierarchy = getChildren()
+   hierarchy = getHierarchy()
 
    def numOfCombinations(hierarchy):
+      '''
+      Returns "combinations" the number of all possible NFT combinations.
+      '''
       hierarchyByNum = []
       for i in hierarchy:
          hierarchyByNum.append(len(hierarchy[i]))
@@ -127,15 +141,15 @@ listAllCollections, attributeCollections, attributeCollections1, hierarchy, poss
 
 def generateNFT_DNA(possibleCombinations):
    '''
-   :return: the batch dictionary of the NFT's being created, there dna, and attributes
+   Returns batchDataDictionary containing the number of NFT cominations, hierarchy, and the DNAList.
    '''
    batchDataDictionary = {}
+   listOptionVari = []
 
    print("-----------------------------------------------------------------------------")
    print("Generating " + str(possibleCombinations) + " combinations of DNA...")
    print("")
 
-   listOptionVari = []
 
    for i in hierarchy:
       numChild = len(hierarchy[i])
@@ -164,11 +178,13 @@ DataDictionary = generateNFT_DNA(possibleCombinations)
 
 def send_To_Record_JSON():
    '''
-   Sends 'batchDataDictionary' dictionary to the NFTRecord.json file.
+   Creates NFTRecord.json file and sends "batchDataDictionary" to it. NFTRecord.json is a permanent record of all DNA
+   you've generated with all attribute variants. If you add new variants or attributes to your .blend file, other scripts
+   need to reference this .json file to gnereate new DNA and make note of the new attributes and variants to prevent
+   repeate DNA.
    '''
 
    ledger = json.dumps(DataDictionary, indent=1, ensure_ascii=True)
-
    with open(os.path.join(save_path, "NFTRecord.json"), 'w') as outfile:
       outfile.write(ledger + '\n')
 
