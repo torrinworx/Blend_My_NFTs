@@ -10,7 +10,7 @@ imageName = "ThisCozyPlace_"    # The name of the NFT image produces by PNG-Gene
 # Example mac: /Users/Path/to/Blend_My_NFTs
 # Example windows: C:\Users\Path\to\Blend_My_NFTs
 save_path_mac = ''
-save_path_windows = ''
+save_path_windows = r''
 
 mac = 'Darwin' # Mac OS
 windows = 'Windows' # Windows
@@ -22,7 +22,7 @@ if platform.system() == mac:
     save_path = save_path_mac
     slash = '/'
 elif platform.system() == windows:
-    save_path = r''.format(save_path_windows)
+    save_path = save_path_windows
     slash = '\\'
 
 # Paths to folders

@@ -16,10 +16,6 @@ import config
 importlib.reload(config)
 from config import *
 
-import Rarity_Sorter
-importlib.reload(Rarity_Sorter)
-from Rarity_Sorter import *
-
 time_start = time.time()
 
 def returnData():
@@ -181,7 +177,7 @@ def generateNFT_DNA(possibleCombinations):
 
 DataDictionary = generateNFT_DNA(possibleCombinations)
 
-rareDataDictionary = sortRarityWeights(DataDictionary)
+# rareDataDictionary = sortRarityWeights(DataDictionary)
 
 def send_To_Record_JSON():
    '''
