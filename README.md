@@ -78,7 +78,7 @@ Note - You will need to install the Icon Viewer add on for Blender: https://docs
 
 <img width="1440" alt="Screen Shot 2021-10-24 at 9 51 25 PM" src="https://user-images.githubusercontent.com/82110564/138623488-9d0efc07-4004-4d3a-a7fe-25cb6050ac51.png">
 
-2. Click the "Open" button in the Blender Text Editor
+2. Click the "Open" button in the Blender Text Editor:
 
 <img width="1422" alt="Screen Shot 2021-10-29 at 11 31 38 PM" src="https://user-images.githubusercontent.com/82110564/139518856-7798ea86-0be0-4511-bc87-fa09ce2f6538.png">
 
