@@ -94,6 +94,12 @@ def render_and_save_NFTs():
 
         x += 1
 
+    if resetViewport:
+        for a in BatchDNAList:
+            for i in hierarchy:
+                for j in hierarchy[i]:
+                    bpy.data.collections[j].hide_render = False
+                    bpy.data.collections[j].hide_viewport = False
     print("")
     print("All NFT PNGs rendered, process finished.")
     print("Time to complete all renders in Batch{}.json:".format(renderBatch) + "%.4f seconds" % (time.time() - time_start_2))

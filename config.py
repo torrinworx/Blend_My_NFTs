@@ -5,6 +5,7 @@ maxNFTs = 0    # The maximum number of NFTs you want to generate - doesn't do an
 nftsPerBatch = 5    # Number of NFTs per batch
 renderBatch = 1     # The batch number to render in PNG-Generator
 imageName = "ThisCozyPlace_"    # The name of the NFT image produces by PNG-Generator
+resetViewport = True
 
 includeRarity = False # True = include weighted rarity percentages in NFTRecord.json calculations,
                       # False = Pure random selection of variants
