@@ -40,8 +40,14 @@ def returnData():
    scriptIgnore = bpy.data.collections["Script_Ignore"]
 
    for i in bpy.data.collections:
-      listAllCollections.append(i.name)
-
+      if generateColors:
+         for j in range(len(colorList)):
+            if i.name[-1].isdigit():
+               listAllCollections.append(i.name + "_" + str(j+1))
+            elif j == 0:
+               listAllCollections.append(i.name)
+      else:
+         listAllCollections.append(i.name)
    listAllCollections.remove(scriptIgnore.name)
 
    def allScriptIgnore(collection):
@@ -89,7 +95,7 @@ def returnData():
 
          def getOrder_rarity(i):
             '''
-            Returns the "order" and "rarity" of i attribute variant in a list
+            Returns the "order", "rarity" and "color" of i attribute variant in a list
             '''
             x = re.sub(r'[a-zA-Z]', "", i)
             a = x.split("_")
@@ -107,7 +113,11 @@ def returnData():
          elif len(orderRarity) > 0:
             number = orderRarity[0]
             rarity = orderRarity[1]
-            eachObject = {"name": name, "number": number, "rarity": rarity}
+            if generateColors:
+               color = orderRarity[2]
+            else:
+               color = "0"
+            eachObject = {"name": name, "number": number, "rarity": rarity, "color": color}
             allAttDataList[i] = eachObject
       return allAttDataList
 
@@ -122,7 +132,14 @@ def returnData():
          colParLong = list(bpy.data.collections[str(i)].children)
          colParShort = {}
          for x in colParLong:
-            colParShort[x.name] = None
+            if generateColors:
+               '''
+               Append colors to blender name for PNG generator and NFTRecord.json to create the correct list
+               '''
+               for j in range(len(colorList)):
+                  colParShort[x.name + "_" + str(j+1)] = None
+            else:
+               colParShort[x.name] = None
          hierarchy[i] = colParShort
 
       for a in hierarchy:
@@ -162,6 +179,11 @@ def returnData():
 
    for i in variantMetaData:
       def cameraToggle(i,toggle = True):
+         if generateColors:
+            '''
+            Remove Color code so blender recognises the collection
+            '''
+            i = "_".join(i.split("_")[:-1])
          bpy.data.collections[i].hide_render = toggle
          bpy.data.collections[i].hide_viewport = toggle
       cameraToggle(i)

@@ -40,6 +40,11 @@ def render_and_save_NFTs():
     for a in BatchDNAList:
         for i in hierarchy:
             for j in hierarchy[i]:
+                if generateColors:
+                    '''
+                     Remove Color code so blender recognises the collection
+                    '''
+                    j = "_".join(j.split("_")[:-1])
                 bpy.data.collections[j].hide_render = True
                 bpy.data.collections[j].hide_viewport = True
 
@@ -56,10 +61,17 @@ def render_and_save_NFTs():
                 dnaDictionary[i] = j
 
             for x in dnaDictionary:
+                #print(hierarchy[x])
                 for k in hierarchy[x]:
-                    kNum = hierarchy[x][k]["number"]
-                    if kNum == dnaDictionary[x]:
-                        dnaDictionary.update({x:k})
+                    if generateColors:
+                        kColor = hierarchy[x][k]["color"]
+                        kNum = hierarchy[x][k]["number"]
+                        if str(((int(kNum)-1)*len(colorList))+int(kColor)) == dnaDictionary[x]:
+                            dnaDictionary.update({x:k})
+                    else:
+                        kNum = hierarchy[x][k]["number"]
+                        if kNum == dnaDictionary[x]:
+                            dnaDictionary.update({x:k})
             return dnaDictionary
 
         dnaDictionary = match_DNA_to_Variant(a)
@@ -75,15 +87,32 @@ def render_and_save_NFTs():
 
         for c in dnaDictionary:
             collection = dnaDictionary[c]
-            bpy.data.collections[collection].hide_render = False
-            bpy.data.collections[collection].hide_viewport = False
+            if not generateColors:
+                bpy.data.collections[collection].hide_render = False
+                bpy.data.collections[collection].hide_viewport = False
 
         time_start_2 = time.time()
 
         fullImagePath = images_path + slash + "{}.jpeg".format(name)
 
-        bpy.context.scene.render.filepath = fullImagePath
-        bpy.ops.render.render(write_still=True)
+
+        if generateColors:
+            for c in dnaDictionary:
+                collection = dnaDictionary[c]
+                colorVal = int(collection.rsplit("_",1)[1])-1
+                collection = "_".join(collection.split("_")[:-1])
+                bpy.data.collections[collection].hide_render = False
+                bpy.data.collections[collection].hide_viewport = False
+                for activeObject in bpy.data.collections[collection].all_objects: 
+                    mat = bpy.data.materials.new("PKHG")
+                    mat.diffuse_color = colorList[colorVal]
+                    activeObject.active_material = mat
+            print("Rendering")
+            bpy.context.scene.render.filepath = fullImagePath
+            bpy.ops.render.render(write_still=True)
+        else:
+            bpy.context.scene.render.filepath = fullImagePath
+            bpy.ops.render.render(write_still=True)
         print("Completed {} render. Time: ".format(name) + "%.4f seconds" % (time.time() - time_start_2))
 
         def imageMetaData():

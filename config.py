@@ -9,6 +9,8 @@ imageName = "ThisCozyPlace_"    # The name of the NFT image produces by PNG-Gene
 includeRarity = False # True = include weighted rarity percentages in NFTRecord.json calculations,
                       # False = Pure random selection of variants
 
+generateColors = True
+colorList = [(1,0,0,1),(0,1,0,1),(0,0,1,1),(1,0,1,.7),(1,1,1,1),(0,0,0,1)]
 # The path to Blend_My_NFTs folder:
 # Example mac: /Users/Path/to/Blend_My_NFTs
 # Example windows: C:\Users\Path\to\Blend_My_NFTs
