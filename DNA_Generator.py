@@ -225,7 +225,7 @@ def send_To_Record_JSON():
    '''
    Creates NFTRecord.json file and sends "batchDataDictionary" to it. NFTRecord.json is a permanent record of all DNA
    you've generated with all attribute variants. If you add new variants or attributes to your .blend file, other scripts
-   need to reference this .json file to gnereate new DNA and make note of the new attributes and variants to prevent
+   need to reference this .json file to generate new DNA and make note of the new attributes and variants to prevent
    repeate DNA.
    '''
 

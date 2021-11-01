@@ -86,11 +86,11 @@ In the Blend_My_NFTs open the config.py file. Here you can customize some aspect
 
 <img width="1422" alt="Screen Shot 2021-10-29 at 11 31 38 PM" src="https://user-images.githubusercontent.com/82110564/139518856-7798ea86-0be0-4511-bc87-fa09ce2f6538.png">
 
-3. With the Blender File View open, navigate to the Blend_My_NFTs folder, select DNA_Generator.py and click "Open" in the bottom right corner:
+3. With the Blender File View open, navigate to the Blend_My_NFTs folder, select main.py and click "Open" in the bottom right corner:
 
 <img width="1061" alt="Screen Shot 2021-10-29 at 11 35 03 PM" src="https://user-images.githubusercontent.com/82110564/139518920-a987d72a-a213-4579-a682-79e8d55fedca.png">
 
-4. Repeat the previous step with Batch_Sorter.py and PNG_Generator.py.
+4. Repeat the previous step for PNG_Generator.py.
 
 5. To navigate to the a script click the drop down button shown circled below:
 
@@ -103,6 +103,5 @@ In the Blend_My_NFTs open the config.py file. Here you can customize some aspect
 ## The order to run scripts
 
 Run the scripts in the following order: 
-1. DNA-Generator.py - Generates NFTRecord.json, a list of all possible NFT combinations
-2. Batch-Sorter.py - Randomly selects NFTs from NFTReocord.json and adds them to a specified number of Batch#.json files
-3. PNG-Generator.py - Renders the NFTs from a specified Batch #number and exmports the image to "Images from PNG Generator"
+1. main.py - Generates NFTRecord.json, a list of all possible NFT combinations then randomly selects NFTs from NFTReocord.json and adds them to a specified number of Batch#.json files
+3. PNG_Generator.py - Renders the NFTs from a specified Batch #number and exmports the image to "Images from PNG Generator"
