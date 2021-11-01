@@ -2,9 +2,13 @@ import platform
 
 # NFT configurations:
 maxNFTs = 0    # The maximum number of NFTs you want to generate - doesn't do anything yet
-nftsPerBatch = 5    # Number of NFTs per batch
+nftsPerBatch = 1   # Number of NFTs per batch
 renderBatch = 1     # The batch number to render in PNG-Generator
 imageName = "ThisCozyPlace_"    # The name of the NFT image produces by PNG-Generator
+fileFormat = 'JPEG'     # The file format you want to export the NFT as.
+                    # Visit https://docs.blender.org/api/current/bpy.types.Image.html#bpy.types.Image.file_format
+                    # for a list of file formats supported by Blender. Enter the file extension exactly as specified in
+                    # the Blender API documentation above.
 
 includeRarity = False # True = include weighted rarity percentages in NFTRecord.json calculations,
                       # False = Pure random selection of variants
@@ -30,4 +34,4 @@ elif platform.system() == windows:
 
 # Paths to folders
 batch_path = save_path + slash + 'Batch_Json_files'
-images_path = save_path + slash + 'Images from PNG Generator'
+images_path = save_path + slash + 'NFT_Image_Output'

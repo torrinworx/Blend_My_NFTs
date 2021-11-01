@@ -25,7 +25,7 @@ from Rarity_Sorter import *
 class bcolors:
    OK = '\033[92m'  # GREEN
    WARNING = '\033[93m'  # YELLOW
-   FAIL = '\033[91m'  # RED
+   ERROR = '\033[91m'  # RED
    RESET = '\033[0m'  # RESET COLOR
 
 time_start = time.time()
@@ -147,7 +147,7 @@ def returnData():
          combinations = combinations*i
 
       if combinations == 0:
-         print(bcolors.WARNING + "Warning!" + bcolors.RESET)
+         print(bcolors.FAIL + "ERROR:" + bcolors.RESET)
          print("The number of all possible combinations is equal to 0. Please review your collection hierarchy \n "
                "and ensure it is formatted correctly.")
          print("Please review README.md for more information.")
@@ -155,6 +155,17 @@ def returnData():
          print("Here is the hierarchy of all collections the DNA_Generator gathered from your .blend file, excluding "
                "\nthose in Script_Ignore:")
          print(hierarchy)
+
+
+      numBatches = combinations/nftsPerBatch
+
+      if numBatches < 1:
+         print(bcolors.Fail + "ERROR:" + bcolors.RESET)
+         print("The number of NFTs Per Batch (NFTsPerBatch variable in config.py) is to high")
+         print("There are a total of " + combinations + " possible NFT combinations")
+         print("and you've requested " + nftsPerBatch + " NFTs per batch.")
+         print("Lower the number of NFTs per batch in config.py or increase the number of \nattributes and/or variants"
+               " in your .blend file.")
 
       return combinations
 

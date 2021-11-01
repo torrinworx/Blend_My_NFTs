@@ -6,7 +6,6 @@ import json
 import random
 import importlib
 
-
 dir = os.path.dirname(bpy.data.filepath)
 sys.path.append(dir)
 
@@ -57,13 +56,15 @@ def makeBatches():
 
             i += 1
 
-      incompleteBatch = {}
-      incompleteBatch["NFTs_in_Batch"] = int(len(DNAList))
-      incompleteBatch["hierarchy"] = hierarchy
-      incompleteBatch["BatchDNAList"] = DNAList
-      incompleteBatch["hierarchy"] = hierarchy
+      if len(DNAList) > 0:
+            incompleteBatch = {}
 
-      incompleteBatch = json.dumps(incompleteBatch, indent=1, ensure_ascii=True)
+            incompleteBatch["NFTs_in_Batch"] = int(len(DNAList))
+            incompleteBatch["hierarchy"] = hierarchy
+            incompleteBatch["BatchDNAList"] = DNAList
+            incompleteBatch["hierarchy"] = hierarchy
 
-      with open(batch_path + slash + ("Batch{}.json".format(i+1)), "w") as outfile2:
-            outfile2.write(incompleteBatch)
+            incompleteBatch = json.dumps(incompleteBatch, indent=1, ensure_ascii=True)
+
+            with open(batch_path + slash + ("Batch{}.json".format(i+1)), "w") as outfile2:
+                  outfile2.write(incompleteBatch)
