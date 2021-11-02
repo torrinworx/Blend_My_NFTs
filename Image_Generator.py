@@ -17,6 +17,9 @@ import config
 importlib.reload(config)
 from config import *
 
+def stripColorFromName(name):
+   return "_".join(name.split("_")[:-1])
+   
 def getBatchData():
     '''
     Retrieves a given batches data determined by renderBatch in config.py
@@ -43,6 +46,11 @@ def render_and_save_NFTs():
     for a in BatchDNAList:
         for i in hierarchy:
             for j in hierarchy[i]:
+                if generateColors:
+                    '''
+                     Remove Color code so blender recognises the collection
+                    '''
+                    j = stripColorFromName(j)
                 bpy.data.collections[j].hide_render = True
                 bpy.data.collections[j].hide_viewport = True
 
@@ -78,16 +86,35 @@ def render_and_save_NFTs():
 
         for c in dnaDictionary:
             collection = dnaDictionary[c]
-            bpy.data.collections[collection].hide_render = False
-            bpy.data.collections[collection].hide_viewport = False
+            if not generateColors:
+                bpy.data.collections[collection].hide_render = False
+                bpy.data.collections[collection].hide_viewport = False
 
         time_start_2 = time.time()
 
         fullImagePath = images_path + slash + "{}.jpeg".format(name)
 
+        if generateColors:
+            for c in dnaDictionary:
+                collection = dnaDictionary[c]
+                if stripColorFromName(collection) in colorList:
+                    colorVal = int(collection.rsplit("_",1)[1])-1
+                    collection = stripColorFromName(collection)
+                    bpy.data.collections[collection].hide_render = False
+                    bpy.data.collections[collection].hide_viewport = False
+                    for activeObject in bpy.data.collections[collection].all_objects: 
+                        mat = bpy.data.materials.new("PKHG")
+                        mat.diffuse_color = colorList[collection][colorVal]
+                        activeObject.active_material = mat
+                else:
+                    collection = stripColorFromName(collection)
+                    bpy.data.collections[collection].hide_render = False
+                    bpy.data.collections[collection].hide_viewport = False
+        print("Rendering")
         bpy.context.scene.render.filepath = fullImagePath
         bpy.context.scene.render.image_settings.file_format = fileFormat
         bpy.ops.render.render(write_still=True)
+
         print("Completed {} render. Time: ".format(name) + "%.4f seconds" % (time.time() - time_start_2))
 
         #Image meta data stuff, for future implementation, doesn't work right now:
@@ -111,7 +138,14 @@ def render_and_save_NFTs():
         '''
 
         x += 1
-
+    if resetViewport:
+        for a in BatchDNAList:
+            for i in hierarchy:
+                for j in hierarchy[i]:
+                    if generateColors:
+                        j = stripColorFromName(j)
+                    bpy.data.collections[j].hide_render = False
+                    bpy.data.collections[j].hide_viewport = False
     print("")
     print("All NFT PNGs rendered, process finished.")
     print("Time to complete all renders in Batch{}.json:".format(renderBatch) + "%.4f seconds" % (time.time() - time_start_2))

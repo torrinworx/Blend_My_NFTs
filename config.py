@@ -13,6 +13,13 @@ fileFormat = 'JPEG'     # The file format you want to export the NFT as.
 includeRarity = False # True = include weighted rarity percentages in NFTRecord.json calculations,
                       # False = Pure random selection of variants
 
+resetViewport = True
+
+generateColors = True
+collection1 = [(1,0,0,1),(0,1,0,1),(0,0,1,1),(1,1,1,1),(.5,0,0,1)]
+collection2 = [(1,1,0,1),(0,1,1,1),(.5,0,1,1),(.5,1,1,1),(0,.5,0,1)]
+colorList = {"Cube_2_0":collection1,"Sphere_1_0":collection2}
+
 # The path to Blend_My_NFTs folder:
 # Example mac: /Users/Path/to/Blend_My_NFTs
 # Example windows: C:\Users\Path\to\Blend_My_NFTs

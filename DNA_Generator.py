@@ -30,6 +30,16 @@ class bcolors:
 
 time_start = time.time()
 
+def stripColorFromName(name):
+   return "_".join(name.split("_")[:-1])
+
+def checkCollectionChildNames():
+   #Needs to be implemented to ensure that objects under a collection share the same structure check before compiling list
+   #Example
+   #AreaLight Collection 
+   #AreaLigjht_1_0 != AreaLight_2_0 
+   #AreaLigjht vs AreaLight
+   return True
 def returnData():
    '''
    Generates important variables, dictionaries, and lists needed to be stored to catalog the NFTs.
@@ -39,9 +49,32 @@ def returnData():
    listAllCollections = []
    scriptIgnore = bpy.data.collections["Script_Ignore"]
 
-   for i in bpy.data.collections:
-      listAllCollections.append(i.name)
+   def listSubIgnoreCollections():
+      def getParentSubCollections(collection):
+         yield collection
+         for child in collection.children:
+            yield from getParentSubCollections(child)
+      collList = []
+      for c in getParentSubCollections(scriptIgnore):
+         collList.append(c.name)
+      return collList
 
+   ignoreList = listSubIgnoreCollections()
+   print(ignoreList)
+   for i in bpy.data.collections:
+      if generateColors:
+         if i.name in colorList:
+            for j in range(len(colorList[i.name])):
+               if i.name[-1].isdigit() and i.name not in ignoreList:
+                  listAllCollections.append(i.name + "_" + str(j+1))
+               elif j == 0:
+                  listAllCollections.append(i.name)
+         elif i.name[-1].isdigit() and i.name not in ignoreList:
+            listAllCollections.append(i.name+"_0")
+         else:
+             listAllCollections.append(i.name)
+      else:
+         listAllCollections.append(i.name)
    listAllCollections.remove(scriptIgnore.name)
 
    def allScriptIgnore(collection):
@@ -78,6 +111,8 @@ def returnData():
       Creates a dictionary of each attribute
       '''
       allAttDataList = {}
+      count = 0
+      previousAttribute = ""
       for i in attributeVariants:
 
          def getName(i):
@@ -89,7 +124,7 @@ def returnData():
 
          def getOrder_rarity(i):
             '''
-            Returns the "order" and "rarity" of i attribute variant in a list
+            Returns the "order", "rarity" and "color" (if enabled) of i attribute variant in a list
             '''
             x = re.sub(r'[a-zA-Z]', "", i)
             a = x.split("_")
@@ -106,8 +141,21 @@ def returnData():
             return
          elif len(orderRarity) > 0:
             number = orderRarity[0]
+            if generateColors:
+               if count == 1 or count == 0:
+                  previousAttribute = i.partition("_")[0]
+                  count +=1
+               elif i.partition("_")[0] == previousAttribute:
+                  count +=1
+               else:
+                  count = 1
+               number = str(count)
             rarity = orderRarity[1]
-            eachObject = {"name": name, "number": number, "rarity": rarity}
+            if generateColors and stripColorFromName(i) in colorList:
+               color = orderRarity[2]
+            else:
+               color = "0"
+            eachObject = {"name": name, "number": number, "rarity": rarity, "color": color}
             allAttDataList[i] = eachObject
       return allAttDataList
 
@@ -122,7 +170,17 @@ def returnData():
          colParLong = list(bpy.data.collections[str(i)].children)
          colParShort = {}
          for x in colParLong:
-            colParShort[x.name] = None
+            if generateColors:
+               '''
+               Append colors to blender name for PNG generator and NFTRecord.json to create the correct list
+               '''
+               if x.name in colorList:
+                  for j in range(len(colorList[x.name])):
+                     colParShort[x.name + "_" + str(j+1)] = None
+               else:
+                  colParShort[x.name + "_0"] = None
+            else:
+               colParShort[x.name] = None
          hierarchy[i] = colParShort
 
       for a in hierarchy:
@@ -173,6 +231,11 @@ def returnData():
 
    for i in variantMetaData:
       def cameraToggle(i,toggle = True):
+         if generateColors:
+            '''
+            Remove Color code so blender recognises the collection
+            '''
+            i = stripColorFromName(i)
          bpy.data.collections[i].hide_render = toggle
          bpy.data.collections[i].hide_viewport = toggle
       cameraToggle(i)
