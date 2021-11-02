@@ -9,14 +9,15 @@ sys.path.append(dir)
 
 sys.modules.values()
 
-import DNA_Generator
-import Batch_Sorter
+from src.generators_and_sorters import DNA_Generator
+
+from src.generators_and_sorters import Batch_Sorter
 
 importlib.reload(DNA_Generator)
-from DNA_Generator import *
+from src.generators_and_sorters.DNA_Generator import *
 
 importlib.reload(Batch_Sorter)
-from Batch_Sorter import *
+from src.generators_and_sorters.Batch_Sorter import *
 
 DNA_Generator.send_To_Record_JSON()
 Batch_Sorter.makeBatches()

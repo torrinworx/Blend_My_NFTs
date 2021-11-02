@@ -1,23 +1,26 @@
 import bpy
 import os
-import sys
-import itertools
-import time
-import copy
 import re
+import sys
+import copy
+import time
 import json
+import itertools
 import importlib
+
+dir = os.path.dirname(bpy.data.filepath)
+sys.path.append(dir)
 
 sys.modules.values()
 
-import config
-import DNA_Generator
+from src.main import config
+from src.generators_and_sorters import DNA_Generator
 
 importlib.reload(config)
-from config import *
+from src.main.config import *
 
 importlib.reload(DNA_Generator)
-from DNA_Generator import *
+from src.generators_and_sorters.DNA_Generator import *
 
 
 def sortRarityWeights(DataDictionary):

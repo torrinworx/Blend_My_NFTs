@@ -13,14 +13,14 @@ sys.path.append(dir)
 
 sys.modules.values()
 
-import config
-import Rarity_Sorter
+from src.main import config
+from src.generators_and_sorters import Rarity_Sorter
 
 importlib.reload(config)
-from config import *
+from src.main.config import *
 
 importlib.reload(Rarity_Sorter)
-from Rarity_Sorter import *
+from src.generators_and_sorters.Rarity_Sorter import *
 
 class bcolors:
    OK = '\033[92m'  # GREEN
@@ -258,7 +258,7 @@ def turnAll(toggle):
 # Also don't forget to add an empty list when its done to NFTRecord or else this file can't run properly.
 def clearNFTRecord(AREYOUSURE):
    if AREYOUSURE == True:
-      file_name = os.path.join(save_path, "NFTRecord.json")
+      file_name = os.path.join(save_path, "../../NFTRecord.json")
       print("Wiping NFTRecord.json of all data...")
 
       ledger = json.load(open(file_name))

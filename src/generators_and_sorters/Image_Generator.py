@@ -12,10 +12,10 @@ import json
 import importlib
 #from PIL.PngImagePlugin import PngImageFile, PngInfo
 
-import config
+from src.main import config
 
 importlib.reload(config)
-from config import *
+from src.main.config import *
 
 def getBatchData():
     '''
@@ -38,6 +38,8 @@ def render_and_save_NFTs():
     Renders the NFT DNA in a Batch#.json, where # is renderBatch in config.py. Turns off the viewport camera and
     the render camera for all items in hierarchy.
     '''
+
+    time_start_1 = time.time()
 
     x = 1
     for a in BatchDNAList:
@@ -83,12 +85,14 @@ def render_and_save_NFTs():
 
         time_start_2 = time.time()
 
-        fullImagePath = images_path + slash + "{}.jpeg".format(name)
+        imageOutputBatchSubFolder = "Batch" + str(renderBatch)
+
+        fullImagePath = images_path + slash + imageOutputBatchSubFolder + slash + "{}.jpeg".format(name)
 
         bpy.context.scene.render.filepath = fullImagePath
         bpy.context.scene.render.image_settings.file_format = fileFormat
         bpy.ops.render.render(write_still=True)
-        print("Completed {} render. Time: ".format(name) + "%.4f seconds" % (time.time() - time_start_2))
+        print("Completed {} render in ".format(name) + "%.4f seconds" % (time.time() - time_start_2))
 
         #Image meta data stuff, for future implementation, doesn't work right now:
         '''
@@ -114,7 +118,7 @@ def render_and_save_NFTs():
 
     print("")
     print("All NFT PNGs rendered, process finished.")
-    print("Time to complete all renders in Batch{}.json:".format(renderBatch) + "%.4f seconds" % (time.time() - time_start_2))
+    print("Completed all renders in Batch{}.json in ".format(renderBatch) + "%.4f seconds" % (time.time() - time_start_1))
     print("")
 
 render_and_save_NFTs()

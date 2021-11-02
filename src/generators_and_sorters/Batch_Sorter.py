@@ -11,10 +11,10 @@ sys.path.append(dir)
 
 sys.modules.values()
 
-import config
+from src.main import config
 
 importlib.reload(config)
-from config import *
+from src.main.config import *
 
 def makeBatches():
       time_start = time.time()
