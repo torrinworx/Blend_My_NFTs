@@ -119,6 +119,7 @@ def render_and_save_NFTs():
         bpy.context.scene.render.image_settings.file_format = fileFormat
         bpy.ops.render.render(write_still=True)
 
+        print("Completed {} render in ".format(name) + "%.4f seconds" % (time.time() - time_start_2))
 
         #Image meta data stuff, for future implementation, doesn't work right now:
         '''
