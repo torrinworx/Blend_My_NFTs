@@ -16,10 +16,17 @@ includeRarity = False
 
 resetViewport = True # Turns all viewport and render cameras on after Image_Generator
 
-generateColors = True
-collection1 = [(1,0,0,1),(0,1,0,1),(0,0,1,1),(1,1,1,1),(.5,0,0,1)]
-collection2 = [(1,1,0,1),(0,1,1,1),(.5,0,1,1),(.5,1,1,1),(0,.5,0,1)]
-colorList = {"Cube_2_0":collection1,"Sphere_1_0":collection2}
+generateColors = True # When set to true this applies the sets of colors listed below to the objects in the collections named below 
+
+# The collections below are RGBA Color values. You can put as many or as little color values in these lists as you would like.
+# You can create any number of rgbaColorLists and assign them to any number of collections that you would like.
+# Each set of rgbaColorList1 assigned to an object by collection name in the colorList will act like an attribute and create a unique variant of that item.
+rgbaColorList1 = [(1,0,0,1),(0,1,0,1),(0,0,1,1),(1,1,1,1),(.5,0,0,1)] 
+rgbaColorList2 = [(1,1,0,1),(0,1,1,1),(.5,0,1,1),(.5,1,1,1),(0,.5,0,1)]
+# The following color list can be as long or as short as you want it to be.
+# To use this all you need to do is place the name of the collection you want colored in the "" and the set of colors you want to apply to it after the :
+# The collection named can only contain objects and not sub collections. Every object in the collection will be set to the colors you assigned above for each attribute
+colorList = {"Cube_2_0":rgbaColorList1,"Sphere_1_0":rgbaColorList2} 
 
 # The path to Blend_My_NFTs folder:
 save_path_mac = '/Users/torrinleonard/Desktop/Blend_My_NFTs'
