@@ -14,7 +14,7 @@ includeRarity = False
 # True = include weighted rarity percentages in NFTRecord.json calculations,
 # False = Pure random selection of variants
 
-resetViewport = True
+resetViewport = True # Turns all viewport and render cameras on after Image_Generator
 
 generateColors = True
 collection1 = [(1,0,0,1),(0,1,0,1),(0,0,1,1),(1,1,1,1),(.5,0,0,1)]
