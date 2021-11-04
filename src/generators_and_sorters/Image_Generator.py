@@ -25,7 +25,7 @@ def getBatchData():
     Retrieves a given batches data determined by renderBatch in config.py
     '''
 
-    file_name = os.path.join(batch_path, "Batch{}.json".format(renderBatch))
+    file_name = os.path.join(batch_save_path, "Batch{}.json".format(renderBatch))
     batch = json.load(open(file_name))
     
     NFTs_in_Batch = batch["NFTs_in_Batch"]
@@ -96,7 +96,7 @@ def render_and_save_NFTs():
 
         imageOutputBatchSubFolder = "Batch" + str(renderBatch)
 
-        fullImagePath = images_path + slash + imageOutputBatchSubFolder + slash + "{}.jpeg".format(name)
+        fullImagePath = images_save_path + slash + imageOutputBatchSubFolder + slash + "{}.jpeg".format(name)
 
         if generateColors:
             for c in dnaDictionary:

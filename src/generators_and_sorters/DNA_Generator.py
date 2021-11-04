@@ -23,6 +23,9 @@ importlib.reload(Rarity_Sorter)
 from src.generators_and_sorters.Rarity_Sorter import *
 
 class bcolors:
+   '''
+   The colour of console messages.
+   '''
    OK = '\033[92m'  # GREEN
    WARNING = '\033[93m'  # YELLOW
    ERROR = '\033[91m'  # RED
@@ -40,6 +43,7 @@ def checkCollectionChildNames():
    #AreaLigjht_1_0 != AreaLight_2_0 
    #AreaLigjht vs AreaLight
    return True
+
 def returnData():
    '''
    Generates important variables, dictionaries, and lists needed to be stored to catalog the NFTs.
@@ -213,7 +217,6 @@ def returnData():
          print("Here is the hierarchy of all collections the DNA_Generator gathered from your .blend file, excluding "
                "\nthose in Script_Ignore:")
          print(hierarchy)
-
 
       numBatches = combinations/nftsPerBatch
 

@@ -51,7 +51,7 @@ def makeBatches():
 
             batchDictionaryObject = json.dumps(batchDictionary, indent=1, ensure_ascii=True)
 
-            with open(batch_path + slash + ("Batch{}.json".format(i+1)), "w") as outfile:
+            with open(batch_save_path + slash + ("Batch{}.json".format(i + 1)), "w") as outfile:
                   outfile.write(batchDictionaryObject)
 
             i += 1
@@ -66,5 +66,5 @@ def makeBatches():
 
             incompleteBatch = json.dumps(incompleteBatch, indent=1, ensure_ascii=True)
 
-            with open(batch_path + slash + ("Batch{}.json".format(i+1)), "w") as outfile2:
+            with open(batch_save_path + slash + ("Batch{}.json".format(i + 1)), "w") as outfile2:
                   outfile2.write(incompleteBatch)
