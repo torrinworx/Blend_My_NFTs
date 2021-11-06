@@ -321,15 +321,9 @@ def turnAll(toggle):
 
 # ONLY FOR TESTING, DO NOT EVER USE IF RECORD IS FULL OF REAL DATA
 # THIS WILL DELETE THE RECORD:
-# Also don't forget to add an empty list when its done to NFTRecord or else this file can't run properly.
+# Not - NFTRecrod.json will be created the next time you run main.py
 def clearNFTRecord(AREYOUSURE):
    if AREYOUSURE == True:
-      file_name = os.path.join(save_path, "../../NFTRecord.json")
-      print("Wiping NFTRecord.json of all data...")
+      file_name = os.remove("NFTRecord.json")
 
-      ledger = json.load(open(file_name))
-
-      with open(file_name, 'w') as outfile:
-         ledger.clear()
-         outfile.close()
 #clearNFTRecord()
