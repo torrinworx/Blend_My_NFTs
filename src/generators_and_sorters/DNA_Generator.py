@@ -341,7 +341,7 @@ def turnAll(toggle):
 
 # ONLY FOR TESTING, DO NOT EVER USE IF RECORD IS FULL OF REAL DATA
 # THIS WILL DELETE THE RECORD:
-# Not - NFTRecrod.json will be created the next time you run main.py
+# Note - NFTRecrod.json will be created the next time you run main.py
 def clearNFTRecord(AREYOUSURE):
    if AREYOUSURE == True:
       os.remove("NFTRecord.json")
