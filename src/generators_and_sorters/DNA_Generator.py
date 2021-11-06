@@ -50,47 +50,67 @@ def returnData():
    :return: listAllCollections, attributeCollections, attributeCollections1, hierarchy, variantMetaData, possibleCombinations
    '''
 
-   listAllCollections = []
+   coll = bpy.context.scene.collection
    scriptIgnore = bpy.data.collections["Script_Ignore"]
+   listAllCollInScene = []
+   listAllCollections = []
+
+   def traverse_tree(t):
+      yield t
+      for child in t.children:
+         yield from traverse_tree(child)
+
+   for c in traverse_tree(coll):
+      listAllCollInScene.append(c)
 
    def listSubIgnoreCollections():
       def getParentSubCollections(collection):
          yield collection
          for child in collection.children:
             yield from getParentSubCollections(child)
+
       collList = []
       for c in getParentSubCollections(scriptIgnore):
          collList.append(c.name)
       return collList
 
    ignoreList = listSubIgnoreCollections()
-   print(ignoreList)
-   for i in bpy.data.collections:
+
+   for i in listAllCollInScene:
       if generateColors:
          if i.name in colorList:
             for j in range(len(colorList[i.name])):
                if i.name[-1].isdigit() and i.name not in ignoreList:
-                  listAllCollections.append(i.name + "_" + str(j+1))
+                  listAllCollections.append(i.name + "_" + str(j + 1))
                elif j == 0:
                   listAllCollections.append(i.name)
          elif i.name[-1].isdigit() and i.name not in ignoreList:
-            listAllCollections.append(i.name+"_0")
+            listAllCollections.append(i.name + "_0")
          else:
-             listAllCollections.append(i.name)
+            listAllCollections.append(i.name)
       else:
          listAllCollections.append(i.name)
    listAllCollections.remove(scriptIgnore.name)
+   listAllCollections.remove("Master Collection")
 
    def allScriptIgnore(collection):
       '''
-      Removes all collections, sub collections in Script_Ignore" collection from listAllCollections.
+      Removes all collections, sub collections in Script_Ignore collection from listAllCollections.
       '''
       for coll in list(collection.children):
          listAllCollections.remove(coll.name)
          listColl = list(coll.children)
          if len(listColl) > 0:
             allScriptIgnore(coll)
+
    allScriptIgnore(scriptIgnore)
+   listAllCollections.sort()
+
+
+
+
+
+
 
    exclude = ["_","1","2","3","4","5","6","7","8","9","0"]
    attributeCollections = copy.deepcopy(listAllCollections)
@@ -324,6 +344,6 @@ def turnAll(toggle):
 # Not - NFTRecrod.json will be created the next time you run main.py
 def clearNFTRecord(AREYOUSURE):
    if AREYOUSURE == True:
-      file_name = os.remove("NFTRecord.json")
+      os.remove("NFTRecord.json")
 
 #clearNFTRecord()

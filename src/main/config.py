@@ -17,7 +17,7 @@ includeRarity = False
 resetViewport = True # If True: turns all viewport and render cameras on after Image_Generator is finished operations
 
 # Object colour options:
-generateColors = True # When set to true this applies the sets of colors listed below to the objects in the collections named below 
+generateColors = True # When set to true this applies the sets of colors listed below to the objects in the collections named below
 
 # The collections below are RGBA Color values. You can put as many or as little color values in these lists as you would like.
 # You can create any number of rgbaColorLists and assign them to any number of collections that you would like.
