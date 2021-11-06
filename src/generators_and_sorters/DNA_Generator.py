@@ -23,6 +23,9 @@ importlib.reload(Rarity_Sorter)
 from src.generators_and_sorters.Rarity_Sorter import *
 
 class bcolors:
+   '''
+   The colour of console messages.
+   '''
    OK = '\033[92m'  # GREEN
    WARNING = '\033[93m'  # YELLOW
    ERROR = '\033[91m'  # RED
@@ -40,52 +43,74 @@ def checkCollectionChildNames():
    #AreaLigjht_1_0 != AreaLight_2_0 
    #AreaLigjht vs AreaLight
    return True
+
 def returnData():
    '''
    Generates important variables, dictionaries, and lists needed to be stored to catalog the NFTs.
    :return: listAllCollections, attributeCollections, attributeCollections1, hierarchy, variantMetaData, possibleCombinations
    '''
 
-   listAllCollections = []
+   coll = bpy.context.scene.collection
    scriptIgnore = bpy.data.collections["Script_Ignore"]
+   listAllCollInScene = []
+   listAllCollections = []
+
+   def traverse_tree(t):
+      yield t
+      for child in t.children:
+         yield from traverse_tree(child)
+
+   for c in traverse_tree(coll):
+      listAllCollInScene.append(c)
 
    def listSubIgnoreCollections():
       def getParentSubCollections(collection):
          yield collection
          for child in collection.children:
             yield from getParentSubCollections(child)
+
       collList = []
       for c in getParentSubCollections(scriptIgnore):
          collList.append(c.name)
       return collList
 
    ignoreList = listSubIgnoreCollections()
-   for i in bpy.data.collections:
+
+   for i in listAllCollInScene:
       if generateColors:
          if i.name in colorList:
             for j in range(len(colorList[i.name])):
                if i.name[-1].isdigit() and i.name not in ignoreList:
-                  listAllCollections.append(i.name + "_" + str(j+1))
+                  listAllCollections.append(i.name + "_" + str(j + 1))
                elif j == 0:
                   listAllCollections.append(i.name)
          elif i.name[-1].isdigit() and i.name not in ignoreList:
-            listAllCollections.append(i.name+"_0")
+            listAllCollections.append(i.name + "_0")
          else:
-             listAllCollections.append(i.name)
+            listAllCollections.append(i.name)
       else:
          listAllCollections.append(i.name)
    listAllCollections.remove(scriptIgnore.name)
+   listAllCollections.remove("Master Collection")
 
    def allScriptIgnore(collection):
       '''
-      Removes all collections, sub collections in Script_Ignore" collection from listAllCollections.
+      Removes all collections, sub collections in Script_Ignore collection from listAllCollections.
       '''
       for coll in list(collection.children):
          listAllCollections.remove(coll.name)
          listColl = list(coll.children)
          if len(listColl) > 0:
             allScriptIgnore(coll)
+
    allScriptIgnore(scriptIgnore)
+   listAllCollections.sort()
+
+
+
+
+
+
 
    exclude = ["_","1","2","3","4","5","6","7","8","9","0"]
    attributeCollections = copy.deepcopy(listAllCollections)
@@ -218,7 +243,6 @@ def returnData():
                "\nthose in Script_Ignore:")
          print(hierarchy)
 
-
       numBatches = combinations/nftsPerBatch
 
       if numBatches < 1:
@@ -322,15 +346,9 @@ def turnAll(toggle):
 
 # ONLY FOR TESTING, DO NOT EVER USE IF RECORD IS FULL OF REAL DATA
 # THIS WILL DELETE THE RECORD:
-# Also don't forget to add an empty list when its done to NFTRecord or else this file can't run properly.
+# Note - NFTRecrod.json will be created the next time you run main.py
 def clearNFTRecord(AREYOUSURE):
    if AREYOUSURE == True:
-      file_name = os.path.join(save_path, "../../NFTRecord.json")
-      print("Wiping NFTRecord.json of all data...")
+      os.remove("NFTRecord.json")
 
-      ledger = json.load(open(file_name))
-
-      with open(file_name, 'w') as outfile:
-         ledger.clear()
-         outfile.close()
 #clearNFTRecord()

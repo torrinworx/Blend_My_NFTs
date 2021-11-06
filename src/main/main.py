@@ -19,5 +19,11 @@ from src.generators_and_sorters.DNA_Generator import *
 importlib.reload(Batch_Sorter)
 from src.generators_and_sorters.Batch_Sorter import *
 
-DNA_Generator.send_To_Record_JSON()
-Batch_Sorter.makeBatches()
+if not useModels:
+    DNA_Generator.send_To_Record_JSON()
+    Batch_Sorter.makeBatches()
+
+'''
+if useModels:
+    # Some function that activates DNA_Generator_3D_Models.py
+'''
