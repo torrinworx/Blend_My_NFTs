@@ -223,7 +223,12 @@ def returnData():
       '''
       hierarchyByNum = []
       for i in hierarchy:
-         hierarchyByNum.append(len(hierarchy[i]))
+         # Ignore Collections with nothing in them
+         if len(hierarchy[i]) != 0:
+            hierarchyByNum.append(len(hierarchy[i]))
+         else:
+            print("The following collection has been identified as empty:")
+            print(i)
       combinations = 1
       for i in hierarchyByNum:
          combinations = combinations*i
