@@ -1,0 +1,4 @@
+# This directory is intentionarly ignored - this file only applies to the git repo
+*
+*/
+!.gitignore

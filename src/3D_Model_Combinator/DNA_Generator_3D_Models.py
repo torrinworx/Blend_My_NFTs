@@ -10,11 +10,9 @@ import importlib
 
 dir = os.path.dirname(bpy.data.filepath)
 sys.path.append(dir)
-
 sys.modules.values()
 
 from src.main import config
-
 importlib.reload(config)
 from src.main.config import *
 
@@ -38,21 +36,15 @@ def deleteAllObjects():
     '''
     Deletes all objects in the current scene open in Blender
     '''
-
     deleteListObjects = ['MESH', 'CURVE', 'SURFACE', 'META', 'FONT', 'HAIR', 'POINTCLOUD', 'VOLUME', 'GPENCIL',
-                         'ARMATURE',
-                         'LATTICE', 'EMPTY', 'LIGHT', 'LIGHT_PROBE', 'CAMERA', 'SPEAKER']
-
-    keep = list(bpy.data.collections["Script_Ignore"].all_objects)
+                         'ARMATURE', 'LATTICE', 'EMPTY', 'LIGHT', 'LIGHT_PROBE', 'CAMERA', 'SPEAKER']
 
     for o in bpy.context.scene.objects:
-        if o not in keep:
-            for i in deleteListObjects:
-                if o.type == i:
-                    o.select_set(False)
-                else:
-                    o.select_set(True)
-
+        for i in deleteListObjects:
+            if o.type == i:
+                o.select_set(False)
+            else:
+                o.select_set(True)
     bpy.ops.object.delete()
 
 attributeList = os.listdir(modelAssetPath)
@@ -78,43 +70,20 @@ def numOfCombinations(hierarchy):
       print(bcolors.FAIL + "ERROR:" + bcolors.RESET)
       print("The number of all possible combinations is equal to 0. Please review your collection hierarchy \n "
             "and ensure it is formatted correctly.")
-
   return combinations
 
 combinations = numOfCombinations(hierarchy)
-
 allCombinationsNames = list(itertools.product(*hierarchy.values()))
 
-if objectFormatImport == "gltf":
-    path1 = modelAssetPath + slash + "Script_Ignore_Folder"
-    Script_Ignore_Folder = os.listdir(path1)
-
-    listScriptIgnoreObjects = []
-
-    for i in Script_Ignore_Folder:
-        objName = i.removesuffix(".glb")
-
-        def traverse_tree(t):
-            yield t
-            for child in t.children:
-                yield from traverse_tree(child)
-
-        coll = bpy.context.scene.collection
-
-        for c in traverse_tree(coll):
-            if c.name == "Script_Ignore":  # Specify the name of you main collection here
-                my_sub_coll = bpy.data.collections.new(objName)
-                # Add it to the main collection
-                c.children.link(my_sub_coll)
-
-        bpy.ops.import_scene.gltf(filepath = path1 + slash + i)
-
-        for ob in bpy.context.selected_objects:
-            my_sub_coll.objects.link(ob)
-            bpy.context.scene.collection.objects.unlink(ob)
-
-
+count = 1
 for i in allCombinationsNames:
+    if objectFormatImport == "gltf":
+        path1 = modelAssetPath + slash + "Script_Ignore_Folder"
+        Script_Ignore_Folder = os.listdir(path1)
+
+        for h in Script_Ignore_Folder:
+            bpy.ops.import_scene.gltf(filepath=path1 + slash + h)
+
     for j in i:
         def getParent(hierarchy):
             for x in hierarchy:
@@ -126,10 +95,11 @@ for i in allCombinationsNames:
         path2 = modelAssetPath + slash + parent + slash + j
 
         if objectFormatImport == "gltf":
-            bpy.ops.import_scene.gltf(filepath = path2)
-        
+            bpy.ops.import_scene.gltf(filepath=path2)
+
+    bpy.ops.export_scene.gltf(filepath=model_save_path + slash + imageName + str(count),
+                              check_existing=True, export_format='GLB')
     deleteAllObjects()
-
-
+    count += 1
 
 print("Generated .glb files in %.4f seconds" % (time.time() - time_start))
