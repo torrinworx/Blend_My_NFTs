@@ -10,10 +10,10 @@ import importlib
 
 dir = os.path.dirname(bpy.data.filepath)
 sys.path.append(dir)
-
 sys.modules.values()
 
 from src.main import config
+
 from src.generators_and_sorters import Rarity_Sorter
 
 importlib.reload(config)
@@ -105,12 +105,6 @@ def returnData():
 
    allScriptIgnore(scriptIgnore)
    listAllCollections.sort()
-
-
-
-
-
-
 
    exclude = ["_","1","2","3","4","5","6","7","8","9","0"]
    attributeCollections = copy.deepcopy(listAllCollections)

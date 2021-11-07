@@ -6,24 +6,29 @@ import importlib
 
 dir = os.path.dirname(bpy.data.filepath)
 sys.path.append(dir)
-
 sys.modules.values()
 
-from src.generators_and_sorters import DNA_Generator
+from src.main import config
 
-from src.generators_and_sorters import Batch_Sorter
+importlib.reload(config)
+from src.main.config import *
 
-importlib.reload(DNA_Generator)
-from src.generators_and_sorters.DNA_Generator import *
+if config.use3DModels:
+    from src.generators_and_sorters import Model_Generator
 
-importlib.reload(Batch_Sorter)
-from src.generators_and_sorters.Batch_Sorter import *
+    importlib.reload(Model_Generator)
+    from src.generators_and_sorters.Model_Generator import *
 
-if not useModels:
+    Model_Generator.generate3DModels()
+
+if not config.use3DModels:
+    from src.generators_and_sorters import DNA_Generator
+    from src.generators_and_sorters import Batch_Sorter
+
+    importlib.reload(DNA_Generator)
+    from src.generators_and_sorters.DNA_Generator import *
+    importlib.reload(Batch_Sorter)
+    from src.generators_and_sorters.Batch_Sorter import *
+
     DNA_Generator.send_To_Record_JSON()
     Batch_Sorter.makeBatches()
-
-'''
-if useModels:
-    # Some function that activates DNA_Generator_3D_Models.py
-'''
