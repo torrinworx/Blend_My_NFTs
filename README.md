@@ -45,6 +45,10 @@ For the following terms, lets say you are creating an NFT collection where the i
 
 ## Getting started
 
+I have created a tutorial video which you can find here: https://www.youtube.com/watch?v=dUajXAZzSPc
+
+This video is just a glossery and doesn't go to indepth on how to structure your Blender collections to work properly with Blend_My_NFTs. If you want more details about this, keep following the rest of this tutorial page as it will be necessary to run render images with this software. 
+
 Follow these steps to setup Blend_My_NFTs:
 
 1. Scroll up on this page and click the green "Code" button at the top of this page
