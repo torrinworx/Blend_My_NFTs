@@ -5,6 +5,7 @@ import sys
 import copy
 import time
 import json
+import random
 import itertools
 import importlib
 
@@ -35,14 +36,6 @@ time_start = time.time()
 
 def stripColorFromName(name):
    return "_".join(name.split("_")[:-1])
-
-def checkCollectionChildNames():
-   #Needs to be implemented to ensure that objects under a collection share the same structure check before compiling list
-   #Example
-   #AreaLight Collection 
-   #AreaLigjht_1_0 != AreaLight_2_0 
-   #AreaLigjht vs AreaLight
-   return True
 
 def returnData():
    '''
@@ -294,6 +287,22 @@ def generateNFT_DNA(possibleCombinations):
 
       dna = ''.join(dnaStr.split('-', 1))
       allDNAstr.append(dna)
+
+   if enableMaxNFTs:
+      '''
+      Remove DNA from DNAList until DNAList = maxNFTs from config.py
+      Will need to be changed when creating Rarity_Sorter
+      '''
+      x = len(allDNAstr)
+      while x > maxNFTs:
+         y = random.choice(allDNAstr)
+         allDNAstr.remove(y)
+         x -= 1
+
+      possibleCombinations = maxNFTs
+
+      if nftsPerBatch > maxNFTs:
+         print("The Max num of NFTs you chose is smaller than the NFTs Per Batch you set. Only " + str(maxNFTs) + " were added to 1 batch")
 
    #Data stored in batchDataDictionary:
    batchDataDictionary["numNFTsGenerated"] = possibleCombinations
