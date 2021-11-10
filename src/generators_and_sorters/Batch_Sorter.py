@@ -17,7 +17,6 @@ importlib.reload(config)
 from src.main.config import *
 
 def makeBatches():
-      time_start = time.time()
 
       file_name = os.path.join(save_path, "NFTRecord.json")
       DataDictionary = json.load(open(file_name))

@@ -120,28 +120,8 @@ def render_and_save_NFTs():
         bpy.ops.render.render(write_still=True)
 
         print("Completed {} render in ".format(name) + "%.4f seconds" % (time.time() - time_start_2))
-
-        #Image meta data stuff, for future implementation, doesn't work right now:
-        '''
-        def imageMetaData():
-
-            This function adds meta data to the image that was just generated.
-
-            meta = {}
-            meta[imageName + " DNA"] = a
-            meta["NFT Record hierarchy"] = hierarchy
-            metaString = json.dumps(meta)
-
-            image = name + "." + fileFormat.lower()
-
-            targetImage = PngImageFile(image)
-
-            metaData = PngInfo().add_text(metaString, "test")
-
-            targetImage.save(image, pnginfo = metaData)
-        '''
-
         x += 1
+
     if resetViewport:
         for a in BatchDNAList:
             for i in hierarchy:
@@ -150,10 +130,10 @@ def render_and_save_NFTs():
                         j = stripColorFromName(j)
                     bpy.data.collections[j].hide_render = False
                     bpy.data.collections[j].hide_viewport = False
+
     print("")
     print("All NFT PNGs rendered, process finished.")
     print("Completed all renders in Batch{}.json in ".format(renderBatch) + "%.4f seconds" % (time.time() - time_start_1))
     print("")
 
 render_and_save_NFTs()
-
