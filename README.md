@@ -9,7 +9,9 @@ Blend_My_NFTs is a work-in-progress Blender add on that can automatically genera
 
 ## Disclaimer
 
-Nothing in this repository is financial advice. Create an NFT project/collection at your own risk, we are simply providing a means of acomplishing a goal, not investment/financial information about that goal. Do your own research before spending money on NFTs or any asset for that matter. 
+Nothing in this repository is financial advice. Create an NFT project/collection at your own risk, we are simply providing a means of acomplishing a goal, not investment/financial information about that goal. Do your own research before spending money on NFTs or any asset for that matter.
+
+Blend_My_NFTs works with Windows 10 and MacOS Big Sur. These are the operating systems I have tested the scripts on, I do not garuntee they will work on other systems. 
 
 I do not garuntee this software will work with your setup. There are many variables and factors that go into running the software provided, it differs from system to system, and from blend file to blend file.
 
@@ -80,14 +82,14 @@ Here is an example of the collection format I used to create this script in my .
 
 <img width="422" alt="Screen Shot 2021-10-24 at 8 37 35 PM" src="https://user-images.githubusercontent.com/82110564/138619320-80a9f2a7-719a-46bc-b1cf-0e19dd4d640d.png">
 
-## How to run scripts in Blender
+## How to run the Image_Generator scripts in Blender
 
 If you have no experience with Blender, python, or the Blender API, please watch this tutorial for basic Blender Python information: https://www.youtube.com/watch?v=cyt0O7saU4Q 
 
 There is also helpful documentation in the Blender API about running scripts here: 
 https://docs.blender.org/api/current/info_quickstart.html#running-scripts
 
-Note - You will need to install the Icon Viewer add on for Blender: https://docs.blender.org/manual/en/latest/addons/development/icon_viewer.html 
+Note - You might want to install the Icon Viewer add on for Blender: https://docs.blender.org/manual/en/latest/addons/development/icon_viewer.html 
 
 In the Blend_My_NFTs open the config.py file. Here you can customize some aspects of Blend_My_NFTs. The most important thing to do here is to add the path of Blend_My_NFTs on your computer to either save_path_mac or save_path_windows.
 
@@ -99,11 +101,11 @@ In the Blend_My_NFTs open the config.py file. Here you can customize some aspect
 
 <img width="1422" alt="Screen Shot 2021-10-29 at 11 31 38 PM" src="https://user-images.githubusercontent.com/82110564/139518856-7798ea86-0be0-4511-bc87-fa09ce2f6538.png">
 
-3. With the Blender File View open, navigate to the Blend_My_NFTs folder, select main.py and click "Open" in the bottom right corner:
+3. With the Blender File View open, navigate to the Blend_My_NFTs folder, navigate to and select main.py. Click "Open" in the bottom right corner:
 
 <img width="1061" alt="Screen Shot 2021-10-29 at 11 35 03 PM" src="https://user-images.githubusercontent.com/82110564/139518920-a987d72a-a213-4579-a682-79e8d55fedca.png">
 
-4. Repeat the previous step for PNG_Generator.py.
+4. Repeat the previous step for Image_Generator.py file located in the Generators_and_Sorters folder.
 
 5. To navigate to the a script click the drop down button shown circled below:
 
@@ -118,3 +120,30 @@ In the Blend_My_NFTs open the config.py file. Here you can customize some aspect
 Run the scripts in the following order: 
 1. main.py - Generates NFTRecord.json, a list of all possible NFT combinations then randomly selects NFTs from NFTReocord.json and adds them to a specified number of Batch#.json files
 3. PNG_Generator.py - Renders the NFTs from a specified Batch #number and exmports the image to "Images from PNG Generator"
+
+## How to run the 3D Model Generator scripts in Blender
+This segment discusses setting up the 3D Model Generator. This youtube tutorial goes over a glossory of what is discussed in this section: https://www.youtube.com/watch?v=NonORFpVhLw
+
+The 3D model generator combines 3D models together and exports all possible combinations of those 3D models to a folder. 
+
+1. Similarly to the Image Generator, there is a specific way to format 3d model repositors external to Blender. In the following photo we have a folder structure. In this example, "Sphere" and "Cube" are our attributes. Any object in the "Script_Ignore_Folder" will be added to all NFT 3D models generated, and such is an appropriate place to put constant scene elements you wish to appear in every NFT you generate. 
+
+<img width="191" alt="Screen Shot 2021-11-09 at 8 55 34 PM" src="https://user-images.githubusercontent.com/82110564/141035340-576f5ca6-8710-4ce1-a9ad-a28c75653c6e.png">
+
+2. After you have formated the repository of 3D models to the above convention, copy and past it into the 3D_Model_Input folder located in Blend_My_NFTs: 
+
+<img width="357" alt="Screen Shot 2021-11-09 at 8 59 06 PM" src="https://user-images.githubusercontent.com/82110564/141035754-3561ae2b-ee5c-4d65-ac5e-d4c17e34e3a7.png">
+
+3. Next open config.py and change the variable "use3DModels = False" to "use3DModels = True"
+
+<img width="150" alt="Screen Shot 2021-11-09 at 9 02 05 PM" src="https://user-images.githubusercontent.com/82110564/141035910-5ffb477c-956b-4a89-bda0-3665b7a85fff.png">
+
+4. In Blender open a new blend file and delete everything from the scene. 
+
+5. Save the .blend file to the Blend_My_NFTs folder and reload reload the .blend file.
+
+6. Follow the previous steps to add and run scripts for main.py in your empty .blend file. 
+
+7. Run main.py
+
+The generated 3D models will appear in the folder 3D_Model_Output
