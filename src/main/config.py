@@ -68,7 +68,7 @@ locationObjectAttribute = {
     "Cube": {"x": 0, "y": 0, "z": 0}
 }
 
-includeRarity = False
+enableRarity = True
 # True = include weighted rarity percentages in NFTRecord.json calculations,
 # False = Pure random selection of variants
 

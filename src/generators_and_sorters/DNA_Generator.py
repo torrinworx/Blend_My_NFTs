@@ -270,39 +270,42 @@ def generateNFT_DNA(possibleCombinations):
    print("Generating " + str(possibleCombinations) + " combinations of DNA...")
    print("")
 
+   if not enableRarity:
+      for i in hierarchy:
+         numChild = len(hierarchy[i])
+         possibleNums = list(range(1, numChild + 1))
+         listOptionVari.append(possibleNums)
 
-   for i in hierarchy:
-      numChild = len(hierarchy[i])
-      possibleNums = list(range(1, numChild + 1))
-      listOptionVari.append(possibleNums)
+      allDNAList = list(itertools.product(*listOptionVari))
+      allDNAstr = []
 
-   allDNAList = list(itertools.product(*listOptionVari))
-   allDNAstr = []
+      for i in allDNAList:
+         dnaStr = ""
+         for j in i:
+            num = "-" + str(j)
+            dnaStr += num
 
-   for i in allDNAList:
-      dnaStr = ""
-      for j in i:
-         num = "-" + str(j)
-         dnaStr += num
+         dna = ''.join(dnaStr.split('-', 1))
+         allDNAstr.append(dna)
 
-      dna = ''.join(dnaStr.split('-', 1))
-      allDNAstr.append(dna)
+      if enableMaxNFTs:
+         '''
+         Remove DNA from DNAList until DNAList = maxNFTs from config.py
+         Will need to be changed when creating Rarity_Sorter
+         '''
+         x = len(allDNAstr)
+         while x > maxNFTs:
+            y = random.choice(allDNAstr)
+            allDNAstr.remove(y)
+            x -= 1
 
-   if enableMaxNFTs:
-      '''
-      Remove DNA from DNAList until DNAList = maxNFTs from config.py
-      Will need to be changed when creating Rarity_Sorter
-      '''
-      x = len(allDNAstr)
-      while x > maxNFTs:
-         y = random.choice(allDNAstr)
-         allDNAstr.remove(y)
-         x -= 1
-
-      possibleCombinations = maxNFTs
+         possibleCombinations = maxNFTs
 
       if nftsPerBatch > maxNFTs:
          print("The Max num of NFTs you chose is smaller than the NFTs Per Batch you set. Only " + str(maxNFTs) + " were added to 1 batch")
+
+   if enableRarity:
+
 
    #Data stored in batchDataDictionary:
    batchDataDictionary["numNFTsGenerated"] = possibleCombinations

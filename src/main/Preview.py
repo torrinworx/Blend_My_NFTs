@@ -1,5 +1,5 @@
-# This file allows you to preivew some calculations/numbers generated when you run main. It allows you to make adjustments
-# to the config.py file before running main.py incase there are any issues.
+# This file allows you to preview some calculations/numbers generated when you run main. It allows you to make adjustments
+# to the config.py file before running main.py in case there are any issues.
 
 import bpy
 import os
@@ -66,3 +66,6 @@ if enableMaxNFTs:
         print("There is no extra batch with this combination.")
 
     print("The number of possible batches with Max number enabled: " + str(Number_Of_Possible_Batches2))
+
+# Add the ability to render a test image so that you can estimate the time per batch and the over all time to render
+# the total NFT collection.
