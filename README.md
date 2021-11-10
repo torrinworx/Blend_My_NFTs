@@ -1,6 +1,6 @@
 # Blend_My_NFTs
 
-**This tutorial page is not finished! I don't know how long it will take to make this page, but I'm still working on it. This page will be updated as I commit/merge new changes to the main branch. (Last updated Nov 6th, 2021)** 
+**This tutorial page is not finished! I don't know how long it will take to make this page, but I'm still working on it. This page will be updated as I commit/merge new changes to the main branch. (Last updated Nov 10th, 2021)** 
 
 ## Description
 
