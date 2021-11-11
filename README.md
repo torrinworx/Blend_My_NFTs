@@ -1,37 +1,28 @@
 # Blend_My_NFTs
-
-**This tutorial page is not finished! I don't know how long it will take to make this page, but I'm still working on it. This page will be updated as I commit/merge new changes to the main branch. (Last updated Nov 10th, 2021)** 
-
 ## Description
 
-Blend_My_NFTs is a work-in-progress Blender add on that can automatically generate thousands of images or 3D objects that can be used to create NFTs. It is bing developed to create the NFT project This Cozy Place. This Cozy Place will be an NFT image collection with a total of 10000 unique NFTs all rendered in Blender via Blend_My_NFTs. If you would like to learn more about Blend_My_NFTs or This Cozy Place, please visit our discord server: https://discord.gg/UpZt5Un57t 
+Blend_My_NFTs is a work-in-progress Blender add on that can automatically generate thousands of images or 3D objects to help you launch your NFT colleciton! It is currently in development to launch This Cozy Place. This Cozy Place is an NFT image collection that will launch in November with a total of 10000 unique NFTs all rendered in Blender via Blend_My_NFTs. If you would like to learn more about Blend_My_NFTs or This Cozy Place, please visit our discord server: https://discord.gg/UpZt5Un57t 
 
 ![NFT_Test_Render_10](https://user-images.githubusercontent.com/82110564/141149471-82ef9993-31cf-4237-94b2-28c47c0a859e.png)
 *Testing sample of the NFT collection This Cozy Place rendered in Blender 2.93 using Blend_My_NFTs add on.
 
-## Disclaimer
-
-Nothing in this repository is financial advice. Create an NFT project/collection at your own risk, we are simply providing a means of acomplishing a goal, not investment/financial information about that goal. Do your own research before spending money on NFTs or any asset for that matter.
-
-Blend_My_NFTs works with Windows 10 and MacOS Big Sur. These are the operating systems I have tested the scripts on, I do not garuntee they will work on other systems. 
-
-I do not garuntee this software will work with your setup. There are many variables and factors that go into running the software provided, it differs from system to system, and from blend file to blend file.
-
-I encourage you to do some trouble shooting, read the Blender API documentation, read this tutorial, review the scripts, and do your own research before reaching out for help on our discord. If you are really stuck and are out of options I am available on our disord channel above for consulting. However! I am not a toutor. Although I enjoy teaching people, I simply do not have the time to work, build this project, teach people Blender/Python, and live my life. So please respect my time, I'd love to help! 
-
-If building an NFT collection in blender is something you really want to do and you have experience with Blender, I suggest you get familiar with some basic Python functionality and the how to run scripts in the Belnder Text Editor (an indepth knowledge is not required). However, if you don't use Blender but have a coding background, I would suggest watching some basic tutorials just to get a feel for the software (an indepth knowledge is not required).
-
-To be honest I have no idea how to use Blender. I know some basic things, but I know the API and Python a lot better. This is my first Blender/Python project, so you may be wondering "how is he making a NFT collection with Blender??" Well I'm not, I write the code for the Blend_My_NFTs, and my team has three other members; Devlin and Caelin, who create the scenes and models in Blender, and the third is Quinn who is the lead web developer for our site. 
-
-I garuntee this will eventually be an add on to Blender and not just a script you run through the script editor. (I mostly just put this in here for motivation, please don't pester me about the date lol)
+## Features 
+- Render thousands of unique images in blender!
+- Have an object you want to turn multiple colours? We have multi colour functionality, no more hasteling with 20 differently coloured cubes.
+- Generate all possible combinations of your NFT image/3D model repository! The only limit is your imagination! And your processing power...
+- Looking to create 3D models for the metaverse instead? We got you covered! Generate thousands of 3D modeles with our Model_Generator.py script.
+- Raritize and weight your attributes (Coming soon...)
+- Generate metadata for OpenSea, CNFT, SolonArt, and more! (Coming soon...)
+- New features always dropping, join our discord to stay tuned for updates!
 
 # Blend_My_NFTs Tutorial Guide
 
-## Blender API
+## Youtube Tutorial Series
 
-This Blender add on heaviliy relies on the Blender API and its documentation which you can find here: https://docs.blender.org/api/current/index.html
+Link to the Blend_My_NFTs Tuotrial series on Youtube: 
+https://www.youtube.com/watch?v=dUajXAZzSPc&list=PLuVvzaanutXetnvsa2_xvXvpREUEYfpg1
 
-If you are interested in python I highly recomend getting familiar with some of the basic commands such as bpy.data, bpy.context, and bpy.ops. Also read the Quick Start, very helpful. 
+* I recomend watching the tutorial videos to get a feel for how the software works, then follow along with this guide. They are both good recourses for learning to run the scripts, but I stress that this guide contains more detailed information. The videos are meant to be a complementary glossory of the topics covered in this readme.md. 
 
 ## Important Terminology 
 
@@ -51,18 +42,18 @@ For the following terms, lets say you are creating an NFT collection where the i
 
 This segment discusses the setup and how to create images with Blend_My_NFTs. This youtube tutorial goes over the basic setup discussed in this section: https://www.youtube.com/watch?v=dUajXAZzSPc
 
-This video is just a glossery and doesn't go to indepth on how to structure your Blender collections to work properly with Blend_My_NFTs. If you want more details about this, keep following the rest of this tutorial page as it will be necessary to run render images with this software. 
+This video is just a glossery and doesn't go to indepth on how to structure your Blender collections to work properly with Blend_My_NFTs. If you want more details about this, keep following the rest of this tutorial page as it will be necessary to render images with this software. 
 
 Follow these steps to setup Blend_My_NFTs:
 
-1. Scroll up on this page and click the green "Code" button at the top of this page
+1. At the top of this page click the green "Code" button
 2. Click "Download Zip" - This will download the Blend_My_NFTs folder to your Downloads folder in zip format
-3. In your download folder, move Blend_My_NFTs-main.zip to your desktop
+3. In your download folder, move Blend_My_NFTs-main.zip to your desktop or another easily accessable location
 4. Unzip the file:
 - How to unzip a file on Mac: https://support.apple.com/en-ca/guide/mac-help/mchlp2528/mac
 - How to unzip a file on Windows: https://support.microsoft.com/en-us/windows/zip-and-unzip-files-f6dde0a7-0fec-8294-e1d3-703ed85e7ebc
-5. Ensure the Blend_My_NFTs-main folder is located on your Desktop for easy access (recomended)
-6. Rename the Blend_My_NFTs-main folder to Blend_My_NFTs
+5. Move the Blend_My_NFTs-main folder is located on your Desktop for easy access (recomended)
+6. Rename the Blend_My_NFTs-main folder to Blend_My_NFTs (optional)
 
 ## How to set up your .Blend file 
 
@@ -70,13 +61,13 @@ In order for Blend_My_NFTs to read your .blend file, you need to structure your 
 
 **Important Note**
 
-Your .blend file must be moved to the Blend_My_NFTs folder. When you run the script, the .blend file must have the same directory of the Blend_My_NFTs folder. The Blender text editor has some weird quirks that make finding the right directory a bit tricky, I suggest reading about it in the Blender API above. This is the only work around I could find. 
+Your .blend file must be moved to the Blend_My_NFTs folder. When you run the script, the .blend file must be in the directory of the Blend_My_NFTs folder. The Blender text editor has some weird quirks that make finding the right directory a bit tricky. If you are interested, I suggest reading about it in the Blender API above. This is the only work around I could find for now. 
 
 Rules for .blend structure: 
 
-- All Objects, collections, light sources, cameras, or anything else you want to stay constant for each NFT insert it into a collection named "Script_Ignore" exactly. This collection should be located directly beneath the 'Scene Collection' in your .blend file. Every thing in this Script_Ignore collection will be ignored by the collection (Attribute) fetcher. The state of the render and viewport camera of any objects/collections in Script_Ignore will remain unchanged during the scripts operation. The script will not turn the cameras of anything located in Script_Ignore on or off.
+- All Objects, collections, light sources, cameras, or anything else you want to stay constant for each NFT insert it into a collection named "Script_Ignore" exactly. This collection should be located directly beneath the 'Scene Collection' in your .blend file. Every thing in this Script_Ignore collection will be ignored by the collection (Attribute) fetcher. The state of the render and viewport camera of any objects/collections in Script_Ignore will remain unchanged during the scripts operation. The script will not turn the cameras of anything located in Script_Ignore on or off, so however you set them, will be how it renders.
 
-- Every Attribute of your NFT must be represented by a collection directly beneath the 'Scene Collection' in your .blend file. DO NOT USE NUMBERS  OR UNDERSCORES IN THE NAME OF THESE COLLECTIONS, this will mess with the scripts. Only use capital letters and lowercase letters, no numbers(0-9) or the underscore symbol( _ ). 
+- Every Attribute of your NFT must be represented by a collection directly beneath the 'Scene Collection' in your .blend file. DO NOT USE NUMBERS OR UNDERSCORES IN THE NAME OF THESE COLLECTIONS, this will mess with the scripts. Only use capital letters and lowercase letters, no numbers(0-9) or the underscore symbol( _ ). 
 
 - For each Variant of each Attribute create a collection containing everything that makes up that Variant. This Variant collection must be placed within the Attribute collection and named with the following format: VariantName_(variant number begining at 1)_0 (e.g. Cube_1_0, Cube_2_0, etc.). The VariantName CANNOT CONTAIN NUMBERS OR UNDERSCORES. Like above, this will mess with the scripts.
 
@@ -86,14 +77,15 @@ Here is an example of the collection format I used to create this script in my .
 
 ## How to run the Image_Generator scripts in Blender
 
-If you have no experience with Blender, python, or the Blender API, please watch this tutorial for basic Blender Python information: https://www.youtube.com/watch?v=cyt0O7saU4Q 
+If you have no experience with Blender python or the Blender API, I recomend watch this tutorial on running python scripts in Blender: https://www.youtube.com/watch?v=cyt0O7saU4Q 
 
 There is also helpful documentation in the Blender API about running scripts here: 
 https://docs.blender.org/api/current/info_quickstart.html#running-scripts
 
-Note - You might want to install the Icon Viewer add on for Blender: https://docs.blender.org/manual/en/latest/addons/development/icon_viewer.html 
+Note - You might want to install the Icon Viewer add-on for Blender:
+https://docs.blender.org/manual/en/latest/addons/development/icon_viewer.html 
 
-In the Blend_My_NFTs open the config.py file. Here you can customize some aspects of Blend_My_NFTs. The most important thing to do here is to add the path of Blend_My_NFTs on your computer to either save_path_mac or save_path_windows.
+In the Blend_My_NFTs folder, open the config.py file in a text editor or IDE. Here you can customize some aspects of Blend_My_NFTs. The most important thing to do here is to add the path of Blend_My_NFTs on your computer to either save_path_mac or save_path_windows. (save_path_mac if your OS is MacOS based, and save_path_windows if it is Windows based)
 
 1. Open the Scripting tab in the menu of Blender: 
 
@@ -149,3 +141,29 @@ The 3D model generator combines 3D models together and exports all possible comb
 7. Run main.py
 
 The generated 3D models will appear in the folder 3D_Model_Output
+
+## Blender API
+
+This Blender add on heaviliy relies on the Blender API and its documentation which you can find here: https://docs.blender.org/api/current/index.html
+
+If you are interested in python I highly recomend getting familiar with some of the basic commands such as bpy.data, bpy.context, and bpy.ops. Also read the Quick Start, very helpful. 
+
+## Disclaimers
+
+Blend_My_NFTs works with Windows 10 and MacOS Big Sur. These are the operating systems I have tested the scripts on, I do not garuntee they will work on other operating systems. I do not garuntee this software will work with your setup. There are many variables and factors that go into running the software provided, it differs from system to system, and from blend file to blend file.
+
+I encourage you to do some trouble shooting, read the Blender API documentation, read this tutorial, review the scripts, and do your own research before reaching out for help on our discord. If you are really stuck and are out of options I am available on our disord channel above for consulting. However! I am not a toutor. Although I enjoy teaching people, I simply do not have the time to work, build this project, teach people Blender/Python, and live my life. So please respect my time, I'd love to help! 
+
+To be honest I have no idea how to use Blender. I know some basic things, but I know the API and Python a lot better. This is my first Blender/Python project, so you may be wondering "how is he making a NFT collection with Blender??" Well I'm not, I write the code for the Blend_My_NFTs, and my team has three other members; Devlin and Caelin, who create the scenes and models in Blender, and the third is Quinn who is the lead web developer for our site. 
+
+If building an NFT collection in blender is something you really want to do and you have experience with Blender, I suggest you get familiar with some basic Python functionality and then how to run scripts in the Belnder Text Editor (an indepth knowledge is not required). However, if you don't use Blender but have a coding background, I would suggest watching some basic tutorials just to get a feel for the software (an indepth knowledge is not required).
+
+This tutorial page is not finished! This page will be updated as I commit/merge new changes to the main branch. (Last updated Nov 10th, 2021)
+
+I garuntee this will eventually be an add on to Blender and not just a script you run through the script editor. (I mostly just put this in here for personal motivation, please don't pester me about the date lol)
+
+Nothing in this repository or its documentation is financial advice. If you create an NFT project or collection with Blend_My_NFTs, you do so at your own personal and financial risk. We are only providing a means of acomplishing a goal, not investment or financial information about that goal. Do your own research and come to your own conclusions before spending money on NFTs or any asset for that matter. We are not liable for any finacial losses you may encure while using this software. Any discussion about finances and cryptocurrencies in this repository or its documentation are done with the intent to educate and provide examples to help our users understand concepts relating to Blend_My_NFTs and This Cozy Place. 
+
+The creators of This Cozy Place will never, under any cricumstance, ask for your crypto wallet(s) secret phrase or private keys. If you come across anyone who is impersonating the founding members of This Cozy Place, please report it immediately to the admins on our discord channel and we will take appropriate action and warn our community of the behaviour. 
+
+This software is provided for free and is open source. We are not liable for any felones you may commit using this software, and we staunchly appose the malicious use of this software that in any way breaks any applicable law in your loction of residence. 
