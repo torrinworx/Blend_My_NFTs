@@ -15,6 +15,18 @@ Blend_My_NFTs is a work-in-progress Blender add on that can automatically genera
 - Generate metadata for OpenSea, CNFT, SolonArt, and more! (Coming soon...)
 - New features always dropping, join our discord to stay tuned for updates!
 
+## Official Links: 
+
+Website: http://thiscozyplace.com/ (Under construction...)
+
+Discord: https://discord.gg/UpZt5Un57t 
+
+Instagram: https://www.instagram.com/this_cozy_place/
+
+Twitter: https://twitter.com/CozyPlaceNFT
+
+Reddit: https://www.reddit.com/r/ThisCozyPlace/
+
 # Blend_My_NFTs Tutorial Guide
 
 ## Youtube Tutorial Series
