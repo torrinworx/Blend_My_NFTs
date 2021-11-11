@@ -4,7 +4,7 @@
 Blend_My_NFTs is a work-in-progress Blender add on that can automatically generate thousands of images or 3D objects to help you launch your NFT colleciton! It is currently in development to launch This Cozy Place. This Cozy Place is an NFT image collection that will launch in November with a total of 10000 unique NFTs all rendered in Blender via Blend_My_NFTs. If you would like to learn more about Blend_My_NFTs or This Cozy Place, please visit our discord server: https://discord.gg/UpZt5Un57t 
 
 ![NFT_Test_Render_10](https://user-images.githubusercontent.com/82110564/141149471-82ef9993-31cf-4237-94b2-28c47c0a859e.png)
-*Testing sample of the NFT collection This Cozy Place rendered in Blender 2.93 using Blend_My_NFTs add on.
+*Test sample of the NFT collection This Cozy Place rendered in Blender 2.93 using Blend_My_NFTs add on.
 
 ## Features 
 - Render thousands of unique images in blender!
