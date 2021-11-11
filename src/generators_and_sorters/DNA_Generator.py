@@ -264,7 +264,7 @@ def generateNFT_DNA(possibleCombinations):
    Returns batchDataDictionary containing the number of NFT cominations, hierarchy, and the DNAList.
    '''
    batchDataDictionary = {}
-   listOptionVari = []
+   listOptionVariant = []
 
    print("-----------------------------------------------------------------------------")
    print("Generating " + str(possibleCombinations) + " combinations of DNA...")
@@ -274,9 +274,9 @@ def generateNFT_DNA(possibleCombinations):
       for i in hierarchy:
          numChild = len(hierarchy[i])
          possibleNums = list(range(1, numChild + 1))
-         listOptionVari.append(possibleNums)
+         listOptionVariant.append(possibleNums)
 
-      allDNAList = list(itertools.product(*listOptionVari))
+      allDNAList = list(itertools.product(*listOptionVariant))
       allDNAstr = []
 
       for i in allDNAList:
@@ -305,6 +305,22 @@ def generateNFT_DNA(possibleCombinations):
          print("The Max num of NFTs you chose is smaller than the NFTs Per Batch you set. Only " + str(maxNFTs) + " were added to 1 batch")
 
    if enableRarity:
+      for i in hierarchy:
+         numChild = len(hierarchy[i])
+         possibleNums = list(range(1, numChild + 1))
+         listOptionVariant.append(possibleNums)
+
+      allDNAList = []
+
+      for i in listOptionVariant:
+         return
+
+      allDNAstr = []
+
+
+
+
+
 
 
    #Data stored in batchDataDictionary:
@@ -314,9 +330,6 @@ def generateNFT_DNA(possibleCombinations):
    return batchDataDictionary
 
 DataDictionary = generateNFT_DNA(possibleCombinations)
-
-if includeRarity == True:
-   rareDataDictionary = sortRarityWeights(DataDictionary)
 
 def send_To_Record_JSON():
    '''
