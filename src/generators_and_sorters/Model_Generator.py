@@ -49,6 +49,8 @@ def generate3DModels():
                     o.select_set(True)
         bpy.ops.object.delete()
 
+    deleteAllObjects()
+
     attributeList = os.listdir(modelAssetPath)
     removeList = [".gitignore", ".DS_Store", "Script_Ignore_Folder"]
     attributeList = [x for x in attributeList if (x not in removeList)]
@@ -79,12 +81,18 @@ def generate3DModels():
 
     count = 1
     for i in allCombinationsNames:
-        if objectFormatImport == "gltf":
-            path1 = modelAssetPath + slash + "Script_Ignore_Folder"
-            Script_Ignore_Folder = os.listdir(path1)
 
-            for h in Script_Ignore_Folder:
+        path1 = modelAssetPath + slash + "Script_Ignore_Folder"
+        Script_Ignore_Folder = os.listdir(path1)
+
+        for h in Script_Ignore_Folder:
+            fileName, fileExtension = os.path.splitext(h)
+            if fileExtension == ".glb":
                 bpy.ops.import_scene.gltf(filepath=path1 + slash + h)
+            elif fileExtension == ".fbx":
+                bpy.ops.import_scene.fbx(filepath=path1 + slash + h)
+            elif fileExtension == ".obj":
+                bpy.ops.import_scene.obj(filepath=path1 + slash + h)
 
         for j in i:
             def getParent(hierarchy):
@@ -96,12 +104,29 @@ def generate3DModels():
             parent = getParent(hierarchy)
             path2 = modelAssetPath + slash + parent + slash + j
 
-            if objectFormatImport == "gltf":
+            fileName, fileExtension = os.path.splitext(j)
+            if fileExtension == ".glb":
                 bpy.ops.import_scene.gltf(filepath=path2)
+            elif fileExtension == ".fbx":
+                bpy.ops.import_scene.fbx(filepath=path2)
+            elif fileExtension == ".obj":
+                bpy.ops.import_scene.obj(filepath=path2)
 
-        bpy.ops.export_scene.gltf(filepath=model_save_path + slash + imageName + str(count),
-                                  check_existing=True, export_format='GLB')
+        if objectFormatExport == 'glb':
+            bpy.ops.export_scene.gltf(filepath=model_save_path + slash + imageName + str(count),
+                                      check_existing=True, export_format='GLB')
+        elif objectFormatExport == 'fbx':
+            bpy.ops.export_scene.fbx(filepath=model_save_path + slash + imageName + str(count),
+                                      check_existing=True)
+        elif objectFormatExport == 'obj':
+            bpy.ops.export_scene.obj(filepath=model_save_path + slash + imageName + str(count),
+                                      check_existing=True)
+        elif objectFormatExport == 'x3d':
+            bpy.ops.export_scene.x3d(filepath=model_save_path + slash + imageName + str(count),
+                                      check_existing=True)
+
         deleteAllObjects()
+
         count += 1
 
     print("Generated .glb files in %.4f seconds" % (time.time() - time_start))
