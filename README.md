@@ -12,7 +12,7 @@ Blend_My_NFTs is a work-in-progress Blender add on that can automatically genera
 - Generate all possible combinations of your NFT image/3D model repository! The only limit is your imagination! And your processing power...
 - Looking to create 3D models for the metaverse instead? We got you covered! Generate thousands of 3D modeles with our Model_Generator.py script.
 - Automatically import .x3d, .fbx, .obj, and .glb files!
-- Specify the 3D object file you wish to export as.
+- Specify the 3D object file you wish to export.
 - Raritize and weight your attributes (Coming soon...)
 - Generate metadata for OpenSea, CNFT, SolonArt, and more! (Coming soon...)
 - New features always dropping, join our discord to stay tuned for updates!
