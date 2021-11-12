@@ -34,6 +34,8 @@ class bcolors:
 
 time_start = time.time()
 
+print("")
+
 def stripColorFromName(name):
    return "_".join(name.split("_")[:-1])
 
@@ -221,7 +223,7 @@ def returnData():
          combinations = combinations*i
 
       if combinations == 0:
-         print(bcolors.FAIL + "ERROR:" + bcolors.RESET)
+         print(bcolors.ERROR + "ERROR:" + bcolors.RESET)
          print("The number of all possible combinations is equal to 0. Please review your collection hierarchy \n "
                "and ensure it is formatted correctly.")
          print("Please review README.md for more information.")
@@ -233,10 +235,10 @@ def returnData():
       numBatches = combinations/nftsPerBatch
 
       if numBatches < 1:
-         print(bcolors.Fail + "ERROR:" + bcolors.RESET)
-         print("The number of NFTs Per Batch (NFTsPerBatch variable in config.py) is to high")
-         print("There are a total of " + combinations + " possible NFT combinations")
-         print("and you've requested " + nftsPerBatch + " NFTs per batch.")
+         print(bcolors.ERROR + "ERROR:" + bcolors.RESET)
+         print("The number of NFTs Per Batch (nftsPerBatch variable in config.py) is to high.")
+         print("There are a total of " + str(combinations) + " possible NFT combinations and you've requested "
+               + str(nftsPerBatch) + " NFTs per batch.")
          print("Lower the number of NFTs per batch in config.py or increase the number of \nattributes and/or variants"
                " in your .blend file.")
 
@@ -263,8 +265,6 @@ def generateNFT_DNA(possibleCombinations):
    '''
    Returns batchDataDictionary containing the number of NFT cominations, hierarchy, and the DNAList.
    '''
-   batchDataDictionary = {}
-   listOptionVariant = []
 
    if not enableMaxNFTs:
       print("-----------------------------------------------------------------------------")
@@ -275,6 +275,8 @@ def generateNFT_DNA(possibleCombinations):
       print("Generating " + str(maxNFTs) + " combinations of DNA...")
       print("")
 
+   batchDataDictionary = {}
+   listOptionVariant = []
    DNAList = []
 
    if not enableRarity:
@@ -312,44 +314,7 @@ def generateNFT_DNA(possibleCombinations):
 
    if enableRarity:
       possibleCombinations = maxNFTs
-
-      for i in hierarchy:
-         numChild = len(hierarchy[i])
-         possibleNums = list(range(1, numChild + 1))
-         listOptionVariant.append(possibleNums)
-
-      for x in range(maxNFTs):
-         dnaStr = ""
-         for i in hierarchy:
-            number_List_Of_i = []
-            rarity_List_Of_i = []
-            count = 0
-            ifZeroBool = None
-
-            for k in hierarchy[i]:
-               number = hierarchy[i][k]["number"]
-               number_List_Of_i.append(number)
-
-               rarity = hierarchy[i][k]["rarity"]
-               rarity_List_Of_i.append(float(rarity))
-
-               count += 1
-
-            for x in rarity_List_Of_i:
-               if x == 0:
-                  ifZeroBool = True
-               elif x != 0:
-                  ifZeroBool = False
-
-            if ifZeroBool == True:
-               variantByNum = random.choices(number_List_Of_i, k = 1)
-            elif ifZeroBool == False:
-               variantByNum = random.choices(number_List_Of_i, weights = rarity_List_Of_i, k = 1)
-
-            dnaStr += '-' + str(variantByNum[0])
-
-         dnaPushToList = ''.join(dnaStr.split('-', 1))
-         DNAList.append(dnaPushToList)
+      Rarity_Sorter.sortRarityWeights(hierarchy, listOptionVariant, DNAList)
 
    #Data stored in batchDataDictionary:
    batchDataDictionary["numNFTsGenerated"] = possibleCombinations

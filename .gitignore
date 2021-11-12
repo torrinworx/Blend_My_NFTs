@@ -2,5 +2,8 @@
 *.blend1
 *.json
 
+.idea
+__pycache__
 NFTRecord.json
 3D_Model_Test.blend
+.Ds_Store
