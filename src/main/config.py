@@ -1,7 +1,7 @@
 import platform
 
 # NFT configurations:
-nftsPerBatch = 100   # Number of NFTs per batch
+nftsPerBatch = 4   # Number of NFTs per batch
 renderBatch = 1     # The batch number to render in PNG-Generator
 imageName = "ThisCozyPlace_"    # The name of the NFT image produces by PNG-Generator
 fileFormat = 'JPEG' # Dictate the image extension when Blender renders the images
@@ -15,13 +15,14 @@ save_path_windows = r''
 # Example mac: /Users/Path/to/Blend_My_NFTs
 # Example windows: C:\Users\Path\to\Blend_My_NFTs
 
-enableMaxNFTs = True  # Turn on the maximum number of NFTs, use this to limit the number of DNA sent to NFTRecord, and subsequent batches
+enableMaxNFTs = False  # Turn on the maximum number of NFTs, use this to limit the number of DNA sent to NFTRecord, and subsequent batches
 maxNFTs = 100    # The maximum number of NFTs you want to generate - doesn't do anything yet
 
 resetViewport = True # If True: turns all viewport and render cameras on after Image_Generator is finished operations
 
 # 3D model imports and exports variables:
-use3DModels = False # Set to True if using external models as attributes instead of Blender objects
+use3DModels = True # Set to True if using external models as attributes instead of Blender objects
+# ^Does not work with colour options and rarity, both must be turned off in order to use this.
 
 # Object colour options:
 generateColors = False # When set to true this applies the sets of colors listed below to the objects in the collections named below
@@ -34,7 +35,7 @@ rgbaColorList2 = [(1,1,0,1),(0,1,1,1),(.5,0,1,1),(.5,1,1,1),(0,.5,0,1)]
 # The following color list can be as long or as short as you want it to be.
 # To use this all you need to do is place the name of the collection you want colored in the "" and the set of colors you want to apply to it after the :
 # The collection named can only contain objects and not sub collections. Every object in the collection will be set to the colors you assigned above for each attribute
-colorList = {"TextA_1_0":rgbaColorList1,"CurveA_1_0":rgbaColorList2}
+colorList = {"Sphere_1_0":rgbaColorList1,"CurveA_1_0":rgbaColorList2}
 
 # Utilities - DO NOT TOUCH:
 mac = 'Darwin'  # Mac OS
@@ -68,7 +69,7 @@ locationObjectAttribute = {
     "Cube": {"x": 0, "y": 0, "z": 0}
 }
 
-enableRarity = True
+enableRarity = False
 # True = include weighted rarity percentages in NFTRecord.json calculations,
 # False = Pure random selection of variants
 

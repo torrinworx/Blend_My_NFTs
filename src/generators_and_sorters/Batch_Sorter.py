@@ -30,7 +30,6 @@ def makeBatches():
 
       print("To generate batches of " + str(nftsPerBatch) + " DNA sequences per batch, with a total of " +
             str(numNFTsGenerated) + " possible NFT DNA sequences, the number of batches generated will be " + str(Number_Of_Possible_Batches))
-      print("The number of remaining NFTs will be " + str(remainder) + " and total number accross all batches will be " + str(Number_Of_Possible_Batches*nftsPerBatch))
 
       i = 0
       while i < Number_Of_Possible_Batches:
@@ -56,6 +55,8 @@ def makeBatches():
             i += 1
 
       if len(DNAList) > 0:
+            print("One batch could not be filled completely and will contain " + str(len(DNAList)) + " NFTs.")
+
             incompleteBatch = {}
 
             incompleteBatch["NFTs_in_Batch"] = int(len(DNAList))

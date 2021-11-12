@@ -268,11 +268,11 @@ def generateNFT_DNA(possibleCombinations):
 
    if not enableMaxNFTs:
       print("-----------------------------------------------------------------------------")
-      print("Generating " + str(possibleCombinations) + " combinations of DNA...")
+      print("Generating " + str(possibleCombinations) + " combinations of DNA.")
       print("")
    elif enableMaxNFTs:
       print("-----------------------------------------------------------------------------")
-      print("Generating " + str(maxNFTs) + " combinations of DNA...")
+      print("Generating " + str(maxNFTs) + " combinations of DNA.")
       print("")
 
    batchDataDictionary = {}
@@ -338,7 +338,7 @@ def send_To_Record_JSON():
       outfile.write(ledger + '\n')
 
    print("")
-   print("All possible combinations of DNA sent to NFTRecord.json with " + str(possibleCombinations) + "\nNFT DNA sequences generated in %.4f seconds" % (time.time() - time_start))
+   print("All possible combinations of DNA sent to NFTRecord.json with " + str(possibleCombinations) + " NFT DNA sequences generated in %.4f seconds" % (time.time() - time_start))
    print("")
    print("If you want the number of NFT DNA sequences to be higher, please add more variants or attributes to your .blend file")
    print("")

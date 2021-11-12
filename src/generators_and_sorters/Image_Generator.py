@@ -4,13 +4,11 @@ import sys
 
 dir = os.path.dirname(bpy.data.filepath)
 sys.path.append(dir)
-
 sys.modules.values()
 
 import time
 import json
 import importlib
-#from PIL.PngImagePlugin import PngImageFile, PngInfo
 
 from src.main import config
 
