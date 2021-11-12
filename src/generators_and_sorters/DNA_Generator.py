@@ -266,9 +266,16 @@ def generateNFT_DNA(possibleCombinations):
    batchDataDictionary = {}
    listOptionVariant = []
 
-   print("-----------------------------------------------------------------------------")
-   print("Generating " + str(possibleCombinations) + " combinations of DNA...")
-   print("")
+   if not enableMaxNFTs:
+      print("-----------------------------------------------------------------------------")
+      print("Generating " + str(possibleCombinations) + " combinations of DNA...")
+      print("")
+   elif enableMaxNFTs:
+      print("-----------------------------------------------------------------------------")
+      print("Generating " + str(maxNFTs) + " combinations of DNA...")
+      print("")
+
+   DNAList = []
 
    if not enableRarity:
       for i in hierarchy:
@@ -276,27 +283,26 @@ def generateNFT_DNA(possibleCombinations):
          possibleNums = list(range(1, numChild + 1))
          listOptionVariant.append(possibleNums)
 
-      allDNAList = list(itertools.product(*listOptionVariant))
-      allDNAstr = []
+      allDNAFloat = list(itertools.product(*listOptionVariant))
 
-      for i in allDNAList:
+      for i in allDNAFloat:
          dnaStr = ""
          for j in i:
             num = "-" + str(j)
             dnaStr += num
 
          dna = ''.join(dnaStr.split('-', 1))
-         allDNAstr.append(dna)
+         DNAList.append(dna)
 
       if enableMaxNFTs:
          '''
          Remove DNA from DNAList until DNAList = maxNFTs from config.py
          Will need to be changed when creating Rarity_Sorter
          '''
-         x = len(allDNAstr)
+         x = len(DNAList)
          while x > maxNFTs:
-            y = random.choice(allDNAstr)
-            allDNAstr.remove(y)
+            y = random.choice(DNAList)
+            DNAList.remove(y)
             x -= 1
 
          possibleCombinations = maxNFTs
@@ -305,31 +311,54 @@ def generateNFT_DNA(possibleCombinations):
          print("The Max num of NFTs you chose is smaller than the NFTs Per Batch you set. Only " + str(maxNFTs) + " were added to 1 batch")
 
    if enableRarity:
+      possibleCombinations = maxNFTs
+
       for i in hierarchy:
          numChild = len(hierarchy[i])
          possibleNums = list(range(1, numChild + 1))
          listOptionVariant.append(possibleNums)
 
-      allDNAList = []
+      for x in range(maxNFTs):
+         dnaStr = ""
+         for i in hierarchy:
+            number_List_Of_i = []
+            rarity_List_Of_i = []
+            count = 0
+            ifZeroBool = None
 
-      for i in listOptionVariant:
-         return
+            for k in hierarchy[i]:
+               number = hierarchy[i][k]["number"]
+               number_List_Of_i.append(number)
 
-      allDNAstr = []
+               rarity = hierarchy[i][k]["rarity"]
+               rarity_List_Of_i.append(float(rarity))
 
+               count += 1
 
+            for x in rarity_List_Of_i:
+               if x == 0:
+                  ifZeroBool = True
+               elif x != 0:
+                  ifZeroBool = False
 
+            if ifZeroBool == True:
+               variantByNum = random.choices(number_List_Of_i, k = 1)
+            elif ifZeroBool == False:
+               variantByNum = random.choices(number_List_Of_i, weights = rarity_List_Of_i, k = 1)
 
+            dnaStr += '-' + str(variantByNum[0])
 
-
+         dnaPushToList = ''.join(dnaStr.split('-', 1))
+         DNAList.append(dnaPushToList)
 
    #Data stored in batchDataDictionary:
    batchDataDictionary["numNFTsGenerated"] = possibleCombinations
    batchDataDictionary["hierarchy"] = hierarchy
-   batchDataDictionary["DNAList"] = allDNAstr
+   batchDataDictionary["DNAList"] = DNAList
    return batchDataDictionary
 
 DataDictionary = generateNFT_DNA(possibleCombinations)
+
 
 def send_To_Record_JSON():
    '''
@@ -363,7 +392,7 @@ def turnAll(toggle):
 
 #turnAll(False)
 
-# ONLY FOR TESTING, DO NOT EVER USE IF RECORD IS FULL OF REAL DATA
+# ONLY FOR TESTING, DO NOT EVER USE IF NFTRecord.json IS FULL OF REAL DATA
 # THIS WILL DELETE THE RECORD:
 # Note - NFTRecrod.json will be created the next time you run main.py
 def clearNFTRecord(AREYOUSURE):

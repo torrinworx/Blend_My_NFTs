@@ -1,7 +1,7 @@
 import platform
 
 # NFT configurations:
-nftsPerBatch = 3   # Number of NFTs per batch
+nftsPerBatch = 100   # Number of NFTs per batch
 renderBatch = 1     # The batch number to render in PNG-Generator
 imageName = "ThisCozyPlace_"    # The name of the NFT image produces by PNG-Generator
 fileFormat = 'JPEG' # Dictate the image extension when Blender renders the images
@@ -24,7 +24,7 @@ resetViewport = True # If True: turns all viewport and render cameras on after I
 use3DModels = False # Set to True if using external models as attributes instead of Blender objects
 
 # Object colour options:
-generateColors = True # When set to true this applies the sets of colors listed below to the objects in the collections named below
+generateColors = False # When set to true this applies the sets of colors listed below to the objects in the collections named below
 
 # The collections below are RGBA Color values. You can put as many or as little color values in these lists as you would like.
 # You can create any number of rgbaColorLists and assign them to any number of collections that you would like.
@@ -34,7 +34,7 @@ rgbaColorList2 = [(1,1,0,1),(0,1,1,1),(.5,0,1,1),(.5,1,1,1),(0,.5,0,1)]
 # The following color list can be as long or as short as you want it to be.
 # To use this all you need to do is place the name of the collection you want colored in the "" and the set of colors you want to apply to it after the :
 # The collection named can only contain objects and not sub collections. Every object in the collection will be set to the colors you assigned above for each attribute
-colorList = {"Cube_2_0":rgbaColorList1,"Sphere_1_0":rgbaColorList2}
+colorList = {"TextA_1_0":rgbaColorList1,"CurveA_1_0":rgbaColorList2}
 
 # Utilities - DO NOT TOUCH:
 mac = 'Darwin'  # Mac OS
@@ -68,7 +68,7 @@ locationObjectAttribute = {
     "Cube": {"x": 0, "y": 0, "z": 0}
 }
 
-enableRarity = False
+enableRarity = True
 # True = include weighted rarity percentages in NFTRecord.json calculations,
 # False = Pure random selection of variants
 

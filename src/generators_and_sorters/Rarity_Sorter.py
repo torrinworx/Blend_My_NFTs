@@ -22,7 +22,6 @@ from src.main.config import *
 importlib.reload(DNA_Generator)
 from src.generators_and_sorters.DNA_Generator import *
 
-
 def sortRarityWeights(DataDictionary):
     '''
     Sorts through DataDictionary and appropriately weights each variant based on their rarity percentage set in Blender
