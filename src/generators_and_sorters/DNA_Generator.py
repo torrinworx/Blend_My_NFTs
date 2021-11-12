@@ -5,6 +5,7 @@ import sys
 import copy
 import time
 import json
+import random
 import itertools
 import importlib
 
@@ -33,16 +34,10 @@ class bcolors:
 
 time_start = time.time()
 
+print("")
+
 def stripColorFromName(name):
    return "_".join(name.split("_")[:-1])
-
-def checkCollectionChildNames():
-   #Needs to be implemented to ensure that objects under a collection share the same structure check before compiling list
-   #Example
-   #AreaLight Collection 
-   #AreaLigjht_1_0 != AreaLight_2_0 
-   #AreaLigjht vs AreaLight
-   return True
 
 def returnData():
    '''
@@ -228,7 +223,7 @@ def returnData():
          combinations = combinations*i
 
       if combinations == 0:
-         print(bcolors.FAIL + "ERROR:" + bcolors.RESET)
+         print(bcolors.ERROR + "ERROR:" + bcolors.RESET)
          print("The number of all possible combinations is equal to 0. Please review your collection hierarchy \n "
                "and ensure it is formatted correctly.")
          print("Please review README.md for more information.")
@@ -240,10 +235,10 @@ def returnData():
       numBatches = combinations/nftsPerBatch
 
       if numBatches < 1:
-         print(bcolors.Fail + "ERROR:" + bcolors.RESET)
-         print("The number of NFTs Per Batch (NFTsPerBatch variable in config.py) is to high")
-         print("There are a total of " + combinations + " possible NFT combinations")
-         print("and you've requested " + nftsPerBatch + " NFTs per batch.")
+         print(bcolors.ERROR + "ERROR:" + bcolors.RESET)
+         print("The number of NFTs Per Batch (nftsPerBatch variable in config.py) is to high.")
+         print("There are a total of " + str(combinations) + " possible NFT combinations and you've requested "
+               + str(nftsPerBatch) + " NFTs per batch.")
          print("Lower the number of NFTs per batch in config.py or increase the number of \nattributes and/or variants"
                " in your .blend file.")
 
@@ -270,41 +265,65 @@ def generateNFT_DNA(possibleCombinations):
    '''
    Returns batchDataDictionary containing the number of NFT cominations, hierarchy, and the DNAList.
    '''
+
+   if not enableMaxNFTs:
+      print("-----------------------------------------------------------------------------")
+      print("Generating " + str(possibleCombinations) + " combinations of DNA.")
+      print("")
+   elif enableMaxNFTs:
+      print("-----------------------------------------------------------------------------")
+      print("Generating " + str(maxNFTs) + " combinations of DNA.")
+      print("")
+
    batchDataDictionary = {}
-   listOptionVari = []
+   listOptionVariant = []
+   DNAList = []
 
-   print("-----------------------------------------------------------------------------")
-   print("Generating " + str(possibleCombinations) + " combinations of DNA...")
-   print("")
+   if not enableRarity:
+      for i in hierarchy:
+         numChild = len(hierarchy[i])
+         possibleNums = list(range(1, numChild + 1))
+         listOptionVariant.append(possibleNums)
 
+      allDNAFloat = list(itertools.product(*listOptionVariant))
 
-   for i in hierarchy:
-      numChild = len(hierarchy[i])
-      possibleNums = list(range(1, numChild + 1))
-      listOptionVari.append(possibleNums)
+      for i in allDNAFloat:
+         dnaStr = ""
+         for j in i:
+            num = "-" + str(j)
+            dnaStr += num
 
-   allDNAList = list(itertools.product(*listOptionVari))
-   allDNAstr = []
+         dna = ''.join(dnaStr.split('-', 1))
+         DNAList.append(dna)
 
-   for i in allDNAList:
-      dnaStr = ""
-      for j in i:
-         num = "-" + str(j)
-         dnaStr += num
+      if enableMaxNFTs:
+         '''
+         Remove DNA from DNAList until DNAList = maxNFTs from config.py
+         Will need to be changed when creating Rarity_Sorter
+         '''
+         x = len(DNAList)
+         while x > maxNFTs:
+            y = random.choice(DNAList)
+            DNAList.remove(y)
+            x -= 1
 
-      dna = ''.join(dnaStr.split('-', 1))
-      allDNAstr.append(dna)
+         possibleCombinations = maxNFTs
+
+      if nftsPerBatch > maxNFTs:
+         print("The Max num of NFTs you chose is smaller than the NFTs Per Batch you set. Only " + str(maxNFTs) + " were added to 1 batch")
+
+   if enableRarity:
+      possibleCombinations = maxNFTs
+      Rarity_Sorter.sortRarityWeights(hierarchy, listOptionVariant, DNAList)
 
    #Data stored in batchDataDictionary:
    batchDataDictionary["numNFTsGenerated"] = possibleCombinations
    batchDataDictionary["hierarchy"] = hierarchy
-   batchDataDictionary["DNAList"] = allDNAstr
+   batchDataDictionary["DNAList"] = DNAList
    return batchDataDictionary
 
 DataDictionary = generateNFT_DNA(possibleCombinations)
 
-if includeRarity == True:
-   rareDataDictionary = sortRarityWeights(DataDictionary)
 
 def send_To_Record_JSON():
    '''
@@ -319,7 +338,7 @@ def send_To_Record_JSON():
       outfile.write(ledger + '\n')
 
    print("")
-   print("All possible combinations of DNA sent to NFTRecord.json with " + str(possibleCombinations) + "\nNFT DNA sequences generated in %.4f seconds" % (time.time() - time_start))
+   print("All possible combinations of DNA sent to NFTRecord.json with " + str(possibleCombinations) + " NFT DNA sequences generated in %.4f seconds" % (time.time() - time_start))
    print("")
    print("If you want the number of NFT DNA sequences to be higher, please add more variants or attributes to your .blend file")
    print("")
@@ -338,7 +357,7 @@ def turnAll(toggle):
 
 #turnAll(False)
 
-# ONLY FOR TESTING, DO NOT EVER USE IF RECORD IS FULL OF REAL DATA
+# ONLY FOR TESTING, DO NOT EVER USE IF NFTRecord.json IS FULL OF REAL DATA
 # THIS WILL DELETE THE RECORD:
 # Note - NFTRecrod.json will be created the next time you run main.py
 def clearNFTRecord(AREYOUSURE):
