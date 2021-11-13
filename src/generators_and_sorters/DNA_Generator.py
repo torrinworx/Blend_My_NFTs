@@ -266,14 +266,11 @@ def generateNFT_DNA(possibleCombinations):
    Returns batchDataDictionary containing the number of NFT cominations, hierarchy, and the DNAList.
    '''
 
-   if not enableMaxNFTs:
-      print("-----------------------------------------------------------------------------")
-      print("Generating " + str(possibleCombinations) + " combinations of DNA.")
-      print("")
-   elif enableMaxNFTs:
-      print("-----------------------------------------------------------------------------")
-      print("Generating " + str(maxNFTs) + " combinations of DNA.")
-      print("")
+   print("-----------------------------------------------------------------------------")
+   print("The number of possible DNA combinations is " + str(possibleCombinations))
+   print("")
+   print("Generating " + str(maxNFTs) + " combinations of DNA. Set in config.py.")
+   print("")
 
    batchDataDictionary = {}
    listOptionVariant = []
@@ -285,9 +282,26 @@ def generateNFT_DNA(possibleCombinations):
          possibleNums = list(range(1, numChild + 1))
          listOptionVariant.append(possibleNums)
 
-      allDNAFloat = list(itertools.product(*listOptionVariant))
 
-      for i in allDNAFloat:
+      def createDNARandom():
+         ab = []
+
+         for x in range(maxNFTs):
+            dnaStrList = []
+            for i in listOptionVariant:
+               randomVariantNum = random.choices(i, k = 1)
+               str1 = ''.join(str(e) for e in randomVariantNum)
+               dnaStrList.append(str1)
+
+            if dnaStrList not in DNAList:
+               ab.append(dnaStrList)
+            else:
+               createDNARandom()
+         return ab
+
+      dnaSplitList = createDNARandom()
+
+      for i in dnaSplitList:
          dnaStr = ""
          for j in i:
             num = "-" + str(j)
@@ -296,18 +310,7 @@ def generateNFT_DNA(possibleCombinations):
          dna = ''.join(dnaStr.split('-', 1))
          DNAList.append(dna)
 
-      if enableMaxNFTs:
-         '''
-         Remove DNA from DNAList until DNAList = maxNFTs from config.py
-         Will need to be changed when creating Rarity_Sorter
-         '''
-         x = len(DNAList)
-         while x > maxNFTs:
-            y = random.choice(DNAList)
-            DNAList.remove(y)
-            x -= 1
-
-         possibleCombinations = maxNFTs
+      possibleCombinations = maxNFTs
 
       if nftsPerBatch > maxNFTs:
          print("The Max num of NFTs you chose is smaller than the NFTs Per Batch you set. Only " + str(maxNFTs) + " were added to 1 batch")
@@ -321,10 +324,8 @@ def generateNFT_DNA(possibleCombinations):
    batchDataDictionary["numNFTsGenerated"] = possibleCombinations
    batchDataDictionary["hierarchy"] = hierarchy
    batchDataDictionary["DNAList"] = DNAList
+
    return batchDataDictionary
-
-DataDictionary = generateNFT_DNA(possibleCombinations)
-
 
 def send_To_Record_JSON():
    '''
@@ -333,6 +334,8 @@ def send_To_Record_JSON():
    need to reference this .json file to generate new DNA and make note of the new attributes and variants to prevent
    repeate DNA.
    '''
+
+   DataDictionary = generateNFT_DNA(possibleCombinations)
 
    ledger = json.dumps(DataDictionary, indent=1, ensure_ascii=True)
    with open(os.path.join(save_path, "NFTRecord.json"), 'w') as outfile:
