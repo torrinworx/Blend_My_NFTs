@@ -1,10 +1,10 @@
 import platform
 
 # NFT configurations:
-nftsPerBatch = 4   # Number of NFTs per batch
-renderBatch = 1     # The batch number to render in PNG-Generator
-imageName = "ThisCozyPlace_"    # The name of the NFT image produces by PNG-Generator
-fileFormat = 'JPEG' # Dictate the image extension when Blender renders the images
+nftsPerBatch = 0   # Number of NFTs per batch
+renderBatch = 0     # The batch number to render in PNG-Generator
+imageName = ''    # The name of the NFT image produces by PNG-Generator
+fileFormat = '' # Dictate the image extension when Blender renders the images
 # Visit https://docs.blender.org/api/current/bpy.types.Image.html#bpy.types.Image.file_format
 # for a list of file formats supported by Blender. Enter the file extension exactly as specified in
 # the Blender API documentation above.
@@ -17,7 +17,7 @@ save_path_windows = r''
 # Example windows: C:\Users\Path\to\Blend_My_NFTs
 
 enableMaxNFTs = False  # Turn on the maximum number of NFTs, use this to limit the number of DNA sent to NFTRecord, and subsequent batches
-maxNFTs = 100    # The maximum number of NFTs you want to generate - doesn't do anything yet
+maxNFTs = 0    # The maximum number of NFTs you want to generate - doesn't do anything yet
 
 resetViewport = True # If True: turns all viewport and render cameras on after Image_Generator is finished operations
 
@@ -25,7 +25,7 @@ resetViewport = True # If True: turns all viewport and render cameras on after I
 use3DModels = False # Set to True if using external models as attributes instead of Blender objects
 # ^Does not work with colour options and rarity, both must be turned off in order to use this.
 
-objectFormatExport = 'glb'  # The file format of the objects you would like to export
+objectFormatExport = ''  # The file format of the objects you would like to export
 # The following are file formats Blender accepts for exporting object files.
 # Please type the exact name provided below in the '' above:
 # fbx - The .FBX file format
@@ -44,7 +44,7 @@ rgbaColorList2 = [(1,1,0,1),(0,1,1,1),(.5,0,1,1),(.5,1,1,1),(0,.5,0,1)]
 # The following color list can be as long or as short as you want it to be.
 # To use this all you need to do is place the name of the collection you want colored in the "" and the set of colors you want to apply to it after the :
 # The collection named can only contain objects and not sub collections. Every object in the collection will be set to the colors you assigned above for each attribute
-colorList = {"Sphere_1_0":rgbaColorList1,"CurveA_1_0":rgbaColorList2}
+colorList = {"Cube_1_33":rgbaColorList1,"Sphere_4_0":rgbaColorList2}
 
 # Utilities - DO NOT TOUCH:
 mac = 'Darwin'  # Mac OS

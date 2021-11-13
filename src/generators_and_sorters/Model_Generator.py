@@ -93,6 +93,8 @@ def generate3DModels():
                 bpy.ops.import_scene.fbx(filepath=path1 + slash + h)
             elif fileExtension == ".obj":
                 bpy.ops.import_scene.obj(filepath=path1 + slash + h)
+            elif fileExtension == ".x3d":
+                bpy.ops.import_scene.obj(filepath=path1 + slash + h)
 
         for j in i:
             def getParent(hierarchy):
@@ -110,6 +112,8 @@ def generate3DModels():
             elif fileExtension == ".fbx":
                 bpy.ops.import_scene.fbx(filepath=path2)
             elif fileExtension == ".obj":
+                bpy.ops.import_scene.obj(filepath=path2)
+            elif fileExtension == ".x3d":
                 bpy.ops.import_scene.obj(filepath=path2)
 
         if objectFormatExport == 'glb':

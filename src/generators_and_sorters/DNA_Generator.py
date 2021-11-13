@@ -313,6 +313,7 @@ def generateNFT_DNA(possibleCombinations):
          print("The Max num of NFTs you chose is smaller than the NFTs Per Batch you set. Only " + str(maxNFTs) + " were added to 1 batch")
 
    if enableRarity:
+      print(bcolors.OK + "Rarity is on. Weights listed in .blend will be taken into account " + bcolors.RESET)
       possibleCombinations = maxNFTs
       Rarity_Sorter.sortRarityWeights(hierarchy, listOptionVariant, DNAList)
 
