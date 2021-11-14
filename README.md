@@ -31,6 +31,8 @@ Reddit: https://www.reddit.com/r/ThisCozyPlace/
 
 # Blend_My_NFTs Tutorial Guide
 
+Blend_My_NFTs works with Windows 10 or macOS BigSure 11.6 on Blender 2.93.5. 
+
 ## Youtube Tutorial Series
 
 Link to the Blend_My_NFTs Tuotrial series on Youtube: 
@@ -164,7 +166,7 @@ If you are interested in python I highly recomend getting familiar with some of 
 
 ## Disclaimers
 
-Blend_My_NFTs works with Windows 10 and MacOS Big Sur. These are the operating systems I have tested the scripts on, I do not garuntee they will work on other operating systems. I do not garuntee this software will work with your setup. There are many variables and factors that go into running the software provided, it differs from system to system, and from blend file to blend file.
+Blend_My_NFTs works with Windows 10 or macOS BigSure 11.6 on Blender 2.93.5. These are the operating systems I have tested the scripts on, I do not garuntee they will work on other operating systems. I do not garuntee this software will work with your setup. There are many variables and factors that go into running the software provided, it differs from system to system, and from blend file to blend file.
 
 I encourage you to do some trouble shooting, read the Blender API documentation, read this tutorial, review the scripts, and do your own research before reaching out for help on our discord. If you are really stuck and are out of options I am available on our disord channel above for consulting. However! I am not a toutor. Although I enjoy teaching people, I simply do not have the time to work, build this project, teach people Blender/Python, and live my life. So please respect my time, I'd love to help! 
 
