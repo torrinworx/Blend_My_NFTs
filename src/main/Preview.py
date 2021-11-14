@@ -70,13 +70,6 @@ print("")
 print("Rarity(enableRarity): " + bcolors.WARNING + str(enableRarity) + bcolors.RESET)
 
 
-
-
-
-
-'''
-
-'''
 '''
 if config.enable3DModels:
     # Create a timer to time export of 3D models to 3D_Model_Output folder in Model_Generator.py
@@ -85,9 +78,6 @@ if config.enable3DModels:
 
 # Add the ability to render a test image so that you can estimate the time per batch and the over all time to render
 # the total NFT collection.
-
-
-
 
 # To run the following, run main.py with enableRarity = True in config.py:
 # Somehow cross check percentage rarity of variant number in NFTRecord.json, iterate through all of them. Then print the

@@ -259,7 +259,6 @@ def returnData():
 
    return listAllCollections, attributeCollections, attributeCollections1, hierarchy, possibleCombinations
 
-
 def generateNFT_DNA():
    '''
    Returns batchDataDictionary containing the number of NFT cominations, hierarchy, and the DNAList.
