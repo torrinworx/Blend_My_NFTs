@@ -17,7 +17,6 @@ sys.path.append(dir)
 sys.modules.values()
 
 from src.main import config
-
 from src.generators_and_sorters import DNA_Generator
 
 importlib.reload(config)
@@ -39,33 +38,38 @@ listAllCollections, attributeCollections, attributeCollections1, hierarchy, poss
 
 print(bcolors.OK + "--------YOU ARE RUNNING PREVIEW.py--------" + bcolors.RESET)
 print("")
-print(bcolors.WARNING + "CONFIG.py INPUT" + bcolors.RESET)
-print("The number of NFT DNA per batch: " + str(nftsPerBatch))
-print("Number of possible combinations with current .blend file: " + str(possibleCombinations))
+print(bcolors.WARNING + "---CONFIG.py SETTINGS---" + bcolors.RESET)
+print("NFTs Per Batch(nftsPerBatch): " + bcolors.WARNING + str(nftsPerBatch) + bcolors.RESET)
+print("Image Name(imageName): " + bcolors.WARNING + imageName + bcolors.RESET)
+print("Image File Format(imageFileFormat): " + bcolors.WARNING + imageFileFormat + bcolors.RESET)
+print("Operating system: " + bcolors.WARNING + str(platform.system()) + bcolors.RESET)
+print("Save Path(save_path): " + bcolors.WARNING + save_path + bcolors.RESET)
+print("Possible DNA Combinations(possibleCombinations): " + bcolors.WARNING + str(possibleCombinations) + bcolors.RESET)
 
-if not enableMaxNFTs:
+remainder = maxNFTs % nftsPerBatch
+Number_Of_Possible_Batches = (maxNFTs - remainder) / nftsPerBatch
 
-    remainder1 = possibleCombinations % nftsPerBatch
-    Number_Of_Possible_Batches1 = (possibleCombinations - remainder1) / nftsPerBatch
+print("Max number of NFTs(maxNFTs): " + bcolors.WARNING + str(maxNFTs) + bcolors.RESET)
 
-    print("The total number of NFT DNA sent to NFTRecord: " + str(possibleCombinations))
-    print("The number of possible batches: " + str(Number_Of_Possible_Batches1))
-    print("The final batch will have " + str(remainder1) + " left over NFT DNA in it.")
+if remainder > 0:
+    print("One incomplete batch will have " + bcolors.WARNING + str(remainder) + bcolors.RESET + " DNA in it.")
+elif remainder == 0:
+    print("There is no incomplete batch with this combination.")
 
-if enableMaxNFTs:
+print("Number of possible batches: " + bcolors.WARNING + str(Number_Of_Possible_Batches) + bcolors.RESET)
+print("")
+print("Settings:")
+print("Reset viewport(enableResetViewport): " + bcolors.WARNING + str(enableResetViewport) + bcolors.RESET)
+print("3D Models(enable3DModels): " + bcolors.WARNING + str(enable3DModels) + bcolors.RESET)
+if enable3DModels:
+    print("3D Model File Format(objectFormatExport): " + bcolors.WARNING + str(objectFormatExport) + bcolors.RESET)
+print("Generate Colours(enableGenerateColours): " + bcolors.WARNING + str(enableGenerateColours) + bcolors.RESET)
+print("")
+print("Colour List(colorList): \n" + bcolors.WARNING + str(colorList) + bcolors.RESET)
+print("")
+print("Rarity(enableRarity): " + bcolors.WARNING + str(enableRarity) + bcolors.RESET)
 
-    possibleCombinations = maxNFTs
-    remainder2 = possibleCombinations % nftsPerBatch
-    Number_Of_Possible_Batches2 = (possibleCombinations - remainder2) / nftsPerBatch
 
-    print("The set Max number of NFT DNA sent to NFTRecord: " + str(maxNFTs))
-
-    if remainder2 > 0:
-        print("The final batch will have " + str(remainder2) + " left over NFT DNA in it.")
-    elif remainder2 == 0:
-        print("There is no extra batch with this combination.")
-
-    print("The number of possible batches with Max number enabled: " + str(Number_Of_Possible_Batches2))
 
 # Add the ability to render a test image so that you can estimate the time per batch and the over all time to render
 # the total NFT collection.

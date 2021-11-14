@@ -13,7 +13,7 @@ from src.main import config
 importlib.reload(config)
 from src.main.config import *
 
-if config.use3DModels:
+if config.enable3DModels:
     from src.generators_and_sorters import Model_Generator
 
     importlib.reload(Model_Generator)
@@ -21,7 +21,7 @@ if config.use3DModels:
 
     Model_Generator.generate3DModels()
 
-if not config.use3DModels:
+if not config.enable3DModels:
     from src.generators_and_sorters import DNA_Generator
     from src.generators_and_sorters import Batch_Sorter
 

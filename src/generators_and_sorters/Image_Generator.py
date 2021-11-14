@@ -46,7 +46,7 @@ def render_and_save_NFTs():
     for a in BatchDNAList:
         for i in hierarchy:
             for j in hierarchy[i]:
-                if generateColors:
+                if enableGenerateColours:
                     '''
                      Remove Color code so blender recognises the collection
                     '''
@@ -86,7 +86,7 @@ def render_and_save_NFTs():
 
         for c in dnaDictionary:
             collection = dnaDictionary[c]
-            if not generateColors:
+            if not enableGenerateColours:
                 bpy.data.collections[collection].hide_render = False
                 bpy.data.collections[collection].hide_viewport = False
 
@@ -96,7 +96,7 @@ def render_and_save_NFTs():
 
         fullImagePath = images_save_path + slash + imageOutputBatchSubFolder + slash + "{}.jpeg".format(name)
 
-        if generateColors:
+        if enableGenerateColours:
             for c in dnaDictionary:
                 collection = dnaDictionary[c]
                 if stripColorFromName(collection) in colorList:
@@ -114,17 +114,17 @@ def render_and_save_NFTs():
                     bpy.data.collections[collection].hide_viewport = False
         print("Rendering")
         bpy.context.scene.render.filepath = fullImagePath
-        bpy.context.scene.render.image_settings.file_format = fileFormat
+        bpy.context.scene.render.image_settings.file_format = imageFileFormat
         bpy.ops.render.render(write_still=True)
 
         print("Completed {} render in ".format(name) + "%.4f seconds" % (time.time() - time_start_2))
         x += 1
 
-    if resetViewport:
+    if enableResetViewport:
         for a in BatchDNAList:
             for i in hierarchy:
                 for j in hierarchy[i]:
-                    if generateColors:
+                    if enableGenerateColours:
                         j = stripColorFromName(j)
                     bpy.data.collections[j].hide_render = False
                     bpy.data.collections[j].hide_viewport = False
