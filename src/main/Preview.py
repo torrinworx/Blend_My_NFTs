@@ -6,7 +6,7 @@ import os
 import re
 import sys
 import copy
-import time
+import timeit
 import json
 import random
 import itertools
@@ -37,8 +37,9 @@ class bcolors:
 listAllCollections, attributeCollections, attributeCollections1, hierarchy, possibleCombinations = DNA_Generator.returnData()
 
 print(bcolors.OK + "--------YOU ARE RUNNING PREVIEW.py--------" + bcolors.RESET)
+print("*Please Note: Running this test will have no effect on your config.py settings or the state of Blend_My_NFTs.")
 print("")
-print(bcolors.WARNING + "---CONFIG.py SETTINGS---" + bcolors.RESET)
+print(bcolors.WARNING + "---config.py SETTINGS---" + bcolors.RESET)
 print("NFTs Per Batch(nftsPerBatch): " + bcolors.WARNING + str(nftsPerBatch) + bcolors.RESET)
 print("Image Name(imageName): " + bcolors.WARNING + imageName + bcolors.RESET)
 print("Image File Format(imageFileFormat): " + bcolors.WARNING + imageFileFormat + bcolors.RESET)
@@ -50,15 +51,14 @@ remainder = maxNFTs % nftsPerBatch
 Number_Of_Possible_Batches = (maxNFTs - remainder) / nftsPerBatch
 
 print("Max number of NFTs(maxNFTs): " + bcolors.WARNING + str(maxNFTs) + bcolors.RESET)
+print("Number of possible batches: " + bcolors.WARNING + str(Number_Of_Possible_Batches) + bcolors.RESET)
 
 if remainder > 0:
     print("One incomplete batch will have " + bcolors.WARNING + str(remainder) + bcolors.RESET + " DNA in it.")
 elif remainder == 0:
     print("There is no incomplete batch with this combination.")
 
-print("Number of possible batches: " + bcolors.WARNING + str(Number_Of_Possible_Batches) + bcolors.RESET)
-print("")
-print("Settings:")
+print("\nSettings:")
 print("Reset viewport(enableResetViewport): " + bcolors.WARNING + str(enableResetViewport) + bcolors.RESET)
 print("3D Models(enable3DModels): " + bcolors.WARNING + str(enable3DModels) + bcolors.RESET)
 if enable3DModels:
@@ -71,10 +71,24 @@ print("Rarity(enableRarity): " + bcolors.WARNING + str(enableRarity) + bcolors.R
 
 
 
+
+
+
+'''
+
+'''
+'''
+if config.enable3DModels:
+    # Create a timer to time export of 3D models to 3D_Model_Output folder in Model_Generator.py
+    print("")
+'''
+
 # Add the ability to render a test image so that you can estimate the time per batch and the over all time to render
 # the total NFT collection.
 
-# To run the following, run main.py with enableRarity = True in config.py
 
+
+
+# To run the following, run main.py with enableRarity = True in config.py:
 # Somehow cross check percentage rarity of variant number in NFTRecord.json, iterate through all of them. Then print the
 # percentage values that were generated relative to the ones set in .blend

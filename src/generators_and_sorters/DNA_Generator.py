@@ -259,12 +259,13 @@ def returnData():
 
    return listAllCollections, attributeCollections, attributeCollections1, hierarchy, possibleCombinations
 
-listAllCollections, attributeCollections, attributeCollections1, hierarchy, possibleCombinations = returnData()
 
-def generateNFT_DNA(possibleCombinations):
+def generateNFT_DNA():
    '''
    Returns batchDataDictionary containing the number of NFT cominations, hierarchy, and the DNAList.
    '''
+
+   listAllCollections, attributeCollections, attributeCollections1, hierarchy, possibleCombinations = returnData()
 
    print("-----------------------------------------------------------------------------")
    print("The number of possible DNA combinations is " + str(possibleCombinations))
@@ -272,7 +273,7 @@ def generateNFT_DNA(possibleCombinations):
    print("Generating " + str(maxNFTs) + " combinations of DNA. Set in config.py.")
    print("")
 
-   batchDataDictionary = {}
+   DataDictionary = {}
    listOptionVariant = []
    DNAList = []
 
@@ -321,11 +322,11 @@ def generateNFT_DNA(possibleCombinations):
       Rarity_Sorter.sortRarityWeights(hierarchy, listOptionVariant, DNAList)
 
    #Data stored in batchDataDictionary:
-   batchDataDictionary["numNFTsGenerated"] = possibleCombinations
-   batchDataDictionary["hierarchy"] = hierarchy
-   batchDataDictionary["DNAList"] = DNAList
+   DataDictionary["numNFTsGenerated"] = possibleCombinations
+   DataDictionary["hierarchy"] = hierarchy
+   DataDictionary["DNAList"] = DNAList
 
-   return batchDataDictionary
+   return DataDictionary, possibleCombinations
 
 def send_To_Record_JSON():
    '''
@@ -335,7 +336,7 @@ def send_To_Record_JSON():
    repeate DNA.
    '''
 
-   DataDictionary = generateNFT_DNA(possibleCombinations)
+   DataDictionary, possibleCombinations = generateNFT_DNA()
 
    ledger = json.dumps(DataDictionary, indent=1, ensure_ascii=True)
    with open(os.path.join(save_path, "NFTRecord.json"), 'w') as outfile:
@@ -347,19 +348,7 @@ def send_To_Record_JSON():
    print("If you want the number of NFT DNA sequences to be higher, please add more variants or attributes to your .blend file")
    print("")
 
-'''Utility functions:'''
-
-def turnAll(toggle):
-   '''
-   Turns all renender and viewport cameras off or on for all collections in the scene.
-   :param toggle: False = turn all cameras on
-                  True = turn all cameras off
-   '''
-   for i in listAllCollections:
-      bpy.data.collections[i].hide_render = toggle
-      bpy.data.collections[i].hide_viewport = toggle
-
-#turnAll(False)
+#Utility functions:
 
 # ONLY FOR TESTING, DO NOT EVER USE IF NFTRecord.json IS FULL OF REAL DATA
 # THIS WILL DELETE THE RECORD:

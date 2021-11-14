@@ -31,4 +31,4 @@ if not config.enable3DModels:
     from src.generators_and_sorters.Batch_Sorter import *
 
     DNA_Generator.send_To_Record_JSON()
-    Batch_Sorter.makeBatches()
+    #Batch_Sorter.makeBatches()

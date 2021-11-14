@@ -1,22 +1,26 @@
 import platform
 
+# Set to True to run Preview test, set to False to stop test.
+runPreview = False
+runRenderTest = False
+
 # NFT configurations:
-nftsPerBatch = 0   # Number of NFTs per batch
-renderBatch = 0     # The batch number to render in PNG-Generator
-imageName = ''    # The name of the NFT image produces by PNG-Generator
-imageFileFormat = '' # Dictate the image extension when Blender renders the images
+nftsPerBatch = 2   # Number of NFTs per batch
+renderBatch = 1     # The batch number to render in PNG-Generator
+imageName = 'TestImage_'    # The name of the NFT image produces by PNG-Generator
+imageFileFormat = 'PNG' # Dictate the image extension when Blender renders the images
 # Visit https://docs.blender.org/api/current/bpy.types.Image.html#bpy.types.Image.file_format
 # for a list of file formats supported by Blender. Enter the file extension exactly as specified in
 # the Blender API documentation above.
 
 # The path to Blend_My_NFTs folder:
-save_path_mac = ''
+save_path_mac = '/Users/torrinleonard/Desktop/Blend_My_NFTs'
 save_path_windows = r''
 # Place the path in the '', e.g: save_path_mac = '/Users/Path/to/Blend_My_NFTs'
 # Example mac: /Users/Path/to/Blend_My_NFTs
 # Example windows: C:\Users\Path\to\Blend_My_NFTs
 
-maxNFTs = 0    # The maximum number of NFTs you want to generate - doesn't do anything yet
+maxNFTs = 5    # The maximum number of NFTs you want to generate - doesn't do anything yet
 
 enableResetViewport = True # If True: turns all viewport and render cameras on after Image_Generator is finished operations
 
@@ -78,3 +82,11 @@ locationObjectAttribute = {
     "Cone": {"x": 0, "y": 0, "z": 0},
     "Cube": {"x": 0, "y": 0, "z": 0}
 }
+
+# Loging Current State (DO NOT TOUCH):
+class user_configState():
+    def __init__(self):
+        self.nftsPerBatch = nftsPerBatch
+        self.renderBatch = renderBatch
+        self.maxNFTs = maxNFTs
+        self.imageName = imageName
