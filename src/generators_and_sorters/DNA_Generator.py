@@ -18,7 +18,7 @@ importlib.reload(config)
 from src.generators_and_sorters import Rarity_Sorter
 importlib.reload(Rarity_Sorter)
 
-if config.runRenderTest:
+if config.runPreview:
    config.maxNFTs = config.maxNFTsTest
    config.renderBatch = 1
    config.imageName = config.imageNameTest

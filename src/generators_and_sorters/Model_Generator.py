@@ -135,6 +135,5 @@ def generate3DModels():
 
     print("Generated .glb files in %.4f seconds" % (time.time() - time_start))
 
-
 if __name__ == '__main__':
     generate3DModels()

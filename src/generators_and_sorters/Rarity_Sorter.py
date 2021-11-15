@@ -14,6 +14,11 @@ importlib.reload(config)
 from src.generators_and_sorters import DNA_Generator
 importlib.reload(DNA_Generator)
 
+if config.runPreview:
+   config.maxNFTs = config.maxNFTsTest
+   config.renderBatch = 1
+   config.imageName = config.imageNameTest
+
 def sortRarityWeights(hierarchy, listOptionVariant, DNAList):
     '''
     Sorts through DataDictionary and appropriately weights each variant based on their rarity percentage set in Blender
