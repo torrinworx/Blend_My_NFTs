@@ -3,13 +3,8 @@
 
 import bpy
 import os
-import re
 import sys
-import copy
-import timeit
-import json
-import random
-import itertools
+import platform
 import importlib
 
 dir = os.path.dirname(bpy.data.filepath)
@@ -17,13 +12,10 @@ sys.path.append(dir)
 sys.modules.values()
 
 from src.main import config
-from src.generators_and_sorters import DNA_Generator
-
 importlib.reload(config)
-from src.main.config import *
 
+from src.generators_and_sorters import DNA_Generator
 importlib.reload(DNA_Generator)
-from src.generators_and_sorters.DNA_Generator import *
 
 class bcolors:
    '''
@@ -34,47 +26,52 @@ class bcolors:
    ERROR = '\033[91m'  # RED
    RESET = '\033[0m'  # RESET COLOR
 
-listAllCollections, attributeCollections, attributeCollections1, hierarchy, possibleCombinations = DNA_Generator.returnData()
+def printImportant():
+    listAllCollections, attributeCollections, attributeCollections1, hierarchy, possibleCombinations = DNA_Generator.returnData()
 
-print(bcolors.OK + "--------YOU ARE RUNNING PREVIEW.py--------" + bcolors.RESET)
-print("*Please Note: Running this test will have no effect on your config.py settings or the state of Blend_My_NFTs.")
-print("")
-print(bcolors.WARNING + "---config.py SETTINGS---" + bcolors.RESET)
-print("NFTs Per Batch(nftsPerBatch): " + bcolors.WARNING + str(nftsPerBatch) + bcolors.RESET)
-print("Image Name(imageName): " + bcolors.WARNING + imageName + bcolors.RESET)
-print("Image File Format(imageFileFormat): " + bcolors.WARNING + imageFileFormat + bcolors.RESET)
-print("Operating system: " + bcolors.WARNING + str(platform.system()) + bcolors.RESET)
-print("Save Path(save_path): " + bcolors.WARNING + save_path + bcolors.RESET)
-print("Possible DNA Combinations(possibleCombinations): " + bcolors.WARNING + str(possibleCombinations) + bcolors.RESET)
+    print(bcolors.OK + "--------YOU ARE RUNNING PREVIEW.py--------" + bcolors.RESET)
+    print("*Please Note: Running this test will have no effect on your config.py settings or the state of Blend_My_NFTs.")
+    print("")
+    print(bcolors.WARNING + "---config.py SETTINGS---" + bcolors.RESET)
+    print("NFTs Per Batch(nftsPerBatch): " + bcolors.WARNING + str(config.nftsPerBatch) + bcolors.RESET)
+    print("Image Name(imageName): " + bcolors.WARNING + config.imageName + bcolors.RESET)
+    print("Image File Format(imageFileFormat): " + bcolors.WARNING + config.imageFileFormat + bcolors.RESET)
+    print("Operating system: " + bcolors.WARNING + str(platform.system()) + bcolors.RESET)
+    print("Save Path(save_path): " + bcolors.WARNING + config.save_path + bcolors.RESET)
+    print("Possible DNA Combinations(possibleCombinations): " + bcolors.WARNING + str(possibleCombinations) + bcolors.RESET)
 
-remainder = maxNFTs % nftsPerBatch
-Number_Of_Possible_Batches = (maxNFTs - remainder) / nftsPerBatch
+    remainder = config.maxNFTs % config.nftsPerBatch
+    Number_Of_Possible_Batches = (config.maxNFTs - remainder) / config.nftsPerBatch
 
-print("Max number of NFTs(maxNFTs): " + bcolors.WARNING + str(maxNFTs) + bcolors.RESET)
-print("Number of possible batches: " + bcolors.WARNING + str(Number_Of_Possible_Batches) + bcolors.RESET)
+    print("Max number of NFTs(maxNFTs): " + bcolors.WARNING + str(config.maxNFTs) + bcolors.RESET)
+    print("Number of possible batches: " + bcolors.WARNING + str(Number_Of_Possible_Batches) + bcolors.RESET)
 
-if remainder > 0:
-    print("One incomplete batch will have " + bcolors.WARNING + str(remainder) + bcolors.RESET + " DNA in it.")
-elif remainder == 0:
-    print("There is no incomplete batch with this combination.")
+    if remainder > 0:
+        print("One incomplete batch will have " + bcolors.WARNING + str(remainder) + bcolors.RESET + " DNA in it.")
+    elif remainder == 0:
+        print("There is no incomplete batch with this combination.")
 
-print("\nSettings:")
-print("Reset viewport(enableResetViewport): " + bcolors.WARNING + str(enableResetViewport) + bcolors.RESET)
-print("3D Models(enable3DModels): " + bcolors.WARNING + str(enable3DModels) + bcolors.RESET)
-if enable3DModels:
-    print("3D Model File Format(objectFormatExport): " + bcolors.WARNING + str(objectFormatExport) + bcolors.RESET)
-print("Generate Colours(enableGenerateColours): " + bcolors.WARNING + str(enableGenerateColours) + bcolors.RESET)
-print("")
-print("Colour List(colorList): \n" + bcolors.WARNING + str(colorList) + bcolors.RESET)
-print("")
-print("Rarity(enableRarity): " + bcolors.WARNING + str(enableRarity) + bcolors.RESET)
+    print("\nSettings:")
+    print("Reset viewport(enableResetViewport): " + bcolors.WARNING + str(config.enableResetViewport) + bcolors.RESET)
+    print("3D Models(enable3DModels): " + bcolors.WARNING + str(config.enable3DModels) + bcolors.RESET)
 
+    if config.enable3DModels:
+        print("3D Model File Format(objectFormatExport): " + bcolors.WARNING + str(config.objectFormatExport) + bcolors.RESET)
+
+    print("Generate Colours(enableGenerateColours): " + bcolors.WARNING + str(config.enableGenerateColours) + bcolors.RESET)
+    print("")
+    print("Colour List(colorList): \n" + bcolors.WARNING + str(config.colorList) + bcolors.RESET)
+    print("")
+    print("Rarity(enableRarity): " + bcolors.WARNING + str(config.enableRarity) + bcolors.RESET)
 
 '''
 if config.enable3DModels:
     # Create a timer to time export of 3D models to 3D_Model_Output folder in Model_Generator.py
     print("")
 '''
+
+if __name__ == '__main__':
+    printImportant()
 
 # Add the ability to render a test image so that you can estimate the time per batch and the over all time to render
 # the total NFT collection.

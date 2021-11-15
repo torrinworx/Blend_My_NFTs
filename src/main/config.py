@@ -1,13 +1,16 @@
 import platform
 
-# Set to True to run Preview test, set to False to stop test.
-runPreview = False
-runRenderTest = False
+# Set to True to run Preview test, set to False to stop test. Run main.py in Blender to initiate the test.
+runPreview = True
+runRenderTest = True
+
+# Set to True to generate images or 3D models depending on your settings below when main.py is run in Blender.
+generate = True
 
 # NFT configurations:
-nftsPerBatch = 2   # Number of NFTs per batch
-renderBatch = 1     # The batch number to render in PNG-Generator
-imageName = 'TestImage_'    # The name of the NFT image produces by PNG-Generator
+nftsPerBatch = 10   # Number of NFTs per batch
+renderBatch = 1   # The batch number to render in PNG-Generator
+imageName = 'ThisCozyPlace_'    # The name of the NFT image produces by PNG-Generator
 imageFileFormat = 'PNG' # Dictate the image extension when Blender renders the images
 # Visit https://docs.blender.org/api/current/bpy.types.Image.html#bpy.types.Image.file_format
 # for a list of file formats supported by Blender. Enter the file extension exactly as specified in
@@ -20,7 +23,7 @@ save_path_windows = r''
 # Example mac: /Users/Path/to/Blend_My_NFTs
 # Example windows: C:\Users\Path\to\Blend_My_NFTs
 
-maxNFTs = 5    # The maximum number of NFTs you want to generate - doesn't do anything yet
+maxNFTs = 50    # The maximum number of NFTs you want to generate - does not work with enable3DModels set to True.
 
 enableResetViewport = True # If True: turns all viewport and render cameras on after Image_Generator is finished operations
 
@@ -28,7 +31,7 @@ enableResetViewport = True # If True: turns all viewport and render cameras on a
 enable3DModels = False # Set to True if using external models as attributes instead of Blender objects
 # ^Does not work with colour options and rarity, both must be turned off in order to use this.
 
-objectFormatExport = ''  # The file format of the objects you would like to export
+objectFormatExport = 'glb'  # The file format of the objects you would like to export
 # The following are file formats Blender accepts for exporting object files.
 # Please type the exact name provided below in the '' above:
 # fbx - The .FBX file format
@@ -83,10 +86,6 @@ locationObjectAttribute = {
     "Cube": {"x": 0, "y": 0, "z": 0}
 }
 
-# Loging Current State (DO NOT TOUCH):
-class user_configState():
-    def __init__(self):
-        self.nftsPerBatch = nftsPerBatch
-        self.renderBatch = renderBatch
-        self.maxNFTs = maxNFTs
-        self.imageName = imageName
+# RenderTest.py settings:
+maxNFTsTest = 5 # Increase to get a more accurate reading of the render time.
+imageNameTest = "TestRenderImage_" # Name of test file output.

@@ -1,11 +1,7 @@
 import bpy
 import os
-import re
 import sys
-import copy
-import time
-import json
-import itertools
+import random
 import importlib
 
 dir = os.path.dirname(bpy.data.filepath)
@@ -13,13 +9,10 @@ sys.path.append(dir)
 sys.modules.values()
 
 from src.main import config
-from src.generators_and_sorters import DNA_Generator
-
 importlib.reload(config)
-from src.main.config import *
 
+from src.generators_and_sorters import DNA_Generator
 importlib.reload(DNA_Generator)
-from src.generators_and_sorters.DNA_Generator import *
 
 def sortRarityWeights(hierarchy, listOptionVariant, DNAList):
     '''
@@ -32,7 +25,7 @@ def sortRarityWeights(hierarchy, listOptionVariant, DNAList):
         possibleNums = list(range(1, numChild + 1))
         listOptionVariant.append(possibleNums)
 
-    for x in range(maxNFTs):
+    for x in range(config.maxNFTs):
         def createDNA():
             dnaStr1 = ""
             for i in hierarchy:
@@ -73,3 +66,6 @@ def sortRarityWeights(hierarchy, listOptionVariant, DNAList):
 
         DNAList.append(dnaPushToList)
     return
+
+if __name__ == '__main__':
+    sortRarityWeights()

@@ -15,6 +15,11 @@ from src.main import config
 importlib.reload(config)
 from src.main.config import *
 
+if config.runRenderTest:
+   config.maxNFTs = config.maxNFTsTest
+   config.renderBatch = 1
+   config.imageName = config.imageNameTest
+
 def makeBatches():
 
       file_name = os.path.join(save_path, "NFTRecord.json")
@@ -67,3 +72,6 @@ def makeBatches():
 
             with open(batch_save_path + slash + ("Batch{}.json".format(i + 1)), "w") as outfile2:
                   outfile2.write(incompleteBatch)
+
+if __name__ == '__main__':
+      makeBatches()

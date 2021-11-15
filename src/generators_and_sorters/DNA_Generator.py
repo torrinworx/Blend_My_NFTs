@@ -6,7 +6,6 @@ import copy
 import time
 import json
 import random
-import itertools
 import importlib
 
 dir = os.path.dirname(bpy.data.filepath)
@@ -14,14 +13,19 @@ sys.path.append(dir)
 sys.modules.values()
 
 from src.main import config
+importlib.reload(config)
 
 from src.generators_and_sorters import Rarity_Sorter
-
-importlib.reload(config)
-from src.main.config import *
-
 importlib.reload(Rarity_Sorter)
-from src.generators_and_sorters.Rarity_Sorter import *
+
+if config.runRenderTest:
+   config.maxNFTs = config.maxNFTsTest
+   config.renderBatch = 1
+   config.imageName = config.imageNameTest
+
+print(config.maxNFTs)
+print(config.renderBatch)
+print(config.imageName)
 
 class bcolors:
    '''
@@ -72,9 +76,9 @@ def returnData():
    ignoreList = listSubIgnoreCollections()
 
    for i in listAllCollInScene:
-      if enableGenerateColours:
-         if i.name in colorList:
-            for j in range(len(colorList[i.name])):
+      if config.enableGenerateColours:
+         if i.name in config.colorList:
+            for j in range(len(config.colorList[i.name])):
                if i.name[-1].isdigit() and i.name not in ignoreList:
                   listAllCollections.append(i.name + "_" + str(j + 1))
                elif j == 0:
@@ -154,7 +158,7 @@ def returnData():
             return
          elif len(orderRarity) > 0:
             number = orderRarity[0]
-            if enableGenerateColours:
+            if config.enableGenerateColours:
                if count == 1 or count == 0:
                   previousAttribute = i.partition("_")[0]
                   count +=1
@@ -164,7 +168,7 @@ def returnData():
                   count = 1
                number = str(count)
             rarity = orderRarity[1]
-            if enableGenerateColours and stripColorFromName(i) in colorList:
+            if config.enableGenerateColours and stripColorFromName(i) in config.colorList:
                color = orderRarity[2]
             else:
                color = "0"
@@ -183,12 +187,12 @@ def returnData():
          colParLong = list(bpy.data.collections[str(i)].children)
          colParShort = {}
          for x in colParLong:
-            if enableGenerateColours:
+            if config.enableGenerateColours:
                '''
                Append colors to blender name for PNG generator and NFTRecord.json to create the correct list
                '''
-               if x.name in colorList:
-                  for j in range(len(colorList[x.name])):
+               if x.name in config.colorList:
+                  for j in range(len(config.colorList[x.name])):
                      colParShort[x.name + "_" + str(j+1)] = None
                else:
                   colParShort[x.name + "_0"] = None
@@ -232,13 +236,13 @@ def returnData():
                "\nthose in Script_Ignore:")
          print(hierarchy)
 
-      numBatches = combinations/nftsPerBatch
+      numBatches = combinations/config.nftsPerBatch
 
       if numBatches < 1:
          print(bcolors.ERROR + "ERROR:" + bcolors.RESET)
          print("The number of NFTs Per Batch (nftsPerBatch variable in config.py) is to high.")
          print("There are a total of " + str(combinations) + " possible NFT combinations and you've requested "
-               + str(nftsPerBatch) + " NFTs per batch.")
+               + str(config.nftsPerBatch) + " NFTs per batch.")
          print("Lower the number of NFTs per batch in config.py or increase the number of \nattributes and/or variants"
                " in your .blend file.")
 
@@ -248,7 +252,7 @@ def returnData():
 
    for i in variantMetaData:
       def cameraToggle(i,toggle = True):
-         if enableGenerateColours:
+         if config.enableGenerateColours:
             '''
             Remove Color code so blender recognises the collection
             '''
@@ -269,14 +273,14 @@ def generateNFT_DNA():
    print("-----------------------------------------------------------------------------")
    print("The number of possible DNA combinations is " + str(possibleCombinations))
    print("")
-   print("Generating " + str(maxNFTs) + " combinations of DNA. Set in config.py.")
+   print("Generating " + str(config.maxNFTs) + " combinations of DNA. Set in config.py.")
    print("")
 
    DataDictionary = {}
    listOptionVariant = []
    DNAList = []
 
-   if not enableRarity:
+   if not config.enableRarity:
       for i in hierarchy:
          numChild = len(hierarchy[i])
          possibleNums = list(range(1, numChild + 1))
@@ -286,7 +290,7 @@ def generateNFT_DNA():
       def createDNARandom():
          ab = []
 
-         for x in range(maxNFTs):
+         for x in range(config.maxNFTs):
             dnaStrList = []
             for i in listOptionVariant:
                randomVariantNum = random.choices(i, k = 1)
@@ -310,14 +314,14 @@ def generateNFT_DNA():
          dna = ''.join(dnaStr.split('-', 1))
          DNAList.append(dna)
 
-      possibleCombinations = maxNFTs
+      possibleCombinations = config.maxNFTs
 
-      if nftsPerBatch > maxNFTs:
-         print("The Max num of NFTs you chose is smaller than the NFTs Per Batch you set. Only " + str(maxNFTs) + " were added to 1 batch")
+      if config.nftsPerBatch > config.maxNFTs:
+         print("The Max num of NFTs you chose is smaller than the NFTs Per Batch you set. Only " + str(config.maxNFTs) + " were added to 1 batch")
 
-   if enableRarity:
+   if config.enableRarity:
       print(bcolors.OK + "Rarity is on. Weights listed in .blend will be taken into account " + bcolors.RESET)
-      possibleCombinations = maxNFTs
+      possibleCombinations = config.maxNFTs
       Rarity_Sorter.sortRarityWeights(hierarchy, listOptionVariant, DNAList)
 
    #Data stored in batchDataDictionary:
@@ -338,7 +342,7 @@ def send_To_Record_JSON():
    DataDictionary, possibleCombinations = generateNFT_DNA()
 
    ledger = json.dumps(DataDictionary, indent=1, ensure_ascii=True)
-   with open(os.path.join(save_path, "NFTRecord.json"), 'w') as outfile:
+   with open(os.path.join(config.save_path, "NFTRecord.json"), 'w') as outfile:
       outfile.write(ledger + '\n')
 
    print("")
@@ -357,3 +361,9 @@ def clearNFTRecord(AREYOUSURE):
       os.remove("NFTRecord.json")
 
 #clearNFTRecord()
+
+if __name__ == '__main__':
+   stripColorFromName()
+   returnData()
+   send_To_Record_JSON()
+   clearNFTRecord()
