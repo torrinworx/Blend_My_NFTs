@@ -3,13 +3,8 @@
 
 import bpy
 import os
-import re
 import sys
-import copy
 import timeit
-import json
-import random
-import itertools
 import importlib
 
 dir = os.path.dirname(bpy.data.filepath)
@@ -57,7 +52,9 @@ def imageRenderTest():
 
     endRender = timeit.timeit()
 
-    print("Image rendered in %.4f seconds" % (endRender - startRender))
+    print("Image(s) rendered in %.4f seconds" % (endRender - startRender))
+    print(bcolors.WARNING + "\n Time to render " + str(config.maxNFTs) + " NFT Images: " + bcolors.RESET)
+    print(((endRender - startRender)/(config.maxNFTsTest))*config.maxNFTs)
 
 if __name__ == '__main__':
     imageRenderTest()

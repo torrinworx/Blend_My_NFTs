@@ -2,10 +2,9 @@ import platform
 
 # Set to True to run Preview test, set to False to stop test. Run main.py in Blender to initiate the test.
 runPreview = True
-runRenderTest = True
 
 # Set to True to generate images or 3D models depending on your settings below when main.py is run in Blender.
-generate = True
+generate = False
 
 # NFT configurations:
 nftsPerBatch = 10   # Number of NFTs per batch

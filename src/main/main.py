@@ -36,6 +36,3 @@ if not config.runPreview and config.runRenderTest:
 
 if config.runPreview:
     Preview.printImportant()
-
-if config.runRenderTest:
-    RenderTest.imageRenderTest()

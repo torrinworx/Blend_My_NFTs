@@ -17,6 +17,9 @@ importlib.reload(config)
 from src.generators_and_sorters import DNA_Generator
 importlib.reload(DNA_Generator)
 
+from src.main import RenderTest
+importlib.reload(RenderTest)
+
 class bcolors:
    '''
    The colour of console messages.
@@ -64,17 +67,17 @@ def printImportant():
     print("")
     print("Rarity(enableRarity): " + bcolors.WARNING + str(config.enableRarity) + bcolors.RESET)
 
-'''
-if config.enable3DModels:
-    # Create a timer to time export of 3D models to 3D_Model_Output folder in Model_Generator.py
-    print("")
-'''
+    if not config.enable3DModels:
+        RenderTest.imageRenderTest()
+
+    # if config.enable3DModels:
+
+    #if config.enable3DModels:
+    #    # Create a timer to time export of 3D models to 3D_Model_Output folder in Model_Generator.py
+    #    print("")
 
 if __name__ == '__main__':
     printImportant()
-
-# Add the ability to render a test image so that you can estimate the time per batch and the over all time to render
-# the total NFT collection.
 
 # To run the following, run main.py with enableRarity = True in config.py:
 # Somehow cross check percentage rarity of variant number in NFTRecord.json, iterate through all of them. Then print the

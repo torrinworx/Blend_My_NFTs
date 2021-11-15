@@ -23,10 +23,6 @@ if config.runRenderTest:
    config.renderBatch = 1
    config.imageName = config.imageNameTest
 
-print(config.maxNFTs)
-print(config.renderBatch)
-print(config.imageName)
-
 class bcolors:
    '''
    The colour of console messages.
