@@ -4,7 +4,7 @@
 import bpy
 import os
 import sys
-import timeit
+import time
 import importlib
 
 dir = os.path.dirname(bpy.data.filepath)
@@ -33,6 +33,11 @@ class bcolors:
    RESET = '\033[0m'  # RESET COLOR
 
 def imageRenderTest():
+    config.nftsPerBatch = config.maxNFTsTest
+    config.maxNFTs = config.maxNFTsTest
+    config.renderBatch = 1
+    config.imageName = config.imageNameTest
+
     print(bcolors.WARNING + "\n---RUNNING IMAGE RENDER TEST---\n" + bcolors.RESET)
     print("This test will render one image, record the time it took, then calculate the time to render")
     print("the maxNFTs specified in config.py based on that image.")
@@ -45,16 +50,17 @@ def imageRenderTest():
     print(bcolors.WARNING + "\n---RUNNING Batch_Sorter.py SHELL---\n" + bcolors.RESET)
     Batch_Sorter.makeBatches()
 
-    startRender = timeit.timeit()
+    fullRenderTime = time.time()
 
-    print(bcolors.WARNING + "\n---RUNNING Batch_Sorter.py SHELL---\n" + bcolors.RESET)
+    print(bcolors.WARNING + "\n---RUNNING Image_Generator.py SHELL---\n" + bcolors.RESET)
     Image_Generator.render_and_save_NFTs()
 
-    endRender = timeit.timeit()
+    print("Image(s) rendered in %.4f seconds" % (time.time() - fullRenderTime))
+    print(bcolors.WARNING + "\nTime to render " + str(config.maxNFTs) + " NFT Images: " + bcolors.RESET)
 
-    print("Image(s) rendered in %.4f seconds" % (endRender - startRender))
-    print(bcolors.WARNING + "\n Time to render " + str(config.maxNFTs) + " NFT Images: " + bcolors.RESET)
-    print(((endRender - startRender)/(config.maxNFTsTest))*config.maxNFTs)
+    renderMaxTime = ((int(fullRenderTime)) / int((config.maxNFTsTest))) * config.maxNFTs
+    
+    print(renderMaxTime)
 
 if __name__ == '__main__':
     imageRenderTest()

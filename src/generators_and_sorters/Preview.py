@@ -11,13 +11,10 @@ dir = os.path.dirname(bpy.data.filepath)
 sys.path.append(dir)
 sys.modules.values()
 
-from src.main import config
-importlib.reload(config)
-
 from src.generators_and_sorters import DNA_Generator
 importlib.reload(DNA_Generator)
 
-from src.main import RenderTest
+from src.generators_and_sorters import RenderTest
 importlib.reload(RenderTest)
 
 class bcolors:
@@ -30,6 +27,9 @@ class bcolors:
    RESET = '\033[0m'  # RESET COLOR
 
 def printImportant():
+    from src.main import config
+    importlib.reload(config)
+
     listAllCollections, attributeCollections, attributeCollections1, hierarchy, possibleCombinations = DNA_Generator.returnData()
 
     print(bcolors.OK + "--------YOU ARE RUNNING PREVIEW.py--------" + bcolors.RESET)

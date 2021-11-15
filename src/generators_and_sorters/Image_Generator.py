@@ -13,6 +13,7 @@ from src.main import config
 importlib.reload(config)
 
 if config.runPreview:
+   config.nftsPerBatch = config.maxNFTsTest
    config.maxNFTs = config.maxNFTsTest
    config.renderBatch = 1
    config.imageName = config.imageNameTest

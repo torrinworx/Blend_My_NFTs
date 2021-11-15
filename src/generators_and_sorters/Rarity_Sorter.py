@@ -15,6 +15,7 @@ from src.generators_and_sorters import DNA_Generator
 importlib.reload(DNA_Generator)
 
 if config.runPreview:
+   config.nftsPerBatch = config.maxNFTsTest
    config.maxNFTs = config.maxNFTsTest
    config.renderBatch = 1
    config.imageName = config.imageNameTest

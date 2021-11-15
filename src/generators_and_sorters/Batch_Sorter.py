@@ -1,7 +1,7 @@
 import bpy
 import os
 import sys
-import time
+import timeit
 import json
 import random
 import importlib
@@ -16,6 +16,7 @@ importlib.reload(config)
 from src.main.config import *
 
 if config.runPreview:
+   config.nftsPerBatch = config.maxNFTsTest
    config.maxNFTs = config.maxNFTsTest
    config.renderBatch = 1
    config.imageName = config.imageNameTest
@@ -29,14 +30,13 @@ def makeBatches():
       hierarchy = DataDictionary["hierarchy"]
       DNAList = DataDictionary["DNAList"]
 
-      remainder = numNFTsGenerated % nftsPerBatch
-      Number_Of_Possible_Batches = (numNFTsGenerated - remainder)/nftsPerBatch
+      numBatches = config.maxNFTs/config.nftsPerBatch
 
       print("To generate batches of " + str(nftsPerBatch) + " DNA sequences per batch, with a total of " +
-            str(numNFTsGenerated) + " possible NFT DNA sequences, the number of batches generated will be " + str(Number_Of_Possible_Batches))
+            str(numNFTsGenerated) + " possible NFT DNA sequences, the number of batches generated will be " + str(numBatches))
 
       i = 0
-      while i < Number_Of_Possible_Batches:
+      while i < numBatches:
             batchDictionary = {}
             BatchDNAList = []
 

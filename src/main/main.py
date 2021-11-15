@@ -11,7 +11,8 @@ sys.modules.values()
 from src.main import config
 importlib.reload(config)
 
-from src.generators_and_sorters import DNA_Generator
+from src.generators_and_sorters import DNA_Generator, Preview, RenderTest
+
 importlib.reload(DNA_Generator)
 
 from src.generators_and_sorters import Batch_Sorter
@@ -20,10 +21,8 @@ importlib.reload(Batch_Sorter)
 from src.generators_and_sorters import Model_Generator
 importlib.reload(Model_Generator)
 
-from src.main import Preview
 importlib.reload(Preview)
 
-from src.main import RenderTest
 importlib.reload(RenderTest)
 
 if not config.runPreview and config.runRenderTest:
