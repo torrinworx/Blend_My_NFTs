@@ -73,7 +73,7 @@ def returnData():
    ignoreList = listSubIgnoreCollections()
 
    for i in listAllCollInScene:
-      if config.enableGenerateColours:
+      if config.enableGeneration:
          if i.name in config.colorList:
             for j in range(len(config.colorList[i.name])):
                if i.name[-1].isdigit() and i.name not in ignoreList:
@@ -155,7 +155,7 @@ def returnData():
             return
          elif len(orderRarity) > 0:
             number = orderRarity[0]
-            if config.enableGenerateColours:
+            if config.enableGeneration:
                if count == 1 or count == 0:
                   previousAttribute = i.partition("_")[0]
                   count +=1
@@ -165,7 +165,7 @@ def returnData():
                   count = 1
                number = str(count)
             rarity = orderRarity[1]
-            if config.enableGenerateColours and stripColorFromName(i) in config.colorList:
+            if config.enableGeneration and stripColorFromName(i) in config.colorList:
                color = orderRarity[2]
             else:
                color = "0"
@@ -184,7 +184,7 @@ def returnData():
          colParLong = list(bpy.data.collections[str(i)].children)
          colParShort = {}
          for x in colParLong:
-            if config.enableGenerateColours:
+            if config.enableGeneration:
                '''
                Append colors to blender name for PNG generator and NFTRecord.json to create the correct list
                '''
@@ -249,7 +249,7 @@ def returnData():
 
    for i in variantMetaData:
       def cameraToggle(i,toggle = True):
-         if config.enableGenerateColours:
+         if config.enableGeneration:
             '''
             Remove Color code so blender recognises the collection
             '''

@@ -13,7 +13,7 @@ imageFileFormat = 'PNG'  # Dictate the image extension when Blender renders the 
 # the Blender API documentation above.
 
 # The path to Blend_My_NFTs folder:
-save_path_mac = '/Users/torrinleonard/Desktop/Blend_My_NFTs'
+save_path_mac = ''
 save_path_windows = r''
 # Place the path in the '', e.g: save_path_mac = '/Users/Path/to/Blend_My_NFTs'
 # Example mac: /Users/Path/to/Blend_My_NFTs
@@ -35,8 +35,12 @@ objectFormatExport = 'glb'  # The file format of the objects you would like to e
 # obj - The .obj file format *Exports both a .obj and a .mtl files for the same generated object
 # x3d - The .x3d file format
 
-# Object colour options:
-enableGenerateColours = False  # When set to true this applies the sets of colors listed below to the objects in the collections named below
+
+### Select colour or material.###
+
+# Object generation options:
+enableGeneration = True  # When set to true this applies the sets of colors listed below to the objects in the collections named below
+generationType = 'material' #You can either set 'color' or 'material' here. Type you set will correspond to following options.
 
 # The collections below are RGBA Color values. You can put as many or as little color values in these lists as you would like.
 # You can create any number of rgbaColorLists and assign them to any number of collections that you would like.
@@ -46,7 +50,21 @@ rgbaColorList2 = [(1,1,0,1),(0,1,1,1),(.5,0,1,1),(.5,1,1,1),(0,.5,0,1)]
 # The following color list can be as long or as short as you want it to be.
 # To use this all you need to do is place the name of the collection you want colored in the "" and the set of colors you want to apply to it after the :
 # The collection named can only contain objects and not sub collections. Every object in the collection will be set to the colors you assigned above for each attribute
-colorList = {"Cube_1_33":rgbaColorList1,"Sphere_4_0":rgbaColorList2}
+if generationType == 'color': #Do not change this line.
+    colorList = {"Cube_1_33":rgbaColorList1,"Sphere_4_0":rgbaColorList2}
+
+### These materials must be in your Current Files' Materials. ###
+# The collections below are Current Files' Materials. You can put as many or as little materials values in these lists as you would like.
+# You can create any number of materialLists and assign them to any number of collections that you would like.
+# Each set of materialLists assigned to an object by collection name in the materialList will act like an attribute and create a unique variant of that item.
+materialList1 = ['Material1','Material1.001','Material1.002','Material1.003','Material1.004']
+materialList2 = ['Material2','Material2.001','Material2.002','Material2.003','Material2.004']
+# The following material list can be as long or as short as you want it to be.
+# To use this all you need to do is place the name of the collection you want materials assigned in the "" and the set of materials you want to apply to it after the :
+# The collection named can only contain objects and not sub collections. Every object in the collection will be set to the materials you assigned above for each attribute
+
+if generationType == 'material': #Do not change this line.
+    colorList = {"Cube_1_33":materialList1,"Sphere_2_0":materialList2}
 
 # Utilities - DO NOT TOUCH:
 mac = 'Darwin'  # Mac OS
