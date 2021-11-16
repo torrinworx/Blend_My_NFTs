@@ -67,7 +67,10 @@ def printImportant():
     print("")
     print("Rarity(enableRarity): " + bcolors.WARNING + str(config.enableRarity) + bcolors.RESET)
 
-    RenderTest.imageRenderTest()
+    if not config.enable3DModels:
+        RenderTest.imageRenderTest()
+    if config.enable3DModels:
+        print( bcolors.WARNING + "Cannot run Render Test when enable3DModels = True" + bcolors.RESET)
 
 if __name__ == '__main__':
     printImportant()
