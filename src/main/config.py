@@ -1,25 +1,26 @@
 import platform
 
-# Set to True to generate images or 3D models depending on your settings below when main.py is run in Blender.
-generate = False
-
 # NFT configurations:
-nftsPerBatch = 10  # Number of NFTs per batch
-renderBatch = 1  # The batch number to render in PNG-Generator
-imageName = 'ThisCozyPlace_'  # The name of the NFT image produces by PNG-Generator
-imageFileFormat = 'PNG'  # Dictate the image extension when Blender renders the images
+nftsPerBatch = 0  # Number of NFTs per batch
+renderBatch = 0  # The batch number to render in PNG-Generator
+imageName = ''  # The name of the NFT image produces by PNG-Generator
+imageFileFormat = ''  # Dictate the image extension when Blender renders the images
 # Visit https://docs.blender.org/api/current/bpy.types.Image.html#bpy.types.Image.file_format
 # for a list of file formats supported by Blender. Enter the file extension exactly as specified in
 # the Blender API documentation above.
 
 # The path to Blend_My_NFTs folder:
-save_path_mac = '/Users/torrinleonard/Desktop/Blend_My_NFTs'
+save_path_mac = ''
 save_path_windows = r''
 # Place the path in the '', e.g: save_path_mac = '/Users/Path/to/Blend_My_NFTs'
 # Example mac: /Users/Path/to/Blend_My_NFTs
 # Example windows: C:\Users\Path\to\Blend_My_NFTs
 
-maxNFTs = 50    # The maximum number of NFTs you want to generate - does not work with enable3DModels set to True.
+maxNFTs = 0  # The maximum number of NFTs you want to generate - does not work with enable3DModels set to True.
+
+# Set to True to generate images or 3D models depending on your settings below when main.py is run in Blender.
+# Only works if you have already generated NFTRecord.json and all batches.
+renderImage = False
 
 enableResetViewport = True  # If True: turns all viewport and render cameras on after Image_Generator is finished operations
 
@@ -76,14 +77,15 @@ enableRarity = False
 # True = include weighted rarity percentages in NFTRecord.json calculations,
 # False = Pure random selection of variants
 
+# RenderTest.py settings:
+# Set to True to run Preview test, set to False to stop test. Run main.py in Blender to initiate the test.
+# enable3DModels must be off to run the render test.
+runPreview = False
+maxNFTsTest = 0  # Increase to get a more accurate reading of the render time. The number of images generated in the render test.
+imageNameTest = ""  # Name of test file output.
+
 # Specify the XYZ location for objects imported as external files:
 locationObjectAttribute = {
     "Cone": {"x": 0, "y": 0, "z": 0},
     "Cube": {"x": 0, "y": 0, "z": 0}
 }
-
-# RenderTest.py settings:
-# Set to True to run Preview test, set to False to stop test. Run main.py in Blender to initiate the test.
-runPreview = True
-maxNFTsTest = 5  # Increase to get a more accurate reading of the render time.
-imageNameTest = "TestRenderImage_"  # Name of test file output.
