@@ -39,7 +39,7 @@ def makeBatches():
             BatchDNAList = []
 
             j = 0
-            while j < config.nftsPerBatch:
+            while (j < config.nftsPerBatch) and (DNAList):
                   oneDNA = random.choice(DNAList)
                   BatchDNAList.append(oneDNA)
                   DNAList.remove(oneDNA)
