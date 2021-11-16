@@ -57,6 +57,7 @@ def printImportant():
     print("\nSettings:")
     print("Reset viewport(enableResetViewport): " + bcolors.WARNING + str(config.enableResetViewport) + bcolors.RESET)
     print("3D Models(enable3DModels): " + bcolors.WARNING + str(config.enable3DModels) + bcolors.RESET)
+    print("")
 
     if config.enable3DModels:
         print("3D Model File Format(objectFormatExport): " + bcolors.WARNING + str(config.objectFormatExport) + bcolors.RESET)

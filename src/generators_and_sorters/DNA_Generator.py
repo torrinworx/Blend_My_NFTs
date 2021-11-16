@@ -149,9 +149,11 @@ def returnData():
          orderRarity = getOrder_rarity(i)
 
          if len(orderRarity) == 0:
-            print(bcolors.WARNING + "Warning" + bcolors.RESET)
+            print(bcolors.ERROR + "\nERROR:" + bcolors.RESET)
             print("The collection " + str(i) + " doesn't follow the naming conventions of attributes. Please move this \n"
                   "colleciton to Script_Ignore or review proper collection format in README.md")
+            sys.exit(bcolors.ERROR + "SCRIPT FAILED" + bcolors.RESET)
+
             return
          elif len(orderRarity) > 0:
             number = orderRarity[0]
@@ -224,7 +226,7 @@ def returnData():
          combinations = combinations*i
 
       if combinations == 0:
-         print(bcolors.ERROR + "ERROR:" + bcolors.RESET)
+         print(bcolors.ERROR + "\nERROR:" + bcolors.RESET)
          print("The number of all possible combinations is equal to 0. Please review your collection hierarchy \n "
                "and ensure it is formatted correctly.")
          print("Please review README.md for more information.")
@@ -232,6 +234,7 @@ def returnData():
          print("Here is the hierarchy of all collections the DNA_Generator gathered from your .blend file, excluding "
                "\nthose in Script_Ignore:")
          print(hierarchy)
+         sys.exit(bcolors.ERROR + "SCRIPT FAILED" + bcolors.RESET)
 
       numBatches = combinations/config.nftsPerBatch
 
@@ -242,6 +245,7 @@ def returnData():
                + str(config.nftsPerBatch) + " NFTs per batch.")
          print("Lower the number of NFTs per batch in config.py or increase the number of \nattributes and/or variants"
                " in your .blend file.")
+         sys.exit(bcolors.ERROR + "SCRIPT FAILED" + bcolors.RESET)
 
       return combinations
 
@@ -314,6 +318,7 @@ def generateNFT_DNA():
       possibleCombinations = config.maxNFTs
 
       if config.nftsPerBatch > config.maxNFTs:
+         print(bcolors.WARNING + "\nWARNING:" + bcolors.RESET)
          print("The Max num of NFTs you chose is smaller than the NFTs Per Batch you set. Only " + str(config.maxNFTs) + " were added to 1 batch")
 
    if config.enableRarity:
