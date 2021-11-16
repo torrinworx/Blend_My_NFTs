@@ -67,12 +67,7 @@ def printImportant():
     print("")
     print("Rarity(enableRarity): " + bcolors.WARNING + str(config.enableRarity) + bcolors.RESET)
 
-    if not config.enable3DModels:
-        RenderTest.imageRenderTest()
-
-    #if config.enable3DModels:
-    #    # Create a timer to time export of 3D models to 3D_Model_Output folder in Model_Generator.py
-    #    print("")
+    RenderTest.imageRenderTest()
 
 if __name__ == '__main__':
     printImportant()
