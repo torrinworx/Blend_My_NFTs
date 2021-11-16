@@ -49,7 +49,7 @@ def render_and_save_NFTs():
     for a in BatchDNAList:
         for i in hierarchy:
             for j in hierarchy[i]:
-                if config.enableGenerateColours:
+                if config.enableGeneration:
                     '''
                      Remove Color code so blender recognises the collection
                     '''
@@ -89,7 +89,7 @@ def render_and_save_NFTs():
 
         for c in dnaDictionary:
             collection = dnaDictionary[c]
-            if not config.enableGenerateColours:
+            if not config.enableGeneration:
                 bpy.data.collections[collection].hide_render = False
                 bpy.data.collections[collection].hide_viewport = False
 
@@ -99,20 +99,22 @@ def render_and_save_NFTs():
 
         fullImagePath = config.images_save_path + config.slash + imageOutputBatchSubFolder + config.slash + "{}.jpeg".format(name)
 
-        if config.enableGenerateColours:
+        if config.enableGeneration:
             for c in dnaDictionary:
                 collection = dnaDictionary[c]
-
                 if stripColorFromName(collection) in config.colorList:
                     colorVal = int(collection.rsplit("_",1)[1])-1
                     collection = stripColorFromName(collection)
                     bpy.data.collections[collection].hide_render = False
                     bpy.data.collections[collection].hide_viewport = False
-
-                    for activeObject in bpy.data.collections[collection].all_objects: 
-                        mat = bpy.data.materials.new("PKHG")
-                        mat.diffuse_color = config.colorList[collection][colorVal]
-                        activeObject.active_material = mat
+                    if config.generationType == 'color':
+                        for activeObject in bpy.data.collections[collection].all_objects: 
+                            mat = bpy.data.materials.new("PKHG")
+                            mat.diffuse_color = config.colorList[collection][colorVal]
+                            activeObject.active_material = mat
+                    if config.generationType == 'material':
+                        for activeObject in bpy.data.collections[collection].all_objects: 
+                            activeObject.material_slots[0].material = bpy.data.materials[config.colorList[collection][colorVal]]
                 else:
                     collection = stripColorFromName(collection)
                     bpy.data.collections[collection].hide_render = False
@@ -129,7 +131,7 @@ def render_and_save_NFTs():
         for a in BatchDNAList:
             for i in hierarchy:
                 for j in hierarchy[i]:
-                    if config.enableGenerateColours:
+                    if config.enableGeneration:
                         j = stripColorFromName(j)
                     bpy.data.collections[j].hide_render = False
                     bpy.data.collections[j].hide_viewport = False
