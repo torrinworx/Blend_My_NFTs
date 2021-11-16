@@ -11,21 +11,14 @@ sys.modules.values()
 from src.main import config
 importlib.reload(config)
 
-from src.generators_and_sorters import DNA_Generator, Preview, RenderTest
-
+from src.generators_and_sorters import DNA_Generator, Preview, RenderTest, Batch_Sorter, Model_Generator
 importlib.reload(DNA_Generator)
-
-from src.generators_and_sorters import Batch_Sorter
 importlib.reload(Batch_Sorter)
-
-from src.generators_and_sorters import Model_Generator
 importlib.reload(Model_Generator)
-
 importlib.reload(Preview)
-
 importlib.reload(RenderTest)
 
-if not config.runPreview and config.runRenderTest:
+if not config.runPreview:
     if config.enable3DModels:
         Model_Generator.generate3DModels()
 

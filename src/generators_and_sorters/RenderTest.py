@@ -4,7 +4,9 @@
 import bpy
 import os
 import sys
+import copy
 import time
+import shutil
 import importlib
 
 dir = os.path.dirname(bpy.data.filepath)
@@ -33,6 +35,7 @@ class bcolors:
    RESET = '\033[0m'  # RESET COLOR
 
 def imageRenderTest():
+    originalMaxNFTs = copy.deepcopy(config.maxNFTs)
     config.nftsPerBatch = config.maxNFTsTest
     config.maxNFTs = config.maxNFTsTest
     config.renderBatch = 1
@@ -56,11 +59,15 @@ def imageRenderTest():
     Image_Generator.render_and_save_NFTs()
 
     print("Image(s) rendered in %.4f seconds" % (time.time() - fullRenderTime))
-    print(bcolors.WARNING + "\nTime to render " + str(config.maxNFTs) + " NFT Images: " + bcolors.RESET)
+    print(bcolors.WARNING + "\nTime to render " + str(originalMaxNFTs) + " NFT Images: " + bcolors.RESET)
 
-    renderMaxTime = ((int(fullRenderTime)) / int((config.maxNFTsTest))) * config.maxNFTs
+    renderMaxTime = str(((int(time.time() - fullRenderTime)) / int((config.maxNFTs))) * originalMaxNFTs) + "s"
     
     print(renderMaxTime)
+
+    os.remove(config.batch_save_path + config.slash + "Batch1.json")
+    os.remove(config.save_path + config.slash + "NFTRecord.json")
+    shutil.rmtree(config.images_save_path + config.slash + "Batch1")
 
 if __name__ == '__main__':
     imageRenderTest()

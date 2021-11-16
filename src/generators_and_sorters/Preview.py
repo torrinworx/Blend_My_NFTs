@@ -70,8 +70,6 @@ def printImportant():
     if not config.enable3DModels:
         RenderTest.imageRenderTest()
 
-    # if config.enable3DModels:
-
     #if config.enable3DModels:
     #    # Create a timer to time export of 3D models to 3D_Model_Output folder in Model_Generator.py
     #    print("")

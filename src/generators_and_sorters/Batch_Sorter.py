@@ -11,9 +11,7 @@ sys.path.append(dir)
 sys.modules.values()
 
 from src.main import config
-
 importlib.reload(config)
-from src.main.config import *
 
 if config.runPreview:
    config.nftsPerBatch = config.maxNFTsTest
@@ -23,7 +21,7 @@ if config.runPreview:
 
 def makeBatches():
 
-      file_name = os.path.join(save_path, "NFTRecord.json")
+      file_name = os.path.join(config.save_path, "NFTRecord.json")
       DataDictionary = json.load(open(file_name))
 
       numNFTsGenerated = DataDictionary["numNFTsGenerated"]
@@ -32,7 +30,7 @@ def makeBatches():
 
       numBatches = config.maxNFTs/config.nftsPerBatch
 
-      print("To generate batches of " + str(nftsPerBatch) + " DNA sequences per batch, with a total of " +
+      print("To generate batches of " + str(config.nftsPerBatch) + " DNA sequences per batch, with a total of " +
             str(numNFTsGenerated) + " possible NFT DNA sequences, the number of batches generated will be " + str(numBatches))
 
       i = 0
@@ -41,7 +39,7 @@ def makeBatches():
             BatchDNAList = []
 
             j = 0
-            while j < nftsPerBatch:
+            while j < config.nftsPerBatch:
                   oneDNA = random.choice(DNAList)
                   BatchDNAList.append(oneDNA)
                   DNAList.remove(oneDNA)
@@ -53,7 +51,7 @@ def makeBatches():
 
             batchDictionaryObject = json.dumps(batchDictionary, indent=1, ensure_ascii=True)
 
-            with open(batch_save_path + slash + ("Batch{}.json".format(i + 1)), "w") as outfile:
+            with open(config.batch_save_path + config.slash + ("Batch{}.json".format(i + 1)), "w") as outfile:
                   outfile.write(batchDictionaryObject)
 
             i += 1
@@ -70,7 +68,7 @@ def makeBatches():
 
             incompleteBatch = json.dumps(incompleteBatch, indent=1, ensure_ascii=True)
 
-            with open(batch_save_path + slash + ("Batch{}.json".format(i + 1)), "w") as outfile2:
+            with open(config.batch_save_path + config.slash + ("Batch{}.json".format(i + 1)), "w") as outfile2:
                   outfile2.write(incompleteBatch)
 
 if __name__ == '__main__':

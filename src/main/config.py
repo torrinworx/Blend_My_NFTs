@@ -1,8 +1,5 @@
 import platform
 
-# Set to True to run Preview test, set to False to stop test. Run main.py in Blender to initiate the test.
-runPreview = True
-
 # Set to True to generate images or 3D models depending on your settings below when main.py is run in Blender.
 generate = False
 
@@ -86,5 +83,7 @@ locationObjectAttribute = {
 }
 
 # RenderTest.py settings:
+# Set to True to run Preview test, set to False to stop test. Run main.py in Blender to initiate the test.
+runPreview = True
 maxNFTsTest = 5  # Increase to get a more accurate reading of the render time.
 imageNameTest = "TestRenderImage_"  # Name of test file output.
