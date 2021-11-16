@@ -27,12 +27,11 @@ class bcolors:
    RESET = '\033[0m'  # RESET COLOR
 
 def generate3DModels():
-    time_start = time.time()
-
     '''
     This sorter assumes that every object file variant for each attribute has a unique name. Names can include numbers, or 
     any character value, but must be unique for each object. 
     '''
+    time_start = time.time()
 
     def deleteAllObjects():
         '''
@@ -134,3 +133,7 @@ def generate3DModels():
         count += 1
 
     print("Generated .glb files in %.4f seconds" % (time.time() - time_start))
+
+
+if __name__ == '__main__':
+    generate3DModels()

@@ -9,26 +9,22 @@ sys.path.append(dir)
 sys.modules.values()
 
 from src.main import config
-
 importlib.reload(config)
-from src.main.config import *
 
-if config.enable3DModels:
-    from src.generators_and_sorters import Model_Generator
+from src.generators_and_sorters import DNA_Generator, Preview, RenderTest, Batch_Sorter, Model_Generator
+importlib.reload(DNA_Generator)
+importlib.reload(Batch_Sorter)
+importlib.reload(Model_Generator)
+importlib.reload(Preview)
+importlib.reload(RenderTest)
 
-    importlib.reload(Model_Generator)
-    from src.generators_and_sorters.Model_Generator import *
+if not config.runPreview:
+    if config.enable3DModels:
+        Model_Generator.generate3DModels()
 
-    Model_Generator.generate3DModels()
+    if not config.enable3DModels:
+        DNA_Generator.send_To_Record_JSON()
+        Batch_Sorter.makeBatches()
 
-if not config.enable3DModels:
-    from src.generators_and_sorters import DNA_Generator
-    from src.generators_and_sorters import Batch_Sorter
-
-    importlib.reload(DNA_Generator)
-    from src.generators_and_sorters.DNA_Generator import *
-    importlib.reload(Batch_Sorter)
-    from src.generators_and_sorters.Batch_Sorter import *
-
-    DNA_Generator.send_To_Record_JSON()
-    Batch_Sorter.makeBatches()
+if config.runPreview:
+    Preview.printImportant()
