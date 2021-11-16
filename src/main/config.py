@@ -13,7 +13,7 @@ imageFileFormat = 'PNG'  # Dictate the image extension when Blender renders the 
 # the Blender API documentation above.
 
 # The path to Blend_My_NFTs folder:
-save_path_mac = ''
+save_path_mac = '/Users/Path/to/Blend_My_NFTs'
 save_path_windows = r''
 # Place the path in the '', e.g: save_path_mac = '/Users/Path/to/Blend_My_NFTs'
 # Example mac: /Users/Path/to/Blend_My_NFTs
@@ -102,6 +102,6 @@ locationObjectAttribute = {
 
 # RenderTest.py settings:
 # Set to True to run Preview test, set to False to stop test. Run main.py in Blender to initiate the test.
-runPreview = True
+runPreview = False
 maxNFTsTest = 5  # Increase to get a more accurate reading of the render time.
 imageNameTest = "TestRenderImage_"  # Name of test file output.
