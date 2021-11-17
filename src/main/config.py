@@ -42,6 +42,8 @@ objectFormatExport = ''  # The file format of the objects you would like to expo
 # Object generation options:
 enableGeneration = True  # When set to true this applies the sets of colors listed below to the objects in the collections named below
 generationType = 'material' #You can either set 'color' or 'material' here. Type you set will correspond to following options.
+#generationType = 'material' mode is experimental. Be sure that you back-up your file.
+#You need to set materials as "fake user". Do not miss this step. Or your materials going to vanish after running this script.
 
 # The collections below are RGBA Color values. You can put as many or as little color values in these lists as you would like.
 # You can create any number of rgbaColorLists and assign them to any number of collections that you would like.
@@ -54,7 +56,7 @@ rgbaColorList2 = [(1,1,0,1),(0,1,1,1),(.5,0,1,1),(.5,1,1,1),(0,.5,0,1)]
 if generationType == 'color': #Do not change this line.
     colorList = {"Cube_1_33":rgbaColorList1,"Sphere_4_0":rgbaColorList2}
 
-### These materials must be in your Current Files' Materials. ###
+### These materials must be in your Current Files' Materials. Make sure that you've set your materials as "fake user". ###
 # The collections below are Current Files' Materials. You can put as many or as little materials values in these lists as you would like.
 # You can create any number of materialLists and assign them to any number of collections that you would like.
 # Each set of materialLists assigned to an object by collection name in the materialList will act like an attribute and create a unique variant of that item.
