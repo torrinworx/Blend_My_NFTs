@@ -15,7 +15,8 @@ sys.modules.values()
 from src.main import config
 importlib.reload(config)
 
-from src.generators_and_sorters import Rarity_Sorter
+from src.Image_Generators import Rarity_Sorter
+
 importlib.reload(Rarity_Sorter)
 
 if config.runPreview:

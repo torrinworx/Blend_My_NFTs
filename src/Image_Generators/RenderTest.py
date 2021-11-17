@@ -14,15 +14,11 @@ sys.path.append(dir)
 sys.modules.values()
 
 from src.main import config
+from src.Image_Generators import Batch_Sorter, DNA_Generator, Image_Generator
+
 importlib.reload(config)
-
-from src.generators_and_sorters import DNA_Generator
 importlib.reload(DNA_Generator)
-
-from src.generators_and_sorters import Batch_Sorter
 importlib.reload(Batch_Sorter)
-
-from src.generators_and_sorters import Image_Generator
 importlib.reload(Image_Generator)
 
 class bcolors:

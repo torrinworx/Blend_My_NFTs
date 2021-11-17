@@ -11,10 +11,9 @@ dir = os.path.dirname(bpy.data.filepath)
 sys.path.append(dir)
 sys.modules.values()
 
-from src.generators_and_sorters import DNA_Generator
-importlib.reload(DNA_Generator)
+from src.Image_Generators import DNA_Generator, RenderTest
 
-from src.generators_and_sorters import RenderTest
+importlib.reload(DNA_Generator)
 importlib.reload(RenderTest)
 
 class bcolors:

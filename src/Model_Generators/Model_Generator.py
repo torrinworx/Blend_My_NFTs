@@ -9,6 +9,7 @@ import sys
 import copy
 import time
 import json
+import random
 import itertools
 import importlib
 
@@ -17,9 +18,7 @@ sys.path.append(dir)
 sys.modules.values()
 
 from src.main import config
-
 importlib.reload(config)
-from src.main.config import *
 
 class bcolors:
    '''
@@ -53,14 +52,15 @@ def generate3DModels():
         bpy.ops.object.delete()
 
     deleteAllObjects()
-
-    attributeList = os.listdir(modelAssetPath)
+    attributeList = os.listdir(config.modelAssetPath)
     removeList = [".gitignore", ".DS_Store", "Script_Ignore_Folder"]
     attributeList = [x for x in attributeList if (x not in removeList)]
     hierarchy = {}
 
     for i in attributeList:
-        hierarchy[i] = os.listdir(modelAssetPath + slash + i)
+        file_unfiltered = os.listdir(config.modelAssetPath + config.slash + i)
+        add_to_hierarchy = [x for x in file_unfiltered if x not in removeList]
+        hierarchy[i] = add_to_hierarchy
 
     def numOfCombinations(hierarchy):
       '''
@@ -74,7 +74,7 @@ def generate3DModels():
          combinations = combinations*i
 
       if combinations == 0:
-          print(bcolors.FAIL + "ERROR:" + bcolors.RESET)
+          print(bcolors.FAIL + "\nERROR:" + bcolors.RESET)
           print("The number of all possible combinations is equal to 0. Please review your collection hierarchy \n "
                 "and ensure it is formatted correctly.")
       return combinations
@@ -82,22 +82,29 @@ def generate3DModels():
     combinations = numOfCombinations(hierarchy)
     allCombinationsNames = list(itertools.product(*hierarchy.values()))
 
+    listToGenerate = []
+
+    while len(listToGenerate) < config.maxNFTs:
+        randCombo = random.choice(allCombinationsNames)
+        if randCombo not in listToGenerate:
+            listToGenerate.append(randCombo)
+
     count = 1
-    for i in allCombinationsNames:
 
-        path1 = modelAssetPath + slash + "Script_Ignore_Folder"
-        Script_Ignore_Folder = os.listdir(path1)
+    for i in listToGenerate:
+        if os.path.isdir(config.model_Script_Ignore_Path):
+            Script_Ignore_Folder = os.listdir(config.model_Script_Ignore_Path)
 
-        for h in Script_Ignore_Folder:
-            fileName, fileExtension = os.path.splitext(h)
-            if fileExtension == ".glb":
-                bpy.ops.import_scene.gltf(filepath=path1 + slash + h)
-            elif fileExtension == ".fbx":
-                bpy.ops.import_scene.fbx(filepath=path1 + slash + h)
-            elif fileExtension == ".obj":
-                bpy.ops.import_scene.obj(filepath=path1 + slash + h)
-            elif fileExtension == ".x3d":
-                bpy.ops.import_scene.obj(filepath=path1 + slash + h)
+            for h in Script_Ignore_Folder:
+                fileName, fileExtension = os.path.splitext(h)
+                if fileExtension == ".glb":
+                    bpy.ops.import_scene.gltf(filepath=config.model_Script_Ignore_Path + config.slash + h)
+                elif fileExtension == ".fbx":
+                    bpy.ops.import_scene.fbx(filepath=config.model_Script_Ignore_Path + config.slash + h)
+                elif fileExtension == ".obj":
+                    bpy.ops.import_scene.obj(filepath=config.model_Script_Ignore_Path + config.slash + h)
+                elif fileExtension == ".x3d":
+                    bpy.ops.import_scene.obj(filepath=config.model_Script_Ignore_Path + config.slash + h)
 
         for j in i:
             def getParent(hierarchy):
@@ -107,9 +114,9 @@ def generate3DModels():
                             return x
 
             parent = getParent(hierarchy)
-            path2 = modelAssetPath + slash + parent + slash + j
-
+            path2 = config.modelAssetPath + config.slash + parent + config.slash + j
             fileName, fileExtension = os.path.splitext(j)
+
             if fileExtension == ".glb":
                 bpy.ops.import_scene.gltf(filepath=path2)
             elif fileExtension == ".fbx":
@@ -119,25 +126,22 @@ def generate3DModels():
             elif fileExtension == ".x3d":
                 bpy.ops.import_scene.obj(filepath=path2)
 
-        if objectFormatExport == 'glb':
-            bpy.ops.export_scene.gltf(filepath=model_save_path + slash + imageName + str(count),
+        if config.objectFormatExport == 'glb':
+            bpy.ops.export_scene.gltf(filepath=config.model_save_path + config.slash + config.imageName + str(count),
                                       check_existing=True, export_format='GLB')
-        elif objectFormatExport == 'fbx':
-            bpy.ops.export_scene.fbx(filepath=model_save_path + slash + imageName + str(count),
+        elif config.objectFormatExport == 'fbx':
+            bpy.ops.export_scene.fbx(filepath=config.model_save_path + config.slash + config.imageName + str(count),
                                       check_existing=True)
-        elif objectFormatExport == 'obj':
-            bpy.ops.export_scene.obj(filepath=model_save_path + slash + imageName + str(count),
+        elif config.objectFormatExport == 'obj':
+            bpy.ops.export_scene.obj(filepath=config.model_save_path + config.slash + config.imageName + str(count),
                                       check_existing=True)
-        elif objectFormatExport == 'x3d':
-            bpy.ops.export_scene.x3d(filepath=model_save_path + slash + imageName + str(count),
+        elif config.objectFormatExport == 'x3d':
+            bpy.ops.export_scene.x3d(filepath=config.model_save_path + config.slash + config.imageName + str(count),
                                       check_existing=True)
-
         deleteAllObjects()
-
         count += 1
 
-    print("Generated .glb files in %.4f seconds" % (time.time() - time_start))
-
+    print("Generated ." + str(config.objectFormatExport) +" files in %.4f seconds" % (time.time() - time_start))
 
 if __name__ == '__main__':
     generate3DModels()
