@@ -11,7 +11,8 @@ sys.modules.values()
 from src.main import config
 importlib.reload(config)
 
-from src.generators_and_sorters import DNA_Generator
+from src.Image_Generators import DNA_Generator
+
 importlib.reload(DNA_Generator)
 
 if config.runPreview:

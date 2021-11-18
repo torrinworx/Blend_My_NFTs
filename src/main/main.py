@@ -11,10 +11,12 @@ sys.modules.values()
 from src.main import config
 importlib.reload(config)
 
-from src.generators_and_sorters import DNA_Generator, Preview, RenderTest, Batch_Sorter, Model_Generator, Image_Generator
-importlib.reload(DNA_Generator)
-importlib.reload(Batch_Sorter)
+from src.Model_Generators import Model_Generator
+from src.Image_Generators import Batch_Sorter, DNA_Generator, Image_Generator, RenderTest, Preview
+
 importlib.reload(Model_Generator)
+importlib.reload(Batch_Sorter)
+importlib.reload(DNA_Generator)
 importlib.reload(Preview)
 importlib.reload(RenderTest)
 importlib.reload(Image_Generator)
@@ -32,4 +34,3 @@ if config.runPreview:
 
 if config.renderImage:
     Image_Generator.render_and_save_NFTs()
-
