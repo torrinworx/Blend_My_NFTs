@@ -36,6 +36,10 @@ objectFormatExport = ''  # The file format of the objects you would like to expo
 # obj - The .obj file format *Exports both a .obj and a .mtl files for the same generated object
 # x3d - The .x3d file format
 
+# error handling #
+if objectFormatExport not in ['fbx', 'glb', 'obj', 'x3d']:
+    raise ValueError("Output format in `objectFormatExport` can only be 'fbx', 'glb', 'obj', 'x3d'.")
+
 ### Select colour or material.###
 # Object generation options:
 enableGeneration = True  # When set to true this applies the sets of colors listed below to the objects in the collections named below
