@@ -3,14 +3,14 @@ import platform
 # NFT configurations:
 nftsPerBatch = 0  # Number of NFTs per batch
 renderBatch = 0  # The batch number to render in PNG-Generator
-imageName = ''  # The name of the NFT image produces by PNG-Generator
-imageFileFormat = ''  # Dictate the image extension when Blender renders the images
+imageName = 'TestImage'  # The name of the NFT image produces by PNG-Generator
+imageFileFormat = 'JPEG'  # Dictate the image extension when Blender renders the images
 # Visit https://docs.blender.org/api/current/bpy.types.Image.html#bpy.types.Image.file_format
 # for a list of file formats supported by Blender. Enter the file extension exactly as specified in
 # the Blender API documentation above.
 
 # The path to Blend_My_NFTs folder:
-save_path_mac = '/Users/Path/to/Blend_My_NFTs'
+save_path_mac = '/Users/Path/To/Blend_My_NFTs'
 save_path_windows = r''
 # Place the path in the '', e.g: save_path_mac = '/Users/Path/to/Blend_My_NFTs'
 # Example mac: /Users/Path/to/Blend_My_NFTs
@@ -37,12 +37,13 @@ objectFormatExport = ''  # The file format of the objects you would like to expo
 # x3d - The .x3d file format
 
 # error handling #
-if objectFormatExport not in ['fbx', 'glb', 'obj', 'x3d']:
+
+if objectFormatExport not in ['fbx', 'glb', 'obj', 'x3d'] and enable3DModels:
     raise ValueError("Output format in `objectFormatExport` can only be 'fbx', 'glb', 'obj', 'x3d'.")
 
 ### Select colour or material.###
 # Object generation options:
-enableGeneration = True  # When set to true this applies the sets of colors listed below to the objects in the collections named below
+enableGeneration = False  # When set to true this applies the sets of colors listed below to the objects in the collections named below
 
 generationType = 'material' #You can either set 'color' or 'material' here. Type you set will correspond to following options.
 #generationType = 'material' mode is experimental. Be sure that you back-up your file.
