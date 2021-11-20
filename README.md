@@ -130,7 +130,7 @@ In the Blend_My_NFTs folder, open the config.py file in a text editor or IDE. He
 
 Run the scripts in the following order: 
 1. main.py - Generates NFTRecord.json, a list of all possible NFT combinations then randomly selects NFTs from NFTReocord.json and adds them to a specified number of Batch#.json files
-3. PNG_Generator.py - Renders the NFTs from a specified Batch #number and exmports the image to "Images from PNG Generator"
+3. PNG_Generator.py - Renders the NFTs from a specified Batch #number and exports the image to "Images from PNG Generator"
 
 ## How to run the 3D Model Generator scripts in Blender
 This segment discusses setting up the 3D Model Generator. This youtube tutorial goes over a glossory of what is discussed in this section: https://www.youtube.com/watch?v=NonORFpVhLw
