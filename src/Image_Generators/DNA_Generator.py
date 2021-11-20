@@ -288,33 +288,43 @@ def generateNFT_DNA():
          possibleNums = list(range(1, numChild + 1))
          listOptionVariant.append(possibleNums)
 
-
       def createDNARandom():
-         ab = []
-
-         for x in range(config.maxNFTs):
-            dnaStrList = []
-            for i in listOptionVariant:
-               randomVariantNum = random.choices(i, k = 1)
-               str1 = ''.join(str(e) for e in randomVariantNum)
-               dnaStrList.append(str1)
-
-            if dnaStrList not in DNAList:
-               ab.append(dnaStrList)
-            else:
-               createDNARandom()
-         return ab
-
-      dnaSplitList = createDNARandom()
-
-      for i in dnaSplitList:
          dnaStr = ""
-         for j in i:
-            num = "-" + str(j)
-            dnaStr += num
+         dnaStrList = []
+
+         for i in listOptionVariant:
+            randomVariantNum = random.choices(i, k = 1)
+            str1 = ''.join(str(e) for e in randomVariantNum)
+            dnaStrList.append(str1)
+
+         for i in dnaStrList:
+            for j in i:
+               num = "-" + str(j)
+               dnaStr += num
 
          dna = ''.join(dnaStr.split('-', 1))
-         DNAList.append(dna)
+
+         return str(dna)
+
+      for i in range(config.maxNFTs):
+         DNAList.append(createDNARandom())
+
+      def anydup(DNAList):
+         dups = None
+         seen = set()
+
+         for x in DNAList:
+            if x in seen:
+               DNAList.remove(x)
+               DNAList.append(createDNARandom())
+               dups = True
+               anydup(DNAList)
+            else:
+               dups = False
+            seen.add(x)
+         return dups
+
+      anydup(DNAList)
 
       possibleCombinations = config.maxNFTs
 
