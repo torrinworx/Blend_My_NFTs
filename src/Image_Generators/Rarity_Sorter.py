@@ -8,7 +8,7 @@ dir = os.path.dirname(bpy.data.filepath)
 sys.path.append(dir)
 sys.modules.values()
 
-from src.main import config
+from src import config
 importlib.reload(config)
 
 from src.Image_Generators import DNA_Generator
@@ -19,7 +19,7 @@ if config.runPreview:
    config.nftsPerBatch = config.maxNFTsTest
    config.maxNFTs = config.maxNFTsTest
    config.renderBatch = 1
-   config.imageName = config.imageNameTest
+   config.nftName = "TestImages"
 
 def sortRarityWeights(hierarchy, listOptionVariant, DNAList):
     '''

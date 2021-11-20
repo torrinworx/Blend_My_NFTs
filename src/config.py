@@ -1,22 +1,22 @@
 import platform
 
 # NFT configurations:
-nftsPerBatch = 1000  # Number of NFTs per batch
-renderBatch = 1  # The batch number to render in PNG-Generator
-imageName = 'TestImage'  # The name of the NFT image produces by PNG-Generator
+nftsPerBatch = 0  # Number of NFTs per batch
+renderBatch = 0  # The batch number to render in PNG-Generator
+nftName = ''  # The name of the NFT image produces by PNG-Generator
 imageFileFormat = ''  # Dictate the image extension when Blender renders the images
 # Visit https://docs.blender.org/api/current/bpy.types.Image.html#bpy.types.Image.file_format
 # for a list of file formats supported by Blender. Enter the file extension exactly as specified in
 # the Blender API documentation above.
 
 # The path to Blend_My_NFTs folder:
-save_path_mac = '/Users/torrinleonard/Desktop/Blend_My_NFTs'
+save_path_mac = '/Users/Path/To/Blend_My_NFTs'
 save_path_windows = r''
 # Place the path in the '', e.g: save_path_mac = '/Users/Path/to/Blend_My_NFTs'
 # Example mac: /Users/Path/to/Blend_My_NFTs
 # Example windows: C:\Users\Path\to\Blend_My_NFTs
 
-maxNFTs = 10000  # The maximum number of NFTs you want to generate - does not work with enable3DModels set to True.
+maxNFTs = 100  # The maximum number of NFTs you want to generate - does not work with enable3DModels set to True.
 
 # Set to True to generate images or 3D models depending on your settings below when main.py is run in Blender.
 # Only works if you have already generated NFTRecord.json and all batches.
@@ -38,11 +38,11 @@ objectFormatExport = ''  # The file format of the objects you would like to expo
 
 ### Select colour or material.###
 # Object generation options:
-enableGeneration = True  # When set to true this applies the sets of colors listed below to the objects in the collections named below
+enableGeneration = False  # When set to true this applies the sets of colors listed below to the objects in the collections named below
 
-generationType = 'color' #You can either set 'color' or 'material' here. Type you set will correspond to following options.
-#generationType = 'material' mode is experimental. Be sure that you back-up your file.
-#You need to set materials as "fake user". Do not miss this step. Or your materials going to vanish after running this script.
+generationType = 'material'  # You can either set 'color' or 'material' here. Type you set will correspond to following options.
+# generationType = 'material' mode is experimental. Be sure that you back-up your file.
+# You need to set materials as "fake user". Do not miss this step. Or your materials going to vanish after running this script.
 
 # The collections below are RGBA Color values. You can put as many or as little color values in these lists as you would like.
 # You can create any number of rgbaColorLists and assign them to any number of collections that you would like.
@@ -101,5 +101,8 @@ enableRarity = False
 # Set to True to run Preview test, set to False to stop test. Run main.py in Blender to initiate the test.
 # enable3DModels must be off to run the render test.
 runPreview = False
-maxNFTsTest = 0  # Increase to get a more accurate reading of the render time. The number of images generated in the render test.
-imageNameTest = ""  # Name of test file output.
+maxNFTsTest = 5  # Increase to get a more accurate reading of the render time. The number of images generated in the render test.
+
+# Turn this on when you run main.py to generate NFTRecord.json and appropriate batches to confirm there are no duplicate
+# NFT DNA.
+checkDups = False

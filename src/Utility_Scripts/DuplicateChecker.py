@@ -9,7 +9,7 @@ dir = os.path.dirname(bpy.data.filepath)
 sys.path.append(dir)
 sys.modules.values()
 
-from src.main import config
+from src import config
 importlib.reload(config)
 
 def checkIfBatchDup(i):
@@ -28,18 +28,15 @@ def checkIfBatchDup(i):
         return numOfDupDNA
 
     duplicates = countDups(DNAList)
-
     return duplicates
 
 def checkDups():
     listBatchFolder = os.listdir(config.batch_save_path)
-    numInBatchFolder = len(listBatchFolder)
-
     removeList = [".gitignore", ".DS_Store", "Script_Ignore_Folder"]
     batchList = [x for x in listBatchFolder if (x not in removeList)]
 
     for i in batchList:
-        print( "\n" + i + " has " + str(checkIfBatchDup(i)) + " duplicate NFT DNA.\n")
+        print( i + " has " + str(checkIfBatchDup(i)) + " duplicate NFT DNA.")
 
 if __name__ == '__main__':
     checkDups()

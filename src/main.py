@@ -8,13 +8,13 @@ dir = os.path.dirname(bpy.data.filepath)
 sys.path.append(dir)
 sys.modules.values()
 
-from src.main import config, DuplicateChecker
+from src import config
+from src.Utility_Scripts import DuplicateChecker, RenderTest, Preview
+from src.Model_Generators import Model_Generator
+from src.Image_Generators import Batch_Sorter, DNA_Generator, Image_Generator
+
 importlib.reload(config)
 importlib.reload(DuplicateChecker)
-
-from src.Model_Generators import Model_Generator
-from src.Image_Generators import Batch_Sorter, DNA_Generator, Image_Generator, RenderTest, Preview
-
 importlib.reload(Model_Generator)
 importlib.reload(Batch_Sorter)
 importlib.reload(DNA_Generator)
@@ -29,7 +29,8 @@ if not config.runPreview and not config.renderImage:
     if not config.enable3DModels:
         DNA_Generator.send_To_Record_JSON()
         Batch_Sorter.makeBatches()
-        DuplicateChecker.checkDups()
+        if config.checkDups:
+            DuplicateChecker.checkDups()
 
 if config.runPreview:
     Preview.printImportant()

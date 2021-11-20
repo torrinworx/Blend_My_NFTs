@@ -9,14 +9,14 @@ dir = os.path.dirname(bpy.data.filepath)
 sys.path.append(dir)
 sys.modules.values()
 
-from src.main import config
+from src import config
 importlib.reload(config)
 
 if config.runPreview:
    config.nftsPerBatch = config.maxNFTsTest
    config.maxNFTs = config.maxNFTsTest
    config.renderBatch = 1
-   config.imageName = config.imageNameTest
+   config.nftName = "TestImages"
 
 def stripColorFromName(name):
    return "_".join(name.split("_")[:-1])
@@ -77,7 +77,7 @@ def render_and_save_NFTs():
             return dnaDictionary
 
         dnaDictionary = match_DNA_to_Variant(a)
-        name = config.imageName + str(x)
+        name = config.nftName + str(x)
 
         print("")
         print("----------Rendering New NFT----------")
