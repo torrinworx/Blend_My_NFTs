@@ -16,6 +16,7 @@ from src.Image_Generators import DNA_Generator, RenderTest
 importlib.reload(DNA_Generator)
 importlib.reload(RenderTest)
 
+
 class bcolors:
    '''
    The colour of console messages.
@@ -24,6 +25,7 @@ class bcolors:
    WARNING = '\033[93m'  # YELLOW
    ERROR = '\033[91m'  # RED
    RESET = '\033[0m'  # RESET COLOR
+
 
 def printImportant():
     from src.main import config
@@ -71,6 +73,7 @@ def printImportant():
         RenderTest.imageRenderTest()
     if config.enable3DModels:
         print( bcolors.WARNING + "Cannot run Render Test when enable3DModels = True" + bcolors.RESET)
+
 
 if __name__ == '__main__':
     printImportant()

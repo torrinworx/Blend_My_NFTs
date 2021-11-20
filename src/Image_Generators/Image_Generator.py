@@ -18,9 +18,11 @@ if config.runPreview:
    config.renderBatch = 1
    config.imageName = config.imageNameTest
 
+
 def stripColorFromName(name):
    return "_".join(name.split("_")[:-1])
-   
+
+
 def getBatchData():
     '''
     Retrieves a given batches data determined by renderBatch in config.py
@@ -34,6 +36,7 @@ def getBatchData():
     BatchDNAList = batch["BatchDNAList"]
 
     return NFTs_in_Batch, hierarchy, BatchDNAList
+
 
 def render_and_save_NFTs():
     '''
@@ -138,6 +141,7 @@ def render_and_save_NFTs():
 
     print("\nAll NFT PNGs rendered, process finished.")
     print("Completed all renders in Batch{}.json in ".format(config.renderBatch) + "%.4f seconds" % (time.time() - time_start_1) + "\n")
+
 
 if __name__ == '__main__':
     render_and_save_NFTs()

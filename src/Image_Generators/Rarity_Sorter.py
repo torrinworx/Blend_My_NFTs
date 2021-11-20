@@ -21,6 +21,7 @@ if config.runPreview:
    config.renderBatch = 1
    config.imageName = config.imageNameTest
 
+
 def sortRarityWeights(hierarchy, listOptionVariant, DNAList):
     '''
     Sorts through DataDictionary and appropriately weights each variant based on their rarity percentage set in Blender
@@ -56,9 +57,9 @@ def sortRarityWeights(hierarchy, listOptionVariant, DNAList):
                     elif x != 0:
                         ifZeroBool = False
 
-                if ifZeroBool == True:
+                if ifZeroBool is True:
                     variantByNum = random.choices(number_List_Of_i, k=1)
-                elif ifZeroBool == False:
+                elif ifZeroBool is False:
                     variantByNum = random.choices(number_List_Of_i, weights=rarity_List_Of_i, k=1)
 
                 dnaStr1 += '-' + str(variantByNum[0])
@@ -72,7 +73,7 @@ def sortRarityWeights(hierarchy, listOptionVariant, DNAList):
             createDNA()
 
         DNAList.append(dnaPushToList)
-    return
+
 
 if __name__ == '__main__':
     sortRarityWeights()

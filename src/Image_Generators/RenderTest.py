@@ -30,6 +30,7 @@ class bcolors:
    ERROR = '\033[91m'  # RED
    RESET = '\033[0m'  # RESET COLOR
 
+
 def imageRenderTest():
     originalMaxNFTs = copy.deepcopy(config.maxNFTs)
     config.nftsPerBatch = config.maxNFTsTest
@@ -64,6 +65,7 @@ def imageRenderTest():
     os.remove(config.batch_save_path + config.slash + "Batch1.json")
     os.remove(config.save_path + config.slash + "NFTRecord.json")
     shutil.rmtree(config.images_save_path + config.slash + "Batch1")
+
 
 if __name__ == '__main__':
     imageRenderTest()

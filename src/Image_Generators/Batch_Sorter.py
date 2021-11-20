@@ -1,7 +1,6 @@
 import bpy
 import os
 import sys
-import timeit
 import json
 import random
 import importlib
@@ -19,8 +18,8 @@ if config.runPreview:
    config.renderBatch = 1
    config.imageName = config.imageNameTest
 
-def makeBatches():
 
+def makeBatches():
       file_name = os.path.join(config.save_path, "NFTRecord.json")
       DataDictionary = json.load(open(file_name))
 
@@ -70,6 +69,7 @@ def makeBatches():
 
             with open(config.batch_save_path + config.slash + ("Batch{}.json".format(i + 1)), "w") as outfile2:
                   outfile2.write(incompleteBatch)
+
 
 if __name__ == '__main__':
       makeBatches()

@@ -41,6 +41,7 @@ print("")
 def stripColorFromName(name):
    return "_".join(name.split("_")[:-1])
 
+
 def returnData():
    '''
    Generates important variables, dictionaries, and lists needed to be stored to catalog the NFTs.
@@ -265,6 +266,7 @@ def returnData():
 
    return listAllCollections, attributeCollections, attributeCollections1, hierarchy, possibleCombinations
 
+
 def generateNFT_DNA():
    '''
    Returns batchDataDictionary containing the number of NFT cominations, hierarchy, and the DNAList.
@@ -334,6 +336,7 @@ def generateNFT_DNA():
 
    return DataDictionary, possibleCombinations
 
+
 def send_To_Record_JSON():
    '''
    Creates NFTRecord.json file and sends "batchDataDictionary" to it. NFTRecord.json is a permanent record of all DNA
@@ -360,10 +363,11 @@ def send_To_Record_JSON():
 # THIS WILL DELETE THE RECORD:
 # Note - NFTRecrod.json will be created the next time you run main.py
 def clearNFTRecord(AREYOUSURE):
-   if AREYOUSURE == True:
+   if AREYOUSURE is True:
       os.remove("NFTRecord.json")
 
 #clearNFTRecord()
+
 
 if __name__ == '__main__':
    stripColorFromName()
