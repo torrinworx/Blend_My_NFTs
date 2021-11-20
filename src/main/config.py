@@ -1,7 +1,7 @@
 import platform
 
 # NFT configurations:
-nftsPerBatch = 100  # Number of NFTs per batch
+nftsPerBatch = 1000  # Number of NFTs per batch
 renderBatch = 1  # The batch number to render in PNG-Generator
 imageName = 'TestImage'  # The name of the NFT image produces by PNG-Generator
 imageFileFormat = ''  # Dictate the image extension when Blender renders the images
@@ -16,7 +16,7 @@ save_path_windows = r''
 # Example mac: /Users/Path/to/Blend_My_NFTs
 # Example windows: C:\Users\Path\to\Blend_My_NFTs
 
-maxNFTs = 200  # The maximum number of NFTs you want to generate - does not work with enable3DModels set to True.
+maxNFTs = 10000  # The maximum number of NFTs you want to generate - does not work with enable3DModels set to True.
 
 # Set to True to generate images or 3D models depending on your settings below when main.py is run in Blender.
 # Only works if you have already generated NFTRecord.json and all batches.
