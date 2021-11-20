@@ -16,7 +16,7 @@ save_path_windows = r''
 # Example mac: /Users/Path/to/Blend_My_NFTs
 # Example windows: C:\Users\Path\to\Blend_My_NFTs
 
-maxNFTs = 0  # The maximum number of NFTs you want to generate - does not work with enable3DModels set to True.
+maxNFTs = 100  # The maximum number of NFTs you want to generate.
 
 # Set to True to generate images or 3D models depending on your settings below when main.py is run in Blender.
 # Only works if you have already generated NFTRecord.json and all batches.
