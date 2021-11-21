@@ -17,7 +17,7 @@ dir = os.path.dirname(bpy.data.filepath)
 sys.path.append(dir)
 sys.modules.values()
 
-from src.main import config
+from src import config
 importlib.reload(config)
 
 class bcolors:
@@ -127,17 +127,17 @@ def generate3DModels():
                 bpy.ops.import_scene.obj(filepath=path2)
 
         if config.objectFormatExport == 'glb':
-            bpy.ops.export_scene.gltf(filepath=config.model_save_path + config.slash + config.imageName + str(count),
+            bpy.ops.export_scene.gltf(filepath=config.model_save_path + config.slash + config.nftName + str(count),
                                       check_existing=True, export_format='GLB')
         elif config.objectFormatExport == 'fbx':
-            bpy.ops.export_scene.fbx(filepath=config.model_save_path + config.slash + config.imageName + str(count),
-                                      check_existing=True)
+            bpy.ops.export_scene.fbx(filepath=config.model_save_path + config.slash + config.nftName + str(count),
+                                     check_existing=True)
         elif config.objectFormatExport == 'obj':
-            bpy.ops.export_scene.obj(filepath=config.model_save_path + config.slash + config.imageName + str(count),
-                                      check_existing=True)
+            bpy.ops.export_scene.obj(filepath=config.model_save_path + config.slash + config.nftName + str(count),
+                                     check_existing=True)
         elif config.objectFormatExport == 'x3d':
-            bpy.ops.export_scene.x3d(filepath=config.model_save_path + config.slash + config.imageName + str(count),
-                                      check_existing=True)
+            bpy.ops.export_scene.x3d(filepath=config.model_save_path + config.slash + config.nftName + str(count),
+                                     check_existing=True)
         deleteAllObjects()
         count += 1
 

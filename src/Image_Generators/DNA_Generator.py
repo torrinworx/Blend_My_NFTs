@@ -12,7 +12,7 @@ dir = os.path.dirname(bpy.data.filepath)
 sys.path.append(dir)
 sys.modules.values()
 
-from src.main import config
+from src import config
 importlib.reload(config)
 
 from src.Image_Generators import Rarity_Sorter
@@ -23,7 +23,7 @@ if config.runPreview:
    config.nftsPerBatch = config.maxNFTsTest
    config.maxNFTs = config.maxNFTsTest
    config.renderBatch = 1
-   config.imageName = config.imageNameTest
+   config.nftName = "TestImages"
 
 class bcolors:
    '''
@@ -288,33 +288,43 @@ def generateNFT_DNA():
          possibleNums = list(range(1, numChild + 1))
          listOptionVariant.append(possibleNums)
 
-
       def createDNARandom():
-         ab = []
-
-         for x in range(config.maxNFTs):
-            dnaStrList = []
-            for i in listOptionVariant:
-               randomVariantNum = random.choices(i, k = 1)
-               str1 = ''.join(str(e) for e in randomVariantNum)
-               dnaStrList.append(str1)
-
-            if dnaStrList not in DNAList:
-               ab.append(dnaStrList)
-            else:
-               createDNARandom()
-         return ab
-
-      dnaSplitList = createDNARandom()
-
-      for i in dnaSplitList:
          dnaStr = ""
-         for j in i:
-            num = "-" + str(j)
-            dnaStr += num
+         dnaStrList = []
+
+         for i in listOptionVariant:
+            randomVariantNum = random.choices(i, k = 1)
+            str1 = ''.join(str(e) for e in randomVariantNum)
+            dnaStrList.append(str1)
+
+         for i in dnaStrList:
+            for j in i:
+               num = "-" + str(j)
+               dnaStr += num
 
          dna = ''.join(dnaStr.split('-', 1))
-         DNAList.append(dna)
+
+         return str(dna)
+
+      for i in range(config.maxNFTs):
+         DNAList.append(createDNARandom())
+
+      def anydup(DNAList):
+         dups = None
+         seen = set()
+
+         for x in DNAList:
+            if x in seen:
+               DNAList.remove(x)
+               DNAList.append(createDNARandom())
+               dups = True
+               anydup(DNAList)
+            else:
+               dups = False
+            seen.add(x)
+         return dups
+
+      anydup(DNAList)
 
       possibleCombinations = config.maxNFTs
 

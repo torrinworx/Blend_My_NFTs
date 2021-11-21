@@ -11,7 +11,8 @@ dir = os.path.dirname(bpy.data.filepath)
 sys.path.append(dir)
 sys.modules.values()
 
-from src.Image_Generators import DNA_Generator, RenderTest
+from src.Image_Generators import DNA_Generator
+from src.Utility_Scripts import RenderTest
 
 importlib.reload(DNA_Generator)
 importlib.reload(RenderTest)
@@ -26,7 +27,7 @@ class bcolors:
    RESET = '\033[0m'  # RESET COLOR
 
 def printImportant():
-    from src.main import config
+    from src import config
     importlib.reload(config)
 
     listAllCollections, attributeCollections, attributeCollections1, hierarchy, possibleCombinations = DNA_Generator.returnData()
@@ -36,7 +37,7 @@ def printImportant():
     print("")
     print(bcolors.WARNING + "---config.py SETTINGS---" + bcolors.RESET)
     print("NFTs Per Batch(nftsPerBatch): " + bcolors.WARNING + str(config.nftsPerBatch) + bcolors.RESET)
-    print("Image Name(imageName): " + bcolors.WARNING + config.imageName + bcolors.RESET)
+    print("Image Name(imageName): " + bcolors.WARNING + config.nftName + bcolors.RESET)
     print("Image File Format(imageFileFormat): " + bcolors.WARNING + config.imageFileFormat + bcolors.RESET)
     print("Operating system: " + bcolors.WARNING + str(platform.system()) + bcolors.RESET)
     print("Save Path(save_path): " + bcolors.WARNING + config.save_path + bcolors.RESET)

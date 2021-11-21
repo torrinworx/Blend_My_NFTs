@@ -13,7 +13,7 @@ dir = os.path.dirname(bpy.data.filepath)
 sys.path.append(dir)
 sys.modules.values()
 
-from src.main import config
+from src import config
 from src.Image_Generators import Batch_Sorter, DNA_Generator, Image_Generator
 
 importlib.reload(config)
@@ -35,7 +35,7 @@ def imageRenderTest():
     config.nftsPerBatch = config.maxNFTsTest
     config.maxNFTs = config.maxNFTsTest
     config.renderBatch = 1
-    config.imageName = config.imageNameTest
+    config.nftName = "TestImages"
 
     print(bcolors.WARNING + "\n---RUNNING IMAGE RENDER TEST---\n" + bcolors.RESET)
     print("This test will render one image, record the time it took, then calculate the time to render")
