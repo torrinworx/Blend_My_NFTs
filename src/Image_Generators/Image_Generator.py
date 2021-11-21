@@ -93,20 +93,21 @@ def render_and_save_NFTs():
             if metaDataType == "SOL":
                 metaData["name"] = name
                 metaData["symbol"] = ""
+                metaData["description"] = config.metaDataDescription
                 metaData["seller_fee_basis_points"] = None
                 metaData["image"] = ""
                 metaData["animation_url"] = ""
                 metaData["external_url"] = ""
                 metaData["attributes"] = dnaDictionary
                 metaData["collection"] = {"name": "", "family": ""}
-                metaData["properties"] = {"files": [{"uri": "", "type": ""}], "category": "", "creators": [{
-                    "address": "",
-                    "share": None
-                }]}
+                metaData["properties"] = {"files": [{"uri": "", "type": ""}],
+                                          "category": "",
+                                          "creators": [{"address": "", "share": None}]
+                                          }
 
             elif metaDataType == "ADA":
-                return
 
+                return
             return
 
         returnMetaData(config.metaDataType)
@@ -129,9 +130,7 @@ def render_and_save_NFTs():
 
         batchFolder = os.path.join(config.images_save_path, "Batch" + str(config.renderBatch))
         imagePath = os.path.join(batchFolder, "Images", name)
-
         metaDataFolder = os.path.join(batchFolder, "Image_Data")
-
 
         if config.enableGeneration:
             for c in dnaDictionary:
