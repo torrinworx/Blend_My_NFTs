@@ -1,5 +1,5 @@
-# The code in this file was generous sponsored by the amazing team over at Rumble Worlds!
-# Feel free to check out their amazing project and see how they are using Blend_My_NFTs
+# The code in this file was generously sponsored by the amazing team over at Rumble Worlds!
+# Feel free to check out their amazing project and see how they are using Blend_My_NFTs:
 # https://www.rumbleworlds.io/
 
 import bpy

@@ -1,3 +1,7 @@
+# Some code in this file was generously sponsored by the amazing team over at SolSweepers!
+# Feel free to check out their amazing project and see how they are using Blend_My_NFTs:
+# https://discord.gg/QTT7dzcuVs
+
 import bpy
 import os
 import sys
@@ -47,6 +51,8 @@ def render_and_save_NFTs():
 
     x = 1
     for a in BatchDNAList:
+        metaData = {}
+
         for i in hierarchy:
             for j in hierarchy[i]:
                 if config.enableGeneration:
@@ -63,21 +69,47 @@ def render_and_save_NFTs():
             '''
 
             listAttributes = list(hierarchy.keys())
-            listDnaDecunstructed  = a.split('-')
+            listDnaDecunstructed = a.split('-')
             dnaDictionary = {}
 
-            for i,j in zip(listAttributes,listDnaDecunstructed):
+            for i, j in zip(listAttributes, listDnaDecunstructed):
                 dnaDictionary[i] = j
 
             for x in dnaDictionary:
                 for k in hierarchy[x]:
                     kNum = hierarchy[x][k]["number"]
                     if kNum == dnaDictionary[x]:
-                        dnaDictionary.update({x:k})
+                        dnaDictionary.update({x: k})
             return dnaDictionary
 
         dnaDictionary = match_DNA_to_Variant(a)
         name = config.nftName + str(x)
+
+
+        def returnMetaData(metaDataType):
+            '''
+            This function exports formatted meta data based on the metaDataType variable in config.py
+            '''
+            if metaDataType == "SOL":
+                metaData["name"] = name
+                metaData["symbol"] = ""
+                metaData["seller_fee_basis_points"] = None
+                metaData["image"] = ""
+                metaData["animation_url"] = ""
+                metaData["external_url"] = ""
+                metaData["attributes"] = dnaDictionary
+                metaData["collection"] = {"name": "", "family": ""}
+                metaData["properties"] = {"files": [{"uri": "", "type": ""}], "category": "", "creators": [{
+                    "address": "",
+                    "share": None
+                }]}
+
+            elif metaDataType == "ADA":
+                return
+
+            return
+
+        returnMetaData(config.metaDataType)
 
         print("")
         print("----------Rendering New NFT----------")
@@ -95,15 +127,17 @@ def render_and_save_NFTs():
 
         time_start_2 = time.time()
 
-        imageOutputBatchSubFolder = "Batch" + str(config.renderBatch)
+        batchFolder = os.path.join(config.images_save_path, "Batch" + str(config.renderBatch))
+        imagePath = os.path.join(batchFolder, "Images", name)
 
-        fullImagePath = config.images_save_path + config.slash + imageOutputBatchSubFolder + config.slash + "{}.jpeg".format(name)
+        metaDataFolder = os.path.join(batchFolder, "Image_Data")
+
 
         if config.enableGeneration:
             for c in dnaDictionary:
                 collection = dnaDictionary[c]
                 if stripColorFromName(collection) in config.colorList:
-                    colorVal = int(collection.rsplit("_",1)[1])-1
+                    colorVal = int(collection.rsplit("_", 1)[1])-1
                     collection = stripColorFromName(collection)
                     bpy.data.collections[collection].hide_render = False
                     bpy.data.collections[collection].hide_viewport = False
@@ -120,9 +154,16 @@ def render_and_save_NFTs():
                     bpy.data.collections[collection].hide_render = False
                     bpy.data.collections[collection].hide_viewport = False
         print("Rendering")
-        bpy.context.scene.render.filepath = fullImagePath
+        bpy.context.scene.render.filepath = imagePath
         bpy.context.scene.render.image_settings.file_format = config.imageFileFormat
         bpy.ops.render.render(write_still=True)
+
+        if not os.path.exists(metaDataFolder):
+            os.mkdir(metaDataFolder)
+
+        jsonMetaData = json.dumps(metaData, indent=1, ensure_ascii=True)
+        with open(os.path.join(metaDataFolder, name + "_Data"), 'w') as outfile:
+            outfile.write(jsonMetaData + '\n')
 
         print("Completed {} render in ".format(name) + "%.4f seconds" % (time.time() - time_start_2))
         x += 1
