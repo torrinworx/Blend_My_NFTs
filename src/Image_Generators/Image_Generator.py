@@ -90,7 +90,14 @@ def render_and_save_NFTs():
             '''
             This function exports formatted meta data based on the metaDataType variable in config.py
             '''
-            if metaDataType == "SOL":
+
+            if metaDataType == "DEFAULT":
+                metaData["name"] = name
+                metaData["description"] = config.metaDataDescription
+                metaData["NFT_DNA"] = a
+                metaData["NFT_Variants"] = dnaDictionary
+
+            elif metaDataType == "SOL":
                 metaData["name"] = name
                 metaData["symbol"] = ""
                 metaData["description"] = config.metaDataDescription
@@ -98,15 +105,14 @@ def render_and_save_NFTs():
                 metaData["image"] = ""
                 metaData["animation_url"] = ""
                 metaData["external_url"] = ""
-                metaData["attributes"] = dnaDictionary
+                metaData["attributes"] = {"NFT_DNA": a, "NFT_Variants": dnaDictionary}
                 metaData["collection"] = {"name": "", "family": ""}
                 metaData["properties"] = {"files": [{"uri": "", "type": ""}],
                                           "category": "",
                                           "creators": [{"address": "", "share": None}]
                                           }
-
             elif metaDataType == "ADA":
-
+                print("Cardano meta data not yet supported. Please visit our discord server for more information.")
                 return
             return
 

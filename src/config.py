@@ -9,16 +9,6 @@ imageFileFormat = ''  # Dictate the image extension when Blender renders the ima
 # for a list of file formats supported by Blender. Enter the file extension exactly as specified in
 # the Blender API documentation above.
 
-metaDataType = 'SOL'  # Select the format of the generated Meta Data for your NFTs blockchain.
-# ADA - Cardano - Format:
-# SOL - Solana - Format: https://docs.metaplex.com/nft-standard
-# ETH - Ethereum - Format:
-# Note - This is just the information Blend_My_NFTs can provide, you will have to add policy ID and URI information
-# yourself when you upload and mint your NFT collection.
-
-metaDataDescription = ''  # The description of your NFT that will be inserted into its meta data
-
-
 # The path to Blend_My_NFTs folder:
 save_path_mac = '/Users/Path/To/Blend_My_NFTs'
 save_path_windows = r''
@@ -45,7 +35,6 @@ objectFormatExport = ''  # The file format of the objects you would like to expo
 # glb - The .glb file format
 # obj - The .obj file format *Exports both a .obj and a .mtl files for the same generated object
 # x3d - The .x3d file format
-
 
 ### Select colour or material.###
 # Object generation options:
@@ -78,6 +67,20 @@ materialList2 = ['Material2', 'Material2.001', 'Material2.002', 'Material2.003',
 # The collection named can only contain objects and not sub collections. Every object in the collection will be set to the materials you assigned above for each attribute
 if generationType == 'material':  # Do not change this line.
     colorList = {"Cube_1_33": materialList1, "Sphere_2_0": materialList2}
+
+metaDataType = 'DEFAULT'  # Select the format of the generated Meta Data for your NFTs blockchain.
+# DEFAULT - The default setting; exports variants, dna, number, name, and rarity of each NFT to a dictionary
+# ADA - Cardano - Format: Not supported yet.
+# SOL - Solana - Format: https://docs.metaplex.com/nft-standard
+# ETH - Ethereum - Format: Not supported yet.
+
+# NOTE: This is just the information Blend_My_NFTs can provide, you will have to add policy ID, URI information, etc
+# yourself when you upload and mint your NFT collection.
+# DISCLAIMER: These are only templates based on the common standards for the given blockchain, you will have to modify
+# and fill them in with a script of your own when you mint your NFT collection. These metadata templates are only provided
+# for your convenience.
+
+metaDataDescription = ''  # The description of your NFT that will be inserted into its meta data
 
 # Utilities - DO NOT TOUCH:
 mac = 'Darwin'  # Mac OS
