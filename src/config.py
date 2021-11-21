@@ -16,7 +16,7 @@ save_path_windows = r''
 # Example mac: /Users/Path/to/Blend_My_NFTs
 # Example windows: C:\Users\Path\to\Blend_My_NFTs
 
-maxNFTs = 100  # The maximum number of NFTs you want to generate - does not work with enable3DModels set to True.
+maxNFTs = 100  # The maximum number of NFTs you want to generate.
 
 # Set to True to generate images or 3D models depending on your settings below when main.py is run in Blender.
 # Only works if you have already generated NFTRecord.json and all batches.
@@ -35,6 +35,11 @@ objectFormatExport = ''  # The file format of the objects you would like to expo
 # glb - The .glb file format
 # obj - The .obj file format *Exports both a .obj and a .mtl files for the same generated object
 # x3d - The .x3d file format
+
+# error handling #
+
+if objectFormatExport not in ['fbx', 'glb', 'obj', 'x3d'] and enable3DModels:
+    raise ValueError("Output format in `objectFormatExport` can only be 'fbx', 'glb', 'obj', 'x3d'.")
 
 ### Select colour or material.###
 # Object generation options:
