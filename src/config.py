@@ -68,6 +68,9 @@ materialList2 = ['Material2', 'Material2.001', 'Material2.002', 'Material2.003',
 if generationType == 'material':  # Do not change this line.
     colorList = {"Cube_1_33": materialList1, "Sphere_2_0": materialList2}
 
+# Meta Data generation
+enableMeteData = True  # Set to True to turn on meta data, set to False to turn off meta data generation.
+
 metaDataType = 'DEFAULT'  # Select the format of the generated Meta Data for your NFTs blockchain.
 # DEFAULT - The default setting; exports variants, dna, number, name, and rarity of each NFT to a dictionary
 # ADA - Cardano - Format: Not supported yet.

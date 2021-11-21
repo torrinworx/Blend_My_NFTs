@@ -112,11 +112,12 @@ def render_and_save_NFTs():
                                           "creators": [{"address": "", "share": None}]
                                           }
             elif metaDataType == "ADA":
-                print("Cardano meta data not yet supported. Please visit our discord server for more information.")
+                print("Cardano meta data template not yet supported.")
                 return
-            return
 
-        returnMetaData(config.metaDataType)
+            elif metaDataType == "ETH":
+                print("Ethereum meta data template not yet supported.")
+            return
 
         print("")
         print("----------Rendering New NFT----------")
@@ -163,12 +164,15 @@ def render_and_save_NFTs():
         bpy.context.scene.render.image_settings.file_format = config.imageFileFormat
         bpy.ops.render.render(write_still=True)
 
-        if not os.path.exists(metaDataFolder):
-            os.mkdir(metaDataFolder)
+        if config.enableMeteData:
+            returnMetaData(config.metaDataType)
 
-        jsonMetaData = json.dumps(metaData, indent=1, ensure_ascii=True)
-        with open(os.path.join(metaDataFolder, name + "_Data"), 'w') as outfile:
-            outfile.write(jsonMetaData + '\n')
+            if not os.path.exists(metaDataFolder):
+                os.mkdir(metaDataFolder)
+
+            jsonMetaData = json.dumps(metaData, indent=1, ensure_ascii=True)
+            with open(os.path.join(metaDataFolder, name + "_Data"), 'w') as outfile:
+                outfile.write(jsonMetaData + '\n')
 
         print("Completed {} render in ".format(name) + "%.4f seconds" % (time.time() - time_start_2))
         x += 1
