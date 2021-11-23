@@ -153,7 +153,6 @@ def returnData():
             print(bcolors.ERROR + "\nERROR:" + bcolors.RESET)
             print("The collection " + str(i) + " doesn't follow the naming conventions of attributes. Please move this \n"
                   "colleciton to Script_Ignore or review proper collection format in README.md")
-            sys.exit(bcolors.ERROR + "SCRIPT FAILED" + bcolors.RESET)
 
             return
          elif len(orderRarity) > 0:
@@ -235,7 +234,6 @@ def returnData():
          print("Here is the hierarchy of all collections the DNA_Generator gathered from your .blend file, excluding "
                "\nthose in Script_Ignore:")
          print(hierarchy)
-         sys.exit(bcolors.ERROR + "SCRIPT FAILED" + bcolors.RESET)
 
       numBatches = combinations/config.nftsPerBatch
 
@@ -246,7 +244,6 @@ def returnData():
                + str(config.nftsPerBatch) + " NFTs per batch.")
          print("Lower the number of NFTs per batch in config.py or increase the number of \nattributes and/or variants"
                " in your .blend file.")
-         sys.exit(bcolors.ERROR + "SCRIPT FAILED" + bcolors.RESET)
 
       return combinations
 
