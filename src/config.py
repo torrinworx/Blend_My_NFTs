@@ -1,40 +1,31 @@
-import platform
 
-# NFT configurations:
-nftsPerBatch = 0  # Number of NFTs per batch
-renderBatch = 0  # The batch number to render in PNG-Generator
-nftName = ''  # The name of the NFT image produces by PNG-Generator
-imageFileFormat = ''  # Dictate the image extension when Blender renders the images
+# config.py is where you can configure the settings of your NFT collection
+
+nftName = 'TestImage'  # The name of the NFT image produces by PNG-Generator
+imageFileFormat = 'JPEG'  # Dictate the image extension when Blender renders the images
+# Type the exact name provided below in the '' above:
+# JPEG - Exports the .jpeg format
+# PNG - Exports the .png format
 # Visit https://docs.blender.org/api/current/bpy.types.Image.html#bpy.types.Image.file_format
-# for a list of file formats supported by Blender. Enter the file extension exactly as specified in
-# the Blender API documentation above.
+# for a complete list of file formats supported by Blender. Enter the file extension exactly as specified in
+# the Blender API documentation.
 
 # The path to Blend_My_NFTs folder:
-save_path_mac = '/Users/Path/To/Blend_My_NFTs'
+save_path_mac = '/Users/torrinleonard/Desktop/Blend_My_NFTs'
 save_path_windows = r''
 # Place the path in the '', e.g: save_path_mac = '/Users/Path/to/Blend_My_NFTs'
 # Example mac: /Users/Path/to/Blend_My_NFTs
 # Example windows: C:\Users\Path\to\Blend_My_NFTs
 
-maxNFTs = 100  # The maximum number of NFTs you want to generate.
+maxNFTs = 10  # The maximum number of NFTs you want to generate.
+nftsPerBatch = 5  # Number of NFTs per batch
+renderBatch = 1  # The batch number to render in Image_Generator.py
 
 # Set to True to generate images or 3D models depending on your settings below when main.py is run in Blender.
 # Only works if you have already generated NFTRecord.json and all batches.
 renderImage = False
 
 enableResetViewport = True  # If True: turns all viewport and render cameras on after Image_Generator is finished operations
-
-# 3D model imports and exports variables:
-enable3DModels = False  # Set to True if using external models as attributes instead of Blender objects
-# ^Does not work with colour options and rarity, both must be turned off in order to use this.
-
-objectFormatExport = ''  # The file format of the objects you would like to export
-# The following are file formats Blender accepts for exporting object files.
-# Please type the exact name provided below in the '' above:
-# fbx - The .FBX file format
-# glb - The .glb file format
-# obj - The .obj file format *Exports both a .obj and a .mtl files for the same generated object
-# x3d - The .x3d file format
 
 ### Select colour or material.###
 # Object generation options:
@@ -68,6 +59,18 @@ materialList2 = ['Material2', 'Material2.001', 'Material2.002', 'Material2.003',
 if generationType == 'material':  # Do not change this line.
     colorList = {"Cube_1_33": materialList1, "Sphere_2_0": materialList2}
 
+# 3D model imports and exports variables:
+enable3DModels = False  # Set to True if using external models as attributes instead of Blender objects
+# ^Does not work with colour options and rarity, both must be turned off in order to use this.
+
+objectFormatExport = ''  # The file format of the objects you would like to export
+# The following are file formats Blender accepts for exporting object files.
+# Please type the exact name provided below in the '' above:
+# fbx - The .FBX file format
+# glb - The .glb file format
+# obj - The .obj file format *Exports both a .obj and a .mtl files for the same generated object
+# x3d - The .x3d file format
+
 # Meta Data generation
 enableMeteData = True  # Set to True to turn on meta data, set to False to turn off meta data generation.
 
@@ -86,10 +89,12 @@ metaDataType = 'DEFAULT'  # Select the format of the generated Meta Data for you
 metaDataDescription = ''  # The description of your NFT that will be inserted into its meta data
 
 # Utilities - DO NOT TOUCH:
-mac = 'Darwin'  # Mac OS
-windows = 'Windows'  # Windows
-slash = ''  # Leave empty
-save_path = None  # Leave empty
+import platform
+
+mac = 'Darwin'
+windows = 'Windows'
+slash = ''
+save_path = None
 
 # Save_path utilities and os compatibility
 if platform.system() == mac:
