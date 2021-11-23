@@ -103,12 +103,12 @@ In this example ``Camera`` ``and Const Collection 1`` is in ``Script_Ignore`` an
 
 After installation, open the Blend_My_NFTs folder. You will need to change variables in the config.py file with a text editor or IDE; I recomend Visual Studio Code, but Blender has a bilt in Text Editor for ease of use. config.py is where you can customize aspects of your NFT collection and how it is generated.
 
-Variables in config.py to adjust the settings of your NFT collection: 
+Description of customisable variables to generate images: 
 
-``nftName`` - The name of the file exported by Blend_My_NFTs
+``nftName`` - A string representing name of the file exported by Blend_My_NFTs (REQUIRED)
 
 
-``imageFileFormat`` - The image file format that Blend_My_NFTs will export generated images as: 
+``imageFileFormat`` - A string representing the image file format that Blend_My_NFTs will export generated images as: (REQUIRED)
 
      Type the exact name provided below in the '' for the imageFileFormat:
   
@@ -116,34 +116,52 @@ Variables in config.py to adjust the settings of your NFT collection:
   
     'PNG' - Exports the .png format
   
-  Visit https://docs.blender.org/api/current/bpy.types.Image.html#bpy.types.Image.file_format for a complete list of file formats supported by Blender. Enter the     file extension exactly as specified in the Blender API documentation.
+    Visit https://docs.blender.org/api/current/bpy.types.Image.html#bpy.types.Image.file_format for a complete list of file formats supported by Blender. Enter the     file extension exactly as specified in the Blender API documentation.
 
 
-``save_path_mac`` - The save path for Blend_My_NFTs if you are on MacOS:
+``save_path_mac`` - A string representing the save path for Blend_My_NFTs if you are on MacOS: (REQUIRED - if on MacOS)
 
-Example mac: /Users/Path/to/Blend_My_NFTs
-
-
-``save_path_windows`` - The save path for Blend_My_NFTs if you are on Windows:
-
-Example windows: C:\Users\Path\to\Blend_My_NFTs
+    Example mac: /Users/Path/to/Blend_My_NFTs
 
 
-``nftsPerBatch`` - A positive integer representing the number of NFTs per batch 
+``save_path_windows`` - A string representing the save path for Blend_My_NFTs if you are on Windows: (REQUIRED - if on Windows)
+
+    Example windows: C:\Users\Path\to\Blend_My_NFTs
+
+``maxNFTs`` - A positive integer representeing the number of NFTs to generate. (REQUIRED)
 
 
+``nftsPerBatch`` - A positive integer representing the number of NFTs per batch. (REQUIRED)
 
 
+``renderBatch`` - A positive integer representing the the batch number to render if ``renderImage`` is set to True. (REQUIRED)
 
 
+``renderImage`` - A Boolean value, when set to True, turns the Image_Generator.py on or off. (Turned on after NFTRecord.json and appropriate batches are generated with main.py)
 
 
+``enableResetViewport`` - A boolean value, when set to True, resets the veiwport of all cameras not in Script_Ignore. (Optional)
 
 
+``enableGeneration`` - A boolean value, when set to True, applies and takes into account colour or material variants in the NFT DNA. (Optional)
 
 
+``generationType`` - A string value, takes ``color`` or ``material`` as input. Determines if extra variatns are generated with colours or material textures. (Optional)
 
 
+``rgbaColorList#`` - A list containing tuples representing the RGBA colour values assigned to a given object in ``colorList``. (Optional)
+
+
+``materialList#`` - A list containing strings representing the names of materials in blender: (Optional)
+
+    These materials must be in your Current Files' Materials. Make sure that you've set your materials as "fake user". The collections below are Current Files'         Materials. You can put as many or as little materials values in these lists as you would like. You can create any number of materialLists and assign them to       any number of collections that you would like. Each set of materialLists assigned to an object by collection name in the materialList will act like an             attribute and create a unique variant of that item.
+
+
+``colorList`` - A dictionary which the keys are the names of variants, and the items are the ``rgbaColorList#`` or ``materialList#``: (Optional)
+
+    The rgbaColorList# deterimnes the colours that the variants will change to. This creates new variants with those RGBA colour values. 
+
+Steps to run scripts in Blender
 1. Open the Scripting tab in the menu of Blender: 
 
 <img width="1440" alt="Screen Shot 2021-10-24 at 9 51 25 PM" src="https://user-images.githubusercontent.com/82110564/138623488-9d0efc07-4004-4d3a-a7fe-25cb6050ac51.png">
