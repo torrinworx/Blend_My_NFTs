@@ -1,5 +1,9 @@
 # Blend_My_NFTs
-![TCPLong3 0](https://user-images.githubusercontent.com/82110564/142058307-4fec86b6-35de-4124-9066-f224b47aa91e.png)
+
+<p align="center">
+  <img src="https://user-images.githubusercontent.com/82110564/142058307-4fec86b6-35de-4124-9066-f224b47aa91e.png">
+</p>
+
 ## Description
 
 Blend_My_NFTs is a work-in-progress Blender add on that can automatically generate thousands of images or 3D objects to help you launch your NFT colleciton! It is currently in development to launch the NFT collection This Cozy Place that will launch in November with a total of 10000 unique NFTs all rendered in Blender via Blend_My_NFTs. If you would like to learn more about Blend_My_NFTs or This Cozy Place, please visit our discord server: https://discord.gg/UpZt5Un57t 
@@ -161,8 +165,28 @@ Description of customisable variables to generate images:
 
     The rgbaColorList# deterimnes the colours that the variants will change to. This creates new variants with those RGBA colour values. 
 
-Steps to run scripts in Blender
-1. Open the Scripting tab in the menu of Blender: 
+## 1. Running main.py - Generating NFTRecord and Batches
+
+Before you can render iamges you need to generate a list of NFT DNA then split it up into batches to render more easily. These will take the form of the NFTRecord.json file, and a list of Batch#.json files. 
+
+``NFTRecord.json`` - This file contains a list of all NFT DNA, this list is limited by ``nftMax`` in config.py. 
+
+
+``Batch#.json`` - These files contain peices of NFTRecord.json selected at random and sent to a batch containing ``nftsPerBatch`` number of DNA. 
+
+Before running main.py, ensure these variables are set properly or else the script will not work:  
+
+- ``nftName``
+- ``imageFileFormat``
+- ``save_path_mac`` or ``save_path_windows``
+- ``maxNFTs``
+- ``nftsPerBatch``
+- ``renderImage = False``
+
+
+Steps to generate NFTRecord and Batches:
+
+1. In your .blend file open the ``Scripting Tab`` in the menu of Blender: 
 
 <img width="1440" alt="Screen Shot 2021-10-24 at 9 51 25 PM" src="https://user-images.githubusercontent.com/82110564/138623488-9d0efc07-4004-4d3a-a7fe-25cb6050ac51.png">
 
@@ -170,25 +194,38 @@ Steps to run scripts in Blender
 
 <img width="1422" alt="Screen Shot 2021-10-29 at 11 31 38 PM" src="https://user-images.githubusercontent.com/82110564/139518856-7798ea86-0be0-4511-bc87-fa09ce2f6538.png">
 
-3. With the Blender File View open, navigate to the Blend_My_NFTs folder, navigate to and select main.py. Click "Open" in the bottom right corner:
+3. With the Blender File View open, navigate to the Blend_My_NFTs folder, navigate to the ``src`` folder, then open main.py.
 
-<img width="1061" alt="Screen Shot 2021-10-29 at 11 35 03 PM" src="https://user-images.githubusercontent.com/82110564/139518920-a987d72a-a213-4579-a682-79e8d55fedca.png">
+<img width="1062" alt="Screen Shot 2021-11-23 at 8 09 23 PM" src="https://user-images.githubusercontent.com/82110564/143153066-254e5e3e-cd06-4fdb-b645-180ed01fe89b.png">
 
-4. Repeat the previous step for Image_Generator.py file located in the Generators_and_Sorters folder.
+5. To run main.py click the run button shown circled below:
 
-5. To navigate to the a script click the drop down button shown circled below:
+<img width="605" alt="Screen Shot 2021-11-23 at 8 12 10 PM" src="https://user-images.githubusercontent.com/82110564/143153297-b90d9e16-69b7-4b44-b63b-20869f155f32.png">
 
-<img width="274" alt="Screen Shot 2021-10-29 at 11 48 13 PM" src="https://user-images.githubusercontent.com/82110564/139519232-20891a2f-041f-4fa7-8f8a-b467e02de503.png">
+If you correctly formated your .blend file, you will now have two files; an NFTRecord.json, and a number of Batch#.json files located in the ``Batch_Json_files`` folder. 
 
-6. To run a script click the run button shown circled below:
 
-<img width="263" alt="Screen Shot 2021-10-29 at 11 51 08 PM" src="https://user-images.githubusercontent.com/82110564/139519277-4e02ee15-d97c-4f30-83e4-5837a3388d66.png">
+## 2. Running main.py - Generating Images
 
-## The order to run scripts
+Steps to Generate Images: 
+1. Set ``renderBatch`` to the batch number you wish to render in config.py. 
+
+<img width="613" alt="Screen Shot 2021-11-23 at 8 33 22 PM" src="https://user-images.githubusercontent.com/82110564/143155078-1f7cc0d2-644d-4e42-9ee0-24a2aa1992d5.png">
+
+2. Turn the Image_Generator on by setting ``renderImage`` to True in config.py. 
+
+<img width="933" alt="Screen Shot 2021-11-23 at 8 34 47 PM" src="https://user-images.githubusercontent.com/82110564/143155192-c6cbf660-3b3b-44c8-8d6b-8ac413d34783.png">
+
+3. Run main.py in Blender Scripting just like before in the Blender Scripting Tab
+
+<img width="605" alt="Screen Shot 2021-11-23 at 8 12 10 PM" src="https://user-images.githubusercontent.com/82110564/143153297-b90d9e16-69b7-4b44-b63b-20869f155f32.png">
+
+
+## Summery: The order to run main.py
 
 Run the scripts in the following order: 
 1. main.py - With ``renderImage`` set to ``False`` in the config.py file (by defeault): Generates the data for your NFT collection
-3. main.py - With ``renderImage`` set to ``True`` in the config.py file
+3. main.py - With ``renderImage`` set to ``True`` in the config.py file: Renders images in a batch specified by ``renderBatch``
 
 ## How to run the 3D Model Generator scripts in Blender
 This segment discusses setting up the 3D Model Generator. This youtube tutorial goes over a glossory of what is discussed in this section: https://www.youtube.com/watch?v=NonORFpVhLw
