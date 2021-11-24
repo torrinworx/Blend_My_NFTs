@@ -45,7 +45,8 @@ The software in its current state is not farily user friendly but with a really 
 Link to the Blend_My_NFTs Tuotrial series on Youtube: 
 https://www.youtube.com/watch?v=dUajXAZzSPc&list=PLuVvzaanutXetnvsa2_xvXvpREUEYfpg1
 
-Note - Though this video series may be helpful, it is not up to date with the current Blend_My_NFTs release. This document has more detailes and may have newer information. 
+Note - Though this video series may be helpful, it is not up to date with the current Blend_My_NFTs release. This document has more detailes and may have newer information. If you have no experience with the Blender API I recomend watch this tutorial on running python scripts in Blender: https://www.youtube.com/watch?v=cyt0O7saU4Q 
+
 
 ## Important Terminology 
 
@@ -227,12 +228,18 @@ Run the scripts in the following order:
 1. main.py - With ``renderImage`` set to ``False`` in the config.py file (by defeault): Generates the data for your NFT collection
 3. main.py - With ``renderImage`` set to ``True`` in the config.py file: Renders images in a batch specified by ``renderBatch``
 
-## How to run the 3D Model Generator scripts in Blender
-This segment discusses setting up the 3D Model Generator. This youtube tutorial goes over a glossory of what is discussed in this section: https://www.youtube.com/watch?v=NonORFpVhLw
 
-The 3D model generator combines 3D models together and exports all possible combinations of those 3D models to a folder. 
+# Generating 3D Models with Blend_My_NFTs with external models
 
-1. Similarly to the Image Generator, there is a specific way to format 3d model repositors external to Blender. In the following photo we have a folder structure. In this example, "Sphere" and "Cube" are our attributes. Any object in the "Script_Ignore_Folder" will be added to all NFT 3D models generated, and such is an appropriate place to put constant scene elements you wish to appear in every NFT you generate. 
+This youtube tutorial goes over the basic setup discussed in this section: https://www.youtube.com/watch?v=NonORFpVhLw (This video is out of date but may be of use)
+
+The following section covers generating and exporting 3D models with Blend_My_NFTs with a repository of external 3D models in a folder structure. The 3D model generator combines 3D models together and exports all possible combinations of those 3D models to a folder. 
+
+## How to set up your 3D model folders
+
+Similarly to the Image Generator, there is a specific way to format 3d model repositors external to Blender. 
+
+1. In the following photo we have a folder structure. In this example, ``Sphere`` and ``Cube`` are our attributes. Any object file in the ``Script_Ignore_Folder`` will be added to all NFT 3D models generated, and such is an appropriate place to put constant scene elements you wish to appear in every NFT you generate. 
 
 <img width="191" alt="Screen Shot 2021-11-09 at 8 55 34 PM" src="https://user-images.githubusercontent.com/82110564/141035340-576f5ca6-8710-4ce1-a9ad-a28c75653c6e.png">
 
@@ -240,21 +247,17 @@ The 3D model generator combines 3D models together and exports all possible comb
 
 <img width="357" alt="Screen Shot 2021-11-09 at 8 59 06 PM" src="https://user-images.githubusercontent.com/82110564/141035754-3561ae2b-ee5c-4d65-ac5e-d4c17e34e3a7.png">
 
-3. Next open config.py and change the variable "use3DModels = False" to "use3DModels = True"
+3. Next open config.py and change the variable ``use3DModels = False`` to ``use3DModels = True``
 
 <img width="150" alt="Screen Shot 2021-11-09 at 9 02 05 PM" src="https://user-images.githubusercontent.com/82110564/141035910-5ffb477c-956b-4a89-bda0-3665b7a85fff.png">
 
 4. In Blender open a new blend file and delete everything from the scene. 
 
-5. Save the .blend file to the Blend_My_NFTs folder and reload reload the .blend file.
+5. Save the .blend file to the Blend_My_NFTs folder and reload the .blend file from the new directory.
 
-6. Follow the previous steps to add and run scripts for main.py in your empty .blend file. 
-
-7. Run main.py
+7. Run main.py in the Blender Scripting Tab
 
 The generated 3D models will appear in the folder 3D_Model_Output
-
-
 
 
 
