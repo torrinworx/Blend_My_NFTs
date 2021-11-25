@@ -295,9 +295,8 @@ def generateNFT_DNA():
             dnaStrList.append(str1)
 
          for i in dnaStrList:
-            for j in i:
-               num = "-" + str(j)
-               dnaStr += num
+            num = "-" + str(i)
+            dnaStr += num
 
          dna = ''.join(dnaStr.split('-', 1))
 
