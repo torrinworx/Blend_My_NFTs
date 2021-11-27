@@ -1,8 +1,9 @@
 # Purpose:
-# This file determins the settings of your NFT collection. Please read the README.md file to understand how to run this
+# This file determines the settings of your NFT collection. Please read the README.md file to understand how to run this
 # program.
 
 nftName = ''  # The name of the NFT image produces by PNG-Generator
+
 imageFileFormat = ''  # Dictate the image extension when Blender renders the images
 # Type the exact name provided below in the '' above:
 # JPEG - Exports the .jpeg format
@@ -10,6 +11,14 @@ imageFileFormat = ''  # Dictate the image extension when Blender renders the ima
 # Visit https://docs.blender.org/api/current/bpy.types.Image.html#bpy.types.Image.file_format
 # for a complete list of file formats supported by Blender. Enter the file extension exactly as specified in
 # the Blender API documentation.
+
+objectFormatExport = ''  # The file format of the objects you would like to export
+# The following are file formats Blender accepts for exporting object files.
+# Please type the exact name provided below in the '' above:
+# fbx - The .FBX file format
+# glb - The .glb file format
+# obj - The .obj file format *Exports both a .obj and a .mtl files for the same generated object
+# x3d - The .x3d file format
 
 # The path to Blend_My_NFTs folder:
 save_path_mac = '/Users/Path/To/Blend_My_NFTs'
@@ -22,9 +31,13 @@ maxNFTs = 10  # The maximum number of NFTs you want to generate.
 nftsPerBatch = 10  # Number of NFTs per batch
 renderBatch = 1  # The batch number to render in Exporter.py
 
-# Set to True to generate images or 3D models depending on your settings below when main.py is run in Blender.
-# Only works if you have already generated NFTRecord.json and all batches.
-renderImage = False
+# Set to True to generate images or 3D models depending on your settings below when main.py is run in Blender. Only works
+# if you have already generated NFTRecord.json and all batches.
+enableExporter = False
+
+enableImages = False  # Renders and exports Images when main.py is run in Blender if enableExporter = True
+enableModelsBlender = False  # Generates 3D models when main.py is run in Blender if enableExporter = True
+# ^^ Generates models with .blend file NOT external object library.
 
 ### Select colour or material.###
 # Object generation options:
@@ -58,18 +71,6 @@ materialList2 = ['Material2', 'Material2.001', 'Material2.002', 'Material2.003',
 if generationType == 'material':  # Do not change this line.
     colorList = {"Cube_1_33": materialList1, "Sphere_2_0": materialList2}
 
-# 3D model imports and exports variables:
-enable3DModels = False  # Set to True if using external models as attributes instead of Blender objects
-# ^Does not work with colour options and rarity, both must be turned off in order to use this.
-
-objectFormatExport = ''  # The file format of the objects you would like to export
-# The following are file formats Blender accepts for exporting object files.
-# Please type the exact name provided below in the '' above:
-# fbx - The .FBX file format
-# glb - The .glb file format
-# obj - The .obj file format *Exports both a .obj and a .mtl files for the same generated object
-# x3d - The .x3d file format
-
 # Meta Data generation
 enableMeteData = True  # Set to True to turn on meta data, set to False to turn off meta data generation.
 
@@ -88,6 +89,10 @@ metaDataType = 'DEFAULT'  # Select the format of the generated Meta Data for you
 metaDataDescription = ''  # The description of your NFT that will be inserted into its meta data
 
 enableResetViewport = True  # If True: turns all viewport and render cameras on after Image_Generator is finished operations
+
+# 3D model imports and exports variables:
+enable3DModels = False  # Set to True if using external models as attributes instead of Blender objects
+# ^Does not work with colour options and rarity, both must be turned off in order to use this.
 
 # Utilities - DO NOT TOUCH:
 import platform
@@ -113,7 +118,6 @@ model_save_path = save_path + slash + "3D_Model_Output"  # The output path for 3
 model_Script_Ignore_Path = modelAssetPath + slash + "Script_Ignore_Folder"  # The path to the Script_Ignore_Folder for 3D models
 
 # error handling #
-
 if objectFormatExport not in ['fbx', 'glb', 'obj', 'x3d'] and enable3DModels:
     raise ValueError("Output format in `objectFormatExport` can only be 'fbx', 'glb', 'obj', 'x3d'.")
 
@@ -126,8 +130,8 @@ enableRarity = False
 # False = Pure random selection of variants
 
 # Preview and render test settings:
-# Set to True to run Preview test, set to False to stop test. Run main.py in Blender to initiate the test.
-# enable3DModels must be off to run the render test.
+# Set to True to run Preview test, set to False to stop test. Run main.py in Blender to initiate the test. Results will
+# be displayed in the Blender terminal or console. enable3DModels and enableExporter must be False to run the preview.
 runPreview = False
 maxNFTsTest = 5  # Increase to get a more accurate reading of the render time. The number of images generated in the render test.
 

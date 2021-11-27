@@ -24,7 +24,8 @@ importlib.reload(Preview)
 importlib.reload(RenderTest)
 importlib.reload(Exporter)
 
-if not config.runPreview and not config.renderImage:
+
+if not config.enableExporter and not config.runPreview:
     if config.enable3DModels:
         Model_Generator.generate3DModels()
 
@@ -34,8 +35,8 @@ if not config.runPreview and not config.renderImage:
         if config.checkDups:
             DuplicateChecker.checkDups()
 
+if config.enableExporter and not config.runPreview:
+    Exporter.render_and_save_NFTs()
+
 if config.runPreview:
     Preview.printImportant()
-
-if config.renderImage:
-    Exporter.render_and_save_NFTs()
