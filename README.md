@@ -17,7 +17,7 @@ Blend_My_NFTs is a work-in-progress Blender add on that can automatically genera
 - Support for .x3d, .fbx, .obj, and .glb files
 - Raritize and weight your attributes (Now available, still an experimental feature)
 - Preview data about your NFT collection; Time to render and the possible combinations
-- Generate metadata templates for Solana! (More blockchain templates coming soon...)
+- Inbuilt metadata template generation for Solana, Cardano, and Ethereum!
 
 There are always new features dropping, join our discord to stay tuned for updates!
 
