@@ -12,9 +12,9 @@ Blend_My_NFTs is a work-in-progress Blender add on that can automatically genera
 *Test sample of the NFT collection This Cozy Place rendered in Blender 2.93 using Blend_My_NFTs add on.
 
 ## Features 
-- Render and export both images and 3D models 
+- Render and export both images and 3D models at the same time or individually
 - Generate all possible combinations of your NFTs! The only limit is your imagination, and your processing power...
-- Support for .x3d, .fbx, .obj, and .glb files
+- Support for .x3d, .fbx, .obj, and .glb files 
 - Raritize and weight your attributes (Now available, still an experimental feature)
 - Preview data about your NFT collection; Time to render and the possible combinations
 - Inbuilt metadata template generation for Solana, Cardano, and Ethereum!
@@ -143,7 +143,13 @@ Description of customisable variables to generate images:
 ``renderBatch`` - A positive integer representing the the batch number to render if ``renderImage`` is set to True. (REQUIRED)
 
 
-``renderImage`` - A Boolean value, when set to True, turns the Image_Generator.py on or off. (Turned on after NFTRecord.json and appropriate batches are generated with main.py)
+``enableExporter`` - A Boolean value, when set to True, will export Images and or 3D models when main.py is run in Blender. (Turned on after NFTRecord.json and appropriate batches are generated with main.py)
+
+``enableImages`` - A boolean value, when set to True with ``enableExporter = True`` will export images. 
+
+``enableModelsBlender`` - A boolean value, when set to True with ``enableExporter = True`` will export 3D models. 
+
+- Note that ``enableImages`` and ``enableModelsBlender`` can run at the same time. Both images and models will be exported. (One of the above is REQUIRED)
 
 
 ``enableResetViewport`` - A boolean value, when set to True, resets the veiwport of all cameras not in Script_Ignore. (Optional)
