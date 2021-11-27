@@ -39,7 +39,7 @@ Reddit: https://www.reddit.com/r/ThisCozyPlace/
 
 Blend_My_NFTs works with Blender 2.93.5 on Windows 10 or macOS BigSure 11.6. 
 
-The software in its current state is not farily user friendly but with a really basic understanding of programing you can opporate easily. You can learn the programing skillz needed in ten minutes! :)
+The software in its current state is not farily user friendly but with a really basic understanding of programing you can opporate it easily. You can learn the programing skillz needed in ten minutes! :)
 
 ## Youtube Tutorial Series
 
