@@ -11,7 +11,7 @@ sys.modules.values()
 from src import config
 from src.Utility_Scripts import DuplicateChecker, RenderTest, Preview
 from src.Model_Generators import Model_Generator
-from src.Image_Generators import Batch_Sorter, DNA_Generator, Image_Generator
+from src.Main_Generators import Batch_Sorter, DNA_Generator, Exporter
 
 importlib.reload(config)
 importlib.reload(DuplicateChecker)
@@ -20,7 +20,7 @@ importlib.reload(Batch_Sorter)
 importlib.reload(DNA_Generator)
 importlib.reload(Preview)
 importlib.reload(RenderTest)
-importlib.reload(Image_Generator)
+importlib.reload(Exporter)
 
 if not config.runPreview and not config.renderImage:
     if config.enable3DModels:
@@ -36,4 +36,4 @@ if config.runPreview:
     Preview.printImportant()
 
 if config.renderImage:
-    Image_Generator.render_and_save_NFTs()
+    Exporter.render_and_save_NFTs()

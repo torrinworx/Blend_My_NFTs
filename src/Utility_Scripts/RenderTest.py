@@ -14,12 +14,12 @@ sys.path.append(dir)
 sys.modules.values()
 
 from src import config
-from src.Image_Generators import Batch_Sorter, DNA_Generator, Image_Generator
+from src.Main_Generators import Batch_Sorter, DNA_Generator, Exporter
 
 importlib.reload(config)
 importlib.reload(DNA_Generator)
 importlib.reload(Batch_Sorter)
-importlib.reload(Image_Generator)
+importlib.reload(Exporter)
 
 class bcolors:
    '''
@@ -51,8 +51,8 @@ def imageRenderTest():
 
     fullRenderTime = time.time()
 
-    print(bcolors.WARNING + "\n---RUNNING Image_Generator.py SHELL---\n" + bcolors.RESET)
-    Image_Generator.render_and_save_NFTs()
+    print(bcolors.WARNING + "\n---RUNNING Exporter.py SHELL---\n" + bcolors.RESET)
+    Exporter.render_and_save_NFTs()
 
     print("Image(s) rendered in %.4f seconds" % (time.time() - fullRenderTime))
     print(bcolors.WARNING + "\nTime to render " + str(originalMaxNFTs) + " NFT Images: " + bcolors.RESET)

@@ -16,6 +16,9 @@ sys.modules.values()
 from src import config
 importlib.reload(config)
 
+from src.Main_Generators import metaData
+importlib.reload(metaData)
+
 if config.runPreview:
    config.nftsPerBatch = config.maxNFTsTest
    config.maxNFTs = config.maxNFTsTest
@@ -51,7 +54,7 @@ def render_and_save_NFTs():
 
     x = 1
     for a in BatchDNAList:
-        metaData = {}
+        metaDataDict = {}
 
         for i in hierarchy:
             for j in hierarchy[i]:
@@ -86,38 +89,7 @@ def render_and_save_NFTs():
         name = config.nftName + str(x)
 
 
-        def returnMetaData(metaDataType):
-            '''
-            This function exports formatted meta data based on the metaDataType variable in config.py
-            '''
 
-            if metaDataType == "DEFAULT":
-                metaData["name"] = name
-                metaData["description"] = config.metaDataDescription
-                metaData["NFT_DNA"] = a
-                metaData["NFT_Variants"] = dnaDictionary
-
-            elif metaDataType == "SOL":
-                metaData["name"] = name
-                metaData["symbol"] = ""
-                metaData["description"] = config.metaDataDescription
-                metaData["seller_fee_basis_points"] = None
-                metaData["image"] = ""
-                metaData["animation_url"] = ""
-                metaData["external_url"] = ""
-                metaData["attributes"] = {"NFT_DNA": a, "NFT_Variants": dnaDictionary}
-                metaData["collection"] = {"name": "", "family": ""}
-                metaData["properties"] = {"files": [{"uri": "", "type": ""}],
-                                          "category": "",
-                                          "creators": [{"address": "", "share": None}]
-                                          }
-            elif metaDataType == "ADA":
-                print("Cardano meta data template not yet supported.")
-                return
-
-            elif metaDataType == "ETH":
-                print("Ethereum meta data template not yet supported.")
-            return
 
         print("")
         print("----------Rendering New NFT----------")
@@ -137,7 +109,8 @@ def render_and_save_NFTs():
 
         batchFolder = os.path.join(config.images_save_path, "Batch" + str(config.renderBatch))
         imagePath = os.path.join(batchFolder, "Images", name)
-        metaDataFolder = os.path.join(batchFolder, "Image_Data")
+        modelPath = os.path.join(batchFolder, "Models", name)
+        metaDataFolder = os.path.join(batchFolder, "NFT_metaData")
 
         if config.enableGeneration:
             for c in dnaDictionary:
@@ -159,18 +132,19 @@ def render_and_save_NFTs():
                     collection = stripColorFromName(collection)
                     bpy.data.collections[collection].hide_render = False
                     bpy.data.collections[collection].hide_viewport = False
+
         print("Rendering")
         bpy.context.scene.render.filepath = imagePath
         bpy.context.scene.render.image_settings.file_format = config.imageFileFormat
         bpy.ops.render.render(write_still=True)
 
         if config.enableMeteData:
-            returnMetaData(config.metaDataType)
+            metaData.returnMetaData(config.metaDataType, metaDataDict, name, a, dnaDictionary)
 
             if not os.path.exists(metaDataFolder):
                 os.mkdir(metaDataFolder)
 
-            jsonMetaData = json.dumps(metaData, indent=1, ensure_ascii=True)
+            jsonMetaData = json.dumps(metaDataDict, indent=1, ensure_ascii=True)
             with open(os.path.join(metaDataFolder, name + "_Data"), 'w') as outfile:
                 outfile.write(jsonMetaData + '\n')
 

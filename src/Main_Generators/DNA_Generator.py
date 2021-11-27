@@ -15,7 +15,7 @@ sys.modules.values()
 from src import config
 importlib.reload(config)
 
-from src.Image_Generators import Rarity_Sorter
+from src.Main_Generators import Rarity_Sorter
 
 importlib.reload(Rarity_Sorter)
 

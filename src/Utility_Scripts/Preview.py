@@ -11,7 +11,7 @@ dir = os.path.dirname(bpy.data.filepath)
 sys.path.append(dir)
 sys.modules.values()
 
-from src.Image_Generators import DNA_Generator
+from src.Main_Generators import DNA_Generator
 from src.Utility_Scripts import RenderTest
 
 importlib.reload(DNA_Generator)
