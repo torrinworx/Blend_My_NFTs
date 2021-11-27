@@ -89,13 +89,10 @@ def render_and_save_NFTs():
         dnaDictionary = match_DNA_to_Variant(a)
         name = config.nftName + str(x)
 
-
-
-
         print("")
         print("----------Rendering New NFT----------")
         print("DNA attribute list:")
-        print(list(dnaDictionary.items()))
+        print(dnaDictionary)
         print("DNA Code:")
         print(a)
         print("")
@@ -109,8 +106,8 @@ def render_and_save_NFTs():
         time_start_2 = time.time()
 
         batchFolder = os.path.join(config.images_save_path, "Batch" + str(config.renderBatch))
-        imagePath = os.path.join(batchFolder, "Images", name)
-        modelPath = os.path.join(batchFolder, "Models", name)
+        imagePath = os.path.join(batchFolder, "Images", "Image_" + name)
+        modelPath = os.path.join(batchFolder, "Models")
         metaDataFolder = os.path.join(batchFolder, "NFT_metaData")
 
         if config.enableGeneration:
@@ -134,10 +131,45 @@ def render_and_save_NFTs():
                     bpy.data.collections[collection].hide_render = False
                     bpy.data.collections[collection].hide_viewport = False
 
-        print("Rendering")
-        bpy.context.scene.render.filepath = imagePath
-        bpy.context.scene.render.image_settings.file_format = config.imageFileFormat
-        bpy.ops.render.render(write_still=True)
+        print("Generating")
+
+        if config.enableImages:
+            bpy.context.scene.render.filepath = imagePath
+            bpy.context.scene.render.image_settings.file_format = config.imageFileFormat
+            bpy.ops.render.render(write_still=True)
+
+        if config.enableModelsBlender:
+
+            if not os.path.exists(modelPath):
+                os.mkdir(modelPath)
+
+            for i in dnaDictionary:
+                print("\ni in dnaDict: ")
+                coll = dnaDictionary[i]
+
+                for obj in bpy.data.collections[coll].all_objects:
+                    obj.select_set(True)
+
+            for obj in bpy.data.collections['Script_Ignore'].all_objects:
+                obj.select_set(True)
+
+            if config.objectFormatExport == 'glb':
+                bpy.ops.export_scene.gltf(filepath=os.path.join(modelPath, "Model_" + name),
+                                          check_existing=True,
+                                          export_format='GLB',
+                                          use_selection=True)
+            elif config.objectFormatExport == 'fbx':
+                bpy.ops.export_scene.fbx(filepath=os.path.join(modelPath, "Model_" + name),
+                                         check_existing=True,
+                                         use_selection=True)
+            elif config.objectFormatExport == 'obj':
+                bpy.ops.export_scene.obj(filepath=os.path.join(modelPath, "Model_" + name),
+                                         check_existing=True,
+                                         use_selection=True)
+            elif config.objectFormatExport == 'x3d':
+                bpy.ops.export_scene.x3d(filepath=os.path.join(modelPath, "Model_" + name),
+                                         check_existing=True,
+                                         use_selection=True)
 
         if config.enableMeteData:
             metaData.returnMetaData(config.metaDataType, metaDataDict, name, a, dnaDictionary)
