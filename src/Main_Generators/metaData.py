@@ -70,8 +70,5 @@ def returnMetaData(metaDataType, metaDataDict, name, a, dnaDictionary):
                                       "description": config.metaDataDescription,
                                       "NFT_DNA": a}
 
-
-
-
 if __name__ == '__main__':
     returnMetaData()
