@@ -1,3 +1,7 @@
+# Some code in this file was generously sponsored by the amazing team over at SolSweepers!
+# Feel free to check out their amazing project and see how they are using Blend_My_NFTs:
+# https://discord.gg/QTT7dzcuVs
+
 import bpy
 import os
 import sys
