@@ -1,6 +1,6 @@
-# Some code in this file was generously sponsored by the amazing team over at SolSweepers!
-# Feel free to check out their amazing project and see how they are using Blend_My_NFTs:
-# https://discord.gg/QTT7dzcuVs
+# Purpose:
+# This file takes a given Batch created by DNA_Generator.py and tells blender to render the image or export a 3D model to
+# the NFT_Image_Output folder.
 
 import bpy
 import os
@@ -14,10 +14,11 @@ sys.path.append(dir)
 sys.modules.values()
 
 from src import config
-importlib.reload(config)
-
 from src.Main_Generators import metaData
+
+importlib.reload(config)
 importlib.reload(metaData)
+
 
 if config.runPreview:
    config.nftsPerBatch = config.maxNFTsTest

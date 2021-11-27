@@ -2,6 +2,9 @@
 # Feel free to check out their amazing project and see how they are using Blend_My_NFTs:
 # https://discord.gg/QTT7dzcuVs
 
+# Purpose:
+# This file returns the specified meta data format to the Exporter.py for a given NFT DNA.
+
 import bpy
 import os
 import sys
@@ -14,6 +17,7 @@ sys.path.append(dir)
 sys.modules.values()
 
 from src import config
+
 importlib.reload(config)
 
 

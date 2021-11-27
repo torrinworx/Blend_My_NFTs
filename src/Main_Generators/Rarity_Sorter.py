@@ -1,3 +1,6 @@
+# Purpose:
+# This file sorts the Variants in DNA slots based on the rarity value set in the name.
+
 import bpy
 import os
 import sys
@@ -14,6 +17,7 @@ importlib.reload(config)
 from src.Main_Generators import DNA_Generator
 
 importlib.reload(DNA_Generator)
+
 
 if config.runPreview:
    config.nftsPerBatch = config.maxNFTsTest

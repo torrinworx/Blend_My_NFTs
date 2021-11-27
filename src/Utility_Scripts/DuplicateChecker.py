@@ -10,7 +10,9 @@ sys.path.append(dir)
 sys.modules.values()
 
 from src import config
+
 importlib.reload(config)
+
 
 def checkIfBatchDup(i):
     file_name = os.path.join(config.batch_save_path, i)

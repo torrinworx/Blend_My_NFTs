@@ -1,3 +1,6 @@
+# Purpose:
+# This file generates NFT DNA based on a .blend file scene structure and exports NFTRecord.json.
+
 import bpy
 import os
 import re
@@ -13,11 +16,11 @@ sys.path.append(dir)
 sys.modules.values()
 
 from src import config
-importlib.reload(config)
-
 from src.Main_Generators import Rarity_Sorter
 
+importlib.reload(config)
 importlib.reload(Rarity_Sorter)
+
 
 if config.runPreview:
    config.nftsPerBatch = config.maxNFTsTest

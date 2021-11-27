@@ -21,6 +21,7 @@ importlib.reload(DNA_Generator)
 importlib.reload(Batch_Sorter)
 importlib.reload(Exporter)
 
+
 class bcolors:
    '''
    The colour of console messages.

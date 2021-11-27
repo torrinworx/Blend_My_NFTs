@@ -2,6 +2,9 @@
 # Feel free to check out their amazing project and see how they are using Blend_My_NFTs:
 # https://www.rumbleworlds.io/
 
+# Purpose:
+# This file imports object files from the 3D_Model_Import folder and exports possible combinations to the 3D_Model_Output folder
+
 import bpy
 import os
 import re
@@ -18,7 +21,9 @@ sys.path.append(dir)
 sys.modules.values()
 
 from src import config
+
 importlib.reload(config)
+
 
 class bcolors:
    '''

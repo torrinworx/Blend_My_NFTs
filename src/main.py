@@ -1,4 +1,6 @@
-# This script runs DNA_Generator.py and Batch_Sorter.py so you only have to run main.py in Blender
+# Purpose:
+# This file is the main file you run in Blender.
+
 import bpy
 import os
 import sys

@@ -1,3 +1,7 @@
+# Purpose:
+# This file sorts the NFT DNA from NFTRecord.json and exports it to a given number of Batch#.json files set by nftsPerBatch
+# in config.py.
+
 import bpy
 import os
 import sys
@@ -11,7 +15,9 @@ sys.path.append(dir)
 sys.modules.values()
 
 from src import config
+
 importlib.reload(config)
+
 
 if config.runPreview:
    config.nftsPerBatch = config.maxNFTsTest

@@ -17,6 +17,7 @@ from src.Utility_Scripts import RenderTest
 importlib.reload(DNA_Generator)
 importlib.reload(RenderTest)
 
+
 class bcolors:
    '''
    The colour of console messages.

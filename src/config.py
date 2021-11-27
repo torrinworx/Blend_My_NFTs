@@ -1,4 +1,6 @@
-# config.py is where you can configure the settings of your NFT collection
+# Purpose:
+# This file determins the settings of your NFT collection. Please read the README.md file to understand how to run this
+# program.
 
 nftName = ''  # The name of the NFT image produces by PNG-Generator
 imageFileFormat = ''  # Dictate the image extension when Blender renders the images
