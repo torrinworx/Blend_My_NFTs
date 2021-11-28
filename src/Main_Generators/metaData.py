@@ -33,19 +33,39 @@ def returnMetaData(metaDataType, metaDataDict, name, a, dnaDictionary):
         metaDataDict["NFT_Variants"] = dnaDictionary
 
     elif metaDataType == "SOL":
-        metaDataDict["name"] = name
+        metaDataDict["name"] = config.nftName
         metaDataDict["symbol"] = ""
         metaDataDict["description"] = config.metaDataDescription
         metaDataDict["seller_fee_basis_points"] = None
         metaDataDict["image"] = ""
         metaDataDict["animation_url"] = ""
         metaDataDict["external_url"] = ""
-        metaDataDict["attributes"] = {"NFT_DNA": a, "NFT_Variants": dnaDictionary}
-        metaDataDict["collection"] = {"name": "", "family": ""}
+
+        attributes = []
+
+        for i in dnaDictionary:
+            dictionary = {
+                "trait_type": i,
+                "value": dnaDictionary[i]
+            }
+
+            attributes.append(dictionary)
+
+        metaDataDict["attributes"] = attributes
+        metaDataDict["collection"] = {
+            "name": "",
+            "family": ""
+        }
         metaDataDict["properties"] = {"files": [{"uri": "", "type": ""}],
                                       "category": "",
                                       "creators": [{"address": "", "share": None}]
                                       }
+        metaDataDict["category"] = ""
+        metaDataDict["creators"] = [{
+            "address": "",
+            "share": None
+        }]
+
 
     elif metaDataType == "ADA":
         metaDataDict["721"] = {
