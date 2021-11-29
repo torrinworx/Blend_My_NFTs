@@ -66,7 +66,6 @@ def returnMetaData(metaDataType, metaDataDict, name, a, dnaDictionary):
             "share": None
         }]
 
-
     elif metaDataType == "ADA":
         metaDataDict["721"] = {
             "<policy_id>": {
