@@ -1,6 +1,6 @@
 # Purpose:
 # This file takes a given Batch created by DNA_Generator.py and tells blender to render the image or export a 3D model to
-# the NFT_Image_Output folder.
+# the NFT_Output folder.
 
 import bpy
 import os
@@ -171,14 +171,14 @@ def render_and_save_NFTs():
                                          check_existing=True,
                                          use_selection=True)
 
-        if config.enableMeteData:
+        if config.enableMetaData:
             metaData.returnMetaData(config.metaDataType, metaDataDict, name, a, dnaDictionary)
 
             if not os.path.exists(metaDataFolder):
                 os.mkdir(metaDataFolder)
 
             jsonMetaData = json.dumps(metaDataDict, indent=1, ensure_ascii=True)
-            with open(os.path.join(metaDataFolder, name + "_Data"), 'w') as outfile:
+            with open(os.path.join(metaDataFolder, name + "_Data.json"), 'w') as outfile:
                 outfile.write(jsonMetaData + '\n')
 
         print("Completed {} render in ".format(name) + "%.4f seconds" % (time.time() - time_start_2))
