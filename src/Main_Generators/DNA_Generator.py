@@ -10,6 +10,7 @@ import time
 import json
 import random
 import importlib
+from functools import partial
 
 dir = os.path.dirname(bpy.data.filepath)
 sys.path.append(dir)
@@ -283,6 +284,8 @@ def generateNFT_DNA():
    DNAList = []
 
    if not config.enableRarity:
+      DNASet = set()
+
       for i in hierarchy:
          numChild = len(hierarchy[i])
          possibleNums = list(range(1, numChild + 1))
@@ -306,24 +309,11 @@ def generateNFT_DNA():
          return str(dna)
 
       for i in range(config.maxNFTs):
-         DNAList.append(createDNARandom())
+         dnaPushToList = partial(createDNARandom)
 
-      def anydup(DNAList):
-         dups = None
-         seen = set()
+         DNASet |= {''.join([dnaPushToList()]) for _ in range(config.maxNFTs - len(DNASet))}
 
-         for x in DNAList:
-            if x in seen:
-               DNAList.remove(x)
-               DNAList.append(createDNARandom())
-               dups = True
-               anydup(DNAList)
-            else:
-               dups = False
-            seen.add(x)
-         return dups
-
-      anydup(DNAList)
+      DNAList = list(DNASet)
 
       possibleCombinations = config.maxNFTs
 
@@ -334,7 +324,7 @@ def generateNFT_DNA():
    if config.enableRarity:
       print(bcolors.OK + "Rarity is on. Weights listed in .blend will be taken into account " + bcolors.RESET)
       possibleCombinations = config.maxNFTs
-      Rarity_Sorter.sortRarityWeights(hierarchy, listOptionVariant, DNAList)
+      DNAList = Rarity_Sorter.sortRarityWeights(hierarchy, listOptionVariant, DNAList)
 
    #Data stored in batchDataDictionary:
    DataDictionary["numNFTsGenerated"] = possibleCombinations
