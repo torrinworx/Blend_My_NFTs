@@ -39,6 +39,12 @@ enableImages = False  # Renders and exports Images when main.py is run in Blende
 enableModelsBlender = False  # Generates 3D models when main.py is run in Blender if enableExporter = True
 # ^^ Generates models with .blend file NOT external object library.
 
+# Enables Rarity_Sorter to weigh NFT DNA attributes and variants:
+enableRarity = False
+# generateColors must be turned off and enableMaxNFTs must be turned on.
+# True = include weighted rarity percentages in NFTRecord.json calculations,
+# False = Pure random selection of variants
+
 ### Select colour or material.###
 # Object generation options:
 enableGeneration = False  # When set to true this applies the sets of colors listed below to the objects in the collections named below
@@ -72,7 +78,7 @@ if generationType == 'material':  # Do not change this line.
     colorList = {"Cube_1_33": materialList1, "Sphere_2_0": materialList2}
 
 # Meta Data generation
-enableMetaData = True  # Set to True to turn on meta data, set to False to turn off meta data generation.
+enableMetaData = False  # Set to True to turn on meta data, set to False to turn off meta data generation.
 
 metaDataType = 'DEFAULT'  # Select the format of the generated Meta Data for your NFTs blockchain.
 # DEFAULT - The default setting; exports variants, dna, number, name, and rarity of each NFT to a dictionary (Not a blockchain standard)
@@ -121,20 +127,15 @@ model_Script_Ignore_Path = modelAssetPath + slash + "Script_Ignore_Folder"  # Th
 if objectFormatExport not in ['fbx', 'glb', 'obj', 'x3d'] and enable3DModels:
     raise ValueError("Output format in `objectFormatExport` can only be 'fbx', 'glb', 'obj', 'x3d'.")
 
-# EXPERIMENTAL FEATURES:
-
-# Enables Rarity_Sorter to weigh NFT DNA attributes and variants:
-enableRarity = False
-# generateColors must be turned off and enableMaxNFTs must be turned on.
-# True = include weighted rarity percentages in NFTRecord.json calculations,
-# False = Pure random selection of variants
+# Tests and Previews:
 
 # Preview and render test settings:
 # Set to True to run Preview test, set to False to stop test. Run main.py in Blender to initiate the test. Results will
-# be displayed in the Blender terminal or console. enable3DModels and enableExporter must be False to run the preview.
+# be displayed in the Blender terminal or console. enableExporter must be False, and enableImages and/or enableModelsBlender
+# to run a preview.
 runPreview = False
 maxNFTsTest = 5  # Increase to get a more accurate reading of the render time. The number of images generated in the render test.
 
 # Turn this on when you run main.py to generate NFTRecord.json and appropriate batches to confirm there are no duplicate
 # NFT DNA.
-checkDups = False
+checkDups = True

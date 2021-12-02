@@ -144,7 +144,6 @@ def render_and_save_NFTs():
                 os.mkdir(modelPath)
 
             for i in dnaDictionary:
-                print("\ni in dnaDict: ")
                 coll = dnaDictionary[i]
 
                 for obj in bpy.data.collections[coll].all_objects:

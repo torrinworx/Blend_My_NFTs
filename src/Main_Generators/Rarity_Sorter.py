@@ -6,6 +6,8 @@ import os
 import sys
 import random
 import importlib
+from functools import partial
+
 
 dir = os.path.dirname(bpy.data.filepath)
 sys.path.append(dir)
@@ -30,6 +32,8 @@ def sortRarityWeights(hierarchy, listOptionVariant, DNAList):
     Sorts through DataDictionary and appropriately weights each variant based on their rarity percentage set in Blender
     ("rarity" in DNA_Generator). Then
     '''
+
+    DNASet = set()
 
     for i in hierarchy:
         numChild = len(hierarchy[i])
@@ -65,18 +69,16 @@ def sortRarityWeights(hierarchy, listOptionVariant, DNAList):
                 elif ifZeroBool == False:
                     variantByNum = random.choices(number_List_Of_i, weights=rarity_List_Of_i, k=1)
 
-                dnaStr1 += '-' + str(variantByNum[0])
+                dnaStr1 += "-" + str(variantByNum[0])
+            dnaStr1 = ''.join(dnaStr1.split('-', 1))
             return dnaStr1
 
-        dnaStr = createDNA()
+        dnaPushToList = partial(createDNA)
 
-        if dnaStr not in DNAList:
-            dnaPushToList = ''.join(dnaStr.split('-', 1))
-        else:
-            createDNA()
+        DNASet |= {''.join([dnaPushToList()]) for _ in range(config.maxNFTs - len(DNASet))}
 
-        DNAList.append(dnaPushToList)
-    return
+    DNAListRare = list(DNASet)
+    return DNAListRare
 
 if __name__ == '__main__':
     sortRarityWeights()
