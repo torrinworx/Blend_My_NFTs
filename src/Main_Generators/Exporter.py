@@ -170,6 +170,9 @@ def render_and_save_NFTs():
                                          check_existing=True,
                                          use_selection=True)
 
+        if config.enableAnimations:
+
+
         if config.enableMetaData:
             metaData.returnMetaData(config.metaDataType, metaDataDict, name, a, dnaDictionary)
 

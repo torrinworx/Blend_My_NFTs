@@ -139,3 +139,8 @@ maxNFTsTest = 5  # Increase to get a more accurate reading of the render time. T
 # Turn this on when you run main.py to generate NFTRecord.json and appropriate batches to confirm there are no duplicate
 # NFT DNA.
 checkDups = True
+
+# EXPERIMENTAL FEATURES:
+
+enableAnimations = True  # enableExporter must be set to True, and enableImages and enableModelsBlender must be set to False
+
