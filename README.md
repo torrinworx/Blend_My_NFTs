@@ -78,12 +78,9 @@ Follow these steps to setup Blend_My_NFTs:
 5. Move the Blend_My_NFTs-main folder is located on your Desktop for easy access (recomended)
 6. Rename the Blend_My_NFTs-main folder to Blend_My_NFTs (optional)
 
-
-# Generating Images with Blend_My_NFTs
-
-The following section covers how to generate images with Blend_My_NFTs in Blender.
-
 ## How to set up your .Blend file 
+
+The following section covers how to set up your .Blend file and config.py file
 
 In order for Blend_My_NFTs to read your .blend file, you need to structure your scene in a specific way. Please follow all naming and collection conventions exactly, otherwise the scripts will not run properly. 
 
@@ -173,7 +170,7 @@ Description of customisable variables to generate images:
 
     The rgbaColorList# deterimnes the colours that the variants will change to. This creates new variants with those RGBA colour values. 
 
-## 1. Running main.py - Generating NFTRecord and Batches
+## Running main.py - Generating NFTRecord and Batches
 
 Before you can render iamges you need to generate a list of NFT DNA then split it up into batches to render more easily. These will take the form of the NFTRecord.json file, and a list of Batch#.json files. 
 
@@ -185,11 +182,10 @@ Before you can render iamges you need to generate a list of NFT DNA then split i
 Before running main.py, ensure these variables are set properly or else the script will not work:  
 
 - ``nftName``
-- ``imageFileFormat``
 - ``save_path_mac`` or ``save_path_windows``
 - ``maxNFTs``
 - ``nftsPerBatch``
-- ``renderImage = False``
+- ``enableExporter = False``
 
 
 Steps to generate NFTRecord and Batches:
@@ -213,21 +209,30 @@ Steps to generate NFTRecord and Batches:
 If you correctly formated your .blend file, you will now have two files; an NFTRecord.json, and a number of Batch#.json files located in the ``Batch_Json_files`` folder. 
 
 
-## 2. Running main.py - Generating Images
+## Running main.py - Generating Images
+
+**For this section, ensure you have generated NFTRecord.json and Batch#.json files before taking the following steps**
 
 Steps to Generate Images: 
-1. Set ``renderBatch`` to the batch number you wish to render in config.py. 
 
-<img width="613" alt="Screen Shot 2021-11-23 at 8 33 22 PM" src="https://user-images.githubusercontent.com/82110564/143155078-1f7cc0d2-644d-4e42-9ee0-24a2aa1992d5.png">
+1. Ensure all manditory variables have been filed in (all found in config.py): 
+- ``nftName``
+- ``save_path_mac`` or ``save_path_windows``
+- ``maxNFTs``
+- ``nftsPerBatch``
+- ``renderBatch``
 
-2. Turn the Image_Generator on by setting ``renderImage`` to True in config.py. 
+2. Run main.py in Blender with ``enableExporter`` set to ``False`` in config.py. This will generate the NFTRecord.json and Batch#.json files. 
 
-<img width="933" alt="Screen Shot 2021-11-23 at 8 34 47 PM" src="https://user-images.githubusercontent.com/82110564/143155192-c6cbf660-3b3b-44c8-8d6b-8ac413d34783.png">
+3. Set ``renderBatch`` to the batch number you wish to render in config.py. 
 
-3. Run main.py in Blender Scripting just like before in the Blender Scripting Tab.
+4. Set ``enableExporter`` to ``True`` in config.py. 
+
+5. Set ``enableImages`` to ``True`` in config.py.
+
+6. Run main.py in the Blender Scripting Tab. This will now generate Images.
 
 <img width="605" alt="Screen Shot 2021-11-23 at 8 12 10 PM" src="https://user-images.githubusercontent.com/82110564/143153297-b90d9e16-69b7-4b44-b63b-20869f155f32.png">
-
 
 ## Summery: The order to run main.py to Generate Images
 
@@ -239,28 +244,25 @@ Run the scripts in the following order:
 ## Running main.py - Generating Animations
 
 Steps to Generate Animations: 
-1. Ensure all manditory variables have been filed in: 
+
+1. Ensure all manditory variables have been filed in (all found in config.py): 
 - ``nftName``
 - ``save_path_mac`` or ``save_path_windows``
 - ``maxNFTs``
 - ``nftsPerBatch``
 - ``renderBatch``
-(Found in config.py)
 
-2. Set ``animationFileFormat`` to the animation file format you wish to export in config.py. 
+2. Run main.py in Blender with ``enableExporter`` set to ``False``. This will generate the NFTRecord.json and Batch#.json files. 
 
-<img width="984" alt="Screen Shot 2021-12-03 at 5 14 01 PM" src="https://user-images.githubusercontent.com/82110564/144679924-e2d62e2b-48a3-4303-89f3-c6a2fae06a00.png">
+3. Set ``animationFileFormat`` to the animation file format you wish to export in config.py. 
 
-3. Run main.py in Blender with ``enableExporter`` set to ``False``. This will generate the NFTRecord.json and Batch#.json files. 
+4. Set ``enableAnimations`` to ``True`` in config.py.
 
-4. Set ``enableExporter`` to ``True`` in config.py.
+5. Set ``enableExporter`` to ``True`` in config.py.
 
-5. Set ``enableAnimations`` to ``True`` in config.py.
-
-6. Run main.py in Blender Scripting just like before in the Blender Scripting Tab.
+6. Run main.py in the Blender Scripting Tab. This will now generate Animations.
 
 <img width="605" alt="Screen Shot 2021-11-23 at 8 12 10 PM" src="https://user-images.githubusercontent.com/82110564/143153297-b90d9e16-69b7-4b44-b63b-20869f155f32.png">
-
 
 ## Summery: The order to run main.py to Generate Animations
 
@@ -268,7 +270,36 @@ Run the scripts in the following order:
 1. main.py - With ``enableExporter`` set to ``False`` in config.py: Generates the data for your NFT collection. 
 2. main.py - With ``enableExporter`` and ``enableAnimations`` set to ``True`` in config.py: Renders and compiles animations.
 
-# Generating 3D Models with Blend_My_NFTs with external models
+## Running main.py - Generating 3D models from a .blend file
+
+Steps to Generate 3D models: 
+
+1. Ensure all manditory variables have been filed in (all found in config.py): 
+- ``nftName``
+- ``save_path_mac`` or ``save_path_windows``
+- ``maxNFTs``
+- ``nftsPerBatch``
+- ``renderBatch``
+
+2. Run main.py in Blender with ``enableExporter`` set to ``False``. This will generate the NFTRecord.json and Batch#.json files. 
+
+3. Set ``modelFileFormat`` to the 3D Model file format you wish to export in config.py. 
+
+4. Set ``enableModelsBlender`` to ``True`` in config.py.
+
+5. Set ``enableExporter`` to ``True`` in config.py.
+
+6. Run main.py in the Blender Scripting Tab. This will now generate 3D Models.  
+
+<img width="605" alt="Screen Shot 2021-11-23 at 8 12 10 PM" src="https://user-images.githubusercontent.com/82110564/143153297-b90d9e16-69b7-4b44-b63b-20869f155f32.png">
+
+## Summary: The order to run main.py to Generate 3D Models: 
+
+run the scripts in the following order:
+1. main.py - With ``enableExporter`` set to ``False`` in config.py: Generates the data for your NFT collection. 
+2. main.py - With ``enableExporter`` and ``enableModelsBlender`` set to ``True`` in config.py: Exports 3D models.
+
+# Generating 3D Models with external 3D Models
 
 This youtube tutorial goes over the basic setup discussed in this section: https://www.youtube.com/watch?v=NonORFpVhLw (This video is out of date but may be of use)
 
@@ -326,6 +357,6 @@ I garuntee this will eventually be an add on to Blender and not just a script yo
 
 Nothing in this repository or its documentation is financial advice. If you create an NFT project or collection with Blend_My_NFTs, you do so at your own personal and financial risk. We are only providing a means of acomplishing a goal, not investment or financial information about that goal. Do your own research and come to your own conclusions before spending money on NFTs or any asset for that matter. We are not liable for any finacial losses you may encure while using this software. Any discussion about finances and cryptocurrencies in this repository or its documentation are done with the intent to educate and provide examples to help our users understand concepts relating to Blend_My_NFTs and This Cozy Place. 
 
-The creators of This Cozy Place will never, under any cricumstance, ask for your crypto wallet(s) secret phrase or private keys. If you come across anyone who is impersonating the founding members of This Cozy Place, please report it immediately to the admins on our discord channel and we will take appropriate action and warn our community of the behaviour. 
+The members of This Cozy Studio will never, under any cricumstance, ask for your crypto wallet(s) secret phrase or private keys. If you come across anyone who is impersonating the founding members of This Cozy Place, please report it immediately to the admins on our discord channel and we will take appropriate action and warn our community of the behaviour. If this takes place outside of our community boundries then report the user to the appropriate authorities. 
 
 This software is provided for free and is open source. We are not liable for any felones you may commit using this software, and we staunchly appose the malicious use of this software that in any way breaks any applicable law in your loction of residence. 
