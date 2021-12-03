@@ -61,7 +61,7 @@ def printImportant():
     print("")
 
     if config.enable3DModels:
-        print("3D Model File Format(objectFormatExport): " + bcolors.WARNING + str(config.objectFormatExport) + bcolors.RESET)
+        print("3D Model File Format(objectFormatExport): " + bcolors.WARNING + str(config.modelFileFormat) + bcolors.RESET)
 
     print("Generate Colours(enableGeneration): " + bcolors.WARNING + str(config.enableGeneration) + bcolors.RESET)
     print("")

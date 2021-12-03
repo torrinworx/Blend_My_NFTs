@@ -169,20 +169,20 @@ def render_and_save_NFTs():
             for obj in bpy.data.collections['Script_Ignore'].all_objects:
                 obj.select_set(True)
 
-            if config.objectFormatExport == 'glb':
+            if config.modelFileFormat == 'glb':
                 bpy.ops.export_scene.gltf(filepath=modelPath,
                                           check_existing=True,
                                           export_format='GLB',
                                           use_selection=True)
-            elif config.objectFormatExport == 'fbx':
+            elif config.modelFileFormat == 'fbx':
                 bpy.ops.export_scene.fbx(filepath=modelPath,
                                          check_existing=True,
                                          use_selection=True)
-            elif config.objectFormatExport == 'obj':
+            elif config.modelFileFormat == 'obj':
                 bpy.ops.export_scene.obj(filepath=modelPath,
                                          check_existing=True,
                                          use_selection=True)
-            elif config.objectFormatExport == 'x3d':
+            elif config.modelFileFormat == 'x3d':
                 bpy.ops.export_scene.x3d(filepath=modelPath,
                                          check_existing=True,
                                          use_selection=True)

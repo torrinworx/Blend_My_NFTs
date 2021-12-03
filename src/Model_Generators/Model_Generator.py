@@ -131,22 +131,22 @@ def generate3DModels():
             elif fileExtension == ".x3d":
                 bpy.ops.import_scene.obj(filepath=path2)
 
-        if config.objectFormatExport == 'glb':
+        if config.modelFileFormat == 'glb':
             bpy.ops.export_scene.gltf(filepath=config.model_save_path + config.slash + config.nftName + str(count),
                                       check_existing=True, export_format='GLB')
-        elif config.objectFormatExport == 'fbx':
+        elif config.modelFileFormat == 'fbx':
             bpy.ops.export_scene.fbx(filepath=config.model_save_path + config.slash + config.nftName + str(count),
                                      check_existing=True)
-        elif config.objectFormatExport == 'obj':
+        elif config.modelFileFormat == 'obj':
             bpy.ops.export_scene.obj(filepath=config.model_save_path + config.slash + config.nftName + str(count),
                                      check_existing=True)
-        elif config.objectFormatExport == 'x3d':
+        elif config.modelFileFormat == 'x3d':
             bpy.ops.export_scene.x3d(filepath=config.model_save_path + config.slash + config.nftName + str(count),
                                      check_existing=True)
         deleteAllObjects()
         count += 1
 
-    print("Generated ." + str(config.objectFormatExport) +" files in %.4f seconds" % (time.time() - time_start))
+    print("Generated ." + str(config.modelFileFormat) + " files in %.4f seconds" % (time.time() - time_start))
 
 if __name__ == '__main__':
     generate3DModels()

@@ -20,7 +20,7 @@ animationFileFormat = ''  # Dictate the animations extension when Blender render
 # Visit https://docs.blender.org/api/current/bpy.types.Image.html#bpy.types.Image.file_format
 # for a complete list of file formats supported by Blender. (These are the Blender only supported animation formats)
 
-objectFormatExport = ''  # The file format of the objects you would like to export
+modelFileFormat = ''  # The file format of the objects you would like to export
 # Type the exact name provided below in the '' above:
 # fbx - The .FBX file format
 # glb - The .glb file format
@@ -136,7 +136,7 @@ model_save_path = save_path + slash + "3D_Model_Output"  # The output path for 3
 model_Script_Ignore_Path = modelAssetPath + slash + "Script_Ignore_Folder"  # The path to the Script_Ignore_Folder for 3D models
 
 # error handling #
-if objectFormatExport not in ['fbx', 'glb', 'obj', 'x3d'] and enable3DModels:
+if modelFileFormat not in ['fbx', 'glb', 'obj', 'x3d'] and enable3DModels:
     raise ValueError("Output format in `objectFormatExport` can only be 'fbx', 'glb', 'obj', 'x3d'.")
 
 # Tests and Previews:
