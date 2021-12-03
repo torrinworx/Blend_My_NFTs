@@ -14,10 +14,10 @@ from src import config
 importlib.reload(config)
 
 
-def checkIfBatchDup(i):
-    file_name = os.path.join(config.batch_save_path, i)
+def checkIfBatchDup():
+    file_name = os.path.join(config.save_path, "NFTRecord.json")
     DataDictionary = json.load(open(file_name))
-    DNAList = DataDictionary["BatchDNAList"]
+    DNAList = DataDictionary["DNAList"]
 
     def countDups(thelist):
         numOfDupDNA = 0
@@ -28,17 +28,11 @@ def checkIfBatchDup(i):
                 numOfDupDNA += 1
             seen.add(x)
         return numOfDupDNA
-
     duplicates = countDups(DNAList)
     return duplicates
 
 def checkDups():
-    listBatchFolder = os.listdir(config.batch_save_path)
-    removeList = [".gitignore", ".DS_Store", "Script_Ignore_Folder"]
-    batchList = [x for x in listBatchFolder if (x not in removeList)]
-
-    for i in batchList:
-        print( i + " has " + str(checkIfBatchDup(i)) + " duplicate NFT DNA.")
+    print("NFTRecord.json contains " + str(checkIfBatchDup()) + " duplicate NFT DNA.")
 
 if __name__ == '__main__':
     checkDups()
