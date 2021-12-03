@@ -60,11 +60,6 @@ def returnMetaData(metaDataType, metaDataDict, name, a, dnaDictionary):
                                       "category": "",
                                       "creators": [{"address": "", "share": None}]
                                       }
-        metaDataDict["category"] = ""
-        metaDataDict["creators"] = [{
-            "address": "",
-            "share": None
-        }]
 
     elif metaDataType == "ADA":
         metaDataDict["721"] = {
