@@ -224,17 +224,49 @@ Steps to Generate Images:
 
 <img width="933" alt="Screen Shot 2021-11-23 at 8 34 47 PM" src="https://user-images.githubusercontent.com/82110564/143155192-c6cbf660-3b3b-44c8-8d6b-8ac413d34783.png">
 
-3. Run main.py in Blender Scripting just like before in the Blender Scripting Tab
+3. Run main.py in Blender Scripting just like before in the Blender Scripting Tab.
 
 <img width="605" alt="Screen Shot 2021-11-23 at 8 12 10 PM" src="https://user-images.githubusercontent.com/82110564/143153297-b90d9e16-69b7-4b44-b63b-20869f155f32.png">
 
 
-## Summery: The order to run main.py
+## Summery: The order to run main.py to Generate Images
 
 Run the scripts in the following order: 
-1. main.py - With ``renderImage`` set to ``False`` in the config.py file (by defeault): Generates the data for your NFT collection
-3. main.py - With ``renderImage`` set to ``True`` in the config.py file: Renders images in a batch specified by ``renderBatch``
+1. main.py - With ``renderImage`` set to ``False`` in the config.py: Generates the data for your NFT collection.
+2. main.py - With ``renderImage`` set to ``True`` in the config.py: Renders images in a batch specified by ``renderBatch``.
 
+
+## Running main.py - Generating Animations
+
+Steps to Generate Animations: 
+1. Ensure all manditory variables have been filed in: 
+- ``nftName``
+- ``save_path_mac`` or ``save_path_windows``
+- ``maxNFTs``
+- ``nftsPerBatch``
+- ``renderBatch``
+(Found in config.py)
+
+2. Set ``animationFileFormat`` to the animation file format you wish to export in config.py. 
+
+<img width="984" alt="Screen Shot 2021-12-03 at 5 14 01 PM" src="https://user-images.githubusercontent.com/82110564/144679924-e2d62e2b-48a3-4303-89f3-c6a2fae06a00.png">
+
+3. Run main.py in Blender with ``enableExporter`` set to ``False``. This will generate the NFTRecord.json and Batch#.json files. 
+
+4. Set ``enableExporter`` to ``True`` in config.py.
+
+5. Set ``enableAnimations`` to ``True`` in config.py.
+
+6. Run main.py in Blender Scripting just like before in the Blender Scripting Tab.
+
+<img width="605" alt="Screen Shot 2021-11-23 at 8 12 10 PM" src="https://user-images.githubusercontent.com/82110564/143153297-b90d9e16-69b7-4b44-b63b-20869f155f32.png">
+
+
+## Summery: The order to run main.py to Generate Animations
+
+Run the scripts in the following order: 
+1. main.py - With ``enableExporter`` set to ``False`` in config.py: Generates the data for your NFT collection. 
+2. main.py - With ``enableExporter`` and ``enableAnimations`` set to ``True`` in config.py: Renders and compiles animations.
 
 # Generating 3D Models with Blend_My_NFTs with external models
 
