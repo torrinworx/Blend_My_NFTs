@@ -106,8 +106,15 @@ def render_and_save_NFTs():
         time_start_2 = time.time()
 
         batchFolder = os.path.join(config.images_save_path, "Batch" + str(config.renderBatch))
+
         imagePath = os.path.join(batchFolder, "Images", "Image_" + name)
-        modelPath = os.path.join(batchFolder, "Models")
+        animationPath = os.path.join(batchFolder, "Animations", "Animation_" + name)
+        modelPath = os.path.join(batchFolder, "Models", "Model_" + name)
+
+        imageFolder = os.path.join(batchFolder, "Images")
+        animationFolder = os.path.join(batchFolder, "Animations")
+        modelFolder = os.path.join(batchFolder, "Models")
+
         metaDataFolder = os.path.join(batchFolder, "NFT_metaData")
 
         if config.enableGeneration:
@@ -134,14 +141,24 @@ def render_and_save_NFTs():
         print("Generating")
 
         if config.enableImages:
+            if not os.path.exists(imageFolder):
+                os.makedirs(imageFolder)
+
             bpy.context.scene.render.filepath = imagePath
             bpy.context.scene.render.image_settings.file_format = config.imageFileFormat
             bpy.ops.render.render(write_still=True)
 
-        if config.enableModelsBlender:
+        if config.enableAnimations:
+            if not os.path.exists(animationFolder):
+                os.makedirs(animationFolder)
 
-            if not os.path.exists(modelPath):
-                os.mkdir(modelPath)
+            bpy.context.scene.render.filepath = animationPath
+            bpy.context.scene.render.image_settings.file_format = config.animationFileFormat
+            bpy.ops.render.render(animation=True)
+
+        if config.enableModelsBlender:
+            if not os.path.exists(modelFolder):
+                os.makedirs(modelFolder)
 
             for i in dnaDictionary:
                 coll = dnaDictionary[i]
@@ -153,30 +170,30 @@ def render_and_save_NFTs():
                 obj.select_set(True)
 
             if config.objectFormatExport == 'glb':
-                bpy.ops.export_scene.gltf(filepath=os.path.join(modelPath, "Model_" + name),
+                bpy.ops.export_scene.gltf(filepath=modelPath,
                                           check_existing=True,
                                           export_format='GLB',
                                           use_selection=True)
             elif config.objectFormatExport == 'fbx':
-                bpy.ops.export_scene.fbx(filepath=os.path.join(modelPath, "Model_" + name),
+                bpy.ops.export_scene.fbx(filepath=modelPath,
                                          check_existing=True,
                                          use_selection=True)
             elif config.objectFormatExport == 'obj':
-                bpy.ops.export_scene.obj(filepath=os.path.join(modelPath, "Model_" + name),
+                bpy.ops.export_scene.obj(filepath=modelPath,
                                          check_existing=True,
                                          use_selection=True)
             elif config.objectFormatExport == 'x3d':
-                bpy.ops.export_scene.x3d(filepath=os.path.join(modelPath, "Model_" + name),
+                bpy.ops.export_scene.x3d(filepath=modelPath,
                                          check_existing=True,
                                          use_selection=True)
 
         if config.enableMetaData:
-            metaData.returnMetaData(config.metaDataType, metaDataDict, name, a, dnaDictionary)
-
             if not os.path.exists(metaDataFolder):
-                os.mkdir(metaDataFolder)
+                os.makedirs(metaDataFolder)
 
+            metaData.returnMetaData(config.metaDataType, metaDataDict, name, a, dnaDictionary)
             jsonMetaData = json.dumps(metaDataDict, indent=1, ensure_ascii=True)
+
             with open(os.path.join(metaDataFolder, name + "_Data.json"), 'w') as outfile:
                 outfile.write(jsonMetaData + '\n')
 
