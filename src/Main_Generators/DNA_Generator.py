@@ -92,7 +92,7 @@ def returnData():
       else:
          listAllCollections.append(i.name)
    listAllCollections.remove(scriptIgnore.name)
-   listAllCollections.remove("Master Collection")
+   listAllCollections.remove("Scene Collection")
 
    def allScriptIgnore(collection):
       '''
