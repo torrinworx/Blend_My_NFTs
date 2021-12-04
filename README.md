@@ -6,18 +6,17 @@
 
 ## Description
 
-Blend_My_NFTs is a work-in-progress Blender add on that can automatically generate thousands of images or 3D objects to help you launch your NFT colleciton! It is currently in development to launch the NFT collection This Cozy Place that will launch in November with a total of 10000 unique NFTs all rendered in Blender via Blend_My_NFTs. If you would like to learn more about Blend_My_NFTs or This Cozy Place, please visit our discord server: https://discord.gg/UpZt5Un57t 
+Blend_My_NFTs is a work-in-progress Blender add-on that can automatically generate thousands of images, animations, or 3D objects to help you launch your NFT colleciton! Blend_My_NFTs is beign created by This Cozy Studio to launch an NFT collection called This Cozy Place. If you would like to learn more about Blend_My_NFTs or This Cozy Place, please visit our discord server: https://discord.gg/UpZt5Un57t 
 
 ![NFT_Test_Render_17](https://user-images.githubusercontent.com/82110564/142952463-5764566e-1402-40a4-9cca-a9c57105f033.png)
 *Test sample of the NFT collection This Cozy Place rendered in Blender 2.93 using Blend_My_NFTs add on.
 
 ## Features 
-- Render and export both images and 3D models at the same time or individually
+- Generate and export Images, Animations, and 3D Models at the same time or individually.
 - Generate all possible combinations of your NFTs! The only limit is your imagination, and your processing power...
-- Support for .x3d, .fbx, .obj, and .glb files 
-- Raritize and weight your attributes (Now available, still an experimental feature)
-- Preview data about your NFT collection; Time to render and the possible combinations
-- Inbuilt metadata template generation for Solana, Cardano, and Ethereum!
+- Raritize and weight your attributes.
+- Preview data about your NFT collection; Time to render and the possible combinations.
+- Inbuilt metadata template generation for Solana, Cardano, and Ethereum.
 
 There are always new features dropping, join our discord to stay tuned for updates!
 
@@ -121,6 +120,33 @@ Description of customisable variables to generate images:
   
     Visit https://docs.blender.org/api/current/bpy.types.Image.html#bpy.types.Image.file_format for a complete list of file formats supported by Blender. Enter the     file extension exactly as specified in the Blender API documentation.
 
+``animationFileFormat`` - A string representing the animations file format that Blend_My_NFTs will export generated animations as: (REQUIRED)
+
+    Type the exact name provided below in the '' above:
+    
+    AVI_JPEG - Exports the .avi jpeg format
+    
+    AVI_RAW - Exports the .avi raw format
+    
+    FFMPEG - Exports the .ffmpeg format
+    
+    Visit https://docs.blender.org/api/current/bpy.types.Image.html#bpy.types.Image.file_format for a complete list of file formats supported by Blender. (These       are the Blender only supported animation formats).
+
+``modelFileFormat`` - A string representing the 3D Models file format that Blend_My_NFTs will export generated 3D Modles as: (REQUIRED)
+
+    Type the exact name provided below in the '' above:
+    
+    fbx - The .FBX file format
+    
+    glb - The .glb file format
+    
+    obj - The .obj file format *Exports both a .obj and a .mtl files for the same generated object
+    
+    x3d - The .x3d file format
+    
+    Visit https://docs.blender.org/api/current/bpy.ops.export_scene.html?highlight=export_scene#module-bpy.ops.export_scene
+    for a complete list of object formats supported by Blender.
+
 
 ``save_path_mac`` - A string representing the save path for Blend_My_NFTs if you are on MacOS: (REQUIRED - if on MacOS)
 
@@ -130,6 +156,7 @@ Description of customisable variables to generate images:
 ``save_path_windows`` - A string representing the save path for Blend_My_NFTs if you are on Windows: (REQUIRED - if on Windows)
 
     Example windows: C:\Users\Path\to\Blend_My_NFTs
+
 
 ``maxNFTs`` - A positive integer representeing the number of NFTs to generate. (REQUIRED)
 
@@ -143,6 +170,8 @@ Description of customisable variables to generate images:
 ``enableExporter`` - A Boolean value, when set to True, will export Images and or 3D models when main.py is run in Blender. (Turned on after NFTRecord.json and appropriate batches are generated with main.py)
 
 ``enableImages`` - A boolean value, when set to True with ``enableExporter = True`` will export images. 
+
+``enableAnimations`` - A boolean value, when set to True with ``enableExporter = True`` will export animations. 
 
 ``enableModelsBlender`` - A boolean value, when set to True with ``enableExporter = True`` will export 3D models. 
 
@@ -176,7 +205,6 @@ Before you can render iamges you need to generate a list of NFT DNA then split i
 
 ``NFTRecord.json`` - This file contains a list of all NFT DNA, this list is limited by ``nftMax`` in config.py. 
 
-
 ``Batch#.json`` - These files contain peices of NFTRecord.json selected at random and sent to a batch containing ``nftsPerBatch`` number of DNA. 
 
 Before running main.py, ensure these variables are set properly or else the script will not work:  
@@ -186,7 +214,6 @@ Before running main.py, ensure these variables are set properly or else the scri
 - ``maxNFTs``
 - ``nftsPerBatch``
 - ``enableExporter = False``
-
 
 Steps to generate NFTRecord and Batches:
 
@@ -207,7 +234,6 @@ Steps to generate NFTRecord and Batches:
 <img width="605" alt="Screen Shot 2021-11-23 at 8 12 10 PM" src="https://user-images.githubusercontent.com/82110564/143153297-b90d9e16-69b7-4b44-b63b-20869f155f32.png">
 
 If you correctly formated your .blend file, you will now have two files; an NFTRecord.json, and a number of Batch#.json files located in the ``Batch_Json_files`` folder. 
-
 
 ## Running main.py - Generating Images
 
@@ -240,7 +266,6 @@ Run the scripts in the following order:
 1. main.py - With ``renderImage`` set to ``False`` in the config.py: Generates the data for your NFT collection.
 2. main.py - With ``renderImage`` set to ``True`` in the config.py: Renders images in a batch specified by ``renderBatch``.
 
-
 ## Running main.py - Generating Animations
 
 Steps to Generate Animations: 
@@ -270,7 +295,7 @@ Run the scripts in the following order:
 1. main.py - With ``enableExporter`` set to ``False`` in config.py: Generates the data for your NFT collection. 
 2. main.py - With ``enableExporter`` and ``enableAnimations`` set to ``True`` in config.py: Renders and compiles animations.
 
-## Running main.py - Generating 3D models from a .blend file
+## Running main.py - Generating 3D Models from a .blend file
 
 Steps to Generate 3D models: 
 
@@ -328,7 +353,6 @@ Similarly to the Image Generator, there is a specific way to format 3d model rep
 7. Run main.py in the Blender Scripting Tab
 
 The generated 3D models will appear in the folder 3D_Model_Output
-
 
 
 ## Helpful Links
