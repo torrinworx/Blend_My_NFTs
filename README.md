@@ -9,7 +9,7 @@
 Blend_My_NFTs is a work-in-progress Blender add-on that can automatically generate thousands of images, animations, or 3D objects to help you launch your NFT colleciton! Blend_My_NFTs is beign created by This Cozy Studio to launch an NFT collection called This Cozy Place. If you would like to learn more about Blend_My_NFTs or This Cozy Place, please visit our discord server: https://discord.gg/UpZt5Un57t 
 
 ![NFT_Test_Render_17](https://user-images.githubusercontent.com/82110564/142952463-5764566e-1402-40a4-9cca-a9c57105f033.png)
-*Test sample of the NFT collection This Cozy Place rendered in Blender 2.93 using Blend_My_NFTs add on.
+*Test sample of the NFT collection This Cozy Place rendered in Blender 2.93 using Blend_My_NFTs (prior to commit 223).
 
 ## Features 
 - Generate and export Images, Animations, and 3D Models at the same time or individually.
@@ -36,7 +36,7 @@ Reddit: https://www.reddit.com/r/ThisCozyPlace/
 
 # Blend_My_NFTs Tutorial Guide
 
-Blend_My_NFTs works with Blender 2.93.5 on Windows 10 or macOS BigSure 11.6. 
+Blend_My_NFTs works with Blender 3.0.0 on Windows 10 or macOS BigSure 11.6. 
 
 The software in its current state is not farily user friendly but with a really basic understanding of programing you can opporate it easily. You can learn the programing skillz needed in ten minutes! :)
 
@@ -367,7 +367,7 @@ Note - You might want to install the Icon Viewer add-on for Blender: https://doc
 
 ## Disclaimers
 
-Blend_My_NFTs works with Windows 10 or macOS BigSure 11.6 on Blender 2.93.5. These are the operating systems I have tested the scripts on, I do not garuntee they will work on other operating systems. I do not garuntee this software will work with your setup. There are many variables and factors that go into running the software provided, it differs from system to system, and from blend file to blend file.
+Blend_My_NFTs works with Windows 10 or macOS BigSure 11.6 on Blender 3.0.0. These are the operating systems I have tested the scripts on, I do not garuntee they will work on other operating systems. I do not garuntee this software will work with your setup. There are many variables and factors that go into running the software provided, it differs from system to system, and from blend file to blend file.
 
 I encourage you to do some trouble shooting, read the Blender API documentation, read this tutorial, review the scripts, and do your own research before reaching out for help on our discord. If you are really stuck and are out of options I am available on our disord channel above for consulting. However! I am not a toutor. Although I enjoy teaching people, I simply do not have the time to work, build this project, teach people Blender/Python, and live my life. So please respect my time, I'd love to help! 
 
