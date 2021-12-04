@@ -16,7 +16,8 @@ animationFileFormat = ''  # Dictate the animations extension when Blender render
 # Type the exact name provided below in the '' above:
 # AVI_JPEG - Exports the .avi jpeg format
 # AVI_RAW - Exports the .avi raw format
-# FFMPEG - Exports the .ffmpeg format
+# FFMPEG - Encodes the video using ffmpeg. Set your encoding settings in the Output Properties in Blender. Default is
+# medium-quality .mp4 video.
 # Visit https://docs.blender.org/api/current/bpy.types.Image.html#bpy.types.Image.file_format
 # for a complete list of file formats supported by Blender. (These are the Blender only supported animation formats)
 
