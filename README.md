@@ -297,6 +297,8 @@ Run the scripts in the following order:
 
 ## Running main.py - Generating 3D Models from a .blend file
 
+Youtube tutorial for generating 3D models: https://www.youtube.com/watch?v=rRs0lN5huDk&t=1s
+
 Steps to Generate 3D models: 
 
 1. Ensure all manditory variables have been filed in (all found in config.py): 
