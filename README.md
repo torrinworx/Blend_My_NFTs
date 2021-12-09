@@ -36,7 +36,7 @@ Reddit: https://www.reddit.com/r/ThisCozyPlace/
 
 # Blend_My_NFTs Tutorial Guide
 
-Blend_My_NFTs, this readme tutorial material, the youtube tutorials, and the live stream Q/As and tutorials are all provided for free by me for anyone to access/use any way they like. I only ask in return that you credit this software if you use Blend_My_NFTs to launch an NFT collection and kindly share what I have built here. A direct link to the Blend_My_NFTs Github page on your collection website would sefice. I ask you of this only to share this tool and what it can do as I feel there are many out there that would benefit from it, my only goal is to help those that need it. It brings warmth to my heart that so many people use what I have built. Thank you.
+Blend_My_NFTs, this readme tutorial material, the youtube tutorials, and the live stream Q/As and tutorials are all provided for free by me for anyone to access/use any way they like. I only ask in return that you credit this software if you use Blend_My_NFTs to launch an NFT collection and kindly share what I have built here. A direct link to the Blend_My_NFTs Github page on your collection website (or equivelant) would sefice. I ask you of this only to share this tool and what it can do as I feel there are many out there that would benefit from it, my only goal is to help those that need it. It brings warmth to my heart that so many people use what I have built. Thank you.
 
 The software in its current state is not farily user friendly but with a really basic understanding of programing you can opporate it easily. You can learn the programing skillz needed in ten minutes! :)
 
