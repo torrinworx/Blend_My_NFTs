@@ -1,3 +1,4 @@
+# Purpose:
 # This file allows you to test the time it takes to render an image, then calculate how long it will take to render all
 # images specified in maxNFTs in config.py.
 

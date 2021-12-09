@@ -1,5 +1,6 @@
 # Purpose:
-#
+# This file goes through all batches, renames, and sorts all nft files to a Complete_Collection folder in Blend_My_NFTs
+
 import bpy
 import os
 import re
@@ -19,10 +20,6 @@ from src import config
 importlib.reload(config)
 
 def getNFType():
-    batchListDirty = os.listdir(config.nft_save_path)
-    removeList = [".gitignore", ".DS_Store"]
-    batchList = [x for x in batchListDirty if (x not in removeList)]
-
     images = False
     animations = False
     models = False
@@ -40,6 +37,10 @@ def getNFType():
         metaData = True
 
     return images, animations, models, metaData
+
+def renameMetaData():
+    # refactor name in all meta data files to include new order numbers
+    return
 
 def reformatBatches():
     images, animations, models, metaData = getNFType()
