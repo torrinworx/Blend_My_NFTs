@@ -40,7 +40,7 @@ Blend_My_NFTs, this readme tutorial material, the youtube tutorials, and the liv
 
 The software in its current state is not farily user friendly but with a really basic understanding of programing you can opporate it easily. You can learn the programing skillz needed in ten minutes! :)
 
-Blend_My_NFTs works with Blender 3.0.0 on Windows 10 or macOS BigSure 11.6. 
+Blend_My_NFTs works with Blender 3.0.0 on Windows 10 or macOS Big Sur 11.6. 
 
 ## Youtube Tutorial Series
 
