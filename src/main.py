@@ -11,7 +11,7 @@ sys.path.append(dir)
 sys.modules.values()
 
 from src import config
-from src.Utility_Scripts import DuplicateChecker, RenderTest, Preview
+from src.Utility_Scripts import DuplicateChecker, RenderTest, Preview, BatchRefactorer
 from src.Model_Generators import Model_Generator
 from src.Main_Generators import Batch_Sorter, DNA_Generator, Exporter
 
@@ -23,9 +23,10 @@ importlib.reload(DNA_Generator)
 importlib.reload(Preview)
 importlib.reload(RenderTest)
 importlib.reload(Exporter)
+importlib.reload(BatchRefactorer)
 
 
-if not config.enableExporter and not config.runPreview:
+if not config.enableExporter and not config.runPreview and not config.refactorBatchOrder:
     if config.enable3DModels:
         Model_Generator.generate3DModels()
 
@@ -35,8 +36,11 @@ if not config.enableExporter and not config.runPreview:
         if config.checkDups:
             DuplicateChecker.checkDups()
 
-if config.enableExporter and not config.runPreview:
+if config.enableExporter and not config.runPreview and not config.refactorBatchOrder:
     Exporter.render_and_save_NFTs()
 
 if config.runPreview:
     Preview.printImportant()
+
+if config.refactorBatchOrder:
+    BatchRefactorer.reformatBatches()
