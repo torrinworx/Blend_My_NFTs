@@ -55,8 +55,6 @@ def render_and_save_NFTs():
 
     x = 1
     for a in BatchDNAList:
-        metaDataDict = {}
-
         for i in hierarchy:
             for j in hierarchy[i]:
                 if config.enableGeneration:
@@ -190,7 +188,12 @@ def render_and_save_NFTs():
             if not os.path.exists(metaDataFolder):
                 os.makedirs(metaDataFolder)
 
-            metaData.returnMetaData(config.metaDataType, metaDataDict, name, a, dnaDictionary)
+            metaDataDict = {}
+            metaDataDict["name"] = name
+            metaDataDict["description"] = config.metaDataDescription
+            metaDataDict["NFT_DNA"] = a
+            metaDataDict["NFT_Variants"] = dnaDictionary
+
             jsonMetaData = json.dumps(metaDataDict, indent=1, ensure_ascii=True)
 
             with open(os.path.join(metaDataFolder, "Data_" + name + ".json"), 'w') as outfile:

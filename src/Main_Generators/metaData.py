@@ -21,18 +21,12 @@ from src import config
 importlib.reload(config)
 
 
-def returnMetaData(metaDataType, metaDataDict, name, a, dnaDictionary):
+def returnMetaData(metaDataDict, name, a, dnaDictionary):
     '''
     This function exports formatted meta data based on the metaDataType variable in config.py
     '''
 
-    if metaDataType == "DEFAULT":
-        metaDataDict["name"] = name
-        metaDataDict["description"] = config.metaDataDescription
-        metaDataDict["NFT_DNA"] = a
-        metaDataDict["NFT_Variants"] = dnaDictionary
-
-    elif metaDataType == "SOL":
+    if config.solanaMetaData:
         metaDataDict["name"] = config.nftName
         metaDataDict["symbol"] = ""
         metaDataDict["description"] = config.metaDataDescription
@@ -61,7 +55,7 @@ def returnMetaData(metaDataType, metaDataDict, name, a, dnaDictionary):
                                       "creators": [{"address": "", "share": None}]
                                       }
 
-    elif metaDataType == "ADA":
+    if config.cardanoMetaData:
         metaDataDict["721"] = {
             "<policy_id>": {
                 "<asset_name>": {
@@ -81,7 +75,7 @@ def returnMetaData(metaDataType, metaDataDict, name, a, dnaDictionary):
             "version": "1.0"
         }
 
-    elif metaDataType == "ERC721":
+    if config.erc721MetaData:
         metaDataDict["title"] = name
         metaDataDict["type"] = ""
         metaDataDict["properties"] = {"NFT_Variants": dnaDictionary,

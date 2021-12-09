@@ -39,7 +39,7 @@ save_path_windows = r''
 
 maxNFTs = 20  # The maximum number of NFTs you want to generate.
 nftsPerBatch = 5  # Number of NFTs per batch
-renderBatch = 4  # The batch number to render in Exporter.py
+renderBatch = 1  # The batch number to render in Exporter.py
 
 # Set to True to generate images or 3D models depending on your settings below when main.py is run in Blender. Only works
 # if you have already generated NFTRecord.json and all batches.
@@ -93,11 +93,12 @@ if generationType == 'material':  # Do not change this line.
 # Meta Data generation
 enableMetaData = True  # Set to True to turn on meta data, set to False to turn off meta data generation.
 
-metaDataType = 'ADA'  # Select the format of the generated Meta Data for your NFTs blockchain.
-# DEFAULT - The default setting; exports variants, dna, number, name, and rarity of each NFT to a dictionary (Not a blockchain standard)
-# ADA - Cardano - Format Source: https://cips.cardano.org/cips/cip25/
-# SOL - Solana - Format Source: https://docs.metaplex.com/nft-standard
-# ERC721 - Ethereum ERC721 - Format Source: https://eips.ethereum.org/EIPS/eip-721
+metaDataType = 'ADA'
+# Select the format of the generated Meta Data for your NFTs blockchain.
+defaultMetaData = True  # The default setting; exports variants, dna, number, name, and rarity of each NFT to a dictionary (Not a blockchain standard)
+cardanoMetaData = False  # Cardano - Format Source: https://cips.cardano.org/cips/cip25/
+solanaMetaData = False  # Solana - Format Source: https://docs.metaplex.com/nft-standard
+erc721MetaData = False  # Ethereum ERC721 - Format Source: https://eips.ethereum.org/EIPS/eip-721
 
 # NOTE: This is just the information Blend_My_NFTs can provide, you will have to add policy ID, URI information, etc
 # yourself when you upload and mint your NFT collection.
@@ -154,7 +155,7 @@ maxNFTsTest = 5  # Increase to get a more accurate reading of the render time. T
 checkDups = False
 
 # EXPERIMENTAL FEATURE:
-refactorBatchOrder = True  # When set to True, sorts, renames, and moves all NFTs files in all batches in NFT_Output
+refactorBatchOrder = False  # When set to True, sorts, renames, and moves all NFTs files in all batches in NFT_Output
 # folder to the Complete_Collection folder.
 # After you generate all batches move them all to one computer and place them in the NFT_Output folder of Blend_My_NFTs.
 # Run main.py with refactorBatchOrder set to True and all NFT files will be renamed and sorted into a folder called Complete_Collection.
