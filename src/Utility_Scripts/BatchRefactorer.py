@@ -4,6 +4,7 @@ import bpy
 import os
 import re
 import sys
+import copy
 import time
 import json
 import importlib
@@ -42,31 +43,6 @@ def getNFType():
 def reformatBatches():
     images, animations, models, metaData = getNFType()
 
-    batchListDirty = os.listdir(config.nft_save_path)
-    removeList = [".gitignore", ".DS_Store", "Script_Ignore_Folder"]
-    batchList = [x for x in batchListDirty if (x not in removeList)]
-
-    count = 1
-    for i in batchList:
-        if images:
-            imagesDir = os.path.join(config.nft_save_path, i, "Images")
-            imagesList = sorted(os.listdir(imagesDir))
-
-            for i in imagesList:
-                i = i.removeprefix("Image_")
-                i = os.path.splitext(i)[0]
-                print(i)
-
-
-                #os.rename(os.path.join(imagesDir,i),)
-
-        count += 1
-
-        '''
-        if animations:
-        if models:
-        if metaData:'''
-
     completeCollPath = os.path.join(config.nft_save_path, "Complete_Collection")
     completeImagePath = os.path.join(completeCollPath, "Images")
     completeAnimationsPath = os.path.join(completeCollPath, "Animations")
@@ -84,7 +60,32 @@ def reformatBatches():
     if metaData:
         os.mkdir(completeMetaDataPath)
 
+    batchListDirty = os.listdir(config.nft_save_path)
+    removeList = [".gitignore", ".DS_Store", "Script_Ignore_Folder"]
+    batchList = [x for x in batchListDirty if (x not in removeList)]
 
+    count = 1
+    for i in batchList:
+        if images:
+            imagesDir = os.path.join(config.nft_save_path, i, "Images")
+            imagesList = sorted(os.listdir(imagesDir))
+            print(imagesList)
+
+            for j in imagesList:
+                k = copy.deepcopy(j.removeprefix("Image_"))
+                extension = os.path.splitext(k)[1]
+                nameDirty = os.path.splitext(k)[0]
+
+                name = nameDirty.split("_")[0]
+
+                os.rename(os.path.join(imagesDir, j), os.path.join(completeImagePath, "Image_" + name + "_" + str(count) + extension))
+
+        count += 1
+
+        '''
+        if animations:
+        if models:
+        if metaData:'''
 
 
 if __name__ == '__main__':

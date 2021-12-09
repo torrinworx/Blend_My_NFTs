@@ -193,7 +193,7 @@ def render_and_save_NFTs():
             metaData.returnMetaData(config.metaDataType, metaDataDict, name, a, dnaDictionary)
             jsonMetaData = json.dumps(metaDataDict, indent=1, ensure_ascii=True)
 
-            with open(os.path.join(metaDataFolder, name + "_Data.json"), 'w') as outfile:
+            with open(os.path.join(metaDataFolder, "Data_" + name + ".json"), 'w') as outfile:
                 outfile.write(jsonMetaData + '\n')
 
         print("Completed {} render in ".format(name) + "%.4f seconds" % (time.time() - time_start_2))
