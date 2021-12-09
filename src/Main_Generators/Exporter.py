@@ -107,9 +107,9 @@ def render_and_save_NFTs():
 
         batchFolder = os.path.join(config.nft_save_path, "Batch" + str(config.renderBatch))
 
-        imagePath = os.path.join(batchFolder, "Images", "Image_" + name)
-        animationPath = os.path.join(batchFolder, "Animations", "Animation_" + name)
-        modelPath = os.path.join(batchFolder, "Models", "Model_" + name)
+        imagePath = os.path.join(batchFolder, "Images", name)
+        animationPath = os.path.join(batchFolder, "Animations", name)
+        modelPath = os.path.join(batchFolder, "Models", name)
 
         imageFolder = os.path.join(batchFolder, "Images")
         animationFolder = os.path.join(batchFolder, "Animations")

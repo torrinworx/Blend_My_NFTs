@@ -2,6 +2,7 @@
 *.blend1
 *.json
 
+Complete_Collection
 .idea
 __pycache__
 NFTRecord.json

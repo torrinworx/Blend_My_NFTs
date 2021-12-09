@@ -154,4 +154,9 @@ maxNFTsTest = 5  # Increase to get a more accurate reading of the render time. T
 checkDups = False
 
 # EXPERIMENTAL FEATURE:
-refactorBatchOrder = True
+refactorBatchOrder = True  # When set to True, sorts, renames, and moves all NFTs files in all batches in NFT_Output
+# folder to the Complete_Collection folder.
+# After you generate all batches move them all to one computer and place them in the NFT_Output folder of Blend_My_NFTs.
+# Run main.py with refactorBatchOrder set to True and all NFT files will be renamed and sorted into a folder called Complete_Collection.
+
+
