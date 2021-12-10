@@ -39,7 +39,7 @@ save_path_windows = r''
 
 maxNFTs = 20  # The maximum number of NFTs you want to generate.
 nftsPerBatch = 5  # Number of NFTs per batch
-renderBatch = 1  # The batch number to render in Exporter.py
+renderBatch = 4  # The batch number to render in Exporter.py
 
 # Set to True to generate images or 3D models depending on your settings below when main.py is run in Blender. Only works
 # if you have already generated NFTRecord.json and all batches.
@@ -90,24 +90,6 @@ materialList2 = ['Material2', 'Material2.001', 'Material2.002', 'Material2.003',
 if generationType == 'material':  # Do not change this line.
     colorList = {"Cube_1_33": materialList1, "Sphere_2_0": materialList2}
 
-# Meta Data generation
-enableMetaData = True  # Set to True to turn on meta data, set to False to turn off meta data generation.
-
-metaDataType = 'ADA'
-# Select the format of the generated Meta Data for your NFTs blockchain.
-defaultMetaData = True  # The default setting; exports variants, dna, number, name, and rarity of each NFT to a dictionary (Not a blockchain standard)
-cardanoMetaData = False  # Cardano - Format Source: https://cips.cardano.org/cips/cip25/
-solanaMetaData = False  # Solana - Format Source: https://docs.metaplex.com/nft-standard
-erc721MetaData = False  # Ethereum ERC721 - Format Source: https://eips.ethereum.org/EIPS/eip-721
-
-# NOTE: This is just the information Blend_My_NFTs can provide, you will have to add policy ID, URI information, etc
-# yourself when you upload and mint your NFT collection.
-# DISCLAIMER: These are only templates based on the common standards for the given blockchain, you will have to modify
-# and fill them in with a script of your own when you mint your NFT collection. These metadata templates are only provided
-# for your convenience and are as accurate to the standards above that I could make them.
-
-metaDataDescription = ''  # The description of your NFT that will be inserted into its meta data
-
 enableResetViewport = True  # If True: turns all viewport and render cameras on after Image_Generator is finished operations
 
 # 3D model imports and exports variables:
@@ -151,13 +133,27 @@ runPreview = False
 maxNFTsTest = 5  # Increase to get a more accurate reading of the render time. The number of images generated in the render test.
 
 # Turn this on when you run main.py to generate NFTRecord.json and appropriate batches to confirm there are no duplicate
-# NFT DNA.
+# NFT DNA. Note - This file is provided for transparency, it is impossible for duplicates to be made with the current code in
+# DNA_Generator.py.
 checkDups = False
 
 # EXPERIMENTAL FEATURE:
-refactorBatchOrder = False  # When set to True, sorts, renames, and moves all NFTs files in all batches in NFT_Output
+refactorBatchOrder = True  # When set to True, sorts, renames, and moves all NFTs files in all batches in NFT_Output
 # folder to the Complete_Collection folder.
 # After you generate all batches move them all to one computer and place them in the NFT_Output folder of Blend_My_NFTs.
 # Run main.py with refactorBatchOrder set to True and all NFT files will be renamed and sorted into a folder called Complete_Collection.
 
+# Meta Data Templates - Run after refactorBatchOrder
+# Set the following to True to generate the format of the Meta Data template for your NFTs blockchain. (You can use multiple)
+defaultMetaData = False  # The default setting; exports variants, dna, number, name, and rarity of each NFT to a dictionary (Not a blockchain standard)
+cardanoMetaData = False  # Cardano - Format Source: https://cips.cardano.org/cips/cip25/
+solanaMetaData = True  # Solana - Format Source: https://docs.metaplex.com/nft-standard
+erc721MetaData = False  # Ethereum ERC721 - Format Source: https://eips.ethereum.org/EIPS/eip-721
 
+# NOTE: This is just the information Blend_My_NFTs can provide, you will have to add policy ID, URI information, etc
+# yourself when you upload and mint your NFT collection.
+# DISCLAIMER: These are only templates based on the common standards for the given blockchain, you will have to modify
+# and fill them in with a script of your own when you mint your NFT collection. These metadata templates are only provided
+# for your convenience and are as accurate to the standards above that I could make them.
+
+metaDataDescription = ''  # The description of your NFT that will be inserted into its meta data

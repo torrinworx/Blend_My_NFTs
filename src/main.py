@@ -43,4 +43,4 @@ if config.runPreview:
     Preview.printImportant()
 
 if config.refactorBatchOrder:
-    BatchRefactorer.reformatBatches()
+    BatchRefactorer.reformatNFTCollection()

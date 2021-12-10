@@ -16,8 +16,10 @@ sys.path.append(dir)
 sys.modules.values()
 
 from src import config
+from src.Main_Generators import metaData
 
 importlib.reload(config)
+importlib.reload(metaData)
 
 def getNFType():
     images = False
@@ -33,23 +35,89 @@ def getNFType():
         animations = True
     if "Models" in batchContent:
         models = True
-    if "NFT_metaData" in batchContent:
+    if "BMNFT_metaData" in batchContent:
         metaData = True
 
     return images, animations, models, metaData
 
-def renameMetaData():
-    # refactor name in all meta data files to include new order numbers
+
+def getMetaDataDirty(completeMetaDataPath, i):
+    '''
+    Retrieves a given batches data determined by renderBatch in config.py
+    '''
+
+    file_name = os.path.join(completeMetaDataPath, i)
+    metaDataDirty = json.load(open(file_name))
+
+    name = metaDataDirty["name"]
+    description = metaDataDirty["description"]
+    NFT_DNA = metaDataDirty["NFT_DNA"]
+    NFT_Variants = metaDataDirty["NFT_Variants"]  # Variant dictionary
+
+    return name, description, NFT_DNA, NFT_Variants
+
+def sendMetaDataToJson(metaDataDict, metaDataPath, jsonName):
+    jsonMetaData = json.dumps(metaDataDict, indent=1, ensure_ascii=True)
+
+    with open(os.path.join(metaDataPath, jsonName), 'w') as outfile:
+        outfile.write(jsonMetaData + '\n')
+
+def renameMetaData(completeCollPath, completeMetaDataPath):
+    metaDataListOld = os.listdir(completeMetaDataPath)
+    print(metaDataListOld)
+
+    defaultMetaDataPath = os.path.join(completeCollPath, "Default_metaData")
+    cardanoMetaDataPath = os.path.join(completeCollPath, "Cardano_metaData")
+    solanaMetaDataPath = os.path.join(completeCollPath, "Solana_metaData")
+    erc721MetaDataPath = os.path.join(completeCollPath, "Erc721_metaData")
+
+    for i in metaDataListOld:
+        name, description, NFT_DNA, NFT_Variants = getMetaDataDirty(completeMetaDataPath, i)
+
+        file_name = os.path.splitext(i)[0]
+        file_num = file_name.split("_")[1]
+
+        if config.defaultMetaData:
+            if not os.path.exists(defaultMetaDataPath):
+                os.mkdir(defaultMetaDataPath)
+
+            metaDataDictDefault = metaData.returnSolanaMetaData(name, description, NFT_DNA, NFT_Variants)
+
+
+        if config.cardanoMetaData:
+            if not os.path.exists(cardanoMetaDataPath):
+                os.mkdir(completeCollPath)
+
+            metaDataDictCardano = metaData.returnSolanaMetaData(name, description, NFT_DNA, NFT_Variants)
+
+        if config.solanaMetaData:
+            if not os.path.exists(solanaMetaDataPath):
+                os.mkdir(solanaMetaDataPath)
+
+            solanaJsonNew = "Solana_" + i
+
+            solanaNewName = name.split("_")[0] + "_" + str(file_num)
+
+            metaDataDictSolana = metaData.returnSolanaMetaData(solanaNewName, description, NFT_DNA, NFT_Variants)
+
+            sendMetaDataToJson(metaDataDictSolana, solanaMetaDataPath, solanaJsonNew)
+
+        if config.erc721MetaData:
+            if not os.path.exists(erc721MetaDataPath):
+                os.mkdir(erc721MetaDataPath)
+
+            metaDataDictErc721 = metaData.returnSolanaMetaData(name, description, NFT_DNA, NFT_Variants)
+
     return
 
-def reformatBatches():
+def reformatNFTCollection():
     images, animations, models, metaData = getNFType()
 
     completeCollPath = os.path.join(config.save_path, "Complete_Collection")
     completeImagePath = os.path.join(completeCollPath, "Images")
     completeAnimationsPath = os.path.join(completeCollPath, "Animations")
     completeModelsPath = os.path.join(completeCollPath, "Models")
-    completeMetaDataPath = os.path.join(completeCollPath, "NFT_metaData")
+    completeMetaDataPath = os.path.join(completeCollPath, "BMNFT_metaData")
 
     if not os.path.exists(completeCollPath):
         os.mkdir(completeCollPath)
@@ -123,11 +191,11 @@ def reformatBatches():
                 modelCount += 1
 
         if metaData:
-            dataDir = os.path.join(config.nft_save_path, i, "NFT_metaData")
+            dataDir = os.path.join(config.nft_save_path, i, "BMNFT_metaData")
             dataList = sorted(os.listdir(dataDir))
 
             for j in dataList:
-                dataOldPath = os.path.join(config.nft_save_path, i, "NFT_metaData", j)
+                dataOldPath = os.path.join(config.nft_save_path, i, "BMNFT_metaData", j)
                 nameOldDirty = copy.deepcopy(os.path.splitext(j)[0])
                 extension = copy.deepcopy(os.path.splitext(j)[1])
                 nameOldClean = nameOldDirty.split("_")[0]
@@ -141,5 +209,7 @@ def reformatBatches():
 
     print("All NFT files stored and sorted to the Complete_Collection folder in {}".format(config.save_path))
 
+    renameMetaData(completeCollPath, completeMetaDataPath)
+
 if __name__ == '__main__':
-    reformatBatches()
+    reformatNFTCollection()
