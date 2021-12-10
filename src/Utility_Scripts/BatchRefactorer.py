@@ -66,7 +66,6 @@ def renameMetaData(completeCollPath, completeMetaDataPath):
     metaDataListOld = os.listdir(completeMetaDataPath)
     print(metaDataListOld)
 
-    defaultMetaDataPath = os.path.join(completeCollPath, "Default_metaData")
     cardanoMetaDataPath = os.path.join(completeCollPath, "Cardano_metaData")
     solanaMetaDataPath = os.path.join(completeCollPath, "Solana_metaData")
     erc721MetaDataPath = os.path.join(completeCollPath, "Erc721_metaData")
@@ -77,37 +76,35 @@ def renameMetaData(completeCollPath, completeMetaDataPath):
         file_name = os.path.splitext(i)[0]
         file_num = file_name.split("_")[1]
 
-        if config.defaultMetaData:
-            if not os.path.exists(defaultMetaDataPath):
-                os.mkdir(defaultMetaDataPath)
-
-            metaDataDictDefault = metaData.returnSolanaMetaData(name, description, NFT_DNA, NFT_Variants)
-
-
         if config.cardanoMetaData:
             if not os.path.exists(cardanoMetaDataPath):
-                os.mkdir(completeCollPath)
+                os.mkdir(cardanoMetaDataPath)
 
-            metaDataDictCardano = metaData.returnSolanaMetaData(name, description, NFT_DNA, NFT_Variants)
+            cardanoJsonNew = "Cardano_" + i
+            cardanoNewName = name.split("_")[0] + "_" + str(file_num)
+
+            metaDataDictCardano = metaData.returnCardanoMetaData(cardanoNewName, description, NFT_DNA, NFT_Variants)
+            sendMetaDataToJson(metaDataDictCardano, cardanoMetaDataPath, cardanoJsonNew)
 
         if config.solanaMetaData:
             if not os.path.exists(solanaMetaDataPath):
                 os.mkdir(solanaMetaDataPath)
 
             solanaJsonNew = "Solana_" + i
-
             solanaNewName = name.split("_")[0] + "_" + str(file_num)
 
             metaDataDictSolana = metaData.returnSolanaMetaData(solanaNewName, description, NFT_DNA, NFT_Variants)
-
             sendMetaDataToJson(metaDataDictSolana, solanaMetaDataPath, solanaJsonNew)
 
         if config.erc721MetaData:
             if not os.path.exists(erc721MetaDataPath):
                 os.mkdir(erc721MetaDataPath)
 
-            metaDataDictErc721 = metaData.returnSolanaMetaData(name, description, NFT_DNA, NFT_Variants)
+            erc721JsonNew = "Erc721_" + i
+            erc721NewName = name.split("_")[0] + "_" + str(file_num)
 
+            metaDataDictErc721 = metaData.returnErc721MetaData(erc721NewName, description, NFT_DNA, NFT_Variants)
+            sendMetaDataToJson(metaDataDictErc721, erc721MetaDataPath, erc721JsonNew)
     return
 
 def reformatNFTCollection():

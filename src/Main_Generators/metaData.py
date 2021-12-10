@@ -21,6 +21,30 @@ from src import config
 importlib.reload(config)
 
 
+def returnCardanoMetaData(name, description, NFT_DNA, NFT_Variants):
+    metaDataDictCardano = {}
+
+    metaDataDictCardano["721"] = {
+        "<policy_id>": {
+            "<asset_name>": {
+                "name": name,
+                "image": "",
+                "mediaType": "",
+                "description": description,
+                "files": [{
+                    "name": "",
+                    "mediaType": "",
+                    "src": "",
+                    "NFT_Variants": NFT_Variants,
+                    "NFT_DNA": NFT_DNA
+                }]
+            }
+        },
+        "version": "1.0"
+    }
+
+    return metaDataDictCardano
+
 def returnSolanaMetaData(name, description, NFT_DNA, NFT_Variants):
     metaDataDictSolana = {}
 
@@ -53,35 +77,18 @@ def returnSolanaMetaData(name, description, NFT_DNA, NFT_Variants):
                                   }
     return metaDataDictSolana
 
+def returnErc721MetaData(name, description, NFT_DNA, NFT_Variants):
+    metaDataDictErc721 = {}
 
-    '''
-    if config.cardanoMetaData:
-        metaDataDict["721"] = {
-            "<policy_id>": {
-                "<asset_name>": {
-                    "name": name,
-                    "image": "",
-                    "mediaType": "",
-                    "description": config.metaDataDescription,
-                    "files": [{
-                        "name": "",
-                        "mediaType": "",
-                        "src": "",
-                        "NFT_Variants": dnaDictionary,
-                        "NFT_DNA": a
-                    }]
-                }
-            },
-            "version": "1.0"
-        }
-
-    if config.erc721MetaData:
-        metaDataDict["title"] = name
-        metaDataDict["type"] = ""
-        metaDataDict["properties"] = {"NFT_Variants": dnaDictionary,
-                                      "description": config.metaDataDescription,
-                                      "NFT_DNA": a}
-    '''
+    metaDataDictErc721["title"] = name
+    metaDataDictErc721["type"] = ""
+    metaDataDictErc721["properties"] = {"NFT_Variants": NFT_Variants,
+                                        "description": description,
+                                        "NFT_DNA": NFT_DNA
+                                        }
+    return metaDataDictErc721
 
 if __name__ == '__main__':
-    returnMetaData()
+    returnSolanaMetaData()
+    returnCardanoMetaData()
+    returnErc721MetaData()

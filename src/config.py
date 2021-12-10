@@ -2,9 +2,9 @@
 # This file determines the settings of your NFT collection. Please read the README.md file to understand how to run this
 # program.
 
-nftName = 'test'  # The name of the NFT image produces by PNG-Generator
+nftName = ''  # The name of the NFT image produces by PNG-Generator
 
-imageFileFormat = 'JPEG'  # Dictate the image extension when Blender renders the images
+imageFileFormat = ''  # Dictate the image extension when Blender renders the images
 # Type the exact name provided below in the '' above:
 # JPEG - Exports the .jpeg format
 # PNG - Exports the .png format
@@ -12,7 +12,7 @@ imageFileFormat = 'JPEG'  # Dictate the image extension when Blender renders the
 # for a complete list of file formats supported by Blender. (Only use Image file extensions with imageFileFormat, 3D
 # object, or animation file extensions will cause the program to fail)
 
-animationFileFormat = 'AVI_JPEG'  # Dictate the animations extension when Blender renders and compiles the images
+animationFileFormat = ''  # Dictate the animations extension when Blender renders and compiles the images
 # Type the exact name provided below in the '' above:
 # AVI_JPEG - Exports the .avi jpeg format
 # AVI_RAW - Exports the .avi raw format
@@ -21,7 +21,7 @@ animationFileFormat = 'AVI_JPEG'  # Dictate the animations extension when Blende
 # Visit https://docs.blender.org/api/current/bpy.types.Image.html#bpy.types.Image.file_format
 # for a complete list of file formats supported by Blender. (These are the Blender only supported animation formats)
 
-modelFileFormat = 'glb'  # The file format of the objects you would like to export
+modelFileFormat = ''  # The file format of the objects you would like to export
 # Type the exact name provided below in the '' above:
 # fbx - The .FBX file format
 # glb - The .glb file format
@@ -31,23 +31,23 @@ modelFileFormat = 'glb'  # The file format of the objects you would like to expo
 # for a complete list of object formats supported by Blender.
 
 # The path to Blend_My_NFTs folder:
-save_path_mac = '/Users/torrinleonard/Desktop/Blend_My_NFTs'
+save_path_mac = ''
 save_path_windows = r''
 # Place the path in the '', e.g: save_path_mac = '/Users/Path/to/Blend_My_NFTs'
 # Example mac: /Users/Path/to/Blend_My_NFTs
 # Example windows: C:\Users\Path\to\Blend_My_NFTs
 
-maxNFTs = 20  # The maximum number of NFTs you want to generate.
-nftsPerBatch = 5  # Number of NFTs per batch
-renderBatch = 4  # The batch number to render in Exporter.py
+maxNFTs = 0  # The maximum number of NFTs you want to generate.
+nftsPerBatch = 0  # Number of NFTs per batch
+renderBatch = 0  # The batch number to render in Exporter.py
 
 # Set to True to generate images or 3D models depending on your settings below when main.py is run in Blender. Only works
 # if you have already generated NFTRecord.json and all batches.
-enableExporter = True
+enableExporter = False
 
-enableImages = True  # Renders and exports Images when main.py is run in Blender if enableExporter = True
-enableAnimations = True  # Renders and exports Animations when main.py is run in Blender if enableExporter = True
-enableModelsBlender = True  # Generates 3D models when main.py is run in Blender if enableExporter = True
+enableImages = False  # Renders and exports Images when main.py is run in Blender if enableExporter = True
+enableAnimations = False  # Renders and exports Animations when main.py is run in Blender if enableExporter = True
+enableModelsBlender = False  # Generates 3D models when main.py is run in Blender if enableExporter = True
 # ^^ Generates models with .blend file NOT external object library.
 
 # Enables Rarity_Sorter to weigh NFT DNA attributes and variants:
@@ -58,6 +58,26 @@ enableRarity = False
 # Note: The more attributes and variants you have, and by nature the more possible NFT combinations you have, the more
 # accurate your percentages will be.
 
+refactorBatchOrder = False  # When set to True, sorts, renames, and moves all NFTs files in all batches in NFT_Output
+# folder to the Complete_Collection folder.
+# After you generate all batches move them all to one computer and place them in the NFT_Output folder of Blend_My_NFTs.
+# Run main.py with refactorBatchOrder set to True and all NFT files will be renamed and sorted into a folder called Complete_Collection.
+
+# Meta Data Templates - Run after refactorBatchOrder
+# Set the following to True to generate the format of the Meta Data template for your NFTs blockchain. (You can use multiple)
+cardanoMetaData = False  # Cardano - Format Source: https://cips.cardano.org/cips/cip25/
+solanaMetaData = False  # Solana - Format Source: https://docs.metaplex.com/nft-standard
+erc721MetaData = False  # Ethereum ERC721 - Format Source: https://eips.ethereum.org/EIPS/eip-721
+
+# NOTE: This is just the information Blend_My_NFTs can provide, you will have to add policy ID, URI information, etc
+# yourself when you upload and mint your NFT collection.
+# DISCLAIMER: These are only templates based on the common standards for the given blockchain, you will have to modify
+# and fill them in with a script of your own when you mint your NFT collection. These metadata templates are only provided
+# for your convenience and are as accurate to the standards above that I could make them.
+
+metaDataDescription = ''  # The description of your NFT that will be inserted into its meta data
+
+# ADVANCED FEATURES:
 ### Select colour or material.###
 # Object generation options:
 enableGeneration = False  # When set to true this applies the sets of colors listed below to the objects in the collections named below
@@ -136,24 +156,3 @@ maxNFTsTest = 5  # Increase to get a more accurate reading of the render time. T
 # NFT DNA. Note - This file is provided for transparency, it is impossible for duplicates to be made with the current code in
 # DNA_Generator.py.
 checkDups = False
-
-# EXPERIMENTAL FEATURE:
-refactorBatchOrder = True  # When set to True, sorts, renames, and moves all NFTs files in all batches in NFT_Output
-# folder to the Complete_Collection folder.
-# After you generate all batches move them all to one computer and place them in the NFT_Output folder of Blend_My_NFTs.
-# Run main.py with refactorBatchOrder set to True and all NFT files will be renamed and sorted into a folder called Complete_Collection.
-
-# Meta Data Templates - Run after refactorBatchOrder
-# Set the following to True to generate the format of the Meta Data template for your NFTs blockchain. (You can use multiple)
-defaultMetaData = False  # The default setting; exports variants, dna, number, name, and rarity of each NFT to a dictionary (Not a blockchain standard)
-cardanoMetaData = False  # Cardano - Format Source: https://cips.cardano.org/cips/cip25/
-solanaMetaData = True  # Solana - Format Source: https://docs.metaplex.com/nft-standard
-erc721MetaData = False  # Ethereum ERC721 - Format Source: https://eips.ethereum.org/EIPS/eip-721
-
-# NOTE: This is just the information Blend_My_NFTs can provide, you will have to add policy ID, URI information, etc
-# yourself when you upload and mint your NFT collection.
-# DISCLAIMER: These are only templates based on the common standards for the given blockchain, you will have to modify
-# and fill them in with a script of your own when you mint your NFT collection. These metadata templates are only provided
-# for your convenience and are as accurate to the standards above that I could make them.
-
-metaDataDescription = ''  # The description of your NFT that will be inserted into its meta data
