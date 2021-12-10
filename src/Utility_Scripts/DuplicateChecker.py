@@ -1,3 +1,9 @@
+# Purpose:
+# This file checks NFTRecord for duplicate NFT DNA and returns any found in the console.
+
+# Note - This file is provided for transparency, it is impossible for duplicates to be made with the current code in
+# DNA_Generator.py.
+
 import bpy
 import os
 import sys

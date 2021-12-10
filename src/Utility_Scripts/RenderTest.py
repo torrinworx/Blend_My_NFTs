@@ -1,3 +1,4 @@
+# Purpose:
 # This file allows you to test the time it takes to render an image, then calculate how long it will take to render all
 # images specified in maxNFTs in config.py.
 
@@ -58,13 +59,13 @@ def imageRenderTest():
     print("Image(s) rendered in %.4f seconds" % (time.time() - fullRenderTime))
     print(bcolors.WARNING + "\nTime to render " + str(originalMaxNFTs) + " NFT Images: " + bcolors.RESET)
 
-    renderMaxTime = str(((int(time.time() - fullRenderTime)) / int((config.maxNFTs))) * originalMaxNFTs) + "s"
+    renderMaxTime = str(((int(time.time() - fullRenderTime)) / int(config.maxNFTs)) * originalMaxNFTs) + "s"
     
     print(renderMaxTime)
 
-    os.remove(config.batch_save_path + config.slash + "Batch1.json")
+    os.remove(config.batch_json_save_path + config.slash + "Batch1.json")
     os.remove(config.save_path + config.slash + "NFTRecord.json")
-    shutil.rmtree(config.images_save_path + config.slash + "Batch1")
+    shutil.rmtree(config.nft_save_path + config.slash + "Batch1")
 
 if __name__ == '__main__':
     imageRenderTest()

@@ -1,3 +1,4 @@
+# Purpose:
 # This file allows you to preview some calculations/numbers generated when you run main. It allows you to make adjustments
 # to the config.py file before running main.py in case there are any issues.
 

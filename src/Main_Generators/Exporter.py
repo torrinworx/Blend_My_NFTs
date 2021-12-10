@@ -34,7 +34,7 @@ def getBatchData():
     Retrieves a given batches data determined by renderBatch in config.py
     '''
 
-    file_name = os.path.join(config.batch_save_path, "Batch{}.json".format(config.renderBatch))
+    file_name = os.path.join(config.batch_json_save_path, "Batch{}.json".format(config.renderBatch))
     batch = json.load(open(file_name))
     
     NFTs_in_Batch = batch["NFTs_in_Batch"]
@@ -55,8 +55,6 @@ def render_and_save_NFTs():
 
     x = 1
     for a in BatchDNAList:
-        metaDataDict = {}
-
         for i in hierarchy:
             for j in hierarchy[i]:
                 if config.enableGeneration:
@@ -87,7 +85,7 @@ def render_and_save_NFTs():
             return dnaDictionary
 
         dnaDictionary = match_DNA_to_Variant(a)
-        name = config.nftName + str(x)
+        name = config.nftName + "_" + str(x)
 
         print("")
         print("----------Rendering New NFT----------")
@@ -105,17 +103,16 @@ def render_and_save_NFTs():
 
         time_start_2 = time.time()
 
-        batchFolder = os.path.join(config.images_save_path, "Batch" + str(config.renderBatch))
+        batchFolder = os.path.join(config.nft_save_path, "Batch" + str(config.renderBatch))
 
-        imagePath = os.path.join(batchFolder, "Images", "Image_" + name)
-        animationPath = os.path.join(batchFolder, "Animations", "Animation_" + name)
-        modelPath = os.path.join(batchFolder, "Models", "Model_" + name)
+        imagePath = os.path.join(batchFolder, "Images", name)
+        animationPath = os.path.join(batchFolder, "Animations", name)
+        modelPath = os.path.join(batchFolder, "Models", name)
 
         imageFolder = os.path.join(batchFolder, "Images")
         animationFolder = os.path.join(batchFolder, "Animations")
         modelFolder = os.path.join(batchFolder, "Models")
-
-        metaDataFolder = os.path.join(batchFolder, "NFT_metaData")
+        metaDataFolder = os.path.join(batchFolder, "BMNFT_metaData")
 
         if config.enableGeneration:
             for c in dnaDictionary:
@@ -187,15 +184,19 @@ def render_and_save_NFTs():
                                          check_existing=True,
                                          use_selection=True)
 
-        if config.enableMetaData:
-            if not os.path.exists(metaDataFolder):
-                os.makedirs(metaDataFolder)
+        if not os.path.exists(metaDataFolder):
+            os.makedirs(metaDataFolder)
 
-            metaData.returnMetaData(config.metaDataType, metaDataDict, name, a, dnaDictionary)
-            jsonMetaData = json.dumps(metaDataDict, indent=1, ensure_ascii=True)
+        metaDataDict = {}
+        metaDataDict["name"] = name
+        metaDataDict["description"] = config.metaDataDescription
+        metaDataDict["NFT_DNA"] = a
+        metaDataDict["NFT_Variants"] = dnaDictionary
 
-            with open(os.path.join(metaDataFolder, name + "_Data.json"), 'w') as outfile:
-                outfile.write(jsonMetaData + '\n')
+        jsonMetaData = json.dumps(metaDataDict, indent=1, ensure_ascii=True)
+
+        with open(os.path.join(metaDataFolder, "Data_" + name + ".json"), 'w') as outfile:
+            outfile.write(jsonMetaData + '\n')
 
         print("Completed {} render in ".format(name) + "%.4f seconds" % (time.time() - time_start_2))
         x += 1

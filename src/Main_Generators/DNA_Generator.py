@@ -107,7 +107,7 @@ def returnData():
    allScriptIgnore(scriptIgnore)
    listAllCollections.sort()
 
-   exclude = ["_","1","2","3","4","5","6","7","8","9","0"]
+   exclude = ["_", "1", "2", "3", "4", "5", "6", "7", "8", "9", "0"]
    attributeCollections = copy.deepcopy(listAllCollections)
 
    def filter_num():
@@ -254,7 +254,7 @@ def returnData():
    possibleCombinations = numOfCombinations(hierarchy)
 
    for i in variantMetaData:
-      def cameraToggle(i,toggle = True):
+      def cameraToggle(i, toggle=True):
          if config.enableGeneration:
             '''
             Remove Color code so blender recognises the collection
@@ -326,7 +326,7 @@ def generateNFT_DNA():
       possibleCombinations = config.maxNFTs
       DNAList = Rarity_Sorter.sortRarityWeights(hierarchy, listOptionVariant, DNAList)
 
-   #Data stored in batchDataDictionary:
+   # Data stored in batchDataDictionary:
    DataDictionary["numNFTsGenerated"] = possibleCombinations
    DataDictionary["hierarchy"] = hierarchy
    DataDictionary["DNAList"] = DNAList
@@ -353,7 +353,7 @@ def send_To_Record_JSON():
    print("If you want the number of NFT DNA sequences to be higher, please add more variants or attributes to your .blend file")
    print("")
 
-#Utility functions:
+# Utility functions:
 
 # ONLY FOR TESTING, DO NOT EVER USE IF NFTRecord.json IS FULL OF REAL DATA
 # THIS WILL DELETE THE RECORD:
@@ -362,7 +362,7 @@ def clearNFTRecord(AREYOUSURE):
    if AREYOUSURE == True:
       os.remove("NFTRecord.json")
 
-#clearNFTRecord()
+# clearNFTRecord()
 
 if __name__ == '__main__':
    stripColorFromName()
