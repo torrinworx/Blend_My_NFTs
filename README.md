@@ -1,8 +1,9 @@
-# Blend_My_NFTs
 
 <p align="center">
-  <img src="https://user-images.githubusercontent.com/82110564/142058307-4fec86b6-35de-4124-9066-f224b47aa91e.png">
+  <img src="https://user-images.githubusercontent.com/82110564/145726253-99c5540e-dead-4355-a99f-37afc702862c.png">
 </p>
+
+# Blend_My_NFTs
 
 ## Description
 
