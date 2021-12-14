@@ -69,6 +69,9 @@ cardanoMetaData = False  # Cardano - Format Source: https://cips.cardano.org/cip
 solanaMetaData = False  # Solana - Format Source: https://docs.metaplex.com/nft-standard
 erc721MetaData = False  # Ethereum ERC721 - Format Source: https://eips.ethereum.org/EIPS/eip-721
 
+turnNumsOff = True  # When set to True, turns off the extension numbers representing order and rarity from the names of
+# variants in meta Data.
+
 # NOTE: This is just the information Blend_My_NFTs can provide, you will have to add policy ID, URI information, etc
 # yourself when you upload and mint your NFT collection.
 # DISCLAIMER: These are only templates based on the common standards for the given blockchain, you will have to modify
@@ -116,6 +119,20 @@ enableResetViewport = True  # If True: turns all viewport and render cameras on 
 enable3DModels = False  # Set to True if using external models as attributes instead of Blender objects
 # ^Does not work with colour options and rarity, both must be turned off in order to use this.
 
+# Tests and Previews:
+
+# Preview and render test settings:
+# Set to True to run Preview test, set to False to stop test. Run main.py in Blender to initiate the test. Results will
+# be displayed in the Blender terminal or console. enableExporter must be False, and enableImages and/or enableModelsBlender
+# to run a preview.
+runPreview = False
+maxNFTsTest = 5  # Increase to get a more accurate reading of the render time. The number of images generated in the render test.
+
+# Turn this on when you run main.py to generate NFTRecord.json and appropriate batches to confirm there are no duplicate
+# NFT DNA. Note - This file is provided for transparency, it is impossible for duplicates to be made with the current code in
+# DNA_Generator.py.
+checkDups = False
+
 # Utilities - DO NOT TOUCH:
 import platform
 
@@ -142,17 +159,3 @@ model_Script_Ignore_Path = modelAssetPath + slash + "Script_Ignore_Folder"  # Th
 # error handling #
 if modelFileFormat not in ['fbx', 'glb', 'obj', 'x3d'] and enable3DModels:
     raise ValueError("Output format in `objectFormatExport` can only be 'fbx', 'glb', 'obj', 'x3d'.")
-
-# Tests and Previews:
-
-# Preview and render test settings:
-# Set to True to run Preview test, set to False to stop test. Run main.py in Blender to initiate the test. Results will
-# be displayed in the Blender terminal or console. enableExporter must be False, and enableImages and/or enableModelsBlender
-# to run a preview.
-runPreview = False
-maxNFTsTest = 5  # Increase to get a more accurate reading of the render time. The number of images generated in the render test.
-
-# Turn this on when you run main.py to generate NFTRecord.json and appropriate batches to confirm there are no duplicate
-# NFT DNA. Note - This file is provided for transparency, it is impossible for duplicates to be made with the current code in
-# DNA_Generator.py.
-checkDups = False

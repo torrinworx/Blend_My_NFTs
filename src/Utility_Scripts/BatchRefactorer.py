@@ -52,20 +52,22 @@ def getMetaDataDirty(completeMetaDataPath, i):
     name = metaDataDirty["name"]
     description = metaDataDirty["description"]
     NFT_DNA = metaDataDirty["NFT_DNA"]
-    NFT_Variants = metaDataDirty["NFT_Variants"]  # Variant dictionary
+    NFT_Variants = metaDataDirty["NFT_Variants"]
+
+    if config.turnNumsOff:
+        for i in NFT_Variants:
+            x = NFT_Variants[i]
+            NFT_Variants[i] = x.split("_")[0]
 
     return name, description, NFT_DNA, NFT_Variants
 
 def sendMetaDataToJson(metaDataDict, metaDataPath, jsonName):
     jsonMetaData = json.dumps(metaDataDict, indent=1, ensure_ascii=True)
-
     with open(os.path.join(metaDataPath, jsonName), 'w') as outfile:
         outfile.write(jsonMetaData + '\n')
 
 def renameMetaData(completeCollPath, completeMetaDataPath):
     metaDataListOld = os.listdir(completeMetaDataPath)
-    print(metaDataListOld)
-
     cardanoMetaDataPath = os.path.join(completeCollPath, "Cardano_metaData")
     solanaMetaDataPath = os.path.join(completeCollPath, "Solana_metaData")
     erc721MetaDataPath = os.path.join(completeCollPath, "Erc721_metaData")
