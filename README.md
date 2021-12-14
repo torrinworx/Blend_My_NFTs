@@ -23,7 +23,7 @@ There are always new features dropping, join our discord to stay tuned for updat
 
 ## Official Links: 
 
-Website: http://thiscozyplace.com/ (Under construction...)
+Website: https://thiscozystudio.com/
 
 Discord: https://discord.gg/UpZt5Un57t 
 
