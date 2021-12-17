@@ -52,7 +52,13 @@ def returnData():
    '''
 
    coll = bpy.context.scene.collection
-   scriptIgnore = bpy.data.collections["Script_Ignore"]
+
+   try:
+      scriptIgnore = bpy.data.collections["Script_Ignore"]
+   except:
+      print(bcolors.ERROR + "ERROR:\nScript_Ignore collection is not in .blend file scene. Please add the Script_Ignore collection to your "
+            ".blend file scene. For more information, read the README.md file.\n"+ bcolors.RESET)
+
    listAllCollInScene = []
    listAllCollections = []
 
@@ -91,8 +97,14 @@ def returnData():
             listAllCollections.append(i.name)
       else:
          listAllCollections.append(i.name)
+
    listAllCollections.remove(scriptIgnore.name)
-   listAllCollections.remove("Scene Collection")
+
+   if "Scene Collection" in listAllCollections:
+      listAllCollections.remove("Scene Collection")
+
+   if "Master Collection" in listAllCollections:
+      listAllCollections.remove("Master Collection")
 
    def allScriptIgnore(collection):
       '''
