@@ -359,6 +359,47 @@ Similarly to the Image Generator, there is a specific way to format 3d model rep
 
 The generated 3D models will appear in the folder 3D_Model_Output
 
+## How Rarity works
+
+Rarity is a percentage value and accepts fractions like 0.001%, but they must be specified with decimals in the naming. For ease of use the percentages need to add up to 100%:
+
+```
+33% + 33% + 33% + 1% = 100% 
+
+Variant 1 = 33% chance
+Variant 2 = 33% chance
+Variant 3 = 33% chance
+Variant 4 = 1% chance
+```
+
+If you have 20 variants with 50 set as the rarity percentage for each, Blend_My_NFTs will add up the percentages then treat the sum as 100%:
+
+```
+50% + 50% + 50% + 50% + 50%....
+= 1,000%
+
+Out of 100%:
+
+(50/1,000)*100 = 5% chance of 1 variant
+```
+
+Rarity is dependent on both the number of NFTs you generate, as well as the maximum number of possible combinations of the attributes in your .blend file. 
+
+This means the following two scenarios, say, at a fixed number of 10,000 NFTs to generate;
+
+1. Your .blend file has 1,000,000,000 possible combinations (trust me that's a small number, our collection for This Cozy Place has over 11 Trillion possible combinations). Generating 10,000 will be more representative of the rarity numbers you set as the script will simply have more combinations to choose from.
+
+2. Your .blend file has 10,000 possible combinations. This means that all possible combinations of your NFT will be generated, meaning that no rarity can be taken into account since the only way to reach your required 10,000 NFTs to generate is by including NFTs that
+
+This is the result for following reasons: 
+
+1. The rarity is determined sudo randomly by, but is weighted based on each variants rarity percentage.
+
+2. The script prioritises the number of NFTs to generate (that you set in config.py with the maxNFTs variable) over rarity percentage
+
+This behaviour is a fundamental mathematical result, not an issue with the code. I've researched various ways at creating and enforcing rarity, this is the only way I have found that works. If you have found a better method, feel free to make a pull request and I'd be happy to review and merge it to the main Github repo for BMNFTs.
+
+The code for that determines rarity can be found in ``src/Main_Generators/Rarity_Sorter.py``. The most important line in that file is ``70``, that is what generates the randomly weighted DNA. After that it is checked by line 
 
 ## Helpful Links
 
