@@ -11,7 +11,7 @@ sys.path.append(dir)
 sys.modules.values()
 
 from src import config
-from src.Utility_Scripts import DuplicateChecker, RenderTest, Preview, BatchRefactorer
+from src.Utility_Scripts import DuplicateChecker, RenderTest, Preview, BatchRefactorer, RarityChecker
 from src.Model_Generators import Model_Generator
 from src.Main_Generators import Batch_Sorter, DNA_Generator, Exporter
 
@@ -24,6 +24,7 @@ importlib.reload(Preview)
 importlib.reload(RenderTest)
 importlib.reload(Exporter)
 importlib.reload(BatchRefactorer)
+importlib.reload(RarityChecker)
 
 
 if not config.enableExporter and not config.runPreview and not config.refactorBatchOrder:
@@ -44,3 +45,6 @@ if config.runPreview:
 
 if config.refactorBatchOrder:
     BatchRefactorer.reformatNFTCollection()
+
+if config.checkRarity:
+    RarityChecker.getRealRarity()

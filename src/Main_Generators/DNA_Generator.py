@@ -169,8 +169,8 @@ def returnData():
             print(bcolors.ERROR + "\nERROR:" + bcolors.RESET)
             print("The collection " + str(i) + " doesn't follow the naming conventions of attributes. Please move this \n"
                   "colleciton to Script_Ignore or review proper collection format in README.md")
-
             return
+
          elif len(orderRarity) > 0:
             number = orderRarity[0]
             if config.enableGeneration:
@@ -338,8 +338,15 @@ def generateNFT_DNA():
       possibleCombinations = config.maxNFTs
       DNAList = Rarity_Sorter.sortRarityWeights(hierarchy, listOptionVariant, DNAList)
 
+   if len(DNAList) < config.maxNFTs:
+      print(f"{bcolors.ERROR} \nWARNING: \n"
+            f"You are seeing this warning because the program cannot generate {config.maxNFTs} NFTs with rarity enabled. "
+            f"Only {len(DNAList)} NFT DNA were generated."
+            f"Either A) Lower the number of NFTs you wish to create, or B) Increase the maximum number of possible NFTs by"
+            f" creating more variants and attributes in your .blend file.{bcolors.RESET}")
+
    # Data stored in batchDataDictionary:
-   DataDictionary["numNFTsGenerated"] = possibleCombinations
+   DataDictionary["numNFTsGenerated"] = len(DNAList)
    DataDictionary["hierarchy"] = hierarchy
    DataDictionary["DNAList"] = DNAList
 
