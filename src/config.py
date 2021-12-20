@@ -2,9 +2,9 @@
 # This file determines the settings of your NFT collection. Please read the README.md file to understand how to run this
 # program.
 
-nftName = 'Test'  # The name of the NFT image produces by PNG-Generator
+nftName = ''  # The name of the NFT image produces by PNG-Generator
 
-imageFileFormat = 'JPEG'  # Dictate the image extension when Blender renders the images
+imageFileFormat = ''  # Dictate the image extension when Blender renders the images
 # Type the exact name provided below in the '' above:
 # JPEG - Exports the .jpeg format
 # PNG - Exports the .png format
@@ -31,21 +31,21 @@ modelFileFormat = ''  # The file format of the objects you would like to export
 # for a complete list of object formats supported by Blender.
 
 # The path to Blend_My_NFTs folder:
-save_path_mac = '/Users/torrinleonard/Desktop/ThisCozyStudio/Blend_My_NFTs'
+save_path_mac = ''
 save_path_windows = r''
 # Place the path in the '', e.g: save_path_mac = '/Users/Path/to/Blend_My_NFTs'
 # Example mac: /Users/Path/to/Blend_My_NFTs
 # Example windows: C:\Users\Path\to\Blend_My_NFTs
 
-maxNFTs = 10  # The maximum number of NFTs you want to generate.
-nftsPerBatch = 10  # Number of NFTs per batch
-renderBatch = 1  # The batch number to render in Exporter.py
+maxNFTs = 0  # The maximum number of NFTs you want to generate.
+nftsPerBatch = 0  # Number of NFTs per batch
+renderBatch = 0  # The batch number to render in Exporter.py
 
 # Set to True to generate images or 3D models depending on your settings below when main.py is run in Blender. Only works
 # if you have already generated NFTRecord.json and all batches.
 enableExporter = False
 
-enableImages = True  # Renders and exports Images when main.py is run in Blender if enableExporter = True
+enableImages = False  # Renders and exports Images when main.py is run in Blender if enableExporter = True
 enableAnimations = False  # Renders and exports Animations when main.py is run in Blender if enableExporter = True
 enableModelsBlender = False  # Generates 3D models when main.py is run in Blender if enableExporter = True
 # ^^ Generates models with .blend file NOT external object library.
@@ -65,7 +65,7 @@ refactorBatchOrder = False  # When set to True, sorts, renames, and moves all NF
 
 # Meta Data Templates - Run after refactorBatchOrder
 # Set the following to True to generate the format of the Meta Data template for your NFTs blockchain. (You can use multiple)
-cardanoMetaData = True  # Cardano - Format Source: https://cips.cardano.org/cips/cip25/
+cardanoMetaData = False  # Cardano - Format Source: https://cips.cardano.org/cips/cip25/
 solanaMetaData = False  # Solana - Format Source: https://docs.metaplex.com/nft-standard
 erc721MetaData = False  # Ethereum ERC721 - Format Source: https://eips.ethereum.org/EIPS/eip-721
 
@@ -132,6 +132,11 @@ maxNFTsTest = 5  # Increase to get a more accurate reading of the render time. T
 # NFT DNA. Note - This file is provided for transparency, it is impossible for duplicates to be made with the current code in
 # DNA_Generator.py.
 checkDups = False
+
+# Turn this on when running main.py to generate NFTRecord.json and Batch#.json files to record the rarity percentage of each variant.
+# Note - This file is provided for transparency. The accuracy of the rarity values you set in your .blend file as outlined
+# in the README.md file are dependent on the maxNFTs, and the maximum number of combinations of your NFT collection.
+checkRarity = False
 
 # Utilities - DO NOT TOUCH:
 import platform

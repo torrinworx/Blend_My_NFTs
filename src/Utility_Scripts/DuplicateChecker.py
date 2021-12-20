@@ -8,7 +8,6 @@ import bpy
 import os
 import sys
 import json
-import platform
 import importlib
 
 dir = os.path.dirname(bpy.data.filepath)
@@ -19,6 +18,14 @@ from src import config
 
 importlib.reload(config)
 
+class bcolors:
+   '''
+   The colour of console messages.
+   '''
+   OK = '\033[92m'  # GREEN
+   WARNING = '\033[93m'  # YELLOW
+   ERROR = '\033[91m'  # RED
+   RESET = '\033[0m'  # RESET COLOR
 
 def checkIfBatchDup():
     file_name = os.path.join(config.save_path, "NFTRecord.json")
