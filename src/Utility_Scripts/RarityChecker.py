@@ -75,23 +75,25 @@ def getRealRarity():
                 if l == k:
                     name = fullNumName[i][k]
                     num = numDict[j][l]
-                    x[name] = str(round(((num/numNFTsGenerated)*100), 2)) + "%"
+                    x[name] = [(str(round(((num/numNFTsGenerated)*100), 2)) + "%"), str(num)]
 
         completeData[i] = x
+
+    print(completeData)
 
     print(bcolors.OK + "Rarity Checker is active. These are the percentages for each variant per attribute you set in your .blend file:" + bcolors.RESET)
 
     for i in completeData:
         print(i + ":")
         for j in completeData[i]:
-            print("   " + j + ": " + completeData[i][j])
+            print("   " + j + ": " + completeData[i][j][0] + "   Occurrences: " + completeData[i][j][1])
 
     jsonMetaData = json.dumps(completeData, indent=1, ensure_ascii=True)
 
     with open(os.path.join(config.save_path, "RarityData.json"), 'w') as outfile:
         outfile.write(jsonMetaData + '\n')
     path = os.path.join(config.save_path, "RarityData.json")
-    print(bcolors.OK + f"Rarity Data has been saved to {path}.")
+    print(bcolors.OK + f"Rarity Data has been saved to {path}." + bcolors.RESET)
 
     return
 

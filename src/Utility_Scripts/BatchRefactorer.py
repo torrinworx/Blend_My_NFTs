@@ -27,7 +27,7 @@ def getNFType():
     models = False
     metaData = False
 
-    batchContent = os.listdir(os.path.join(config.nft_save_path, "Batch1"))
+    batchContent = os.listdir(os.path.join(config.nft_save_path, (os.listdir(config.nft_save_path)[0])))
 
     if "Images" in batchContent:
         images = True
@@ -201,8 +201,15 @@ def reformatNFTCollection():
 
                 nameNew = nameOldClean + "_" + str(dataCount)
                 dataNewPath = os.path.join(completeMetaDataPath, nameNew + extension)
-
                 os.rename(dataOldPath, dataNewPath)
+
+                BMFNT_Meta = json.load(open(dataNewPath))
+                name = BMFNT_Meta["name"].split("_")[0]
+                BMFNT_Meta["name"] = name + "_" + str(dataCount)
+                jsonMetaData = json.dumps(BMFNT_Meta, indent=1, ensure_ascii=True)
+
+                with open(dataNewPath, 'w') as outfile:
+                    outfile.write(jsonMetaData + '\n')
 
                 dataCount += 1
 
