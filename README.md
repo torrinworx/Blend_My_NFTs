@@ -430,3 +430,16 @@ Nothing in this repository or its documentation is financial advice. If you crea
 The creators of This Cozy Studio will never, under any cricumstance, ask for your crypto wallet(s) secret phrase or private keys. If you come across anyone who is impersonating the founding members of This Cozy Place, please report it immediately to the admins on our discord channel and we will take appropriate action and warn our community of the behaviour. If this takes place outside of our community boundries then report the user to the appropriate authorities. 
 
 This software is provided for free and is open source. We are not liable for any felones you may commit using this software, and we staunchly appose the malicious use of this software that in any way breaks any applicable law in your loction of residence. 
+
+## Donations
+
+Only donate if you are financialy able to, I'm am a well off individual and do not need donations to survive. I do acknowledge some people in our community wish to donate to show their appreciation for the work I've put into this project and I apprieciate the support. 
+
+Cardano (ADA) address: 
+
+addr1q9gh2u4ssptpltl86gy4sspy3naqwfn74zwqcf3k0jmh66xrpv232dnkm46lsf9deqccl3xd2vpyksl6zy5v4r94k0nsw5lnfp
+
+
+Solana (SOL) address: 
+
+A7NuHB79DKfkdZMvqVzBrYN4NXRqP7LVFjMdVoKRfVmo
