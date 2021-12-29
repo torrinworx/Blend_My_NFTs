@@ -32,9 +32,11 @@ modelFileFormat = ''  # The file format of the objects you would like to export
 
 # The path to Blend_My_NFTs folder:
 save_path_mac = ''
+save_path_linux = ''
 save_path_windows = r''
 # Place the path in the '', e.g: save_path_mac = '/Users/Path/to/Blend_My_NFTs'
 # Example mac: /Users/Path/to/Blend_My_NFTs
+# Example linux: /Users/Path/to/Blend_My_NFTs
 # Example windows: C:\Users\Path\to\Blend_My_NFTs
 
 maxNFTs = 0  # The maximum number of NFTs you want to generate.
@@ -142,6 +144,7 @@ checkRarity = False
 import platform
 
 mac = 'Darwin'
+linux = 'Linux'
 windows = 'Windows'
 slash = ''
 save_path = None
@@ -149,6 +152,9 @@ save_path = None
 # Save_path utilities and os compatibility
 if platform.system() == mac:
     save_path = save_path_mac
+    slash = '/'
+elif platform.system() == linux:
+    save_path = save_path_linux
     slash = '/'
 elif platform.system() == windows:
     save_path = save_path_windows
