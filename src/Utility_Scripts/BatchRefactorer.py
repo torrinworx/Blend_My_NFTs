@@ -29,6 +29,9 @@ def getNFType():
 
     batchContent = os.listdir(os.path.join(config.nft_save_path, (os.listdir(config.nft_save_path)[0])))
 
+    removeList = [".gitignore", ".DS_Store"]
+    batchContent = [x for x in batchContent if (x not in removeList)]
+
     if "Images" in batchContent:
         images = True
     if "Animations" in batchContent:
@@ -39,7 +42,6 @@ def getNFType():
         metaData = True
 
     return images, animations, models, metaData
-
 
 def getMetaDataDirty(completeMetaDataPath, i):
     '''
