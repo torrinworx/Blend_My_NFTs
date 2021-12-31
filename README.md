@@ -1,6 +1,6 @@
 
 <p align="center">
-  <img src="https://user-images.githubusercontent.com/82110564/145726253-99c5540e-dead-4355-a99f-37afc702862c.png">
+  <img src="https://user-images.githubusercontent.com/82110564/147833091-50d1daab-f0d8-41b2-b0b1-7d521cf5016a.png">
 </p>
 
 # Blend_My_NFTs
@@ -434,12 +434,3 @@ This software is provided for free and is open source. We are not liable for any
 ## Donations
 
 Only donate if you are financialy able to, I'm am a well off individual and do not need donations to survive. I do acknowledge some people in our community wish to donate to show their appreciation for the work I've put into this project and I apprieciate the support. 
-
-Cardano (ADA) address: 
-
-addr1q9gh2u4ssptpltl86gy4sspy3naqwfn74zwqcf3k0jmh66xrpv232dnkm46lsf9deqccl3xd2vpyksl6zy5v4r94k0nsw5lnfp
-
-
-Solana (SOL) address: 
-
-A7NuHB79DKfkdZMvqVzBrYN4NXRqP7LVFjMdVoKRfVmo
