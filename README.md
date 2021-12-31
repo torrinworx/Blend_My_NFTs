@@ -6,54 +6,59 @@
 # Blend_My_NFTs
 
 ## Description
+Blend_My_NFTs is an open source, free to use Blender add on that enables you to automatically generate thousands of 3D Models, Animations, and Images. This add on's primary purpose is to aid in the creation of large generative 3D NFT collections. 
 
-Blend_My_NFTs is a work-in-progress Blender add-on that can automatically generate thousands of images, animations, or 3D objects to help you launch your NFT colleciton! Blend_My_NFTs is beign created by This Cozy Studio to launch an NFT collection called This Cozy Place. If you would like to learn more about Blend_My_NFTs or This Cozy Place, please visit our discord server: https://discord.gg/UpZt5Un57t 
+For support, help, and questions, please join our Discord where our wonderful community can help you: https://discord.gg/UpZt5Un57t 
 
-![NFT_Test_Render_17](https://user-images.githubusercontent.com/82110564/142952463-5764566e-1402-40a4-9cca-a9c57105f033.png)
-*Test sample of the NFT collection This Cozy Place rendered in Blender 2.93 using Blend_My_NFTs (prior to commit 223).
+This add on was origninal developed to create the NFT project This Cozy Place which is now availabe to mint on our website: https://thiscozystudio.com/
+
+
+
+https://user-images.githubusercontent.com/82110564/147833465-965be08b-ca5f-47ba-a159-b92ff775ee14.mov
+
+The video above illustrates the first 10 Cozy Place NFTs generated with Blend_My_NFts. 
+
 
 ## Features 
-- Generate and export Images, Animations, and 3D Models at the same time or individually.
-- Generate all possible combinations of your NFTs! The only limit is your imagination, and your processing power...
-- Raritize and weight your attributes.
-- Preview data about your NFT collection; Time to render and the possible combinations.
-- Inbuilt metadata template generation for Solana, Cardano, and Ethereum.
+- Generate thousands of NFT 3D Models, Animations, and Images in Blender using 3D art. 
+- Support for Windows, Linux, and Mac OS. 
+- Weight and Raritize your NFT collection by setting weighted values. 
+- Creates Meta Data templates for each NFT making uploading to IPFS and Blockchains easy. 
 
-There are always new features dropping, join our discord to stay tuned for updates!
 
 ## Official Links: 
 
 Website: https://thiscozystudio.com/
 
-Discord: https://discord.gg/UpZt5Un57t 
+Discord: https://discord.gg/UpZt5Un57t
+
+Youtube: https://www.youtube.com/channel/UCARiKfuoSghM6DeieqWylYQ
 
 Twitter: https://twitter.com/CozyPlaceNFT
 
 Instagram: https://www.instagram.com/this_cozy_place/
 
-Youtube: https://www.youtube.com/channel/UCARiKfuoSghM6DeieqWylYQ
-
 Reddit: https://www.reddit.com/r/ThisCozyPlace/
+
 
 # Blend_My_NFTs Tutorial Guide
 
-Blend_My_NFTs, this readme tutorial material, the youtube tutorials, and the live stream Q/As and tutorials are all provided for free by me for anyone to access/use any way they like. I only ask in return that you credit this software if you use Blend_My_NFTs to launch an NFT collection and kindly share what I have built here. A direct link to the Blend_My_NFTs Github page on your collection website (or equivelant) would sefice. I ask you of this only to share this tool and what it can do as I feel there are many out there that would benefit from it, my only goal is to help those that need it. It brings warmth to my heart that so many people use what I have built. Thank you.
+Blend_My_NFTs, this readme tutorial material, the youtube tutorials, the live stream Q/As, and tutorials are all provided for free by me for anyone to access/use any way they like. I only ask in return that you credit this software if you use Blend_My_NFTs to launch an NFT collection and kindly share what I have built here. A direct link to the Blend_My_NFTs Github page on your collection website (or equivelant) would sefice. I ask you of this only to share this tool and what it can do as I feel there are many out there that would benefit from it, my only goal is to help those that need it. It brings warmth to my heart that so many people use what I have built. Thank you.
 
-The software in its current state is not farily user friendly but with a really basic understanding of programing you can opporate it easily. You can learn the programing skillz needed in ten minutes! :)
+The software in its current state is not farily user friendly but with a really basic understanding of programing you can opporate it with ease. You can learn the programing skills needed in ten minutes! :)
 
 Blend_My_NFTs works with Blender 3.0.0 on Windows 10 or macOS Big Sur 11.6. 
 
 ## Youtube Tutorial Series
+ 
+Link to the newest Blend_My_NFTs tutorial video: https://www.youtube.com/watch?v=0T_PWVUIH5M
 
-Link to the Blend_My_NFTs Tuotrial series on Youtube: 
-https://www.youtube.com/watch?v=dUajXAZzSPc&list=PLuVvzaanutXetnvsa2_xvXvpREUEYfpg1
-
-Note - Though this video series may be helpful, it is not up to date with the current Blend_My_NFTs release. This document has more detailes and may have newer information. If you have no experience with the Blender API I recomend watch this tutorial on running python scripts in Blender: https://www.youtube.com/watch?v=cyt0O7saU4Q 
+Note - Though this video series may be helpful, it might not be up to date with the current Blend_My_NFTs release. This document has more detailes and may have newer information. If you have no experience with the Blender API I recomend watch this tutorial on running python scripts in Blender: https://www.youtube.com/watch?v=cyt0O7saU4Q 
 
 
 ## Important Terminology 
 
-Before we can continue there are terms that I will be using to describe the process of this software and make it a bit easier to understand. Refer to this section if you come accross an unfamiliar term. 
+Before we can continue there are terms that are used to describe the process of this software to make it a bit easier to understand. Refer to this section if you come accross an unfamiliar term. 
 
 For the following terms, lets say you are creating an NFT collection where the image is of a person wearing a hat:
 
@@ -78,7 +83,6 @@ Follow these steps to setup Blend_My_NFTs:
 - How to unzip a file on Mac: https://support.apple.com/en-ca/guide/mac-help/mchlp2528/mac
 - How to unzip a file on Windows: https://support.microsoft.com/en-us/windows/zip-and-unzip-files-f6dde0a7-0fec-8294-e1d3-703ed85e7ebc
 5. Move the Blend_My_NFTs-main folder is located on your Desktop for easy access (recomended)
-6. Rename the Blend_My_NFTs-main folder to Blend_My_NFTs (optional)
 
 ## How to set up your .Blend file 
 
@@ -151,14 +155,18 @@ Description of customisable variables to generate images:
     for a complete list of object formats supported by Blender.
 
 
-``save_path_mac`` - A string representing the save path for Blend_My_NFTs if you are on MacOS: (REQUIRED - if on MacOS)
+``save_path_mac`` - A string representing the save path for Blend_My_NFTs if you are using MacOS: (REQUIRED - if using MacOS)
 
-    Example mac: /Users/Path/to/Blend_My_NFTs
+    Example Mac: /Users/Path/to/Blend_My_NFTs
 
 
-``save_path_windows`` - A string representing the save path for Blend_My_NFTs if you are on Windows: (REQUIRED - if on Windows)
+``save_path_windows`` - A string representing the save path for Blend_My_NFTs if you are using Windows: (REQUIRED - if using Windows)
 
-    Example windows: C:\Users\Path\to\Blend_My_NFTs
+    Example Windows: C:\Users\Path\to\Blend_My_NFTs
+
+
+``save_path_linux`` - A string representing the save path for Blend_My_NFTs if you are using Linux OS (REQUIRED - if using Linux)
+    Example Linux: /home/Path/to/Blend_My_NFTs
 
 
 ``maxNFTs`` - A positive integer representeing the number of NFTs to generate. (REQUIRED)
@@ -167,21 +175,43 @@ Description of customisable variables to generate images:
 ``nftsPerBatch`` - A positive integer representing the number of NFTs per batch. (REQUIRED)
 
 
-``renderBatch`` - A positive integer representing the the batch number to render if ``renderImage`` is set to True. (REQUIRED)
+``renderBatch`` - A positive integer representing the batch number to render if ``renderImage`` is set to True. (REQUIRED)
+
+
+``enableRarity`` - A boolean value, when set to True, rarity percentage will be taken into account when generating NFT DNA and exporting to NFTRecord.json
 
 
 ``enableExporter`` - A Boolean value, when set to True, will export Images and or 3D models when main.py is run in Blender. (Turned on after NFTRecord.json and appropriate batches are generated with main.py)
 
+
 ``enableImages`` - A boolean value, when set to True with ``enableExporter = True`` will export images. 
+
 
 ``enableAnimations`` - A boolean value, when set to True with ``enableExporter = True`` will export animations. 
 
+
 ``enableModelsBlender`` - A boolean value, when set to True with ``enableExporter = True`` will export 3D models. 
 
-- Note that ``enableImages`` and ``enableModelsBlender`` can run at the same time. Both images and models will be exported. (One of the above is REQUIRED)
+
+- Note that ``enableImages``, ``enableModelsBlender``, and ``enableAnimations`` can run at the same time. Both 3D Models, Animations, and Images will be exported. (One of the above is REQUIRED to generate NFT files)
 
 
-``enableResetViewport`` - A boolean value, when set to True, resets the veiwport of all cameras not in Script_Ignore. (Optional)
+``refactorBatchOrder`` - A boolean value, when set to True will combine NFT Batch# folders into a folder called ``Complete_Collection`` when main.py is run in Blender. Running main.py with this variable set to True will aslo generate meta data formats if the desired formats below are also set to True.
+
+
+``cardanoMetaData`` - A boolean value, when set to True will generate a folder containing Cardano meta data json files for each NFT file. Generates when main.py is run with ``refactorBatchOrder`` is set to True. 
+
+
+``solanaMetaData`` - A boolean value, when set to True will generate a folder containing Solana meta data json files for each NFT file. Generates when main.py is run with ``refactorBatchOrder`` is set to True. 
+
+
+``erc721MetaData`` - A boolean value, when set to True will generate a folder containing ERC721 (Ethereum) meta data json files for each NFT file. Generates when main.py is run with ``refactorBatchOrder`` is set to True. 
+
+
+``turnNumsOff`` - A boolean value, when set to True will remove numbers and underscores in the names of Variants when NFT meta data is generated. Works after ``refactorBatchOrder`` is ran in main.py. 
+
+
+``metaDataDescription`` - A string value, sets the Description variable in the BMNFTs meta data file format. Can be used in a modifed version of metaData.py to fill in Description varaibles in other meta data formats. 
 
 
 ``enableGeneration`` - A boolean value, when set to True, applies and takes into account colour or material variants in the NFT DNA. (Optional)
@@ -201,6 +231,23 @@ Description of customisable variables to generate images:
 ``colorList`` - A dictionary which the keys are the names of variants, and the items are the ``rgbaColorList#`` or ``materialList#``: (Optional)
 
     The rgbaColorList# deterimnes the colours that the variants will change to. This creates new variants with those RGBA colour values. 
+
+
+``enableResetViewport`` - A boolean value, when set to True, resets the veiwport of all cameras not in Script_Ignore. (Optional)
+
+``enable3DModels`` - A boolean value, when set to True, will generate all possible combinations of 3D models when working with an external repository of 3D models in ``3D_Model_Input``. 
+
+``runPreview`` - A boolean value, when set to True, will run a shell of all main modules to generate NFT files. Will print useful numbers and values in the console to help you create your NFT collection. 
+
+
+``maxNFTsTest`` - A positive integer representing the number of NFTs to create during the test. This number aids in the estimation of complete collection creation; the higher this number, the more accurate the estimation. 
+
+
+``checkDups`` - A boolean value, when set to True, will print the number of duplicate NFTs found in the NFTRecord.json file. This file is provided for transparency, it is impossible for duplicates to be made with the current code in the DNA_Generator.py
+
+
+``checkRarity`` - A boolean value, when set to True, will print the true rarity data in the Blender System Console, this data will be saved to a RarityData.json file in the Blend_My_NFTs folder. This file is provided for transparency. The accuracy of the rarity values you set in your .blend file as outlined in the below are dependent on the maxNFTs, and the maximum number of combinations of your NFT collection.
+
 
 ## Running main.py - Generating NFTRecord and Batches
 
@@ -236,9 +283,9 @@ Steps to generate NFTRecord and Batches:
 
 <img width="605" alt="Screen Shot 2021-11-23 at 8 12 10 PM" src="https://user-images.githubusercontent.com/82110564/143153297-b90d9e16-69b7-4b44-b63b-20869f155f32.png">
 
-If you correctly formated your .blend file, you will now have two files; an NFTRecord.json, and a number of Batch#.json files located in the ``Batch_Json_files`` folder. 
+If you correctly formated your .blend file, you will now have two file types; an NFTRecord.json, and a number of Batch#.json files located in the ``Batch_Json_files`` folder. 
 
-## Running main.py - Generating Images
+## Running main.py - Generating Image Batches
 
 **For this section, ensure you have generated NFTRecord.json and Batch#.json files before taking the following steps**
 
@@ -263,13 +310,15 @@ Steps to Generate Images:
 
 <img width="605" alt="Screen Shot 2021-11-23 at 8 12 10 PM" src="https://user-images.githubusercontent.com/82110564/143153297-b90d9e16-69b7-4b44-b63b-20869f155f32.png">
 
-## Summery: The order to run main.py to Generate Images
+Reapeat the steps above for each Batch to generate the complete NFT collection.  
+
+## Summery: The order to run main.py to Generate Image Batches
 
 Run the scripts in the following order: 
 1. main.py - With ``renderImage`` set to ``False`` in the config.py: Generates the data for your NFT collection.
 2. main.py - With ``renderImage`` set to ``True`` in the config.py: Renders images in a batch specified by ``renderBatch``.
 
-## Running main.py - Generating Animations
+## Running main.py - Generating Animation Batches
 
 Steps to Generate Animations: 
 
@@ -292,13 +341,15 @@ Steps to Generate Animations:
 
 <img width="605" alt="Screen Shot 2021-11-23 at 8 12 10 PM" src="https://user-images.githubusercontent.com/82110564/143153297-b90d9e16-69b7-4b44-b63b-20869f155f32.png">
 
-## Summery: The order to run main.py to Generate Animations
+Reapeat the steps above for each Batch to generate the complete NFT collection.  
+
+## Summery: The order to run main.py to Generate Animation Batches
 
 Run the scripts in the following order: 
 1. main.py - With ``enableExporter`` set to ``False`` in config.py: Generates the data for your NFT collection. 
 2. main.py - With ``enableExporter`` and ``enableAnimations`` set to ``True`` in config.py: Renders and compiles animations.
 
-## Running main.py - Generating 3D Models from a .blend file
+## Running main.py - Generating 3D Model Batches from a .blend file
 
 Youtube tutorial for generating 3D models: https://www.youtube.com/watch?v=rRs0lN5huDk&t=1s
 
@@ -323,7 +374,7 @@ Steps to Generate 3D models:
 
 <img width="605" alt="Screen Shot 2021-11-23 at 8 12 10 PM" src="https://user-images.githubusercontent.com/82110564/143153297-b90d9e16-69b7-4b44-b63b-20869f155f32.png">
 
-## Summary: The order to run main.py to Generate 3D Models: 
+## Summary: The order to run main.py to Generate 3D Model Batches: 
 
 run the scripts in the following order:
 1. main.py - With ``enableExporter`` set to ``False`` in config.py: Generates the data for your NFT collection. 
@@ -359,9 +410,9 @@ Similarly to the Image Generator, there is a specific way to format 3d model rep
 
 The generated 3D models will appear in the folder 3D_Model_Output
 
-## How Rarity works
+## How to use Rarity
 
-Rarity is a percentage value and accepts fractions like 0.001%, but they must be specified with decimals in the naming. For ease of use the percentages need to add up to 100%:
+Rarity is a percentage value and accepts fractions like 0.001%, but they must be specified with decimals in the naming (fraction like 1/2 or 3/5 are not permitted in the naming structure). For ease of use the percentages should add up to 100%:
 
 ```
 33% + 33% + 33% + 1% = 100% 
@@ -399,6 +450,38 @@ This is the result for following reasons:
 
 This behaviour is a fundamental mathematical result, not an issue with the code. I've researched various ways at creating and enforcing rarity, this is the only way I have found that works. If you have found a better method, feel free to make a pull request and I'd be happy to review and merge it to the main Github repo for BMNFTs.
 
+.blend file examples: 
+
+1. With Rarity percentage (50% 50% split)
+```
+  Hat <-- Attribute
+  |-Green Hat_1_50
+  |-Red Hat_2_50
+```
+
+2. Since it's 50/50 it can also be expressed like this: 
+```
+  Hat <-- Attribute
+  |-Green Hat_1_0
+  |-Red Hat_2_0
+```
+
+Leaving the rarity number as 0 will randomly select 1 of the variants you set in your .blend file. Note that this only works if every variant's rarity is set to 0. For an attribute its rarity or random, not both. You can have different attributes, where some are using rarity and others are randomly selected, but you cannot mix these with variants. 
+
+Example of more complex rarity structures: 
+
+```
+  Hat <-- Attribute
+  |-Green Hat_1_24.75
+  |-Red Hat_2_24.75
+  |-Blue Hat_2_24.75
+  |-Orange Hat_2_24.57
+  |-Purple Hat_2_0.5
+  |-Yellow Hat_2_0.5
+```
+
+In the example above, Green, Red, Blue, and Orange hats all have an equal chance of getting selected. However Purple and Yellow hats will only appear on average 0.5% of the time. We recommend rounding to about 5 decimal places for simplicity, as numbers of more accuracy aren't really needed for NFT collections 10,000 or smaller.
+
 The code for that determines rarity can be found in ``src/Main_Generators/Rarity_Sorter.py``. The most important line in that file is ``70``, that is what generates the randomly weighted DNA. After that it is checked by line 
 
 ## Helpful Links
@@ -430,7 +513,3 @@ Nothing in this repository or its documentation is financial advice. If you crea
 The creators of This Cozy Studio will never, under any cricumstance, ask for your crypto wallet(s) secret phrase or private keys. If you come across anyone who is impersonating the founding members of This Cozy Place, please report it immediately to the admins on our discord channel and we will take appropriate action and warn our community of the behaviour. If this takes place outside of our community boundries then report the user to the appropriate authorities. 
 
 This software is provided for free and is open source. We are not liable for any felones you may commit using this software, and we staunchly appose the malicious use of this software that in any way breaks any applicable law in your loction of residence. 
-
-## Donations
-
-Only donate if you are financialy able to, I'm am a well off individual and do not need donations to survive. I do acknowledge some people in our community wish to donate to show their appreciation for the work I've put into this project and I apprieciate the support. 
