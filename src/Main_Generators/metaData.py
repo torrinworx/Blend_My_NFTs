@@ -46,15 +46,8 @@ def returnCardanoMetaData(name, description, NFT_DNA, NFT_Variants):
     return metaDataDictCardano
 
 def returnSolanaMetaData(name, description, NFT_DNA, NFT_Variants):
-    metaDataDictSolana = {}
-
-    metaDataDictSolana["name"] = name
-    metaDataDictSolana["symbol"] = ""
-    metaDataDictSolana["description"] = description
-    metaDataDictSolana["seller_fee_basis_points"] = None
-    metaDataDictSolana["image"] = ""
-    metaDataDictSolana["animation_url"] = ""
-    metaDataDictSolana["external_url"] = ""
+    metaDataDictSolana = {"name": name, "symbol": "", "description": description, "seller_fee_basis_points": None,
+                          "image": "", "animation_url": "", "external_url": ""}
 
     attributes = []
 
@@ -71,21 +64,34 @@ def returnSolanaMetaData(name, description, NFT_DNA, NFT_Variants):
         "name": "",
         "family": ""
     }
-    metaDataDictSolana["properties"] = {"files": [{"uri": "", "type": ""}],
-                                  "category": "",
-                                  "creators": [{"address": "", "share": None}]
-                                  }
+
+    metaDataDictSolana["properties"] = {
+        "files": [{"uri": "", "type": ""}],
+        "category": "",
+        "creators": [{"address": "", "share": None}]
+    }
     return metaDataDictSolana
 
 def returnErc721MetaData(name, description, NFT_DNA, NFT_Variants):
-    metaDataDictErc721 = {}
+    metaDataDictErc721 = {
+        "name": name,
+        "description": description,
+        "image": "",
+        "attributes": None,
+    }
 
-    metaDataDictErc721["title"] = name
-    metaDataDictErc721["type"] = ""
-    metaDataDictErc721["properties"] = {"NFT_Variants": NFT_Variants,
-                                        "description": description,
-                                        "NFT_DNA": NFT_DNA
-                                        }
+    attributes = []
+
+    for i in NFT_Variants:
+        dictionary = {
+            "trait_type": i,
+            "value": NFT_Variants[i]
+        }
+
+        attributes.append(dictionary)
+
+    metaDataDictErc721["attributes"] = attributes
+
     return metaDataDictErc721
 
 if __name__ == '__main__':

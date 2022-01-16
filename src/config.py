@@ -69,7 +69,7 @@ refactorBatchOrder = False  # When set to True, sorts, renames, and moves all NF
 # Set the following to True to generate the format of the Meta Data template for your NFTs blockchain. (You can use multiple)
 cardanoMetaData = False  # Cardano - Format Source: https://cips.cardano.org/cips/cip25/
 solanaMetaData = False  # Solana - Format Source: https://docs.metaplex.com/nft-standard
-erc721MetaData = False  # Ethereum ERC721 - Format Source: https://eips.ethereum.org/EIPS/eip-721
+erc721MetaData = False  # Ethereum ERC721 - Format Source: https://docs.opensea.io/docs/metadata-standards
 
 turnNumsOff = True  # When set to True, turns off the extension numbers representing order and rarity from the names of
 # variants in meta Data.

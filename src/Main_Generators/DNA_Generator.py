@@ -150,7 +150,7 @@ def returnData():
             '''
             Returns the name of "i" attribute variant
             '''
-            name = re.sub(r'[^a-zA-Z]', "", i)
+            name = i.split("_")[0]
             return name
 
          def getOrder_rarity(i):
@@ -229,7 +229,9 @@ def returnData():
       '''
       Returns "combinations" the number of all possible NFT combinations.
       '''
+
       hierarchyByNum = []
+
       for i in hierarchy:
          # Ignore Collections with nothing in them
          if len(hierarchy[i]) != 0:
@@ -237,9 +239,17 @@ def returnData():
          else:
             print("The following collection has been identified as empty:")
             print(i)
+
       combinations = 1
+
       for i in hierarchyByNum:
          combinations = combinations*i
+
+      try:
+         numBatches = combinations/config.nftsPerBatch
+
+      except:
+         print(bcolors.ERROR + "ERROR:\nnftsPerBatch in config.py needs to be a positive integer." + bcolors.RESET)
 
       if combinations == 0:
          print(bcolors.ERROR + "\nERROR:" + bcolors.RESET)
@@ -250,8 +260,6 @@ def returnData():
          print("Here is the hierarchy of all collections the DNA_Generator gathered from your .blend file, excluding "
                "\nthose in Script_Ignore:")
          print(hierarchy)
-
-      numBatches = combinations/config.nftsPerBatch
 
       if numBatches < 1:
          print(bcolors.ERROR + "ERROR:" + bcolors.RESET)
@@ -285,11 +293,8 @@ def generateNFT_DNA():
 
    listAllCollections, attributeCollections, attributeCollections1, hierarchy, possibleCombinations = returnData()
 
-   print("-----------------------------------------------------------------------------")
-   print("The number of possible DNA combinations is " + str(possibleCombinations))
-   print("")
-   print("Generating " + str(config.maxNFTs) + " combinations of DNA. Set in config.py.")
-   print("")
+   print(f"NFT Combinations: {possibleCombinations}\n")
+   print(f"Generating {config.maxNFTs} combinations of DNA.\n")
 
    DataDictionary = {}
    listOptionVariant = []
@@ -350,7 +355,7 @@ def generateNFT_DNA():
    DataDictionary["hierarchy"] = hierarchy
    DataDictionary["DNAList"] = DNAList
 
-   return DataDictionary, possibleCombinations
+   return DataDictionary, possibleCombinations, DNAList
 
 def send_To_Record_JSON():
    '''
@@ -360,31 +365,18 @@ def send_To_Record_JSON():
    repeate DNA.
    '''
 
-   DataDictionary, possibleCombinations = generateNFT_DNA()
+   DataDictionary, possibleCombinations, DNAList = generateNFT_DNA()
 
-   ledger = json.dumps(DataDictionary, indent=1, ensure_ascii=True)
-   with open(os.path.join(config.save_path, "NFTRecord.json"), 'w') as outfile:
-      outfile.write(ledger + '\n')
+   try:
+      ledger = json.dumps(DataDictionary, indent=1, ensure_ascii=True)
+      with open(os.path.join(config.save_path, "NFTRecord.json"), 'w') as outfile:
+         outfile.write(ledger + '\n')
+      print(bcolors.OK + f"{len(DNAList)} NFT DNA sent to NFTRecord.json in %.4f seconds.\n" % (time.time() - time_start) + bcolors.RESET)
 
-   print("")
-   print("All possible combinations of DNA sent to NFTRecord.json with " + str(possibleCombinations) + " NFT DNA sequences generated in %.4f seconds" % (time.time() - time_start))
-   print("")
-   print("If you want the number of NFT DNA sequences to be higher, please add more variants or attributes to your .blend file")
-   print("")
-
-# Utility functions:
-
-# ONLY FOR TESTING, DO NOT EVER USE IF NFTRecord.json IS FULL OF REAL DATA
-# THIS WILL DELETE THE RECORD:
-# Note - NFTRecrod.json will be created the next time you run main.py
-def clearNFTRecord(AREYOUSURE):
-   if AREYOUSURE == True:
-      os.remove("NFTRecord.json")
-
-# clearNFTRecord()
+   except:
+      print(bcolors.ERROR + "ERROR:\nNFT DNA not sent to NFTRecord.json.\n" + bcolors.RESET)
 
 if __name__ == '__main__':
    stripColorFromName()
    returnData()
    send_To_Record_JSON()
-   clearNFTRecord()
