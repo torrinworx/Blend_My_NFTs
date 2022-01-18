@@ -43,7 +43,12 @@ Reddit: https://www.reddit.com/r/ThisCozyPlace/
 
 ## Case Studies
 This document has a list of projects that use Blend_My_NFTs to help facilitate them in the creation of their collection: 
-https://docs.google.com/document/d/e/2PACX-1vSHZS4GRu8xXDYpVPEaxyBeTzms9yrJEC9IoAcP38_U8x0C1kVrbtNZgh0zUmkzBoZQVwNvBf3ldRij/pub 
+https://docs.google.com/document/d/e/2PACX-1vSHZS4GRu8xXDYpVPEaxyBeTzms9yrJEC9IoAcP38_U8x0C1kVrbtNZgh0zUmkzBoZQVwNvBf3ldRij/pub
+
+
+## Other languages
+
+Spanish 🇪🇸 - https://docs.google.com/document/d/e/2PACX-1vTOjtAuI9coQHC7ubf05f6NOlr921dQFmTVO0P9JZ7b6HxdMFVL4bvYPnY3pl1gPLLTZ15oYv6bMWkL/pub
 
 
 # Blend_My_NFTs Tutorial Guide
