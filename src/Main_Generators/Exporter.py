@@ -28,6 +28,7 @@ class bcolors:
    ERROR = '\033[91m'  # RED
    RESET = '\033[0m'  # RESET COLOR
 
+
 if config.runPreview:
    config.nftsPerBatch = config.maxNFTsTest
    config.maxNFTs = config.maxNFTsTest
@@ -74,9 +75,9 @@ def render_and_save_NFTs():
                 bpy.data.collections[j].hide_viewport = True
 
         def match_DNA_to_Variant(a):
-            '''
-            Matches each DNA number sepearted by "-" to its attribute, then its variant.
-            '''
+            """
+            Matches each DNA number separated by "-" to its attribute, then its variant.
+            """
 
             listAttributes = list(hierarchy.keys())
             listDnaDecunstructed = a.split('-')
@@ -220,6 +221,7 @@ def render_and_save_NFTs():
 
     print("\nAll NFT PNGs rendered, process finished.")
     print("Completed all renders in Batch{}.json in ".format(config.renderBatch) + "%.4f seconds" % (time.time() - time_start_1) + "\n")
+
 
 if __name__ == '__main__':
     render_and_save_NFTs()

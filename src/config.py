@@ -40,7 +40,7 @@ save_path_windows = r''
 # Example windows: C:\Users\Path\to\Blend_My_NFTs
 
 maxNFTs = 0  # The maximum number of NFTs you want to generate.
-nftsPerBatch = 0  # Number of NFTs per batch
+nftsPerBatch = 0  # Number of NFTs per batch (Batches split maxNFTs into smaller manageable chunks)
 renderBatch = 0  # The batch number to render in Exporter.py
 
 # Set to True to generate images or 3D models depending on your settings below when main.py is run in Blender. Only works
