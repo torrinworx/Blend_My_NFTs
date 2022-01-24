@@ -180,11 +180,11 @@ def render_and_save_NFTs():
                                           export_format='GLB',
                                           use_selection=True)
             elif config.modelFileFormat == 'fbx':
-                bpy.ops.export_scene.fbx(filepath=modelPath + '.fbx',
+                bpy.ops.export_scene.fbx(filepath=modelPath,
                                          check_existing=True,
                                          use_selection=True)
             elif config.modelFileFormat == 'obj':
-                bpy.ops.export_scene.obj(filepath=modelPath + 'obj',
+                bpy.ops.export_scene.obj(filepath=modelPath,
                                          check_existing=True,
                                          use_selection=True)
             elif config.modelFileFormat == 'x3d':
