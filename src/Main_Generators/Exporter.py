@@ -39,9 +39,9 @@ def stripColorFromName(name):
    return "_".join(name.split("_")[:-1])
    
 def getBatchData():
-    '''
+    """
     Retrieves a given batches data determined by renderBatch in config.py
-    '''
+    """
 
     file_name = os.path.join(config.batch_json_save_path, "Batch{}.json".format(config.renderBatch))
     batch = json.load(open(file_name))
@@ -53,10 +53,10 @@ def getBatchData():
     return NFTs_in_Batch, hierarchy, BatchDNAList
 
 def render_and_save_NFTs():
-    '''
+    """
     Renders the NFT DNA in a Batch#.json, where # is renderBatch in config.py. Turns off the viewport camera and
     the render camera for all items in hierarchy.
-    '''
+    """
 
     NFTs_in_Batch, hierarchy, BatchDNAList = getBatchData()
 
@@ -67,9 +67,9 @@ def render_and_save_NFTs():
         for i in hierarchy:
             for j in hierarchy[i]:
                 if config.enableGeneration:
-                    '''
+                    """
                      Remove Color code so blender recognises the collection
-                    '''
+                    """
                     j = stripColorFromName(j)
                 bpy.data.collections[j].hide_render = True
                 bpy.data.collections[j].hide_viewport = True
@@ -96,13 +96,8 @@ def render_and_save_NFTs():
         dnaDictionary = match_DNA_to_Variant(a)
         name = config.nftName + "_" + str(x)
 
-        print("")
-        print("----------Rendering New NFT----------")
-        print("DNA attribute list:")
-        print(dnaDictionary)
-        print("DNA Code:")
-        print(a)
-        print("")
+        print(f"\n{bcolors.OK}|---Generating {x} NFT Files---|{bcolors.RESET}")
+        print(f"DNA attribute list:\n{dnaDictionary}\nDNA Code:{a}")
 
         for c in dnaDictionary:
             collection = dnaDictionary[c]
@@ -144,7 +139,7 @@ def render_and_save_NFTs():
                     bpy.data.collections[collection].hide_render = False
                     bpy.data.collections[collection].hide_viewport = False
 
-        print("Generating")
+        print(f"{bcolors.OK}Generating{bcolors.RESET}")
 
         if config.enableImages:
             if not os.path.exists(imageFolder):
@@ -196,11 +191,8 @@ def render_and_save_NFTs():
         if not os.path.exists(metaDataFolder):
             os.makedirs(metaDataFolder)
 
-        metaDataDict = {}
-        metaDataDict["name"] = name
-        metaDataDict["description"] = config.metaDataDescription
-        metaDataDict["NFT_DNA"] = a
-        metaDataDict["NFT_Variants"] = dnaDictionary
+        metaDataDict = {"name": name, "description": config.metaDataDescription, "NFT_DNA": a,
+                        "NFT_Variants": dnaDictionary}
 
         jsonMetaData = json.dumps(metaDataDict, indent=1, ensure_ascii=True)
 

@@ -56,8 +56,8 @@ def returnData():
    try:
       scriptIgnore = bpy.data.collections["Script_Ignore"]
    except:
-      print(bcolors.ERROR + "ERROR:\nScript_Ignore collection is not in .blend file scene. Please add the Script_Ignore collection to your "
-            ".blend file scene. For more information, read the README.md file.\n"+ bcolors.RESET)
+      print(f"{bcolors.ERROR} ERROR:\nScript_Ignore collection is not in .blend file scene. Please add the Script_Ignore collection to your "
+            f".blend file scene. For more information, read the README.md file.\n {bcolors.RESET}")
 
    listAllCollInScene = []
    listAllCollections = []
@@ -138,25 +138,25 @@ def returnData():
    attributeCollections1 = copy.deepcopy(attributeCollections)
 
    def attributeData(attributeVariants):
-      '''
+      """
       Creates a dictionary of each attribute
-      '''
+      """
       allAttDataList = {}
       count = 0
       previousAttribute = ""
       for i in attributeVariants:
 
          def getName(i):
-            '''
+            """
             Returns the name of "i" attribute variant
-            '''
+            """
             name = i.split("_")[0]
             return name
 
          def getOrder_rarity(i):
-            '''
+            """
             Returns the "order", "rarity" and "color" (if enabled) of i attribute variant in a list
-            '''
+            """
             x = re.sub(r'[a-zA-Z]', "", i)
             a = x.split("_")
             del a[0]
@@ -166,8 +166,8 @@ def returnData():
          orderRarity = getOrder_rarity(i)
 
          if len(orderRarity) == 0:
-            print(bcolors.ERROR + "\nERROR:" + bcolors.RESET)
-            print("The collection " + str(i) + " doesn't follow the naming conventions of attributes. Please move this \n"
+            print(f"{bcolors.ERROR} \nERROR: {bcolors.RESET}")
+            print(f"The collection {i} doesn't follow the naming conventions of attributes. Please move this \n"
                   "colleciton to Script_Ignore or review proper collection format in README.md")
             return
 
@@ -194,18 +194,18 @@ def returnData():
    variantMetaData = attributeData(attributeVariants)
 
    def getHierarchy():
-      '''
+      """
       Constructs the hierarchy dictionary from attributeCollections1 and variantMetaData.
-      '''
+      """
       hierarchy = {}
       for i in attributeCollections1:
          colParLong = list(bpy.data.collections[str(i)].children)
          colParShort = {}
          for x in colParLong:
             if config.enableGeneration:
-               '''
+               """
                Append colors to blender name for PNG generator and NFTRecord.json to create the correct list
-               '''
+               """
                if x.name in config.colorList:
                   for j in range(len(config.colorList[x.name])):
                      colParShort[x.name + "_" + str(j+1)] = None
@@ -226,9 +226,9 @@ def returnData():
    hierarchy = getHierarchy()
 
    def numOfCombinations(hierarchy):
-      '''
+      """
       Returns "combinations" the number of all possible NFT combinations.
-      '''
+      """
 
       hierarchyByNum = []
 
@@ -237,11 +237,9 @@ def returnData():
          if len(hierarchy[i]) != 0:
             hierarchyByNum.append(len(hierarchy[i]))
          else:
-            print("The following collection has been identified as empty:")
-            print(i)
+            print(f"The following collection has been identified as empty: {i}")
 
       combinations = 1
-
       for i in hierarchyByNum:
          combinations = combinations*i
 
@@ -249,25 +247,20 @@ def returnData():
          numBatches = combinations/config.nftsPerBatch
 
       except:
-         print(bcolors.ERROR + "ERROR:\nnftsPerBatch in config.py needs to be a positive integer." + bcolors.RESET)
+         print(f"{bcolors.ERROR} ERROR:\nnftsPerBatch in config.py needs to be a positive integer. {bcolors.RESET}")
 
       if combinations == 0:
          print(bcolors.ERROR + "\nERROR:" + bcolors.RESET)
-         print("The number of all possible combinations is equal to 0. Please review your collection hierarchy \n "
-               "and ensure it is formatted correctly.")
-         print("Please review README.md for more information.")
-         print("")
-         print("Here is the hierarchy of all collections the DNA_Generator gathered from your .blend file, excluding "
-               "\nthose in Script_Ignore:")
-         print(hierarchy)
+         print("The number of all possible combinations is equal to 0. Please review your collection hierarchy"
+               "and ensure it is formatted correctly. Please review README.md for more information. \nHere is the "
+               "hierarchy of all collections the DNA_Generator gathered from your .blend file, excluding those in "
+               f"Script_Ignore: {hierarchy}")
 
       if numBatches < 1:
-         print(bcolors.ERROR + "ERROR:" + bcolors.RESET)
-         print("The number of NFTs Per Batch (nftsPerBatch variable in config.py) is to high.")
-         print("There are a total of " + str(combinations) + " possible NFT combinations and you've requested "
-               + str(config.nftsPerBatch) + " NFTs per batch.")
-         print("Lower the number of NFTs per batch in config.py or increase the number of \nattributes and/or variants"
-               " in your .blend file.")
+         print(f"{bcolors.ERROR} ERROR: {bcolors.RESET}")
+         print("The number of NFTs Per Batch (nftsPerBatch variable in config.py) is to high. There are a total of "
+               f" {combinations} possible NFT combinations and you've requested {config.nftsPerBatch} NFTs per batch. "
+               f"Lower the number of NFTs per batch in config.py or increase the number of attributes and/or variants in your .blend file.")
 
       return combinations
 
@@ -276,9 +269,9 @@ def returnData():
    for i in variantMetaData:
       def cameraToggle(i, toggle=True):
          if config.enableGeneration:
-            '''
+            """
             Remove Color code so blender recognises the collection
-            '''
+            """
             i = stripColorFromName(i)
          bpy.data.collections[i].hide_render = toggle
          bpy.data.collections[i].hide_viewport = toggle
@@ -287,9 +280,9 @@ def returnData():
    return listAllCollections, attributeCollections, attributeCollections1, hierarchy, possibleCombinations
 
 def generateNFT_DNA():
-   '''
-   Returns batchDataDictionary containing the number of NFT cominations, hierarchy, and the DNAList.
-   '''
+   """
+   Returns batchDataDictionary containing the number of NFT combinations, hierarchy, and the DNAList.
+   """
 
    listAllCollections, attributeCollections, attributeCollections1, hierarchy, possibleCombinations = returnData()
 
@@ -336,10 +329,10 @@ def generateNFT_DNA():
 
       if config.nftsPerBatch > config.maxNFTs:
          print(bcolors.WARNING + "\nWARNING:" + bcolors.RESET)
-         print("The Max num of NFTs you chose is smaller than the NFTs Per Batch you set. Only " + str(config.maxNFTs) + " were added to 1 batch")
+         print(f"The Max num of NFTs you chose is smaller than the NFTs Per Batch you set. Only {config.maxNFTs} were added to 1 batch")
 
    if config.enableRarity:
-      print(bcolors.OK + "Rarity is on. Weights listed in .blend will be taken into account " + bcolors.RESET)
+      print(f"{bcolors.OK} Rarity is on. Weights listed in .blend will be taken into account {bcolors.RESET}")
       possibleCombinations = config.maxNFTs
       DNAList = Rarity_Sorter.sortRarityWeights(hierarchy, listOptionVariant, DNAList)
 
@@ -358,12 +351,12 @@ def generateNFT_DNA():
    return DataDictionary, possibleCombinations, DNAList
 
 def send_To_Record_JSON():
-   '''
+   """
    Creates NFTRecord.json file and sends "batchDataDictionary" to it. NFTRecord.json is a permanent record of all DNA
    you've generated with all attribute variants. If you add new variants or attributes to your .blend file, other scripts
    need to reference this .json file to generate new DNA and make note of the new attributes and variants to prevent
    repeate DNA.
-   '''
+   """
 
    DataDictionary, possibleCombinations, DNAList = generateNFT_DNA()
 
@@ -371,10 +364,11 @@ def send_To_Record_JSON():
       ledger = json.dumps(DataDictionary, indent=1, ensure_ascii=True)
       with open(os.path.join(config.save_path, "NFTRecord.json"), 'w') as outfile:
          outfile.write(ledger + '\n')
-      print(bcolors.OK + f"{len(DNAList)} NFT DNA sent to NFTRecord.json in %.4f seconds.\n" % (time.time() - time_start) + bcolors.RESET)
+      print(f"{bcolors.OK}{len(DNAList)} NFT DNA sent to NFTRecord.json in %.4f seconds.\n" % (time.time() - time_start) + bcolors.RESET)
 
    except:
-      print(bcolors.ERROR + "ERROR:\nNFT DNA not sent to NFTRecord.json.\n" + bcolors.RESET)
+      print(f"{bcolors.ERROR} ERROR:\nNFT DNA not sent to NFTRecord.json.\n {bcolors.RESET}")
+
 
 if __name__ == '__main__':
    stripColorFromName()

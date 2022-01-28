@@ -22,9 +22,7 @@ importlib.reload(config)
 
 
 def returnCardanoMetaData(name, description, NFT_DNA, NFT_Variants):
-    metaDataDictCardano = {}
-
-    metaDataDictCardano["721"] = {
+    metaDataDictCardano = {"721": {
         "<policy_id>": {
             "<asset_name>": {
                 "name": name,
@@ -41,7 +39,7 @@ def returnCardanoMetaData(name, description, NFT_DNA, NFT_Variants):
             }
         },
         "version": "1.0"
-    }
+    }}
 
     return metaDataDictCardano
 
