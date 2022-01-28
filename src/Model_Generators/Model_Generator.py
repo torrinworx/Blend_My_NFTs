@@ -63,7 +63,7 @@ def generate3DModels():
     hierarchy = {}
 
     for i in attributeList:
-        file_unfiltered = os.listdir(config.modelAssetPath + config.slash + i)
+        file_unfiltered = os.listdir(os.path.join(config.modelAssetPath, i))
         add_to_hierarchy = [x for x in file_unfiltered if x not in removeList]
         hierarchy[i] = add_to_hierarchy
 
@@ -103,13 +103,13 @@ def generate3DModels():
             for h in Script_Ignore_Folder:
                 fileName, fileExtension = os.path.splitext(h)
                 if fileExtension == ".glb":
-                    bpy.ops.import_scene.gltf(filepath=config.model_Script_Ignore_Path + config.slash + h)
+                    bpy.ops.import_scene.gltf(filepath=os.path.join(config.model_Script_Ignore_Path, h))
                 elif fileExtension == ".fbx":
-                    bpy.ops.import_scene.fbx(filepath=config.model_Script_Ignore_Path + config.slash + h)
+                    bpy.ops.import_scene.fbx(filepath=os.path.join(config.model_Script_Ignore_Path, h))
                 elif fileExtension == ".obj":
-                    bpy.ops.import_scene.obj(filepath=config.model_Script_Ignore_Path + config.slash + h)
+                    bpy.ops.import_scene.obj(filepath=os.path.join(config.model_Script_Ignore_Path, h))
                 elif fileExtension == ".x3d":
-                    bpy.ops.import_scene.obj(filepath=config.model_Script_Ignore_Path + config.slash + h)
+                    bpy.ops.import_scene.obj(filepath=os.path.join(config.model_Script_Ignore_Path, h))
 
         for j in i:
             def getParent(hierarchy):
@@ -119,7 +119,7 @@ def generate3DModels():
                             return x
 
             parent = getParent(hierarchy)
-            path2 = config.modelAssetPath + config.slash + parent + config.slash + j
+            path2 = os.path.join(config.modelAssetPath, parent, j)
             fileName, fileExtension = os.path.splitext(j)
 
             if fileExtension == ".glb":
@@ -132,16 +132,16 @@ def generate3DModels():
                 bpy.ops.import_scene.obj(filepath=path2)
 
         if config.modelFileFormat == 'glb':
-            bpy.ops.export_scene.gltf(filepath=config.model_save_path + config.slash + config.nftName + str(count),
+            bpy.ops.export_scene.gltf(filepath=os.path.join(config.model_save_path, config.nftName + str(count)),
                                       check_existing=True, export_format='GLB')
         elif config.modelFileFormat == 'fbx':
-            bpy.ops.export_scene.fbx(filepath=config.model_save_path + config.slash + config.nftName + str(count),
+            bpy.ops.export_scene.fbx(filepath=os.path.join(config.model_save_path, config.nftName + str(count)),
                                      check_existing=True)
         elif config.modelFileFormat == 'obj':
-            bpy.ops.export_scene.obj(filepath=config.model_save_path + config.slash + config.nftName + str(count),
+            bpy.ops.export_scene.obj(filepath=os.path.join(config.model_save_path, config.nftName + str(count)),
                                      check_existing=True)
         elif config.modelFileFormat == 'x3d':
-            bpy.ops.export_scene.x3d(filepath=config.model_save_path + config.slash + config.nftName + str(count),
+            bpy.ops.export_scene.x3d(filepath=os.path.join(config.model_save_path, config.nftName + str(count)),
                                      check_existing=True)
         deleteAllObjects()
         count += 1

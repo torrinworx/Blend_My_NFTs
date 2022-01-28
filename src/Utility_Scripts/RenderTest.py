@@ -63,9 +63,10 @@ def imageRenderTest():
     
     print(renderMaxTime)
 
-    os.remove(config.batch_json_save_path + config.slash + "Batch1.json")
-    os.remove(config.save_path + config.slash + "NFTRecord.json")
-    shutil.rmtree(config.nft_save_path + config.slash + "Batch1")
+    os.remove(os.path.join(config.batch_json_save_path, "Batch1.json"))
+    os.remove(os.path.join(config.save_path, "NFTRecord.json"))
+    shutil.rmtree(os.path.join(config.nft_save_path, "Batch1"))
+
 
 if __name__ == '__main__':
     imageRenderTest()
