@@ -28,10 +28,10 @@ if config.runPreview:
    config.nftName = "TestImages"
 
 def sortRarityWeights(hierarchy, listOptionVariant, DNAList):
-    '''
+    """
     Sorts through DataDictionary and appropriately weights each variant based on their rarity percentage set in Blender
     ("rarity" in DNA_Generator). Then
-    '''
+    """
 
     DNASet = set()
 
@@ -79,6 +79,7 @@ def sortRarityWeights(hierarchy, listOptionVariant, DNAList):
 
     DNAListRare = list(DNASet)
     return DNAListRare
+
 
 if __name__ == '__main__':
     sortRarityWeights()

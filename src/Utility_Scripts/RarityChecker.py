@@ -81,7 +81,7 @@ def getRealRarity():
 
     print(completeData)
 
-    print(bcolors.OK + "Rarity Checker is active. These are the percentages for each variant per attribute you set in your .blend file:" + bcolors.RESET)
+    print(f"{bcolors.OK} Rarity Checker is active. These are the percentages for each variant per attribute you set in your .blend file:{bcolors.RESET}")
 
     for i in completeData:
         print(i + ":")
@@ -93,9 +93,10 @@ def getRealRarity():
     with open(os.path.join(config.save_path, "RarityData.json"), 'w') as outfile:
         outfile.write(jsonMetaData + '\n')
     path = os.path.join(config.save_path, "RarityData.json")
-    print(bcolors.OK + f"Rarity Data has been saved to {path}." + bcolors.RESET)
+    print(f"{bcolors.OK}Rarity Data has been saved to {path}. {bcolors.RESET}")
 
     return
+
 
 if __name__ == '__main__':
     getRealRarity()

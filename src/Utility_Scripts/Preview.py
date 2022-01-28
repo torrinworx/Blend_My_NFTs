@@ -73,7 +73,8 @@ def printImportant():
     if not config.enable3DModels:
         RenderTest.imageRenderTest()
     if config.enable3DModels:
-        print( bcolors.WARNING + "Cannot run Render Test when enable3DModels = True" + bcolors.RESET)
+        print(f"{bcolors.WARNING} Cannot run Render Test when enable3DModels = True {bcolors.RESET}")
+
 
 if __name__ == '__main__':
     printImportant()

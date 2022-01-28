@@ -8,8 +8,6 @@
 import bpy
 import os
 import sys
-import time
-import json
 import importlib
 
 dir = os.path.dirname(bpy.data.filepath)
@@ -24,22 +22,19 @@ importlib.reload(config)
 def returnCardanoMetaData(name, description, NFT_DNA, NFT_Variants):
     metaDataDictCardano = {"721": {
         "<policy_id>": {
-            "<asset_name>": {
+            name: {
                 "name": name,
                 "image": "",
                 "mediaType": "",
                 "description": description,
-                "files": [{
-                    "name": "",
-                    "mediaType": "",
-                    "src": "",
-                    "NFT_Variants": NFT_Variants,
-                    "NFT_DNA": NFT_DNA
-                }]
+
             }
         },
         "version": "1.0"
     }}
+
+    for i in NFT_Variants:
+        metaDataDictCardano["721"]["<policy_id>"][name][i] = NFT_Variants[i]
 
     return metaDataDictCardano
 
@@ -91,6 +86,7 @@ def returnErc721MetaData(name, description, NFT_DNA, NFT_Variants):
     metaDataDictErc721["attributes"] = attributes
 
     return metaDataDictErc721
+
 
 if __name__ == '__main__':
     returnSolanaMetaData()

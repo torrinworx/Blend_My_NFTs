@@ -3,12 +3,9 @@
 
 import bpy
 import os
-import re
 import sys
 import copy
-import time
 import json
-import shutil
 import importlib
 
 dir = os.path.dirname(bpy.data.filepath)
@@ -22,6 +19,7 @@ importlib.reload(config)
 importlib.reload(metaData)
 
 removeList = [".gitignore", ".DS_Store"]
+
 
 def getNFType():
     images = False
@@ -45,9 +43,9 @@ def getNFType():
     return images, animations, models, metaData
 
 def getMetaDataDirty(completeMetaDataPath, i):
-    '''
+    """
     Retrieves a given batches data determined by renderBatch in config.py
-    '''
+    """
 
     file_name = os.path.join(completeMetaDataPath, i)
     metaDataDirty = json.load(open(file_name))
@@ -215,9 +213,10 @@ def reformatNFTCollection():
 
                 dataCount += 1
 
-    print("All NFT files stored and sorted to the Complete_Collection folder in {}".format(config.save_path))
+    print(f"All NFT files stored and sorted to the Complete_Collection folder in {config.save_path}")
 
     renameMetaData(completeCollPath, completeMetaDataPath)
+
 
 if __name__ == '__main__':
     reformatNFTCollection()

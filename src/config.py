@@ -2,13 +2,13 @@
 # This file determines the settings of your NFT collection. Please read the README.md file to understand how to run this
 # program.
 
-nftName = 'Test'  # The name of the NFT image produces by PNG-Generator
+nftName = ''  # The name of the NFT image produces by PNG-Generator
 
-maxNFTs = 10  # The maximum number of NFTs you want to generate.
-nftsPerBatch = 10  # Number of NFTs per batch (Batches split maxNFTs into smaller manageable chunks)
+maxNFTs = 0  # The maximum number of NFTs you want to generate.
+nftsPerBatch = 0  # Number of NFTs per batch (Batches split maxNFTs into smaller manageable chunks)
 renderBatch = 1  # The batch number to render in Exporter.py
 
-imageFileFormat = 'PNG'  # Dictate the image extension when Blender renders the images
+imageFileFormat = ''  # Dictate the image extension when Blender renders the images
 # Type the exact name provided below in the '' above:
 # JPEG - Exports the .jpeg format
 # PNG - Exports the .png format
@@ -35,7 +35,7 @@ modelFileFormat = ''  # The file format of the objects you would like to export
 # for a complete list of object formats supported by Blender.
 
 # The path to Blend_My_NFTs folder:
-save_path_mac = '/Users/torrinleonard/Desktop/ThisCozyStudio/Blend_My_NFTs'
+save_path_mac = ''
 save_path_linux = ''
 save_path_windows = r''
 # Place the path in the '', e.g: save_path_mac = '/Users/Path/to/Blend_My_NFTs'

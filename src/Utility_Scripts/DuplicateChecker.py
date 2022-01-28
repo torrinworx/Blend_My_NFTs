@@ -45,7 +45,8 @@ def checkIfBatchDup():
     return duplicates
 
 def checkDups():
-    print("NFTRecord.json contains " + str(checkIfBatchDup()) + " duplicate NFT DNA.")
+    print(f"NFTRecord.json contains {checkIfBatchDup()} duplicate NFT DNA.")
+
 
 if __name__ == '__main__':
     checkDups()
