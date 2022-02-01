@@ -14,24 +14,30 @@ sys.path.append(dir)
 sys.modules.values()
 
 from src import config
+
 importlib.reload(config)
 
 from src.Main_Generators import DNA_Generator
 
 importlib.reload(DNA_Generator)
 
+from src.Utility_Scripts import CheckDNARules
+
+importlib.reload(CheckDNARules)
+
 
 if config.runPreview:
-   config.nftsPerBatch = config.maxNFTsTest
-   config.maxNFTs = config.maxNFTsTest
-   config.renderBatch = 1
-   config.nftName = "TestImages"
+    config.nftsPerBatch = config.maxNFTsTest
+    config.maxNFTs = config.maxNFTsTest
+    config.renderBatch = 1
+    config.nftName = "TestImages"
+
 
 def sortRarityWeights(hierarchy, listOptionVariant, DNAList):
-    '''
+    """
     Sorts through DataDictionary and appropriately weights each variant based on their rarity percentage set in Blender
     ("rarity" in DNA_Generator). Then
-    '''
+    """
 
     DNASet = set()
 
@@ -41,6 +47,7 @@ def sortRarityWeights(hierarchy, listOptionVariant, DNAList):
         listOptionVariant.append(possibleNums)
 
     for x in range(config.maxNFTs):
+
         def createDNA():
             dnaStr1 = ""
             for i in hierarchy:
@@ -67,18 +74,32 @@ def sortRarityWeights(hierarchy, listOptionVariant, DNAList):
                 if ifZeroBool == True:
                     variantByNum = random.choices(number_List_Of_i, k=1)
                 elif ifZeroBool == False:
-                    variantByNum = random.choices(number_List_Of_i, weights=rarity_List_Of_i, k=1)
+                    variantByNum = random.choices(
+                        number_List_Of_i, weights=rarity_List_Of_i, k=1
+                    )
 
                 dnaStr1 += "-" + str(variantByNum[0])
-            dnaStr1 = ''.join(dnaStr1.split('-', 1))
+            dnaStr1 = "".join(dnaStr1.split("-", 1))
+            if config.checkDNARules:
+                (isDnaValid, newDNA) = CheckDNARules.CheckDNA(dnaStr1, hierarchy)
+                dnaStr1 = newDNA
+                if not isDnaValid:
+                    print(dnaStr1 + "is not valid")
+                    # print(CheckDNARules.dnaToString(dnaStr1, hierarchy))
+                    return createDNA()
+            print(dnaStr1 + "is valid")
+            print(CheckDNARules.dnaToString(dnaStr1, hierarchy))
             return dnaStr1
 
         dnaPushToList = partial(createDNA)
 
-        DNASet |= {''.join([dnaPushToList()]) for _ in range(config.maxNFTs - len(DNASet))}
+        DNASet |= {
+            "".join([dnaPushToList()]) for _ in range(config.maxNFTs - len(DNASet))
+        }
 
     DNAListRare = list(DNASet)
     return DNAListRare
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     sortRarityWeights()
