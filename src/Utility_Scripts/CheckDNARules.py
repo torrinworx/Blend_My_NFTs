@@ -1,5 +1,7 @@
 # Purpose:
 # This file applies DNA Rules set by user
+# Tested and Used for FrogTRON NFT Collection Creation
+
 from multiprocessing import Condition
 from operator import truediv
 import bpy
