@@ -140,6 +140,32 @@ checkDups = False
 # in the README.md file are dependent on the maxNFTs, and the maximum number of combinations of your NFT collection.
 checkRarity = False
 
+
+# This will check DNA Rules
+checkDNARules = False
+
+# DNA Rules
+dnaRules =[
+    [("CollectionName","ItemName","ItemName2","Item3"),("Valid/Invalid","CollectionName","Items"),("Valid/Invalid","CollectionName","Items")]
+]
+
+# Rule System First item is items you want to compare. 
+# For item name you can write directly item name or *Name = Ends with Name , Name* = Starts with name , *Name* = Including Name
+
+#[("CollectionName","ItemName","ItemName2","Item3"),("Valid/Invalid","CollectionName","Items"),("Valid/Invalid","CollectionName","Items")]
+#Example:
+#dnaRules =
+# if GoldMask or anything contains CatMask from Masks collection then HeadAcc can be only WizardHat and EyeAcc cant be RedGlass or YellowGlass
+#[[("Masks","GoldMask","*CatMask*"),
+#       (True, "HeadAcc", "WizardHat"),
+#       (False, "EyeAcc", "RedGlass","YellowGlass"),
+#   ],
+#    [
+# if Astronaut item selected from EyeAcc then HeadAcc can be SpaceGlass and Items from Lips collection item name can't contain Smoke.
+#    [("EyeAcc", "Astronaut"), (True, "HeadAcc", "SpaceGlass"), (False, "Lips", "*Smoke*")],
+#]
+
+
 # Utilities - DO NOT TOUCH:
 import platform
 
