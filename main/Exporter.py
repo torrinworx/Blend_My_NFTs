@@ -4,20 +4,13 @@
 
 import bpy
 import os
-import sys
 import time
 import json
-import importlib
 
-dir = os.path.dirname(bpy.data.filepath)
-sys.path.append(dir)
-sys.modules.values()
 
-from src import config
-from src.Main_Generators import metaData
-
-importlib.reload(config)
-importlib.reload(metaData)
+enableGeneration = False
+colorList = []
+generationType = None
 
 class bcolors:
    '''
@@ -29,21 +22,15 @@ class bcolors:
    RESET = '\033[0m'  # RESET COLOR
 
 
-if config.runPreview:
-   config.nftsPerBatch = config.maxNFTsTest
-   config.maxNFTs = config.maxNFTsTest
-   config.renderBatch = 1
-   config.nftName = "TestImages"
-
 def stripColorFromName(name):
    return "_".join(name.split("_")[:-1])
    
-def getBatchData():
+def getBatchData(batchToGenerate, batch_json_save_path):
     """
     Retrieves a given batches data determined by renderBatch in config.py
     """
 
-    file_name = os.path.join(config.batch_json_save_path, "Batch{}.json".format(config.renderBatch))
+    file_name = os.path.join(batch_json_save_path, "Batch{}.json".format(batchToGenerate))
     batch = json.load(open(file_name))
     
     NFTs_in_Batch = batch["NFTs_in_Batch"]
@@ -52,13 +39,16 @@ def getBatchData():
 
     return NFTs_in_Batch, hierarchy, BatchDNAList
 
-def render_and_save_NFTs():
+def render_and_save_NFTs(nftName, maxNFTs, batchToGenerate, batch_json_save_path, nftBatch_save_path, enableImages,
+                                      imageFileFormat, enableAnimations, animationFileFormat, enableModelsBlender,
+                                      modelFileFormat
+                                      ):
     """
     Renders the NFT DNA in a Batch#.json, where # is renderBatch in config.py. Turns off the viewport camera and
     the render camera for all items in hierarchy.
     """
 
-    NFTs_in_Batch, hierarchy, BatchDNAList = getBatchData()
+    NFTs_in_Batch, hierarchy, BatchDNAList = getBatchData(batchToGenerate, batch_json_save_path)
 
     time_start_1 = time.time()
 
@@ -66,7 +56,7 @@ def render_and_save_NFTs():
     for a in BatchDNAList:
         for i in hierarchy:
             for j in hierarchy[i]:
-                if config.enableGeneration:
+                if enableGeneration:
                     """
                      Remove Color code so blender recognises the collection
                     """
@@ -94,20 +84,20 @@ def render_and_save_NFTs():
             return dnaDictionary
 
         dnaDictionary = match_DNA_to_Variant(a)
-        name = config.nftName + "_" + str(x)
+        name = nftName + "_" + str(x)
 
-        print(f"\n{bcolors.OK}|---Generating {x} NFT Files---|{bcolors.RESET}")
+        print(f"\n{bcolors.OK}|---Generating NFT {x}/{NFTs_in_Batch} ---|{bcolors.RESET}")
         print(f"DNA attribute list:\n{dnaDictionary}\nDNA Code:{a}")
 
         for c in dnaDictionary:
             collection = dnaDictionary[c]
-            if not config.enableGeneration:
+            if not enableGeneration:
                 bpy.data.collections[collection].hide_render = False
                 bpy.data.collections[collection].hide_viewport = False
 
         time_start_2 = time.time()
 
-        batchFolder = os.path.join(config.nft_save_path, "Batch" + str(config.renderBatch))
+        batchFolder = os.path.join(nftBatch_save_path, "Batch" + str(batchToGenerate))
 
         imagePath = os.path.join(batchFolder, "Images", name)
         animationPath = os.path.join(batchFolder, "Animations", name)
@@ -118,46 +108,50 @@ def render_and_save_NFTs():
         modelFolder = os.path.join(batchFolder, "Models")
         metaDataFolder = os.path.join(batchFolder, "BMNFT_metaData")
 
-        if config.enableGeneration:
+        # Material handling:
+        if enableGeneration:
             for c in dnaDictionary:
                 collection = dnaDictionary[c]
-                if stripColorFromName(collection) in config.colorList:
+                if stripColorFromName(collection) in colorList:
                     colorVal = int(collection.rsplit("_", 1)[1])-1
                     collection = stripColorFromName(collection)
                     bpy.data.collections[collection].hide_render = False
                     bpy.data.collections[collection].hide_viewport = False
-                    if config.generationType == 'color':
+                    if generationType == 'color':
                         for activeObject in bpy.data.collections[collection].all_objects: 
                             mat = bpy.data.materials.new("PKHG")
-                            mat.diffuse_color = config.colorList[collection][colorVal]
+                            mat.diffuse_color = colorList[collection][colorVal]
                             activeObject.active_material = mat
-                    if config.generationType == 'material':
+                    if generationType == 'material':
                         for activeObject in bpy.data.collections[collection].all_objects: 
-                            activeObject.material_slots[0].material = bpy.data.materials[config.colorList[collection][colorVal]]
+                            activeObject.material_slots[0].material = bpy.data.materials[colorList[collection][colorVal]]
                 else:
                     collection = stripColorFromName(collection)
                     bpy.data.collections[collection].hide_render = False
                     bpy.data.collections[collection].hide_viewport = False
 
-        print(f"{bcolors.OK}Generating{bcolors.RESET}")
 
-        if config.enableImages:
+        if enableImages:
+            print(f"{bcolors.OK}Rendering Image{bcolors.RESET}")
+
             if not os.path.exists(imageFolder):
                 os.makedirs(imageFolder)
 
             bpy.context.scene.render.filepath = imagePath
-            bpy.context.scene.render.image_settings.file_format = config.imageFileFormat
+            bpy.context.scene.render.image_settings.file_format = imageFileFormat
             bpy.ops.render.render(write_still=True)
 
-        if config.enableAnimations:
+        if enableAnimations:
+            print(f"{bcolors.OK}Rendering Animation{bcolors.RESET}")
             if not os.path.exists(animationFolder):
                 os.makedirs(animationFolder)
 
             bpy.context.scene.render.filepath = animationPath
-            bpy.context.scene.render.image_settings.file_format = config.animationFileFormat
+            bpy.context.scene.render.image_settings.file_format = animationFileFormat
             bpy.ops.render.render(animation=True)
 
-        if config.enableModelsBlender:
+        if enableModelsBlender:
+            print(f"{bcolors.OK}Generating 3D Model{bcolors.RESET}")
             if not os.path.exists(modelFolder):
                 os.makedirs(modelFolder)
 
@@ -170,29 +164,40 @@ def render_and_save_NFTs():
             for obj in bpy.data.collections['Script_Ignore'].all_objects:
                 obj.select_set(True)
 
-            if config.modelFileFormat == 'glb':
-                bpy.ops.export_scene.gltf(filepath=modelPath,
+            if modelFileFormat == 'GLB':
+                bpy.ops.export_scene.gltf(filepath=f"{modelPath}.glb",
                                           check_existing=True,
                                           export_format='GLB',
                                           use_selection=True)
-            elif config.modelFileFormat == 'fbx':
-                bpy.ops.export_scene.fbx(filepath=modelPath,
+            if modelFileFormat == 'GLTF_SEPARATE':
+                bpy.ops.export_scene.gltf(filepath=f"{modelPath}",
+                                          check_existing=True,
+                                          export_format='GLTF_SEPARATE',
+                                          use_selection=True)
+            if modelFileFormat == 'GLTF_EMBEDDED':
+                bpy.ops.export_scene.gltf(filepath=f"{modelPath}.gltf",
+                                          check_existing=True,
+                                          export_format='GLTF_EMBEDDED',
+                                          use_selection=True)
+            elif modelFileFormat == 'FBX':
+                bpy.ops.export_scene.fbx(filepath=f"{modelPath}.fbx",
                                          check_existing=True,
                                          use_selection=True)
-            elif config.modelFileFormat == 'obj':
-                bpy.ops.export_scene.obj(filepath=modelPath,
+            elif modelFileFormat == 'OBJ':
+                bpy.ops.export_scene.obj(filepath=f"{modelPath}.obj",
                                          check_existing=True,
                                          use_selection=True)
-            elif config.modelFileFormat == 'x3d':
-                bpy.ops.export_scene.x3d(filepath=modelPath,
+            elif modelFileFormat == 'X3D':
+                bpy.ops.export_scene.x3d(filepath=f"{modelPath}.x3d",
                                          check_existing=True,
                                          use_selection=True)
+            elif modelFileFormat == 'VOX':
+                bpy.ops.export_vox.some_data(filepath=f"{modelPath}.x3d")
 
         if not os.path.exists(metaDataFolder):
             os.makedirs(metaDataFolder)
 
-        metaDataDict = {"name": name, "description": config.metaDataDescription, "NFT_DNA": a,
-                        "NFT_Variants": dnaDictionary}
+        metaDataDict = {"name": name, "NFT_DNA": a, "NFT_Variants": dnaDictionary}
 
         jsonMetaData = json.dumps(metaDataDict, indent=1, ensure_ascii=True)
 
@@ -202,17 +207,16 @@ def render_and_save_NFTs():
         print("Completed {} render in ".format(name) + "%.4f seconds" % (time.time() - time_start_2))
         x += 1
 
-    if config.enableResetViewport:
-        for a in BatchDNAList:
-            for i in hierarchy:
-                for j in hierarchy[i]:
-                    if config.enableGeneration:
-                        j = stripColorFromName(j)
-                    bpy.data.collections[j].hide_render = False
-                    bpy.data.collections[j].hide_viewport = False
+    for a in BatchDNAList:
+        for i in hierarchy:
+            for j in hierarchy[i]:
+                if enableGeneration:
+                    j = stripColorFromName(j)
+                bpy.data.collections[j].hide_render = False
+                bpy.data.collections[j].hide_viewport = False
 
-    print("\nAll NFT PNGs rendered, process finished.")
-    print("Completed all renders in Batch{}.json in ".format(config.renderBatch) + "%.4f seconds" % (time.time() - time_start_1) + "\n")
+    print(f"\nAll NFTs successfully generated and sent to {nftBatch_save_path}")
+    print("Completed all renders in Batch{}.json in ".format(batchToGenerate) + "%.4f seconds" % (time.time() - time_start_1) + "\n")
 
 
 if __name__ == '__main__':

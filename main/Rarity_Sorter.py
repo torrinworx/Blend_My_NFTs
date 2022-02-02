@@ -5,29 +5,10 @@ import bpy
 import os
 import sys
 import random
-import importlib
 from functools import partial
 
 
-dir = os.path.dirname(bpy.data.filepath)
-sys.path.append(dir)
-sys.modules.values()
-
-from src import config
-importlib.reload(config)
-
-from src.Main_Generators import DNA_Generator
-
-importlib.reload(DNA_Generator)
-
-
-if config.runPreview:
-   config.nftsPerBatch = config.maxNFTsTest
-   config.maxNFTs = config.maxNFTsTest
-   config.renderBatch = 1
-   config.nftName = "TestImages"
-
-def sortRarityWeights(hierarchy, listOptionVariant, DNAList):
+def sortRarityWeights(hierarchy, listOptionVariant, DNAList, nftName, maxNFTs, nftsPerBatch, save_path, enableRarity):
     """
     Sorts through DataDictionary and appropriately weights each variant based on their rarity percentage set in Blender
     ("rarity" in DNA_Generator). Then
@@ -40,7 +21,7 @@ def sortRarityWeights(hierarchy, listOptionVariant, DNAList):
         possibleNums = list(range(1, numChild + 1))
         listOptionVariant.append(possibleNums)
 
-    for x in range(config.maxNFTs):
+    for x in range(maxNFTs):
         def createDNA():
             dnaStr1 = ""
             for i in hierarchy:
@@ -75,7 +56,7 @@ def sortRarityWeights(hierarchy, listOptionVariant, DNAList):
 
         dnaPushToList = partial(createDNA)
 
-        DNASet |= {''.join([dnaPushToList()]) for _ in range(config.maxNFTs - len(DNASet))}
+        DNASet |= {''.join([dnaPushToList()]) for _ in range(maxNFTs - len(DNASet))}
 
     DNAListRare = list(DNASet)
     return DNAListRare

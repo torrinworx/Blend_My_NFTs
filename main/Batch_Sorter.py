@@ -9,33 +9,32 @@ import json
 import random
 import importlib
 
-dir = os.path.dirname(bpy.data.filepath)
-sys.path.append(dir)
-sys.modules.values()
 
-from src import config
+def makeBatches(nftName, maxNFTs, nftsPerBatch, save_path, batch_json_save_path):
+    Blend_My_NFTs_Output = os.path.join(save_path, "Blend_My_NFTs Output", "NFT_Data")
+    NFTRecord_save_path = os.path.join(Blend_My_NFTs_Output, "NFTRecord.json")
 
-importlib.reload(config)
-
-if config.runPreview:
-    config.nftsPerBatch = config.maxNFTsTest
-    config.maxNFTs = config.maxNFTsTest
-    config.renderBatch = 1
-    config.nftName = "TestImages"
-
-
-def makeBatches():
-    file_name = os.path.join(config.save_path, "NFTRecord.json")
-    DataDictionary = json.load(open(file_name))
+    DataDictionary = json.load(open(NFTRecord_save_path))
 
     numNFTsGenerated = DataDictionary["numNFTsGenerated"]
     hierarchy = DataDictionary["hierarchy"]
     DNAList = DataDictionary["DNAList"]
 
-    numBatches = config.maxNFTs / config.nftsPerBatch
+    numBatches = maxNFTs / nftsPerBatch
 
-    print(f"To generate batches of {config.nftsPerBatch} DNA sequences per batch, with a total of {numNFTsGenerated}"
+    print(f"To generate batches of {nftsPerBatch} DNA sequences per batch, with a total of {numNFTsGenerated}"
           f" possible NFT DNA sequences, the number of batches generated will be {numBatches}")
+
+    # Clears the Batch Data folder of Batches:
+    batchList = os.listdir(batch_json_save_path)
+
+    if batchList:
+        for i in batchList:
+            batch = os.path.join(batch_json_save_path, i)
+            if os.path.exists(batch):
+                os.remove(
+                    os.path.join(batch_json_save_path, i)
+                )
 
     i = 0
     while i < numBatches:
@@ -43,7 +42,7 @@ def makeBatches():
         BatchDNAList = []
 
         j = 0
-        while (j < config.nftsPerBatch) and (DNAList):
+        while (j < nftsPerBatch) and (DNAList):
             oneDNA = random.choice(DNAList)
             BatchDNAList.append(oneDNA)
             DNAList.remove(oneDNA)
@@ -55,7 +54,7 @@ def makeBatches():
 
         batchDictionaryObject = json.dumps(batchDictionary, indent=1, ensure_ascii=True)
 
-        with open(os.path.join(config.batch_json_save_path, ("Batch{}.json".format(i + 1))), "w") as outfile:
+        with open(os.path.join(batch_json_save_path, ("Batch{}.json".format(i + 1))), "w") as outfile:
             outfile.write(batchDictionaryObject)
 
         i += 1
@@ -67,7 +66,7 @@ def makeBatches():
 
         incompleteBatch = json.dumps(incompleteBatch, indent=1, ensure_ascii=True)
 
-        with open(os.path.join(config.batch_json_save_path, ("Batch{}.json".format(i + 1))), "w") as outfile2:
+        with open(os.path.join(batch_json_save_path, ("Batch{}.json".format(i + 1))), "w") as outfile2:
             outfile2.write(incompleteBatch)
 
 

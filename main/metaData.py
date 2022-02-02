@@ -10,23 +10,15 @@ import os
 import sys
 import importlib
 
-dir = os.path.dirname(bpy.data.filepath)
-sys.path.append(dir)
-sys.modules.values()
 
-from src import config
-
-importlib.reload(config)
-
-
-def returnCardanoMetaData(name, description, NFT_DNA, NFT_Variants):
+def returnCardanoMetaData(name, NFT_DNA, NFT_Variants):
     metaDataDictCardano = {"721": {
         "<policy_id>": {
             name: {
                 "name": name,
                 "image": "",
                 "mediaType": "",
-                "description": description,
+                "description": "",
 
             }
         },
@@ -38,8 +30,8 @@ def returnCardanoMetaData(name, description, NFT_DNA, NFT_Variants):
 
     return metaDataDictCardano
 
-def returnSolanaMetaData(name, description, NFT_DNA, NFT_Variants):
-    metaDataDictSolana = {"name": name, "symbol": "", "description": description, "seller_fee_basis_points": None,
+def returnSolanaMetaData(name, NFT_DNA, NFT_Variants):
+    metaDataDictSolana = {"name": name, "symbol": "", "description": "", "seller_fee_basis_points": None,
                           "image": "", "animation_url": "", "external_url": ""}
 
     attributes = []
@@ -65,10 +57,10 @@ def returnSolanaMetaData(name, description, NFT_DNA, NFT_Variants):
     }
     return metaDataDictSolana
 
-def returnErc721MetaData(name, description, NFT_DNA, NFT_Variants):
+def returnErc721MetaData(name, NFT_DNA, NFT_Variants):
     metaDataDictErc721 = {
         "name": name,
-        "description": description,
+        "description": "",
         "image": "",
         "attributes": None,
     }
