@@ -340,9 +340,7 @@ class CUSTOM_PT_objectList(Panel):
         col = row.column(align=True)
         row = col.row(align=True)
         row.operator("custom.add_viewport_selection", icon="HAND")  # LINENUMBERS_OFF, ANIM
-        row = col.row(align=True)
-        row.operator("custom.select_items", icon="VIEW3D", text="Select Item in 3D View")
-        row.operator("custom.select_items", icon="GROUP", text="Select All Items in 3D View").select_all = True
+
         row = layout.row()
         row = col.row(align=True)
         row.operator("custom.delete_object", icon="X")

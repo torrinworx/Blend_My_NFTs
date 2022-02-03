@@ -5,6 +5,7 @@ import bpy
 import os
 import copy
 import json
+import shutil
 import importlib
 
 from . import metaData
@@ -106,7 +107,7 @@ def reformatNFTCollection(save_path, Blend_My_NFTs_Output, batch_json_save_path,
 
     images, animations, models, metaData = getNFType(nftBatch_save_path)
 
-    completeCollPath = os.path.join(save_path, "Complete_Collection")
+    completeCollPath = os.path.join(save_path, "Blend_My_NFTs Output", "Complete_Collection")
     completeImagePath = os.path.join(completeCollPath, "Images")
     completeAnimationsPath = os.path.join(completeCollPath, "Animations")
     completeModelsPath = os.path.join(completeCollPath, "Models")
@@ -210,6 +211,7 @@ def reformatNFTCollection(save_path, Blend_My_NFTs_Output, batch_json_save_path,
 
     renameMetaData(completeCollPath, completeMetaDataPath, cardanoMetaDataBool, solanaMetaDataBool, erc721MetaData)
 
+    shutil.rmtree(nftBatch_save_path)
 
 if __name__ == '__main__':
     reformatNFTCollection()

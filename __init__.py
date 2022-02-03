@@ -202,6 +202,7 @@ class refactor_Batches(bpy.types.Operator):
 
         Batch_Refactorer.reformatNFTCollection(save_path, Blend_My_NFTs_Output, batch_json_save_path, nftBatch_save_path,
                                                cardanoMetaDataBool, solanaMetaDataBool, erc721MetaData)
+        return {"FINISHED"}
 
 # Main Panel:
 class BMNFTS_PT_MainPanel(bpy.types.Panel):
@@ -255,10 +256,10 @@ class BMNFTS_PT_MainPanel(bpy.types.Panel):
         row.prop(mytool, "enableRarity")
 
         row = layout.row()
-        self.layout.operator("create.data", icon='MESH_CUBE', text="Create Data")
+        self.layout.operator("create.data", icon='DISCLOSURE_TRI_RIGHT', text="Create Data")
 
         row = layout.row()
-        self.layout.operator("exporter.nfts", icon='MESH_CUBE', text="Generate NFTs")
+        self.layout.operator("exporter.nfts", icon='RENDER_RESULT', text="Generate NFTs")
 
         row = layout.row()
         layout.label(text="Meta Data format:")
@@ -267,7 +268,7 @@ class BMNFTS_PT_MainPanel(bpy.types.Panel):
         row.prop(mytool, "cardanoMetaDataBool")
         row.prop(mytool, "solanaMetaDataBool")
         row.prop(mytool, "erc721MetaData")
-        self.layout.operator("refactor.batches", icon='MESH_CUBE', text="Refactor Batches & create MetaData")
+        self.layout.operator("refactor.batches", icon='FOLDER_REDIRECT', text="Refactor Batches & create MetaData")
 
         row = layout.row()
         row.operator("wm.url_open", text="Documentation", icon='URL').url = "https://github.com/torrinworx/Blend_My_NFTs"
@@ -336,16 +337,16 @@ classes = (
     refactor_Batches,
 
     # UIList 1:
-    UIList.CUSTOM_OT_actions,
-    UIList.CUSTOM_OT_addViewportSelection,
-    UIList.CUSTOM_OT_printItems,
-    UIList.CUSTOM_OT_clearList,
-    UIList.CUSTOM_OT_removeDuplicates,
-    UIList.CUSTOM_OT_selectItems,
-    UIList.CUSTOM_OT_deleteObject,
-    UIList.CUSTOM_UL_items,
-    UIList.CUSTOM_PT_objectList,
-    UIList.CUSTOM_PG_objectCollection,
+    # UIList.CUSTOM_OT_actions,
+    # UIList.CUSTOM_OT_addViewportSelection,
+    # UIList.CUSTOM_OT_printItems,
+    # UIList.CUSTOM_OT_clearList,
+    # UIList.CUSTOM_OT_removeDuplicates,
+    # UIList.CUSTOM_OT_selectItems,
+    # UIList.CUSTOM_OT_deleteObject,
+    # UIList.CUSTOM_UL_items,
+    # UIList.CUSTOM_PT_objectList,
+    # UIList.CUSTOM_PG_objectCollection,
 )
 
 def register():
@@ -354,9 +355,10 @@ def register():
 
     bpy.types.Scene.my_tool = bpy.props.PointerProperty(type=BMNFTS_PGT_MyProperties)
 
-    # Custom scene properties UIList1
-    bpy.types.Scene.custom = bpy.props.CollectionProperty(type=UIList.CUSTOM_PG_objectCollection)
-    bpy.types.Scene.custom_index = bpy.props.IntProperty()
+    # UIList1:
+
+    # bpy.types.Scene.custom = bpy.props.CollectionProperty(type=UIList.CUSTOM_PG_objectCollection)
+    # bpy.types.Scene.custom_index = bpy.props.IntProperty()
 
 
 def unregister():
@@ -365,8 +367,10 @@ def unregister():
 
     del bpy.types.Scene.my_tool
 
-    del bpy.types.Scene.custom
-    del bpy.types.Scene.custom_index
+    # UIList 1:
+
+    # del bpy.types.Scene.custom
+    # del bpy.types.Scene.custom_index
 
 if __name__ == '__main__':
     register()
