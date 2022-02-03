@@ -147,8 +147,17 @@ def render_and_save_NFTs(nftName, maxNFTs, batchToGenerate, batch_json_save_path
                 os.makedirs(animationFolder)
 
             bpy.context.scene.render.filepath = animationPath
-            bpy.context.scene.render.image_settings.file_format = animationFileFormat
-            bpy.ops.render.render(animation=True)
+
+            if animationFileFormat == 'MP4':
+                bpy.context.scene.render.image_settings.file_format = "FFMPEG"
+
+                bpy.context.scene.render.ffmpeg.format = 'MPEG4'
+                bpy.context.scene.render.ffmpeg.codec = 'H264'
+                bpy.ops.render.render(animation=True)
+
+            else:
+                bpy.context.scene.render.image_settings.file_format = animationFileFormat
+                bpy.ops.render.render(animation=True)
 
         if enableModelsBlender:
             print(f"{bcolors.OK}Generating 3D Model{bcolors.RESET}")
@@ -191,8 +200,12 @@ def render_and_save_NFTs(nftName, maxNFTs, batchToGenerate, batch_json_save_path
                 bpy.ops.export_scene.x3d(filepath=f"{modelPath}.x3d",
                                          check_existing=True,
                                          use_selection=True)
+            elif modelFileFormat == 'STL':
+                bpy.ops.export_mesh.stl(filepath=f"{modelPath}.stl",
+                                        check_existing=True,
+                                        use_selection=True)
             elif modelFileFormat == 'VOX':
-                bpy.ops.export_vox.some_data(filepath=f"{modelPath}.x3d")
+                bpy.ops.export_vox.some_data(filepath=f"{modelPath}.vox")
 
         if not os.path.exists(metaDataFolder):
             os.makedirs(metaDataFolder)

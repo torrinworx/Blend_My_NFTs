@@ -11,19 +11,35 @@ bl_info = {
 # Import handling:
 
 import bpy
+from bpy.app.handlers import persistent
+
+
 import os
 import importlib
 
-from .main import DNA_Generator, Batch_Sorter, Exporter, Batch_Refactorer
+# Import files from main directory:
 
-importlib.reload(DNA_Generator)
-importlib.reload(Batch_Sorter)
-importlib.reload(Exporter)
-importlib.reload(Batch_Refactorer)
+importList = ['DNA_Generator', 'Batch_Sorter', 'Exporter', 'Batch_Refactorer', 'get_combinations', 'UIList']
+
+if bpy in locals():
+        importlib.reload(DNA_Generator)
+        importlib.reload(Batch_Sorter)
+        importlib.reload(Exporter)
+        importlib.reload(Batch_Refactorer)
+        importlib.reload(get_combinations)
+        importlib.reload(UIList)
+else:
+    from .main import \
+        DNA_Generator, \
+        Batch_Sorter, \
+        Exporter, \
+        Batch_Refactorer, \
+        get_combinations
+
+    from .ui_Lists import UIList
 
 
 # User input Property Group:
-
 class BMNFTS_PGT_MyProperties(bpy.types.PropertyGroup):
     # Main BMNFTS Panel properties: 
 
@@ -56,9 +72,10 @@ class BMNFTS_PGT_MyProperties(bpy.types.PropertyGroup):
         name="Animation File Format", 
         description="Select Animation file format", 
         items=[
-            ('AVI_JPEG', "AVI_JPEG", "Export NFT as AVI_JPEG"),
-            ('AVI_RAW', "AVI_RAW", "Export NFT as AVI_RAW"),
-            ('FFMPEG', "FFMPEG", "Export NFT as FFMPEG")
+            ('AVI_JPEG', '.avi (AVI_JPEG)', 'Export NFT as AVI_JPEG'),
+            ('AVI_RAW', '.avi (AVI_RAW)', 'Export NFT as AVI_RAW'),
+            ('FFMPEG', '.mkv (FFMPEG)', 'Export NFT as FFMPEG'),
+            ('MP4', '.mp4', 'Export NFT as .mp4')
         ]
     )
 
@@ -73,7 +90,8 @@ class BMNFTS_PGT_MyProperties(bpy.types.PropertyGroup):
             ('FBX', '.fbx', 'Export NFT as .fbx'),
             ('OBJ', '.obj', 'Export NFT as .obj'),
             ('X3D', '.x3d', 'Export NFT as .x3d'),
-            ('VOX', '.vox', 'Export NFT as .vox, requires the voxwriter add on: https://github.com/Spyduck/voxwriter')
+            ('STL', '.stl', 'Export NFT as .stl'),
+            ('VOX', '.vox (Experimental)', 'Export NFT as .vox, requires the voxwriter add on: https://github.com/Spyduck/voxwriter')
         ]
     )
 
@@ -85,7 +103,6 @@ class BMNFTS_PGT_MyProperties(bpy.types.PropertyGroup):
 
     # API Panel properties:
     apiKey: bpy.props.StringProperty(name="API Key", subtype='PASSWORD')
-
 
 def make_directories(save_path):
     Blend_My_NFTs_Output = os.path.join(save_path, "Blend_My_NFTs Output", "NFT_Data")
@@ -101,6 +118,21 @@ def make_directories(save_path):
         os.makedirs(nftBatch_save_path)
     return Blend_My_NFTs_Output, batch_json_save_path, nftBatch_save_path
 
+# Update NFT count:
+combinations: int = 0
+
+@persistent
+def update_combinations(dummy1, dummy2):
+    global combinations
+
+    combinations = get_combinations.get_combinations_from_scene()
+
+    redraw_panel()
+    print(combinations)
+
+bpy.app.handlers.depsgraph_update_post.append(update_combinations)
+
+# Main Operators:
 class createData(bpy.types.Operator):
     bl_idname = 'create.data'
     bl_label = 'Create Data'
@@ -171,8 +203,6 @@ class refactor_Batches(bpy.types.Operator):
         Batch_Refactorer.reformatNFTCollection(save_path, Blend_My_NFTs_Output, batch_json_save_path, nftBatch_save_path,
                                                cardanoMetaDataBool, solanaMetaDataBool, erc721MetaData)
 
-
-
 # Main Panel:
 class BMNFTS_PT_MainPanel(bpy.types.Panel):
     bl_label = "Blend_My_NFTs"
@@ -185,6 +215,8 @@ class BMNFTS_PT_MainPanel(bpy.types.Panel):
         layout = self.layout
         scene = context.scene
         mytool = scene.my_tool
+
+        layout.label(text=f"Maximum Number Of NFTs: {combinations}")
 
         row = layout.row()
         row.prop(mytool, "nftName")
@@ -237,26 +269,84 @@ class BMNFTS_PT_MainPanel(bpy.types.Panel):
         row.prop(mytool, "erc721MetaData")
         self.layout.operator("refactor.batches", icon='MESH_CUBE', text="Refactor Batches & create MetaData")
 
-
-# API Panel:
-class BMNFTS_PT_API_Panel(bpy.types.Panel):
-    bl_label = "API"
-    bl_idname = "BMNFTS_PT_API_Panel"
-    bl_space_type = 'VIEW_3D'
-    bl_region_type = 'UI'
-    bl_category = 'Blend_My_NFTs'
-
-    def draw(self, context):
-        layout = self.layout
-        scene = context.scene
-        mytool = scene.my_tool
-
         row = layout.row()
-        row.prop(mytool, "apiKey")
+        row.operator("wm.url_open", text="Documentation", icon='URL').url = "https://github.com/torrinworx/Blend_My_NFTs"
+
+# # Logic Panel:
+# class BMNFTS_PT_LOGIC_Panel(bpy.types.Panel):
+#     bl_label = "Logic"
+#     bl_idname = "BMNFTS_PT_LOGIC_Panel"
+#     bl_space_type = 'VIEW_3D'
+#     bl_region_type = 'UI'
+#     bl_category = 'Blend_My_NFTs'
+#
+#     def draw(self, context):
+#         layout = self.layout
+#         scene = context.scene
+#         mytool = scene.my_tool
+#
+# # Materials Panel:
+#
+# class BMNFTS_PT_MATERIALS_Panel(bpy.types.Panel):
+#     bl_label = "Materials"
+#     bl_idname = "BMNFTS_PT_MATERIALS_Panel"
+#     bl_space_type = 'VIEW_3D'
+#     bl_region_type = 'UI'
+#     bl_category = 'Blend_My_NFTs'
+#
+#     def draw(self, context):
+#         layout = self.layout
+#         scene = context.scene
+#         mytool = scene.my_tool
+#
+# # API Panel:
+# class BMNFTS_PT_API_Panel(bpy.types.Panel):
+#     bl_label = "API"
+#     bl_idname = "BMNFTS_PT_API_Panel"
+#     bl_space_type = 'VIEW_3D'
+#     bl_region_type = 'UI'
+#     bl_category = 'Blend_My_NFTs'
+#
+#     def draw(self, context):
+#         layout = self.layout
+#         scene = context.scene
+#         mytool = scene.my_tool
+#
+#         row = layout.row()
+#         row.prop(mytool, "apiKey")
+
+
+def redraw_panel():
+    try:
+        bpy.utils.unregister_class(BMNFTS_PT_MainPanel)
+    except:
+        pass
+    bpy.utils.register_class(BMNFTS_PT_MainPanel)
 
 
 # Register and Unregister classes from Blender:
-classes = (BMNFTS_PGT_MyProperties, BMNFTS_PT_MainPanel, BMNFTS_PT_API_Panel, createData, exportNFTs, refactor_Batches)
+classes = (
+    BMNFTS_PGT_MyProperties,
+    BMNFTS_PT_MainPanel,
+    # BMNFTS_PT_LOGIC_Panel,
+    # BMNFTS_PT_MATERIALS_Panel,
+    # BMNFTS_PT_API_Panel,
+    createData,
+    exportNFTs,
+    refactor_Batches,
+
+    # UIList 1:
+    UIList.CUSTOM_OT_actions,
+    UIList.CUSTOM_OT_addViewportSelection,
+    UIList.CUSTOM_OT_printItems,
+    UIList.CUSTOM_OT_clearList,
+    UIList.CUSTOM_OT_removeDuplicates,
+    UIList.CUSTOM_OT_selectItems,
+    UIList.CUSTOM_OT_deleteObject,
+    UIList.CUSTOM_UL_items,
+    UIList.CUSTOM_PT_objectList,
+    UIList.CUSTOM_PG_objectCollection,
+)
 
 def register():
     for cls in classes:
@@ -264,12 +354,19 @@ def register():
 
     bpy.types.Scene.my_tool = bpy.props.PointerProperty(type=BMNFTS_PGT_MyProperties)
 
+    # Custom scene properties UIList1
+    bpy.types.Scene.custom = bpy.props.CollectionProperty(type=UIList.CUSTOM_PG_objectCollection)
+    bpy.types.Scene.custom_index = bpy.props.IntProperty()
+
+
 def unregister():
     for cls in classes:
         bpy.utils.unregister_class(cls)
 
     del bpy.types.Scene.my_tool
 
+    del bpy.types.Scene.custom
+    del bpy.types.Scene.custom_index
 
 if __name__ == '__main__':
     register()
