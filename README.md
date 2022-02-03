@@ -39,9 +39,13 @@ https://docs.google.com/document/d/e/2PACX-1vSHZS4GRu8xXDYpVPEaxyBeTzms9yrJEC9Io
 
 
 ## Quick Disclaimer
-Blend_My_NFTs, this readme tutorial material, the youtube tutorials, the live stream Q/As, and tutorials are all provided for free by me for anyone to access and use. I only ask in return that you credit this software kindly share what I have built here. A direct link to the Blend_My_NFTs Github page on your projects website (or equivelant social platform) would sefice. I ask you to share this tool because I feel there are many out there that would benefit from it, my only goal is to help those who need it. It warms my heart that so many people use this add-on. Thank you.
-
 Blend_My_NFTs works with Blender 3.0.0 on Windows 10 or macOS Big Sur 11.6. Linux is supported, however I haven't had the chance to test this functionality and guarantee this.
+
+Blend_My_NFTs, this readme documenation, YouTube tutorials, live stream Q/As are all provided for free by This Cozy Studio for anyone to use and access. I only ask in return that you credit this software and kindly share what our team has built. A direct link to the Blend_My_NFTs Github page on your projects website (or equivelant social platform) would sefice. We ask you to share this tool because we feel there are many out there that would benefit from it, our only goal is to help those in need. It warms our hearts that so many people use this add-on. 
+
+Thank you, 
+
+- This Cozy Studio team
 
 
 ## Setup/Installation
