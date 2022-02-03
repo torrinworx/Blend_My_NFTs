@@ -37,6 +37,13 @@ Reddit: https://www.reddit.com/r/ThisCozyPlace/
 This document has a list of projects that use Blend_My_NFTs to help facilitate them in the creation of their collection: 
 https://docs.google.com/document/d/e/2PACX-1vSHZS4GRu8xXDYpVPEaxyBeTzms9yrJEC9IoAcP38_U8x0C1kVrbtNZgh0zUmkzBoZQVwNvBf3ldRij/pub
 
+
+## Quick Disclaimer
+Blend_My_NFTs, this readme tutorial material, the youtube tutorials, the live stream Q/As, and tutorials are all provided for free by me for anyone to access and use. I only ask in return that you credit this software kindly share what I have built here. A direct link to the Blend_My_NFTs Github page on your projects website (or equivelant social platform) would sefice. I ask you to share this tool because I feel there are many out there that would benefit from it, my only goal is to help those who need it. It warms my heart that so many people use this add-on. Thank you.
+
+Blend_My_NFTs works with Blender 3.0.0 on Windows 10 or macOS Big Sur 11.6. Linux is supported, however I haven't had the chance to test this functionality and guarantee this.
+
+
 ## Setup/Installation
 
 Here are the steps you need to take to get the Blend_My_NFTs add-on installed in Blender:
@@ -80,3 +87,20 @@ Here are the steps you need to take to get the Blend_My_NFTs add-on installed in
 Now that Blend_My_NFTs is installed in your instance of Blender you can find the main panel in the `3D View` tab in `Layout`, once you are there tap `N` on your keyboard to open the side panel:
 
 ![Screen Shot 2022-02-03 at 5 27 41 PM](https://user-images.githubusercontent.com/82110564/152439730-21da93e3-6816-419a-b9d8-5b146dfe3e6e.png)
+
+
+## Important Terminology
+
+Before you can continue further, there are terms used in this documenation to describe the process of this software. This makes it easier to understand how you need to organize your .blend file to generate NFTs. Refer to this section if you come accross an unfamiliar term. 
+
+Let's say you are creating an NFT collection, the artwork is a .png of a person wearing a hat:
+
+``Attribute`` - A part of the .png that can be changed. The idea of a `Hat` on a man is an Attribute, there are many types of Hats, but the `Hat` itself I will refer to it as an Attribute.
+
+``Variants`` - These are the types of Hats; Red Hat, Blue Hat, Green Hat, Cat Hat, etc. These can be swapped into the `Hat` Attribute to create unique .png NFTs.
+
+``DNA`` - A sequence of numbers that determins what ``Variant`` from every ``Attribute`` to include in a single NFT .png. Blend_My_NFTs creates and stores a uniqe DNA sequence for each NFT you create. These numbers are stored in the ``NFTRecord``.
+
+``NFTRecord`` - The "Ledger" of all ``DNA`` for your NFT collection. This will be generated after you create all the Attribtues and Variants that make up your NFT collection in Blender.
+
+``Batch`` - A randomly selected subset of ``DNA``, taken from the ``NFTRecord``. Blend_My_NFTs can split the ``NFTRecord`` into multiple Batches; This allows you to render or create NFTs on multiple machines, or at seperate instances in time.
