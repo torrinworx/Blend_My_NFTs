@@ -39,7 +39,7 @@ https://docs.google.com/document/d/e/2PACX-1vSHZS4GRu8xXDYpVPEaxyBeTzms9yrJEC9Io
 
 ## Setup/Installation
 
-Here are the steps you need to get the Blend_My_NFTs add on installed:
+Here are the steps you need to take to get the Blend_My_NFTs add-on installed in Blender:
 
 1. Click the green `Code` button at the top of this page.
 
@@ -73,8 +73,10 @@ Here are the steps you need to get the Blend_My_NFTs add on installed:
 ![Screen Shot 2022-02-03 at 5 02 59 PM](https://user-images.githubusercontent.com/82110564/152436664-e8e135e5-2d36-487a-bf43-4ea200210a4c.png)
 
 8. Click the `Checkbox` to enable the Blend_My_NFTs add-on:
+
 ![Screen Shot 2022-02-03 at 5 22 43 PM 1](https://user-images.githubusercontent.com/82110564/152439275-c590db7a-8b5c-48a4-96f5-ac1ce372be38.png)
 
 
 Now that Blend_My_NFTs is installed in your instance of Blender you can find the main panel in the `3D View` tab in `Layout`, once you are there tap `N` on your keyboard to open the side panel:
+
 ![Screen Shot 2022-02-03 at 5 27 41 PM](https://user-images.githubusercontent.com/82110564/152439730-21da93e3-6816-419a-b9d8-5b146dfe3e6e.png)
