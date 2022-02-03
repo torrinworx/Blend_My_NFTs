@@ -186,12 +186,19 @@ class exportNFTs(bpy.types.Operator):
         return {"FINISHED"}
 
 class refactor_Batches(bpy.types.Operator):
+    """Refactor your Batches? This action cannot be undone."""
     bl_idname = 'refactor.batches'
-    bl_label = 'Refactor Batches'
-    bl_description = 'Generate and export a given batch of NFTs.'
-    bl_options = {"REGISTER", "UNDO"}
+    bl_label = 'Refactor your Batches?'
+    bl_description = 'This action cannot be undone.'
+    bl_options = {'REGISTER', 'INTERNAL'}
+
+    @classmethod
+    def poll(cls, context):
+        return True
 
     def execute(self, context):
+        self.report({'INFO'}, "YES!")
+
         save_path = bpy.context.scene.my_tool.save_path
 
         cardanoMetaDataBool = bpy.context.scene.my_tool.cardanoMetaDataBool
@@ -203,6 +210,9 @@ class refactor_Batches(bpy.types.Operator):
         Batch_Refactorer.reformatNFTCollection(save_path, Blend_My_NFTs_Output, batch_json_save_path, nftBatch_save_path,
                                                cardanoMetaDataBool, solanaMetaDataBool, erc721MetaData)
         return {"FINISHED"}
+
+    def invoke(self, context, event):
+        return context.window_manager.invoke_confirm(self, event)
 
 # Main Panel:
 class BMNFTS_PT_MainPanel(bpy.types.Panel):
