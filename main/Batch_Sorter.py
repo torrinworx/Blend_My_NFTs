@@ -4,10 +4,8 @@
 
 import bpy
 import os
-import sys
 import json
 import random
-import importlib
 
 
 def makeBatches(nftName, maxNFTs, nftsPerBatch, save_path, batch_json_save_path):

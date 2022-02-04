@@ -6,9 +6,9 @@ enableGeneration = False
 colorList = []
 
 class bcolors:
-   '''
+   """
    The colour of console messages.
-   '''
+   """
    OK = '\033[92m'  # GREEN
    WARNING = '\033[93m'  # YELLOW
    ERROR = '\033[91m'  # RED
@@ -18,10 +18,10 @@ def stripColorFromName(name):
    return "_".join(name.split("_")[:-1])
 
 def get_combinations_from_scene():
-   '''
+   """
    Generates important variables, dictionaries, and lists needed to be stored to catalog the NFTs.
    :return: listAllCollections, attributeCollections, attributeCollections1, hierarchy, variantMetaData, possibleCombinations
-   '''
+   """
 
    coll = bpy.context.scene.collection
 
@@ -226,19 +226,8 @@ def get_combinations_from_scene():
 
    possibleCombinations = numOfCombinations(hierarchy)
 
-   # Toggles render and viewport cameras, commented out since this file is called very often.
-   # for i in variantMetaData:
-   #    def cameraToggle(i, toggle=True):
-   #       if enableGeneration:
-   #          """
-   #          Remove Color code so blender recognises the collection
-   #          """
-   #          i = stripColorFromName(i)
-   #       bpy.data.collections[i].hide_render = toggle
-   #       bpy.data.collections[i].hide_viewport = toggle
-   #    cameraToggle(i)
-
    return possibleCombinations
+
 
 if __name__ == '__main__':
    get_combinations_from_scene()
