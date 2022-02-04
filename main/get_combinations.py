@@ -226,16 +226,17 @@ def get_combinations_from_scene():
 
    possibleCombinations = numOfCombinations(hierarchy)
 
-   for i in variantMetaData:
-      def cameraToggle(i, toggle=True):
-         if enableGeneration:
-            """
-            Remove Color code so blender recognises the collection
-            """
-            i = stripColorFromName(i)
-         bpy.data.collections[i].hide_render = toggle
-         bpy.data.collections[i].hide_viewport = toggle
-      cameraToggle(i)
+   # Toggles render and viewport cameras, commented out since this file is called very often.
+   # for i in variantMetaData:
+   #    def cameraToggle(i, toggle=True):
+   #       if enableGeneration:
+   #          """
+   #          Remove Color code so blender recognises the collection
+   #          """
+   #          i = stripColorFromName(i)
+   #       bpy.data.collections[i].hide_render = toggle
+   #       bpy.data.collections[i].hide_viewport = toggle
+   #    cameraToggle(i)
 
    return possibleCombinations
 
