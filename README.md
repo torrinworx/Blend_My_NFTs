@@ -1,6 +1,6 @@
 
 <p align="center">
-  <img src="https://user-images.githubusercontent.com/82110564/147833091-50d1daab-f0d8-41b2-b0b1-7d521cf5016a.png">
+  <img src="https://user-images.githubusercontent.com/82110564/152652811-e7f7ea86-d7a8-4148-8f61-add6a5491e65.png">
 </p>
 
 # Blend_My_NFTs
