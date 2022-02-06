@@ -120,9 +120,82 @@ Let's say you are creating an NFT collection, the artwork is a .png of a person 
 
 ## Step 3.
 
-# Notes on Rarity and Weighted Variants
+## Notes on Rarity and Weighted Variants
 
-# Notes on Meta Data and Standards
+Rarity is a percentage value and accepts fractions like 0.001%, but they must be specified with decimals in the naming (fraction like 1/2 or 3/5 are not permitted in the naming structure). For ease of use the percentages should add up to 100%:
 
-# I have my NFTs, what next? 
+```
+33% + 33% + 33% + 1% = 100% 
+
+Variant 1 = 33% chance
+Variant 2 = 33% chance
+Variant 3 = 33% chance
+Variant 4 = 1% chance
+```
+
+If you have 20 variants with 50 set as the rarity percentage for each, Blend_My_NFTs will add up the percentages then treat the sum as 100%:
+
+```
+50% + 50% + 50% + 50% + 50%....
+= 1,000%
+
+Out of 100%:
+
+(50/1,000)*100 = 5% chance of 1 variant
+```
+
+Rarity is dependent on both the number of NFTs you generate, as well as the maximum number of possible combinations of the Attributes and Variants in your .blend file. 
+
+This results in the following two scenarios, say, at a fixed number of 10,000 NFTs to generate;
+
+1. Your .blend file has 1,000,000,000 possible combinations (trust me that's a small number, our collection for This Cozy Place has over 11 Trillion possible combinations). Generating 10,000 will be more representative of the rarity numbers you set as the script will simply have more combinations to choose from.
+
+2. Your .blend file has 10,000 possible combinations. This means all possible combinations of your NFT will be generated, meaning that no rarity can be taken into account.
+
+This is happens for following reasons: 
+
+1. The rarity is determined sudo randomly, but is weighted based on each Variants rarity percentage.
+
+2. The scripts generally prioritize the number of NFTs to generate (`maxNFTs`) over rarity percentage
+
+This behaviour is a fundamental mathematical result, not an issue with the code. I've researched various ways of creating and enforcing rarity, this is the only way I have found that works. If you have found a better method, feel free to make a pull request explaining it and I'd be happy to review and merge it to the main Github repo for BMNFTs.
+
+# .blend file Rarity examples: 
+
+1. With Rarity percentage (50% 50% split)
+```
+  Hat <-- Attribute
+  |-Green Hat_1_50
+  |-Red Hat_2_50
+```
+
+2. Since it's 50/50 it can also be expressed like this: 
+```
+  Hat <-- Attribute
+  |-Green Hat_1_0
+  |-Red Hat_2_0
+```
+
+Leaving the rarity number as 0 will randomly select 1 of the variants you set in your .blend file. Note that this only works if every variant's rarity is set to 0. For an attribute its rarity or random, not both. You can have different attributes, where some are using rarity and others are randomly selected, but you cannot mix these with variants of one attribute. 
+
+# Example of more complex rarity structures: 
+
+```
+  Hat <-- Attribute
+  |-Green Hat_1_24.75
+  |-Red Hat_2_24.75
+  |-Blue Hat_2_24.75
+  |-Orange Hat_2_24.57
+  |-Purple Hat_2_0.5
+  |-Yellow Hat_2_0.5
+```
+
+In the example above, Green, Red, Blue, and Orange hats all have an equal chance of getting selected. However Purple and Yellow hats will only appear on average 0.5% of the time. We recommend rounding to about 5 decimal places for simplicity, as numbers of more accuracy aren't really needed for NFT collections 10,000 or smaller.
+
+The code that determines rarity can be found the `Rarity_Sorter.py`.
+
+
+## Notes on Meta Data and Standards
+
+## I have my NFTs, what next? 
 
