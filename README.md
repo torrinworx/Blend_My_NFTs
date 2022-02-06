@@ -47,8 +47,19 @@ Thank you,
 
 - This Cozy Studio team
 
+## Table of Contents 
 
-# Setup/Installation
+- [Blend_My_NFTs](#Blend_My_NFTs)
+  - [Description](#Description)
+  - [Official Links](#Official-Links)
+  - [Quick Disclaimer](#Quick Disclaimer)
+  - [Contents](#Contents)
+- [Setup and Installation](#Setup-and-Installation)
+- [Important Terminology](#Important-Terminology)
+- [Blender File Organization and Structure](Blender-File-Organization-and-Structure)
+
+
+# Setup and Installation
 
 Here are the steps you need to take to get the Blend_My_NFTs add-on installed in Blender:
 
