@@ -48,7 +48,7 @@ Thank you,
 - This Cozy Studio team
 
 
-## Setup/Installation
+# Setup/Installation
 
 Here are the steps you need to take to get the Blend_My_NFTs add-on installed in Blender:
 
@@ -93,7 +93,7 @@ Now that Blend_My_NFTs is installed in your instance of Blender you can find the
 ![Screen Shot 2022-02-03 at 5 27 41 PM](https://user-images.githubusercontent.com/82110564/152439730-21da93e3-6816-419a-b9d8-5b146dfe3e6e.png)
 
 
-## Important Terminology
+# Important Terminology
 
 Before you can continue further, there are terms used in this documenation to describe the process of this software. This makes it easier to understand how you need to organize your .blend file to generate NFTs. Refer to this section if you come accross an unfamiliar term. 
 
@@ -108,3 +108,21 @@ Let's say you are creating an NFT collection, the artwork is a .png of a person 
 4. ``NFTRecord`` - The "Ledger" of all ``DNA`` for your NFT collection. This will be generated after you create all the Attribtues and Variants that make up your NFT collection in Blender.
 
 5. ``Batch`` - A randomly selected subset of ``DNA``, taken from the ``NFTRecord``. Blend_My_NFTs can split the ``NFTRecord`` into multiple Batches; This allows you to render or create NFTs on multiple computers, or at seperate instances in time.
+
+
+# Blender File Organization and Structure
+
+# Steps to Generate NFTs
+
+## Step 1. 
+
+## Step 2.
+
+## Step 3.
+
+# Notes on Rarity and Weighted Variants
+
+# Notes on Meta Data and Standards
+
+# I have my NFTs, what next? 
+
