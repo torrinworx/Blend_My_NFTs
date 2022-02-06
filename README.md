@@ -49,14 +49,23 @@ Thank you,
 
 ## Table of Contents 
 
-- [Blend_My_NFTs](#Blend_My_NFTs)
-  - [Description](#Description)
-  - [Official Links](#Official-Links)
-  - [Quick Disclaimer](#Quick Disclaimer)
-  - [Contents](#Contents)
-- [Setup and Installation](#Setup-and-Installation)
-- [Important Terminology](#Important-Terminology)
-- [Blender File Organization and Structure](Blender-File-Organization-and-Structure)
+- [Blend_My_NFTs](#blend_my_nfts)
+  - [Description](#description)
+  - [Official Links](#official-links)
+  - [Case Studies](#case-studies)
+  - [Quick Disclaimer](#quick-disclaimer)
+  - [Contents](#table-of-contents)
+- [Setup and Installation](#setup-and-installation)
+- [Important Terminology](#important-terminology)
+- [Blender File Organization and Structure](#blender-file-organization-and-structure)
+  - [Example of Proper BMNFTs Compatable Blender Scene](#example-of-proper-bmnfts-compatable-blender-scene)
+- [Steps to Generate NFTs](#steps-to-generate-nfts)
+  - [Step 1. Create NFT Data](#step-1---create-nft-data)
+  - [Step 2. Generating NFTs](#step-2---generate-nfts)
+  - [Step 3. Refactor Batches & Create MetaData](#step-3---refactor-batches--create-metadata)
+- [Notes on Rarity and Weighted Variants](#notes-on-rarity-and-weighted-variants)
+  - [.Blend File Rarity Example](#blend-file-rarity-examples)
+  - [More complex Rarity Example](#example-of-more-complex-rarity-structures)
 
 
 # Setup and Installation
@@ -136,7 +145,7 @@ Organizing your NFTs Attributes and Varariants in Blender is essential to genera
     - `Rarity Percentage` ==> A percentage that determins the chance that the given variant will be selected. Must be a number, can contain decimals, cannot contain the percentage (`%`) symbol. See `Notes on Rarity and Weighted Variants` section for more details.
   - Each Variant collection can contain everything that makes up an individual Variant; it can contain objects, lights, meshes, planes, and every other object type.
 
-## Example of proper BMNFTs compatable Blender scene
+## Example of Proper BMNFTs Compatable Blender Scene
 <img width="527" alt="Screen Shot 2022-02-06 at 5 40 39 PM" src="https://user-images.githubusercontent.com/82110564/152704567-378ee98f-34a7-4cd7-8f62-441b7e1891b0.png">
 
 In this example, notice how the main components in `Script_Ignore` can be any type of object. The collections `Body` and `Arms` are both Attribute collections; `Silver Body_1_75` and `Gold Body_2_25` are Variants of the `Body` Attribute, and have a 75% and 25% generation chance. `Silver Arms_1_75` and `Gold Arms_2_25` are Variants of the `Arm` Attribute and have the same weighted distribution as the `Body` Variants. Notice how the Variant collections in the `Arm` Attribute can contain more than one object and object type, this principle can be applied to any Variant collections.
@@ -154,7 +163,7 @@ In this example, notice how the main components in `Script_Ignore` can be any ty
 
 
 
-## Notes on Rarity and Weighted Variants
+# Notes on Rarity and Weighted Variants
 
 Rarity is a percentage value and accepts fractions like 0.001%, but they must be specified with decimals in the naming (fraction like 1/2 or 3/5 are not permitted in the naming structure). For ease of use the percentages should add up to 100%:
 
@@ -194,7 +203,7 @@ This is happens for following reasons:
 
 This behaviour is a fundamental mathematical result, not an issue with the code. I've researched various ways of creating and enforcing rarity, this is the only way I have found that works. If you have found a better method, feel free to make a pull request explaining it and I'd be happy to review and merge it to the main Github repo for BMNFTs.
 
-### .blend file Rarity examples: 
+## .blend file Rarity examples: 
 
 1. With Rarity percentage (50% 50% split)
 ```
@@ -212,7 +221,7 @@ This behaviour is a fundamental mathematical result, not an issue with the code.
 
 Leaving the rarity number as 0 will randomly select 1 of the variants you set in your .blend file. Note that this only works if every variant's rarity is set to 0. For an attribute its rarity or random, not both. You can have different attributes, where some are using rarity and others are randomly selected, but you cannot mix these with variants of one attribute. 
 
-### Example of more complex rarity structures: 
+### More complex Rarity Example: 
 
 ```
   Hat <-- Attribute
