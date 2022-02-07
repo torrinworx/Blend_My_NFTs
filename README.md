@@ -5,8 +5,8 @@
 <p align="center">
 <a href="https://twitter.com/LeonardTorrin" rel="nofollow"><img src="https://img.shields.io/badge/created%20by-@LeonardTorrin-4BBAAB.svg" alt="Created by Torrin Leonard"></a>
 <a href="https://www.gnu.org/licenses/gpl-3.0.en.html" rel="nofollow"><img src="https://img.shields.io/badge/license-GPL%20v3.0-brightgreen" alt="License"></a>
-<a href="" rel="nofollow"><img src="https://img.shields.io/github/stars/torrinworx/blend_my_nfts" alt="stars"></a>
 <a href="https://www.paypal.com/paypalme/TorrinLeonard" rel="nofollow"><img src="https://img.shields.io/badge/donate-PayPal-blue" alt="Donate"></a>
+<a href="" rel="nofollow"><img src="https://img.shields.io/github/stars/torrinworx/blend_my_nfts" alt="stars"></a>
 
 </p>
 
@@ -43,14 +43,32 @@ This document has a list of projects that use Blend_My_NFTs to help facilitate t
 https://docs.google.com/document/d/e/2PACX-1vSHZS4GRu8xXDYpVPEaxyBeTzms9yrJEC9IoAcP38_U8x0C1kVrbtNZgh0zUmkzBoZQVwNvBf3ldRij/pub
 
 
-## Quick Disclaimer
-Blend_My_NFTs works with Blender 3.0.0 on Windows 10 or macOS Big Sur 11.6. Linux is supported, however I haven't had the chance to test this functionality and guarantee this. Any rendering engine works; Cycles, Eevee, and Octane have all been used by the community without issue. This add-on only works in Blender, a Cinima 4D port will be investigated in the future. 
+## Donations
 
-Blend_My_NFTs, this readme documenation, YouTube tutorials, live stream Q/As are all provided for free by This Cozy Studio for anyone to use and access. I only ask in return that you credit this software and kindly share what our team has built. A direct link to the Blend_My_NFTs Github page on your projects website (or equivelant social platform) would sefice. We ask you to share this tool because we feel there are many out there that would benefit from it, our only goal is to help those in need. It warms our hearts that so many people use this add-on. 
+Blend_My_NFTs, this readme documenation, YouTube tutorials, live stream Q/As, and the Discord community are all provided for free by This Cozy Studio for anyone to use and access. We only ask in return that you credit this software and kindly share what our team has built. A direct link to the Blend_My_NFTs Github page on your projects website (or equivelant social platform) would sefice. We ask you to share this tool because we feel there are many out there that would benefit from it, our only goal is to help those in need. It warms our hearts that so many people use this add-on.
+
+Any donations to the following methods will be put towards developing Blend_My_NFTs and future related Metaverse/Blockchain projects. This Cozy Studio has big plans for Blend_My_NFTs in 2022 and we value your support! 
+
+  - PayPal: https://www.paypal.com/paypalme/TorrinLeonard
+
+Crypto Addresses: 
+
+  - Cardano: `addr1qxzuqz0c32ucga8amwk53unt7vhyf56q73x55aec2lm8esv9cqyl3z4es360mkadfrexhuewgnf5pazdffmns4lk0nqsfylz24`
+
+  - Solana: `A7NuHB79DKfkdZMvqVzBrYN4NXRqP7LVFjMdVoKRfVmo`
+
+  - Ethereum: `0x335408858ce319Cb411090792Ba4BCEE6a2d10CB`
+
+  - USDC (ETH Network): `0x335408858ce319Cb411090792Ba4BCEE6a2d10CB`
+
+We at This Cozy Studio really appreciate all the support our community has given us, you push us forward and inspire us to accomplish great things. We are nothing without you. 
 
 Thank you, 
 
 - This Cozy Studio team
+
+## Quick Disclaimer
+Blend_My_NFTs works with Blender 3.0.0 on Windows 10 or macOS Big Sur 11.6. Linux is supported, however I haven't had the chance to test this functionality and guarantee this. Any rendering engine works; Cycles, Eevee, and Octane have all been used by the community without issue. This add-on only works in Blender, a Cinima 4D port will be investigated in the future.
 
 ## Table of Contents 
 
