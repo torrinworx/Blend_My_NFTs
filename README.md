@@ -281,14 +281,18 @@ After completeing the `Create NFT Data` step, you should have the following file
       - `Batch#.json` files. Smaller chuncks of the `NFTRecord.json` that contain unique DNA.
   - The `Generated NFTs` folder. This directory will be empty, but is where your NFT content files will be exported to. once you've completed [Step 2. Generate NFTs](#step-2---generate-nfts).
     - `Batch#.json` folder. There should be one folder for each batch that you generated. 
-      - `Image` folder.
-        - `Image` files. These images will contain the name you specified in [Step 1. Create Data]()
-      - `Animation` folder. 
+      - `Image` folder. The folder where all the NFT Image content files are stored for a given `Batch#.json`. 
+        - `Image` files. These images will contain have the name you specified in [Step 1. Create Data](#step-1---create-nft-data), an incrementing number, and the file extension you specified above. 
+      - `Animation` folder. The folder where all the NFT Animation content files are stored for a given `Btach#.json`. 
+        - `Animation` files. These animations will have the name you specified in [Step 1. Create Data](#step-1---create-nft-data), an incrementing number, and the file extension you specified above. 
       - `3D Model` folder. 
-      - `BMNFTs_metaData` folder. 
-
+        - `3D Model` files. These 3D models will have the name you specified in [Step 1. Create Data](#step-1---create-nft-data), an incrementing number, and the file extension you specified above. 
+      - `BMNFTs_metaData` folder.
+        - `Data_#.json` files. These files are used by Blend_My_NFTs backend in [Step 3. - Refactor Batches & Create MetaData](#step-3---refactor-batches--create-metadata). These can be ignored, unless you are customizing the metaData.py script.
 
 ## Step 3. - Refactor Batches & Create MetaData
+
+
 
 ## Common Issues and Problems
 
