@@ -69,7 +69,7 @@ Thank you,
   - [Step 3. Refactor Batches & Create MetaData](#step-3---refactor-batches--create-metadata)
 - [Notes on Rarity and Weighted Variants](#notes-on-rarity-and-weighted-variants)
   - [.Blend File Rarity Example](#blend-file-rarity-examples)
-  - [More complex Rarity Example](#example-of-more-complex-rarity-structures)
+  - [More complex Rarity Example](#more-complex-rarity-example)
 - [Notes on Meta Data and Standards](#notes-on-meta-data-and-standards)
 - [I have my NFTs, what next?](#i-have-my-nfts-what-next)
 
@@ -159,13 +159,139 @@ In this example, notice how the main components in `Script_Ignore` can be any ty
 
 # Steps to Generate NFTs
 
+After you have formatted and organized your NFT collection in Blender to the rules outlined above in [Blender File Organization and Structure
+](#blender-file-organization-and-structure) you can now go about generating your NFT collection. By the end of this process you will have a folder continaing the following: 
+
+1. NFT content files; images, animations, or 3D models in any format that you specify.
+2. Json metadata files; one fore each NFT content filem, formatted to the blockchain standard that you set. 
+
+Before you get started, open the .blend of your NFT collection and open the side panel of the `Layout` tab so that Blend_My_NFTs is visible: 
+
+<img width="1440" alt="Screen Shot 2022-02-06 at 9 53 29 PM" src="https://user-images.githubusercontent.com/82110564/152717227-5c0f430e-5d35-452f-b593-28569a144064.png">
+
+Each Step below is represented by one panel; everything you have to do for that one step, is in the corosponding panel in Blend_My_NFTs. 
+
 ## Step 1. - Create NFT Data
 
+Blend_My_NFTs needs data to understand your .blend file, in this step you will create that data. 
+
+1. Isolate or open the `Create NFT Data` panel in Blend_My_NFTs:
+
+<img width="463" alt="Screen Shot 2022-02-06 at 9 56 12 PM" src="https://user-images.githubusercontent.com/82110564/152717434-92fa39a9-6f3a-4a43-b755-95b7c082c35c.png">
+
+2. Note - `Maximum Number Of NFTs: ###` is the maximum number of NFTs your collection can contain with it's current number of Attirbutes and Variants. If you need this number to be higher create more Attributes and Variants.
+<img width="420" alt="Screen Shot 2022-02-06 at 9 59 42 PM" src="https://user-images.githubusercontent.com/82110564/152717757-ea58e112-a79e-43c1-b91a-49acf23b7662.png">
+
+4. Set the name of your NFT collection in the `NFT Name:` text field:
+
+<img width="429" alt="Screen Shot 2022-02-06 at 10 01 19 PM" src="https://user-images.githubusercontent.com/82110564/152717855-078fed04-ab77-4362-95de-f7af12cc01d0.png">
+
+This name will be in the metadata and in the name of each NFT content file. 
+
+5. Set your NFT collection size with the `NFT Collection Size` field:
+
+<img width="421" alt="Screen Shot 2022-02-06 at 10 03 46 PM" src="https://user-images.githubusercontent.com/82110564/152718041-a7043edc-56bf-41ba-bbee-4b439b648e46.png">
+
+**Important:** This number must be greater than 0 and less than `Maximum Number Of NFTs` shown at the top of the `Create NFT Data` panel. 
+
+6. Set the `Save Path` of your `Blend_My_NFTs Output` folder by clicking on the file icon and navigating to a directory: 
+
+<img width="418" alt="Screen Shot 2022-02-06 at 10 04 43 PM" src="https://user-images.githubusercontent.com/82110564/152718246-a52cb8ce-9af3-480c-ae82-aa665196b6e6.png">
+
+Then click the `Accept` button. 
+
+Desktop is recommended for easy access, but any easily accessable directory will do. 
+
+7. Enable or Disable Rarity and Weighted Variants with the checkbox `Enable Rarity`. For more information on what affect this has on your NFT collection, see [Blender File Organization and Structure](#blender-file-organization-and-structure)and [Notes on Rarity and Weighted Variants](#notes-on-rarity-and-weighted-variants). 
+
+<img width="428" alt="Screen Shot 2022-02-06 at 10 10 55 PM" src="https://user-images.githubusercontent.com/82110564/152718643-d1580692-eac4-47bf-a41a-0e4748517b0d.png">
+
+8. Lastly click the `Create Data` button: 
+
+<img width="425" alt="Screen Shot 2022-02-06 at 10 12 37 PM" src="https://user-images.githubusercontent.com/82110564/152718783-8ee0d72a-9223-4168-9664-c55b9cb6d84f.png">
+
+After completeing the `Create NFT Data` step, you should have the following files and folders located at the `Save Path` set in step 6. above; 
+
+- The `Blend_My_NFTs Outuput` folder. A directory that contains all output files from Blend_My_NFTs. 
+  - The `NFT_Data` folder. This contains the following `NFTRecord.json` and `Batch#.json` files. 
+    - `NFTRecord.json` file. A ledger that contains the NFT DNA of your collection.
+    - `Batch_Data` folder. Contains all `Batch#.json files`. 
+      - `Batch#.json` files. Smaller chuncks of the `NFTRecord.json` that contain unique DNA.
+  - The `Generated NFTs` folder. This directory will be empty, but is where your NFT content files will be exported to. once you've completed [Step 2. Generate NFTs](#step-2---generate-nfts).
 
 ## Step 2. - Generate NFTs
 
+In this step, you will select the types of NFT content files you wish to generate, as well as the formats you want them in. You will then generate these files in batches, or all at once. 
+
+1. Isolate or open the `Generate NFTs` panel in Blend_My_NFTs:
+
+<img width="429" alt="Screen Shot 2022-02-06 at 10 22 35 PM" src="https://user-images.githubusercontent.com/82110564/152719611-541d94e7-5526-4bd5-9c22-7aa1a885d16b.png">
+
+2. Check the NFT content files you wish to generate (you can select more than one):
+
+<img width="429" alt="Screen Shot 2022-02-06 at 10 37 42 PM" src="https://user-images.githubusercontent.com/82110564/152720692-130cbb34-a2f7-44c3-b517-9f93b26d20d1.png">
+
+- If you check `Image`, choose the file format you want the NFT content files to be exported as from the `Image drop-down`: 
+
+<img width="422" alt="Screen Shot 2022-02-06 at 10 55 28 PM" src="https://user-images.githubusercontent.com/82110564/152722173-9cf2f6aa-334c-4a3d-ae01-fc8edae15428.png">
+
+  - `.png` --> Exports image as .png
+  - `.jpeg` --> Exports image as .jpeg
+ 
+
+- If you check `Animation`, choose the file format you want the NFT content files to be exported as from the `Animation drop-down`:
+
+<img width="443" alt="Screen Shot 2022-02-06 at 10 47 49 PM" src="https://user-images.githubusercontent.com/82110564/152722010-258d479a-1168-41d5-840b-8a11ef58a15e.png">
+
+  - `.avi (AVI_JPEG)` --> Exports animations in AVI_JPEG encoding to .avi file format. See [Blender API](https://docs.blender.org/api/current/bpy.types.Image.html#bpy.types.Image.file_format) for more information.
+  - `.avi (AVI_RAW)` --> Exports animations in AVI_RAW encoding to .avi file format. See [Blender API](https://docs.blender.org/api/current/bpy.types.Image.html#bpy.types.Image.file_format) for more information.
+  - `.mkv (FFMPEG)` --> Exports animations in FFMPEG Blender default encoding and container to .mkv file format. See [Blender API](https://docs.blender.org/api/current/bpy.types.Image.html#bpy.types.Image.file_format) for more information.
+
+
+- If you check `3D Model`, choose the file format you want the NFT content files to be exported as from the `3D Model drop-down`: 
+
+<img width="443" alt="Screen Shot 2022-02-06 at 10 40 10 PM" src="https://user-images.githubusercontent.com/82110564/152720946-3b17a8cb-28be-4c7e-84d1-4479188e2da8.png">
+
+  - `.glb` --> Exports .glb 3D models
+  - `.gltf + .bin + textures` --> Exports .gltf 3D models with seperated textures
+  - `.gltf` --> Exports .gltf 3D models with embeded textures
+  - `.fbx` --> Exports .fbx 3D models
+  - `.obj` --> Exports .obj 3D models
+  - `.x3d` --> Exports .x3d 3D models
+  - `.stl` --> Exports .stl 3D models
+  - `.vox` --> Exports .vox MagicVoxel 3D models. **Experimental:** This file format is still in development and might not work as intended. **Important:** You must install the [voxwritter Blender add-on](https://github.com/Spyduck/voxwriter) for this feature to work. 
+
+3. Select number of the Batch you wish to generate in the `Batch to Generate` feild:
+
+<img width="423" alt="Screen Shot 2022-02-06 at 10 58 56 PM" src="https://user-images.githubusercontent.com/82110564/152722424-6244f975-955b-4e4f-9314-3725db918a59.png">
+
+4. Click the `Generate NFTs` Button. This will generate the NFT content files from the Batch set in above step 3:
+
+<img width="425" alt="Screen Shot 2022-02-06 at 11 00 11 PM" src="https://user-images.githubusercontent.com/82110564/152722526-72473e53-89fe-4ee3-ab62-e164c871c889.png">
+
+5. To generate the rest of the Batches you have, repeat steps 3. to 4. and increment the `Batch To Generate` number. 
+
+
+After completeing the `Create NFT Data` step, you should have the following files and folders located at the `Save Path` set in [Step 1. Create NFT Data](#step-1---create-nft-data) above;
+
+- The `Blend_My_NFTs Outuput` folder. A directory that contains all output files from Blend_My_NFTs. 
+  - The `NFT_Data` folder. This contains the following `NFTRecord.json` and `Batch#.json` files. 
+    - `NFTRecord.json` file. A ledger that contains the NFT DNA of your collection.
+    - `Batch_Data` folder. Contains all `Batch#.json files`. 
+      - `Batch#.json` files. Smaller chuncks of the `NFTRecord.json` that contain unique DNA.
+  - The `Generated NFTs` folder. This directory will be empty, but is where your NFT content files will be exported to. once you've completed [Step 2. Generate NFTs](#step-2---generate-nfts).
+    - `Batch#.json` folder. There should be one folder for each batch that you generated. 
+      - `Image` folder.
+        - `Image` files. These images will contain the name you specified in [Step 1. Create Data]()
+      - `Animation` folder. 
+      - `3D Model` folder. 
+      - `BMNFTs_metaData` folder. 
+
 
 ## Step 3. - Refactor Batches & Create MetaData
+
+## Common Issues and Problems
+
 
 
 
