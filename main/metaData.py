@@ -8,45 +8,30 @@
 import bpy
 import os
 import sys
-import time
-import json
 import importlib
 
-dir = os.path.dirname(bpy.data.filepath)
-sys.path.append(dir)
-sys.modules.values()
 
-from src import config
-
-importlib.reload(config)
-
-
-def returnCardanoMetaData(name, description, NFT_DNA, NFT_Variants):
-    metaDataDictCardano = {}
-
-    metaDataDictCardano["721"] = {
+def returnCardanoMetaData(name, NFT_DNA, NFT_Variants):
+    metaDataDictCardano = {"721": {
         "<policy_id>": {
-            "<asset_name>": {
+            name: {
                 "name": name,
                 "image": "",
                 "mediaType": "",
-                "description": description,
-                "files": [{
-                    "name": "",
-                    "mediaType": "",
-                    "src": "",
-                    "NFT_Variants": NFT_Variants,
-                    "NFT_DNA": NFT_DNA
-                }]
+                "description": "",
+
             }
         },
         "version": "1.0"
-    }
+    }}
+
+    for i in NFT_Variants:
+        metaDataDictCardano["721"]["<policy_id>"][name][i] = NFT_Variants[i]
 
     return metaDataDictCardano
 
-def returnSolanaMetaData(name, description, NFT_DNA, NFT_Variants):
-    metaDataDictSolana = {"name": name, "symbol": "", "description": description, "seller_fee_basis_points": None,
+def returnSolanaMetaData(name, NFT_DNA, NFT_Variants):
+    metaDataDictSolana = {"name": name, "symbol": "", "description": "", "seller_fee_basis_points": None,
                           "image": "", "animation_url": "", "external_url": ""}
 
     attributes = []
@@ -72,10 +57,10 @@ def returnSolanaMetaData(name, description, NFT_DNA, NFT_Variants):
     }
     return metaDataDictSolana
 
-def returnErc721MetaData(name, description, NFT_DNA, NFT_Variants):
+def returnErc721MetaData(name, NFT_DNA, NFT_Variants):
     metaDataDictErc721 = {
         "name": name,
-        "description": description,
+        "description": "",
         "image": "",
         "attributes": None,
     }
@@ -93,6 +78,7 @@ def returnErc721MetaData(name, description, NFT_DNA, NFT_Variants):
     metaDataDictErc721["attributes"] = attributes
 
     return metaDataDictErc721
+
 
 if __name__ == '__main__':
     returnSolanaMetaData()

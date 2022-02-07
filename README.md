@@ -1,9 +1,12 @@
-
 <p align="center">
-  <img src="https://user-images.githubusercontent.com/82110564/147833091-50d1daab-f0d8-41b2-b0b1-7d521cf5016a.png">
+  <img src="https://user-images.githubusercontent.com/82110564/152652811-e7f7ea86-d7a8-4148-8f61-add6a5491e65.png" align="center" />
+  <h1 align="center">Blend_My_NFTs</h1>
 </p>
-
-# Blend_My_NFTs
+<p align="center">
+<a href="https://twitter.com/LeonardTorrin" rel="nofollow"><img src="https://img.shields.io/badge/created%20by-@LeonardTorrin-4BBAAB.svg" alt="Created by Torrin Leonard"></a>
+<a href="https://www.gnu.org/licenses/gpl-3.0.en.html" rel="nofollow"><img src="https://img.shields.io/badge/license-GNU%20v3.0-brightgreen" alt="License"></a>
+<a href="" rel="nofollow"><img src="https://img.shields.io/github/stars/torrinworx/blend_my_nfts" alt="stars"></a>
+</p>
 
 ## Description
 Blend_My_NFTs is an open source, free to use Blender add on that enables you to automatically generate thousands of 3D Models, Animations, and Images. This add on's primary purpose is to aid in the creation of large generative 3D NFT collections. 
@@ -13,17 +16,9 @@ For support, help, and questions, please join our Discord where our wonderful co
 This add on was origninal developed to create the NFT project This Cozy Place which is now availabe to mint on our website: https://thiscozystudio.com/
 
 
-
 https://user-images.githubusercontent.com/82110564/147833465-965be08b-ca5f-47ba-a159-b92ff775ee14.mov
 
-The video above illustrates the first 10 Cozy Place NFTs generated with Blend_My_NFts. 
-
-
-## Features 
-- Generate thousands of NFT 3D Models, Animations, and Images in Blender using 3D art. 
-- Support for Windows, Linux, and Mac OS. 
-- Weight and Raritize your NFT collection by setting weighted values. 
-- Creates Meta Data templates for each NFT making uploading to IPFS and Blockchains easy. 
+The video above illustrates the first 10 Cozy Place NFTs generated with Blend_My_NFts.
 
 
 ## Official Links: 
@@ -46,381 +41,265 @@ This document has a list of projects that use Blend_My_NFTs to help facilitate t
 https://docs.google.com/document/d/e/2PACX-1vSHZS4GRu8xXDYpVPEaxyBeTzms9yrJEC9IoAcP38_U8x0C1kVrbtNZgh0zUmkzBoZQVwNvBf3ldRij/pub
 
 
-## Other languages
+## Quick Disclaimer
+Blend_My_NFTs works with Blender 3.0.0 on Windows 10 or macOS Big Sur 11.6. Linux is supported, however I haven't had the chance to test this functionality and guarantee this. Any rendering engine works; Cycles, Eevee, and Octane have all been used by the community without issue. This add-on only works in Blender, a Cinima 4D port will be investigated in the future. 
 
-Spanish 🇪🇸 - https://docs.google.com/document/d/e/2PACX-1vTOjtAuI9coQHC7ubf05f6NOlr921dQFmTVO0P9JZ7b6HxdMFVL4bvYPnY3pl1gPLLTZ15oYv6bMWkL/pub
+Blend_My_NFTs, this readme documenation, YouTube tutorials, live stream Q/As are all provided for free by This Cozy Studio for anyone to use and access. I only ask in return that you credit this software and kindly share what our team has built. A direct link to the Blend_My_NFTs Github page on your projects website (or equivelant social platform) would sefice. We ask you to share this tool because we feel there are many out there that would benefit from it, our only goal is to help those in need. It warms our hearts that so many people use this add-on. 
+
+Thank you, 
+
+- This Cozy Studio team
+
+## Table of Contents 
+
+- [Blend_My_NFTs](#blend_my_nfts)
+
+  - [Description](#description)
+  - [Official Links](#official-links)
+  - [Case Studies](#case-studies)
+  - [Quick Disclaimer](#quick-disclaimer)
+  - [Table of Contents](#table-of-contents)
+- [Setup and Installation](#setup-and-installation)
+- [Important Terminology](#important-terminology)
+- [Blender File Organization and Structure](#blender-file-organization-and-structure)
+  - [Example of Proper BMNFTs Compatable Blender Scene](#example-of-proper-bmnfts-compatable-blender-scene)
+- [Steps to Generate NFTs](#steps-to-generate-nfts)
+  - [Step 1. Create NFT Data](#step-1---create-nft-data)
+  - [Step 2. Generating NFTs](#step-2---generate-nfts)
+  - [Step 3. Refactor Batches & Create MetaData](#step-3---refactor-batches--create-metadata)
+- [Notes on Rarity and Weighted Variants](#notes-on-rarity-and-weighted-variants)
+  - [.Blend File Rarity Example](#blend-file-rarity-examples)
+  - [More complex Rarity Example](#more-complex-rarity-example)
+- [Notes on Meta Data and Standards](#notes-on-meta-data-and-standards)
+- [I have my NFTs, what next?](#i-have-my-nfts-what-next)
 
 
-# Blend_My_NFTs Tutorial Guide
+# Setup and Installation
 
-Blend_My_NFTs, this readme tutorial material, the youtube tutorials, the live stream Q/As, and tutorials are all provided for free by me for anyone to access/use any way they like. I only ask in return that you credit this software if you use Blend_My_NFTs to launch an NFT collection and kindly share what I have built here. A direct link to the Blend_My_NFTs Github page on your collection website (or equivelant) would sefice. I ask you of this only to share this tool and what it can do as I feel there are many out there that would benefit from it, my only goal is to help those that need it. It brings warmth to my heart that so many people use what I have built. Thank you.
+Here are the steps you need to take to get the Blend_My_NFTs add-on installed in Blender:
 
-The software in its current state is not farily user friendly but with a really basic understanding of programing you can opporate it with ease. You can learn the programing skills needed in ten minutes! :)
+1. Click the green `Code` button at the top of this page.
 
-Blend_My_NFTs works with Blender 3.0.0 on Windows 10 or macOS Big Sur 11.6. 
+<img width="328" alt="Screen Shot 2022-02-03 at 4 53 16 PM" src="https://user-images.githubusercontent.com/82110564/152435516-bf49bec3-a00f-4c3f-b632-cdf8028d64c8.png">
 
-## Youtube Tutorial Series
+2. From the drop down click `Download ZIP`. This will download Blend_My_NFTs-main.zip to your Downloads folder:
+
+<img width="397" alt="Screen Shot 2022-02-03 at 5 17 21 PM" src="https://user-images.githubusercontent.com/82110564/152438471-060f7af7-0624-42be-943a-57bb44b02482.png">
+
+3. Move the Blend_My_NFTs-main.zip file to your desktop:
+
+![Screen Shot 2022-02-03 at 4 57 02 PM](https://user-images.githubusercontent.com/82110564/152436030-bccf33ca-25d4-45f7-997a-89bf2ac858e4.png)
+
+4. Open Blender and navigate to `Edit` -> `Preferences` -> `Add-ons`:
+
+<img width="466" alt="Screen Shot 2022-02-03 at 5 00 27 PM" src="https://user-images.githubusercontent.com/82110564/152436377-b042234e-a791-4e2a-8ffa-f3694d819b4b.png">
+
+<img width="666" alt="Screen Shot 2022-02-03 at 5 00 43 PM" src="https://user-images.githubusercontent.com/82110564/152436410-e02fe611-49b1-45e8-a1b8-336b67e9ecd4.png">
+
+5. Click the `Install` button: 
+
+![Screen Shot 2022-02-03 at 5 05 08 PM](https://user-images.githubusercontent.com/82110564/152436908-8f7d5d8f-eb9c-431f-8ca1-c9a022b1b4eb.png)
+
+6. In the `Blender File View` window, navigate to the Blend_My_NFTs-main.zip file downloaded in step 1., select it, then click `Install Add-on`:
+
+![Screen Shot 2022-02-03 at 5 07 16 PM](https://user-images.githubusercontent.com/82110564/152438040-513222ea-8297-4771-8bf3-3b6af74bb54b.png)
+
+
+7. Navigate back to the `Add-ons` window in step 4., and search for Blend_My_NFTs:
+
+![Screen Shot 2022-02-03 at 5 02 59 PM](https://user-images.githubusercontent.com/82110564/152436664-e8e135e5-2d36-487a-bf43-4ea200210a4c.png)
+
+8. Click the `Checkbox` to enable the Blend_My_NFTs add-on:
+
+![Screen Shot 2022-02-03 at 5 22 43 PM 1](https://user-images.githubusercontent.com/82110564/152439275-c590db7a-8b5c-48a4-96f5-ac1ce372be38.png)
+
+
+Now that Blend_My_NFTs is installed in your instance of Blender you can find the main panel in the `3D View` tab in `Layout`, once you are there tap `N` on your keyboard to open the side panel:
+
+![Screen Shot 2022-02-03 at 5 27 41 PM](https://user-images.githubusercontent.com/82110564/152439730-21da93e3-6816-419a-b9d8-5b146dfe3e6e.png)
+
+
+# Important Terminology
+
+Before you can continue further, there are terms used in this documenation to describe the process of this software. This makes it easier to understand how you need to organize your .blend file to generate NFTs. Refer to this section if you come accross an unfamiliar term. 
+
+Let's say you are creating an NFT collection, the artwork is a .png of a person wearing a hat:
+
+1. ``Attribute`` - A part of the .png that can be changed. The idea of a `Hat` on a man is an Attribute, there are many types of Hats, but the `Hat` itself I will refer to it as an Attribute.
+
+2. ``Variants`` - These are the types of Hats; Red Hat, Blue Hat, Green Hat, Cat Hat, etc. These can be swapped into the `Hat` Attribute to create unique .png NFTs.
+
+3. ``DNA`` - A sequence of numbers that determins what ``Variant`` from every ``Attribute`` to include in a single NFT .png. Blend_My_NFTs creates and stores a uniqe DNA sequence for each NFT you create. These numbers are stored in the ``NFTRecord``.
+
+4. ``NFTRecord`` - The "Ledger" of all ``DNA`` for your NFT collection. This will be generated after you create all the Attribtues and Variants that make up your NFT collection in Blender.
+
+5. ``Batch`` - A randomly selected subset of ``DNA``, taken from the ``NFTRecord``. Blend_My_NFTs can split the ``NFTRecord`` into multiple Batches; This allows you to render or create NFTs on multiple computers, or at seperate instances in time.
+
+
+# Blender File Organization and Structure
+
+Organizing your NFTs Attributes and Varariants in Blender is essential to generate files with Blend_My_NFTs. Follow the organizational rules below when making your NFT .blend file: 
+
+1. Your .blend file scene must contain a `Script_Ignore` collection. Make sure the name is exactly `Script_Ignore`, include the underscore and capitalization. 
+  -  Any objects (Lights, Cameras, Background images, etc.) that stay constant throughout every NFT file are to be placed in this `Script_Ignore` collection. `Script_Ignore` may contain sub collections and all naming conventions are not required withing this collection.
+2. Every Attribute is represented by a collection placed directly in the Scene collection. The name of these attribute collections **can not** contain numbers or the underscore (`_`) symbol. The name can contain spaces
+
+3. Every Variant of each Attribute is represented by a collection. These collections are to be placed in the corresponding Attribute colleciton. The naming convention of these Variant collections is as follows:
+  - <`Name of Variant`>`_`<`Order Number`>`_`<`Rarity Percentage`>
+    - `Name of Variant` ==> Any string/number/symbol combination, must not include the underscore (`_`) symbol. Can contain spaces. 
+    - `Order Number` ==> An incrementing number. Must increment for each Variant added to a given Attribute starting at `1`, numbers cannot repeat and must be unique for each Variant. Can only be in a single number format, do not use 001 or 0001 formats.
+    - `Rarity Percentage` ==> A percentage that determins the chance that the given variant will be selected. Must be a number, can contain decimals, cannot contain the percentage (`%`) symbol. See `Notes on Rarity and Weighted Variants` section for more details.
+  - Each Variant collection can contain everything that makes up an individual Variant; it can contain objects, lights, meshes, planes, and every other object type.
+
+## Example of Proper BMNFTs Compatable Blender Scene
+<img width="527" alt="Screen Shot 2022-02-06 at 5 40 39 PM" src="https://user-images.githubusercontent.com/82110564/152704567-378ee98f-34a7-4cd7-8f62-441b7e1891b0.png">
+
+In this example, notice how the main components in `Script_Ignore` can be any type of object. The collections `Body` and `Arms` are both Attribute collections; `Silver Body_1_75` and `Gold Body_2_25` are Variants of the `Body` Attribute, and have a 75% and 25% generation chance. `Silver Arms_1_75` and `Gold Arms_2_25` are Variants of the `Arm` Attribute and have the same weighted distribution as the `Body` Variants. Notice how the Variant collections in the `Arm` Attribute can contain more than one object and object type, this principle can be applied to any Variant collections.
+
+
+# Steps to Generate NFTs
+
+After you have formatted and organized your NFT collection in Blender to the rules outlined above in [Blender File Organization and Structure
+](#blender-file-organization-and-structure) you can now go about generating your NFT collection. By the end of this process you will have a folder continaing the following: 
+
+1. NFT content files; images, animations, or 3D models in any format that you specify.
+2. Json metadata files; one fore each NFT content filem, formatted to the blockchain standard that you set. 
+
+Before you get started, open the .blend of your NFT collection and open the side panel of the `Layout` tab so that Blend_My_NFTs is visible: 
+
+<img width="1440" alt="Screen Shot 2022-02-06 at 9 53 29 PM" src="https://user-images.githubusercontent.com/82110564/152717227-5c0f430e-5d35-452f-b593-28569a144064.png">
+
+Each Step below is represented by one panel; everything you have to do for that one step, is in the corosponding panel in Blend_My_NFTs. 
+
+## Step 1. - Create NFT Data
+
+Blend_My_NFTs needs data to understand your .blend file, in this step you will create that data. 
+
+1. Isolate or open the `Create NFT Data` panel in Blend_My_NFTs:
+
+<img width="463" alt="Screen Shot 2022-02-06 at 9 56 12 PM" src="https://user-images.githubusercontent.com/82110564/152717434-92fa39a9-6f3a-4a43-b755-95b7c082c35c.png">
+
+2. Note - `Maximum Number Of NFTs: ###` is the maximum number of NFTs your collection can contain with it's current number of Attirbutes and Variants. If you need this number to be higher create more Attributes and Variants.
+<img width="420" alt="Screen Shot 2022-02-06 at 9 59 42 PM" src="https://user-images.githubusercontent.com/82110564/152717757-ea58e112-a79e-43c1-b91a-49acf23b7662.png">
+
+4. Set the name of your NFT collection in the `NFT Name:` text field:
+
+<img width="429" alt="Screen Shot 2022-02-06 at 10 01 19 PM" src="https://user-images.githubusercontent.com/82110564/152717855-078fed04-ab77-4362-95de-f7af12cc01d0.png">
+
+This name will be in the metadata and in the name of each NFT content file. 
+
+5. Set your NFT collection size with the `NFT Collection Size` field:
+
+<img width="421" alt="Screen Shot 2022-02-06 at 10 03 46 PM" src="https://user-images.githubusercontent.com/82110564/152718041-a7043edc-56bf-41ba-bbee-4b439b648e46.png">
+
+**Important:** This number must be greater than 0 and less than `Maximum Number Of NFTs` shown at the top of the `Create NFT Data` panel. 
+
+6. Set the `Save Path` of your `Blend_My_NFTs Output` folder by clicking on the file icon and navigating to a directory: 
+
+<img width="418" alt="Screen Shot 2022-02-06 at 10 04 43 PM" src="https://user-images.githubusercontent.com/82110564/152718246-a52cb8ce-9af3-480c-ae82-aa665196b6e6.png">
+
+Then click the `Accept` button. 
+
+Desktop is recommended for easy access, but any easily accessable directory will do. 
+
+7. Enable or Disable Rarity and Weighted Variants with the checkbox `Enable Rarity`. For more information on what affect this has on your NFT collection, see [Blender File Organization and Structure](#blender-file-organization-and-structure)and [Notes on Rarity and Weighted Variants](#notes-on-rarity-and-weighted-variants). 
+
+<img width="428" alt="Screen Shot 2022-02-06 at 10 10 55 PM" src="https://user-images.githubusercontent.com/82110564/152718643-d1580692-eac4-47bf-a41a-0e4748517b0d.png">
+
+8. Lastly click the `Create Data` button: 
+
+<img width="425" alt="Screen Shot 2022-02-06 at 10 12 37 PM" src="https://user-images.githubusercontent.com/82110564/152718783-8ee0d72a-9223-4168-9664-c55b9cb6d84f.png">
+
+After completeing the `Create NFT Data` step, you should have the following files and folders located at the `Save Path` set in step 6. above; 
+
+- The `Blend_My_NFTs Outuput` folder. A directory that contains all output files from Blend_My_NFTs. 
+  - The `NFT_Data` folder. This contains the following `NFTRecord.json` and `Batch#.json` files. 
+    - `NFTRecord.json` file. A ledger that contains the NFT DNA of your collection.
+    - `Batch_Data` folder. Contains all `Batch#.json files`. 
+      - `Batch#.json` files. Smaller chuncks of the `NFTRecord.json` that contain unique DNA.
+  - The `Generated NFTs` folder. This directory will be empty, but is where your NFT content files will be exported to. once you've completed [Step 2. Generate NFTs](#step-2---generate-nfts).
+
+## Step 2. - Generate NFTs
+
+In this step, you will select the types of NFT content files you wish to generate, as well as the formats you want them in. You will then generate these files in batches, or all at once. 
+
+1. Isolate or open the `Generate NFTs` panel in Blend_My_NFTs:
+
+<img width="429" alt="Screen Shot 2022-02-06 at 10 22 35 PM" src="https://user-images.githubusercontent.com/82110564/152719611-541d94e7-5526-4bd5-9c22-7aa1a885d16b.png">
+
+2. Check the NFT content files you wish to generate (you can select more than one):
+
+<img width="429" alt="Screen Shot 2022-02-06 at 10 37 42 PM" src="https://user-images.githubusercontent.com/82110564/152720692-130cbb34-a2f7-44c3-b517-9f93b26d20d1.png">
+
+- If you check `Image`, choose the file format you want the NFT content files to be exported as from the `Image drop-down`: 
+
+<img width="422" alt="Screen Shot 2022-02-06 at 10 55 28 PM" src="https://user-images.githubusercontent.com/82110564/152722173-9cf2f6aa-334c-4a3d-ae01-fc8edae15428.png">
+
+  - `.png` --> Exports image as .png
+  - `.jpeg` --> Exports image as .jpeg
  
-Link to the newest Blend_My_NFTs tutorial video: https://www.youtube.com/watch?v=0T_PWVUIH5M
 
-Note - Though this video series may be helpful, it might not be up to date with the current Blend_My_NFTs release. This document has more detailes and may have newer information. If you have no experience with the Blender API I recomend watch this tutorial on running python scripts in Blender: https://www.youtube.com/watch?v=cyt0O7saU4Q 
+- If you check `Animation`, choose the file format you want the NFT content files to be exported as from the `Animation drop-down`:
 
+<img width="443" alt="Screen Shot 2022-02-06 at 10 47 49 PM" src="https://user-images.githubusercontent.com/82110564/152722010-258d479a-1168-41d5-840b-8a11ef58a15e.png">
 
-## Important Terminology 
+  - `.avi (AVI_JPEG)` --> Exports animations in AVI_JPEG encoding to .avi file format. See [Blender API](https://docs.blender.org/api/current/bpy.types.Image.html#bpy.types.Image.file_format) for more information.
+  - `.avi (AVI_RAW)` --> Exports animations in AVI_RAW encoding to .avi file format. See [Blender API](https://docs.blender.org/api/current/bpy.types.Image.html#bpy.types.Image.file_format) for more information.
+  - `.mkv (FFMPEG)` --> Exports animations in FFMPEG Blender default encoding and container to .mkv file format. See [Blender API](https://docs.blender.org/api/current/bpy.types.Image.html#bpy.types.Image.file_format) for more information.
 
-Before we can continue there are terms that are used to describe the process of this software to make it a bit easier to understand. Refer to this section if you come accross an unfamiliar term. 
 
-For the following terms, lets say you are creating an NFT collection where the image is of a person wearing a hat:
+- If you check `3D Model`, choose the file format you want the NFT content files to be exported as from the `3D Model drop-down`: 
 
-``Attribute`` A part of an NFT that can be changed. The hat on a man is an Attribute, there are many types of hats, but the hat itself I will refer to it as an attribute.
+<img width="443" alt="Screen Shot 2022-02-06 at 10 40 10 PM" src="https://user-images.githubusercontent.com/82110564/152720946-3b17a8cb-28be-4c7e-84d1-4479188e2da8.png">
 
-``Variants`` These are the types of hats; red hat, blue hat, green hat, cat hat, etc. These can be swapped into the hat Attribute with one another to create different NFTs. 
+  - `.glb` --> Exports .glb 3D models
+  - `.gltf + .bin + textures` --> Exports .gltf 3D models with seperated textures
+  - `.gltf` --> Exports .gltf 3D models with embeded textures
+  - `.fbx` --> Exports .fbx 3D models
+  - `.obj` --> Exports .obj 3D models
+  - `.x3d` --> Exports .x3d 3D models
+  - `.stl` --> Exports .stl 3D models
+  - `.vox` --> Exports .vox MagicVoxel 3D models. **Experimental:** This file format is still in development and might not work as intended. **Important:** You must install the [voxwritter Blender add-on](https://github.com/Spyduck/voxwriter) for this feature to work. 
 
-``DNA`` DNA is a sequence of numbers that determins what Variant from every Attribute in an NFT collection to include in a single NFT image. This program generates a uniqe DNA sequence for every possible combination of Variants in Attributes. 
+3. Select number of the Batch you wish to generate in the `Batch to Generate` feild:
 
-``Batch`` A Batch is a randomly selected subset of NFT DNA. It is a smaller portion of the total number of NFTs you want to generate. This makes the work load of rendering thousands of images easier to manage. It also gives you the option to render on multiple computers and ensures each computer renders seperate images with no overlap.
+<img width="423" alt="Screen Shot 2022-02-06 at 10 58 56 PM" src="https://user-images.githubusercontent.com/82110564/152722424-6244f975-955b-4e4f-9314-3725db918a59.png">
 
-# Installation and Getting Started
+4. Click the `Generate NFTs` Button. This will generate the NFT content files from the Batch set in above step 3:
 
-This youtube tutorial goes over the basic setup discussed in this section: https://www.youtube.com/watch?v=dUajXAZzSPc (This video is out of date but goes over how to run scripts in Blender which is important to running Blend_My_NFTs)
+<img width="425" alt="Screen Shot 2022-02-06 at 11 00 11 PM" src="https://user-images.githubusercontent.com/82110564/152722526-72473e53-89fe-4ee3-ab62-e164c871c889.png">
 
-Follow these steps to setup Blend_My_NFTs:
+5. To generate the rest of the Batches you have, repeat steps 3. to 4. and increment the `Batch To Generate` number. 
 
-1. At the top of this page click the green "Code" button
-2. Click "Download Zip" - This will download the Blend_My_NFTs folder to your Downloads folder in zip format
-3. In your download folder, move Blend_My_NFTs-main.zip to your desktop or another easily accessable location
-4. Unzip the file:
-- How to unzip a file on Mac: https://support.apple.com/en-ca/guide/mac-help/mchlp2528/mac
-- How to unzip a file on Windows: https://support.microsoft.com/en-us/windows/zip-and-unzip-files-f6dde0a7-0fec-8294-e1d3-703ed85e7ebc
-5. Move the Blend_My_NFTs-main folder is located on your Desktop for easy access (recomended)
 
-## How to set up your .Blend file 
+After completeing the `Create NFT Data` step, you should have the following files and folders located at the `Save Path` set in [Step 1. Create NFT Data](#step-1---create-nft-data) above;
 
-The following section covers how to set up your .Blend file and config.py file
+- The `Blend_My_NFTs Outuput` folder. A directory that contains all output files from Blend_My_NFTs. 
+  - The `NFT_Data` folder. This contains the following `NFTRecord.json` and `Batch#.json` files. 
+    - `NFTRecord.json` file. A ledger that contains the NFT DNA of your collection.
+    - `Batch_Data` folder. Contains all `Batch#.json files`. 
+      - `Batch#.json` files. Smaller chuncks of the `NFTRecord.json` that contain unique DNA.
+  - The `Generated NFTs` folder. This directory will be empty, but is where your NFT content files will be exported to. once you've completed [Step 2. Generate NFTs](#step-2---generate-nfts).
+    - `Batch#.json` folder. There should be one folder for each batch that you generated. 
+      - `Image` folder. The folder where all the NFT Image content files are stored for a given `Batch#.json`. 
+        - `Image` files. These images will contain have the name you specified in [Step 1. Create Data](#step-1---create-nft-data), an incrementing number, and the file extension you specified above. 
+      - `Animation` folder. The folder where all the NFT Animation content files are stored for a given `Btach#.json`. 
+        - `Animation` files. These animations will have the name you specified in [Step 1. Create Data](#step-1---create-nft-data), an incrementing number, and the file extension you specified above. 
+      - `3D Model` folder. 
+        - `3D Model` files. These 3D models will have the name you specified in [Step 1. Create Data](#step-1---create-nft-data), an incrementing number, and the file extension you specified above. 
+      - `BMNFTs_metaData` folder.
+        - `Data_#.json` files. These files are used by Blend_My_NFTs backend in [Step 3. - Refactor Batches & Create MetaData](#step-3---refactor-batches--create-metadata). These can be ignored, unless you are customizing the metaData.py script.
 
-In order for Blend_My_NFTs to read your .blend file, you need to structure your scene in a specific way. Please follow all naming and collection conventions exactly, otherwise the scripts will not run properly. 
+## Step 3. - Refactor Batches & Create MetaData
 
-**Important Note**
 
-Your .blend file must be moved to the Blend_My_NFTs folder. When you run the script, the .blend file must be in the directory of the Blend_My_NFTs folder. The Blender text editor has some weird quirks that make finding the right directory a bit tricky. If you are interested, I suggest reading about it in the Blender API above. This is the only work around I could find for now. 
 
-Rules for .blend structure: 
+## Common Issues and Problems
 
-- All Objects, collections, light sources, cameras, or anything else you want to stay constant for each NFT insert it into a collection named "Script_Ignore" exactly. This collection should be located directly beneath the 'Scene Collection' in your .blend file. Every thing in this Script_Ignore collection will be ignored by the collection (Attribute) fetcher. The state of the render and viewport camera of any objects/collections in Script_Ignore will remain unchanged during the scripts operation. The script will not turn the cameras of anything located in Script_Ignore on or off, so however you set them, will be how it renders.
 
-- Every Attribute of your NFT must be represented by a collection directly beneath the 'Scene Collection' in your .blend file. DO NOT USE NUMBERS OR UNDERSCORES IN THE NAME OF THESE COLLECTIONS, this will mess with the scripts. Only use capital letters and lowercase letters, no numbers(0-9) or the underscore symbol( _ ). 
 
-- For each Variant of each Attribute create a collection containing everything that makes up that Variant. This Variant collection must be placed within the Attribute collection and named with the following format: VariantName_(variant number begining at 1)_0 (e.g. Cube_1_0, Cube_2_0, etc.). The VariantName CANNOT CONTAIN NUMBERS OR UNDERSCORES. Like above, this will mess with the scripts.
- 
-Here is an example of proper scene and collection formating with the above conventions:
 
-<img width="405" alt="Screen Shot 2021-11-22 at 7 24 00 PM" src="https://user-images.githubusercontent.com/82110564/142954386-92372667-72e9-4568-a8f0-aae270f705fb.png">
-
-In this example ``Camera`` ``and Const Collection 1`` is in ``Script_Ignore`` and will be displayed in every NFT generated. The collection ``Cube`` represents an attribute, and the collections ``Cube_1_33``, ``Cube_2_33``, ``Cube_3_33``, and ``Cube_4_1`` are the variants of that attribute. Notice that each variant of Cube has an incrementing number representing the order of the variants. The numbers ``33``, ``33``, ``33``, and ``1`` represent the percentage chance that variant will get chosen if ``enableRarity`` is set to ``True``. 
-
-## Customizing the config.py file
-
-After installation, open the Blend_My_NFTs folder. You will need to change variables in the config.py file with a text editor or IDE; I recomend Visual Studio Code, but Blender has a bilt in Text Editor for ease of use. config.py is where you can customize aspects of your NFT collection and how it is generated.
-
-Description of customisable variables to generate images: 
-
-``nftName`` - A string representing name of the file exported by Blend_My_NFTs (REQUIRED)
-
-
-``imageFileFormat`` - A string representing the image file format that Blend_My_NFTs will export generated images as: (REQUIRED)
-
-     Type the exact name provided below in the '' for the imageFileFormat:
-  
-    'JPEG' - Exports the .jpeg format
-  
-    'PNG' - Exports the .png format
-  
-    Visit https://docs.blender.org/api/current/bpy.types.Image.html#bpy.types.Image.file_format for a complete list of file formats supported by Blender. Enter the     file extension exactly as specified in the Blender API documentation.
-
-``animationFileFormat`` - A string representing the animations file format that Blend_My_NFTs will export generated animations as: (REQUIRED)
-
-    Type the exact name provided below in the '' above:
-    
-    AVI_JPEG - Exports the .avi jpeg format
-    
-    AVI_RAW - Exports the .avi raw format
-    
-    FFMPEG - Exports the .ffmpeg format
-    
-    Visit https://docs.blender.org/api/current/bpy.types.Image.html#bpy.types.Image.file_format for a complete list of file formats supported by Blender. (These       are the Blender only supported animation formats).
-
-``modelFileFormat`` - A string representing the 3D Models file format that Blend_My_NFTs will export generated 3D Modles as: (REQUIRED)
-
-    Type the exact name provided below in the '' above:
-    
-    fbx - The .FBX file format
-    
-    glb - The .glb file format
-    
-    obj - The .obj file format *Exports both a .obj and a .mtl files for the same generated object
-    
-    x3d - The .x3d file format
-    
-    Visit https://docs.blender.org/api/current/bpy.ops.export_scene.html?highlight=export_scene#module-bpy.ops.export_scene
-    for a complete list of object formats supported by Blender.
-
-
-``save_path_mac`` - A string representing the save path for Blend_My_NFTs if you are using MacOS: (REQUIRED - if using MacOS)
-
-    Example Mac: /Users/Path/to/Blend_My_NFTs
-
-
-``save_path_windows`` - A string representing the save path for Blend_My_NFTs if you are using Windows: (REQUIRED - if using Windows)
-
-    Example Windows: C:\Users\Path\to\Blend_My_NFTs
-
-
-``save_path_linux`` - A string representing the save path for Blend_My_NFTs if you are using Linux OS (REQUIRED - if using Linux)
-    Example Linux: /home/Path/to/Blend_My_NFTs
-
-
-``maxNFTs`` - A positive integer representeing the number of NFTs to generate. (REQUIRED)
-
-
-``nftsPerBatch`` - A positive integer representing the number of NFTs per batch. (REQUIRED)
-
-
-``renderBatch`` - A positive integer representing the batch number to render if ``renderImage`` is set to True. (REQUIRED)
-
-
-``enableRarity`` - A boolean value, when set to True, rarity percentage will be taken into account when generating NFT DNA and exporting to NFTRecord.json
-
-
-``enableExporter`` - A Boolean value, when set to True, will export Images and or 3D models when main.py is run in Blender. (Turned on after NFTRecord.json and appropriate batches are generated with main.py)
-
-
-``enableImages`` - A boolean value, when set to True with ``enableExporter = True`` will export images. 
-
-
-``enableAnimations`` - A boolean value, when set to True with ``enableExporter = True`` will export animations. 
-
-
-``enableModelsBlender`` - A boolean value, when set to True with ``enableExporter = True`` will export 3D models. 
-
-
-- Note that ``enableImages``, ``enableModelsBlender``, and ``enableAnimations`` can run at the same time. Both 3D Models, Animations, and Images will be exported. (One of the above is REQUIRED to generate NFT files)
-
-
-``refactorBatchOrder`` - A boolean value, when set to True will combine NFT Batch# folders into a folder called ``Complete_Collection`` when main.py is run in Blender. Running main.py with this variable set to True will aslo generate meta data formats if the desired formats below are also set to True.
-
-
-``cardanoMetaData`` - A boolean value, when set to True will generate a folder containing Cardano meta data json files for each NFT file. Generates when main.py is run with ``refactorBatchOrder`` is set to True. 
-
-
-``solanaMetaData`` - A boolean value, when set to True will generate a folder containing Solana meta data json files for each NFT file. Generates when main.py is run with ``refactorBatchOrder`` is set to True. 
-
-
-``erc721MetaData`` - A boolean value, when set to True will generate a folder containing ERC721 (Ethereum) meta data json files for each NFT file. Generates when main.py is run with ``refactorBatchOrder`` is set to True. 
-
-
-``turnNumsOff`` - A boolean value, when set to True will remove numbers and underscores in the names of Variants when NFT meta data is generated. Works after ``refactorBatchOrder`` is ran in main.py. 
-
-
-``metaDataDescription`` - A string value, sets the Description variable in the BMNFTs meta data file format. Can be used in a modifed version of metaData.py to fill in Description varaibles in other meta data formats. 
-
-
-``enableGeneration`` - A boolean value, when set to True, applies and takes into account colour or material variants in the NFT DNA. (Optional)
-
-
-``generationType`` - A string value, takes ``color`` or ``material`` as input. Determines if extra variatns are generated with colours or material textures. (Optional)
-
-
-``rgbaColorList#`` - A list containing tuples representing the RGBA colour values assigned to a given object in ``colorList``. (Optional)
-
-
-``materialList#`` - A list containing strings representing the names of materials in blender: (Optional)
-
-    These materials must be in your Current Files' Materials. Make sure that you've set your materials as "fake user". The collections below are Current Files'         Materials. You can put as many or as little materials values in these lists as you would like. You can create any number of materialLists and assign them to       any number of collections that you would like. Each set of materialLists assigned to an object by collection name in the materialList will act like an             attribute and create a unique variant of that item.
-
-
-``colorList`` - A dictionary which the keys are the names of variants, and the items are the ``rgbaColorList#`` or ``materialList#``: (Optional)
-
-    The rgbaColorList# deterimnes the colours that the variants will change to. This creates new variants with those RGBA colour values. 
-
-
-``enableResetViewport`` - A boolean value, when set to True, resets the veiwport of all cameras not in Script_Ignore. (Optional)
-
-``enable3DModels`` - A boolean value, when set to True, will generate all possible combinations of 3D models when working with an external repository of 3D models in ``3D_Model_Input``. 
-
-``runPreview`` - A boolean value, when set to True, will run a shell of all main modules to generate NFT files. Will print useful numbers and values in the console to help you create your NFT collection. 
-
-
-``maxNFTsTest`` - A positive integer representing the number of NFTs to create during the test. This number aids in the estimation of complete collection creation; the higher this number, the more accurate the estimation. 
-
-
-``checkDups`` - A boolean value, when set to True, will print the number of duplicate NFTs found in the NFTRecord.json file. This file is provided for transparency, it is impossible for duplicates to be made with the current code in the DNA_Generator.py
-
-
-``checkRarity`` - A boolean value, when set to True, will print the true rarity data in the Blender System Console, this data will be saved to a RarityData.json file in the Blend_My_NFTs folder. This file is provided for transparency. The accuracy of the rarity values you set in your .blend file as outlined in the below are dependent on the maxNFTs, and the maximum number of combinations of your NFT collection.
-
-
-## Running main.py - Generating NFTRecord and Batches
-
-Before you can render iamges you need to generate a list of NFT DNA then split it up into batches to render more easily. These will take the form of the NFTRecord.json file, and a list of Batch#.json files. 
-
-``NFTRecord.json`` - This file contains a list of all NFT DNA, this list is limited by ``nftMax`` in config.py. 
-
-``Batch#.json`` - These files contain peices of NFTRecord.json selected at random and sent to a batch containing ``nftsPerBatch`` number of DNA. 
-
-Before running main.py, ensure these variables are set properly or else the script will not work:  
-
-- ``nftName``
-- ``save_path_mac`` or ``save_path_windows``
-- ``maxNFTs``
-- ``nftsPerBatch``
-- ``enableExporter = False``
-
-Steps to generate NFTRecord and Batches:
-
-1. In your .blend file open the ``Scripting Tab`` in the menu of Blender: 
-
-<img width="1440" alt="Screen Shot 2021-10-24 at 9 51 25 PM" src="https://user-images.githubusercontent.com/82110564/138623488-9d0efc07-4004-4d3a-a7fe-25cb6050ac51.png">
-
-2. Click the "Open" button in the Blender Text Editor:
-
-<img width="1422" alt="Screen Shot 2021-10-29 at 11 31 38 PM" src="https://user-images.githubusercontent.com/82110564/139518856-7798ea86-0be0-4511-bc87-fa09ce2f6538.png">
-
-3. With the Blender File View open, navigate to the Blend_My_NFTs folder, navigate to the ``src`` folder, then open main.py.
-
-<img width="1062" alt="Screen Shot 2021-11-23 at 8 09 23 PM" src="https://user-images.githubusercontent.com/82110564/143153066-254e5e3e-cd06-4fdb-b645-180ed01fe89b.png">
-
-5. To run main.py click the run button shown circled below:
-
-<img width="605" alt="Screen Shot 2021-11-23 at 8 12 10 PM" src="https://user-images.githubusercontent.com/82110564/143153297-b90d9e16-69b7-4b44-b63b-20869f155f32.png">
-
-If you correctly formated your .blend file, you will now have two file types; an NFTRecord.json, and a number of Batch#.json files located in the ``Batch_Json_files`` folder. 
-
-## Running main.py - Generating Image Batches
-
-**For this section, ensure you have generated NFTRecord.json and Batch#.json files before taking the following steps**
-
-Steps to Generate Images: 
-
-1. Ensure all manditory variables have been filed in (all found in config.py): 
-- ``nftName``
-- ``save_path_mac`` or ``save_path_windows``
-- ``maxNFTs``
-- ``nftsPerBatch``
-- ``renderBatch``
-
-2. Run main.py in Blender with ``enableExporter`` set to ``False`` in config.py. This will generate the NFTRecord.json and Batch#.json files. 
-
-3. Set ``renderBatch`` to the batch number you wish to render in config.py. 
-
-4. Set ``enableExporter`` to ``True`` in config.py. 
-
-5. Set ``enableImages`` to ``True`` in config.py.
-
-6. Run main.py in the Blender Scripting Tab. This will now generate Images.
-
-<img width="605" alt="Screen Shot 2021-11-23 at 8 12 10 PM" src="https://user-images.githubusercontent.com/82110564/143153297-b90d9e16-69b7-4b44-b63b-20869f155f32.png">
-
-Reapeat the steps above for each Batch to generate the complete NFT collection.  
-
-## Summery: The order to run main.py to Generate Image Batches
-
-Run the scripts in the following order: 
-1. main.py - With ``renderImage`` set to ``False`` in the config.py: Generates the data for your NFT collection.
-2. main.py - With ``renderImage`` set to ``True`` in the config.py: Renders images in a batch specified by ``renderBatch``.
-
-## Running main.py - Generating Animation Batches
-
-Steps to Generate Animations: 
-
-1. Ensure all manditory variables have been filed in (all found in config.py): 
-- ``nftName``
-- ``save_path_mac`` or ``save_path_windows``
-- ``maxNFTs``
-- ``nftsPerBatch``
-- ``renderBatch``
-
-2. Run main.py in Blender with ``enableExporter`` set to ``False``. This will generate the NFTRecord.json and Batch#.json files. 
-
-3. Set ``animationFileFormat`` to the animation file format you wish to export in config.py. 
-
-4. Set ``enableAnimations`` to ``True`` in config.py.
-
-5. Set ``enableExporter`` to ``True`` in config.py.
-
-6. Run main.py in the Blender Scripting Tab. This will now generate Animations.
-
-<img width="605" alt="Screen Shot 2021-11-23 at 8 12 10 PM" src="https://user-images.githubusercontent.com/82110564/143153297-b90d9e16-69b7-4b44-b63b-20869f155f32.png">
-
-Reapeat the steps above for each Batch to generate the complete NFT collection.  
-
-## Summery: The order to run main.py to Generate Animation Batches
-
-Run the scripts in the following order: 
-1. main.py - With ``enableExporter`` set to ``False`` in config.py: Generates the data for your NFT collection. 
-2. main.py - With ``enableExporter`` and ``enableAnimations`` set to ``True`` in config.py: Renders and compiles animations.
-
-## Running main.py - Generating 3D Model Batches from a .blend file
-
-Youtube tutorial for generating 3D models: https://www.youtube.com/watch?v=rRs0lN5huDk&t=1s
-
-Steps to Generate 3D models: 
-
-1. Ensure all manditory variables have been filed in (all found in config.py): 
-- ``nftName``
-- ``save_path_mac`` or ``save_path_windows``
-- ``maxNFTs``
-- ``nftsPerBatch``
-- ``renderBatch``
-
-2. Run main.py in Blender with ``enableExporter`` set to ``False``. This will generate the NFTRecord.json and Batch#.json files. 
-
-3. Set ``modelFileFormat`` to the 3D Model file format you wish to export in config.py. 
-
-4. Set ``enableModelsBlender`` to ``True`` in config.py.
-
-5. Set ``enableExporter`` to ``True`` in config.py.
-
-6. Run main.py in the Blender Scripting Tab. This will now generate 3D Models.  
-
-<img width="605" alt="Screen Shot 2021-11-23 at 8 12 10 PM" src="https://user-images.githubusercontent.com/82110564/143153297-b90d9e16-69b7-4b44-b63b-20869f155f32.png">
-
-## Summary: The order to run main.py to Generate 3D Model Batches: 
-
-run the scripts in the following order:
-1. main.py - With ``enableExporter`` set to ``False`` in config.py: Generates the data for your NFT collection. 
-2. main.py - With ``enableExporter`` and ``enableModelsBlender`` set to ``True`` in config.py: Exports 3D models.
-
-# Generating 3D Models with external 3D Models
-
-This youtube tutorial goes over the basic setup discussed in this section: https://www.youtube.com/watch?v=NonORFpVhLw (This video is out of date but may be of use)
-
-The following section covers generating and exporting 3D models with Blend_My_NFTs with a repository of external 3D models in a folder structure. The 3D model generator combines 3D models together and exports all possible combinations of those 3D models to a folder. 
-
-## How to set up your 3D model folders
-
-Similarly to the Image Generator, there is a specific way to format 3d model repositors external to Blender. 
-
-1. In the following photo we have a folder structure. In this example, ``Sphere`` and ``Cube`` are our attributes. Any object file in the ``Script_Ignore_Folder`` will be added to all NFT 3D models generated, and such is an appropriate place to put constant scene elements you wish to appear in every NFT you generate. 
-
-<img width="191" alt="Screen Shot 2021-11-09 at 8 55 34 PM" src="https://user-images.githubusercontent.com/82110564/141035340-576f5ca6-8710-4ce1-a9ad-a28c75653c6e.png">
-
-2. After you have formated the repository of 3D models to the above convention, copy and past it into the 3D_Model_Input folder located in Blend_My_NFTs: 
-
-<img width="357" alt="Screen Shot 2021-11-09 at 8 59 06 PM" src="https://user-images.githubusercontent.com/82110564/141035754-3561ae2b-ee5c-4d65-ac5e-d4c17e34e3a7.png">
-
-3. Next open config.py and change the variable ``use3DModels = False`` to ``use3DModels = True``
-
-<img width="150" alt="Screen Shot 2021-11-09 at 9 02 05 PM" src="https://user-images.githubusercontent.com/82110564/141035910-5ffb477c-956b-4a89-bda0-3665b7a85fff.png">
-
-4. In Blender open a new blend file and delete everything from the scene. 
-
-5. Save the .blend file to the Blend_My_NFTs folder and reload the .blend file from the new directory.
-
-7. Run main.py in the Blender Scripting Tab
-
-The generated 3D models will appear in the folder 3D_Model_Output
-
-## How to use Rarity
+# Notes on Rarity and Weighted Variants
 
 Rarity is a percentage value and accepts fractions like 0.001%, but they must be specified with decimals in the naming (fraction like 1/2 or 3/5 are not permitted in the naming structure). For ease of use the percentages should add up to 100%:
 
@@ -444,23 +323,23 @@ Out of 100%:
 (50/1,000)*100 = 5% chance of 1 variant
 ```
 
-Rarity is dependent on both the number of NFTs you generate, as well as the maximum number of possible combinations of the attributes in your .blend file. 
+Rarity is dependent on both the number of NFTs you generate, as well as the maximum number of possible combinations of the Attributes and Variants in your .blend file. 
 
-This means the following two scenarios, say, at a fixed number of 10,000 NFTs to generate;
+This results in the following two scenarios, say, at a fixed number of 10,000 NFTs to generate;
 
 1. Your .blend file has 1,000,000,000 possible combinations (trust me that's a small number, our collection for This Cozy Place has over 11 Trillion possible combinations). Generating 10,000 will be more representative of the rarity numbers you set as the script will simply have more combinations to choose from.
 
-2. Your .blend file has 10,000 possible combinations. This means that all possible combinations of your NFT will be generated, meaning that no rarity can be taken into account since the only way to reach your required 10,000 NFTs to generate is by including NFTs that
+2. Your .blend file has 10,000 possible combinations. This means all possible combinations of your NFT will be generated, meaning that no rarity can be taken into account.
 
-This is the result for following reasons: 
+This is happens for following reasons: 
 
-1. The rarity is determined sudo randomly by, but is weighted based on each variants rarity percentage.
+1. The rarity is determined sudo randomly, but is weighted based on each Variants rarity percentage.
 
-2. The script prioritises the number of NFTs to generate (that you set in config.py with the maxNFTs variable) over rarity percentage
+2. The scripts generally prioritize the number of NFTs to generate (`maxNFTs`) over rarity percentage
 
-This behaviour is a fundamental mathematical result, not an issue with the code. I've researched various ways at creating and enforcing rarity, this is the only way I have found that works. If you have found a better method, feel free to make a pull request and I'd be happy to review and merge it to the main Github repo for BMNFTs.
+This behaviour is a fundamental mathematical result, not an issue with the code. I've researched various ways of creating and enforcing rarity, this is the only way I have found that works. If you have found a better method, feel free to make a pull request explaining it and I'd be happy to review and merge it to the main Github repo for BMNFTs.
 
-.blend file examples: 
+## .blend file Rarity examples: 
 
 1. With Rarity percentage (50% 50% split)
 ```
@@ -476,9 +355,9 @@ This behaviour is a fundamental mathematical result, not an issue with the code.
   |-Red Hat_2_0
 ```
 
-Leaving the rarity number as 0 will randomly select 1 of the variants you set in your .blend file. Note that this only works if every variant's rarity is set to 0. For an attribute its rarity or random, not both. You can have different attributes, where some are using rarity and others are randomly selected, but you cannot mix these with variants. 
+Leaving the rarity number as 0 will randomly select 1 of the variants you set in your .blend file. Note that this only works if every variant's rarity is set to 0. For an attribute its rarity or random, not both. You can have different attributes, where some are using rarity and others are randomly selected, but you cannot mix these with variants of one attribute. 
 
-Example of more complex rarity structures: 
+### More complex Rarity Example: 
 
 ```
   Hat <-- Attribute
@@ -492,34 +371,27 @@ Example of more complex rarity structures:
 
 In the example above, Green, Red, Blue, and Orange hats all have an equal chance of getting selected. However Purple and Yellow hats will only appear on average 0.5% of the time. We recommend rounding to about 5 decimal places for simplicity, as numbers of more accuracy aren't really needed for NFT collections 10,000 or smaller.
 
-The code for that determines rarity can be found in ``src/Main_Generators/Rarity_Sorter.py``. The most important line in that file is ``70``, that is what generates the randomly weighted DNA. After that it is checked by line 
+The code that determines rarity can be found the `Rarity_Sorter.py`.
 
-## Helpful Links
 
-This Blender add on heaviliy relies on the Blender API and its documentation which you can find here: https://docs.blender.org/api/current/index.html
+## Notes on Meta Data and Standards
 
-If you have no experience with the Blender API I recomend watch this tutorial on running python scripts in Blender: https://www.youtube.com/watch?v=cyt0O7saU4Q 
+Blend_My_NFTs can export Cardano, Solana, and ERC721 formatted metadata templates. After running `Refactor Batches & Create MetaData` a template will be generated for each NFT you have created; These templates will include properly formated names for each Attribute and Variant that was selected to create that NFT. 
 
-There is also helpful documentation in the Blender API about running scripts here: https://docs.blender.org/api/current/info_quickstart.html#running-scripts
+Blend_My_NFTs can only provide this information in the templates, you will have to add Policy ID and URL when you upload and mint your NFT collection. For more information on how to do this see [I have my NFTs, what next?](#i-have-my-nfts-what-next)
 
-Note - You might want to install the Icon Viewer add-on for Blender: https://docs.blender.org/manual/en/latest/addons/development/icon_viewer.html 
+### Meta Data Template Sources
 
-## Disclaimers
+The list of meta data standard sources used to create the templates: 
 
-Blend_My_NFTs works with Windows 10 or macOS BigSure 11.6 on Blender 3.0.0. These are the operating systems I have tested the scripts on, I do not garuntee they will work on other operating systems. I do not garuntee this software will work with your setup. There are many variables and factors that go into running the software provided, it differs from system to system, and from blend file to blend file.
+- `Cardano CIP25` --> https://cips.cardano.org/cips/cip25/
+- `Solana Metaplex` --> https://docs.metaplex.com/nft-standard
+- `ERC721` --> https://docs.opensea.io/docs/metadata-standards
+- `ERC1155` --> To be created...
 
-I encourage you to do some trouble shooting, read the Blender API documentation, read this tutorial, review the scripts, and do your own research before reaching out for help on our discord. If you are really stuck and are out of options I am available on our disord channel above for consulting. However! I am not a toutor. Although I enjoy teaching people, I simply do not have the time to work, build this project, teach people Blender/Python, and live my life. So please respect my time, I'd love to help! 
+### Meta Data Disclaimer
+These meta data templates are based on the common standards for the given blockchain, you will have to modify and fill them in with a script of your own when you mint your NFT collection. These metadata templates are only provided for your convenience and are as accurate to the standards above that I could make them.
 
-To be honest I have no idea how to use Blender. I know some basic things, but I know the API and Python a lot better. This is my first Blender/Python project, so you may be wondering "how is he making a NFT collection with Blender??" Well I'm not, I write the code for the Blend_My_NFTs, and my team has three other members; Devlin and Caelin, who create the scenes and models in Blender, and the third is Quinn who is the lead web developer for our site. 
 
-If building an NFT collection in blender is something you really want to do and you have experience with Blender, I suggest you get familiar with some basic Python functionality and then how to run scripts in the Belnder Text Editor (an indepth knowledge is not required). However, if you don't use Blender but have a coding background, I would suggest watching some basic tutorials just to get a feel for the software (an indepth knowledge is not required).
+## I have my NFTs, what next? 
 
-This tutorial page is not finished! This page will be updated as I commit/merge new changes to the main branch. (Last updated Nov 10th, 2021)
-
-I garuntee this will eventually be an add on to Blender and not just a script you run through the script editor. (I mostly just put this in here for personal motivation, please don't pester me about the date lol)
-
-Nothing in this repository or its documentation is financial advice. If you create an NFT project or collection with Blend_My_NFTs, you do so at your own personal and financial risk. We are only providing a means of acomplishing a goal, not investment or financial information about that goal. Do your own research and come to your own conclusions before spending money on NFTs or any asset for that matter. We are not liable for any finacial losses you may encure while using this software. Any discussion about finances and cryptocurrencies in this repository or its documentation are done with the intent to educate and provide examples to help our users understand concepts relating to Blend_My_NFTs and This Cozy Place. 
-
-The creators of This Cozy Studio will never, under any cricumstance, ask for your crypto wallet(s) secret phrase or private keys. If you come across anyone who is impersonating the founding members of This Cozy Place, please report it immediately to the admins on our discord channel and we will take appropriate action and warn our community of the behaviour. If this takes place outside of our community boundries then report the user to the appropriate authorities. 
-
-This software is provided for free and is open source. We are not liable for any felones you may commit using this software, and we staunchly appose the malicious use of this software that in any way breaks any applicable law in your loction of residence. 
