@@ -1,11 +1,15 @@
-
 <p align="center">
-  <img src="https://user-images.githubusercontent.com/82110564/152652811-e7f7ea86-d7a8-4148-8f61-add6a5491e65.png">
+  <img src="https://user-images.githubusercontent.com/82110564/152652811-e7f7ea86-d7a8-4148-8f61-add6a5491e65.png" align="center" />
+  <h1 align="center">Blend_My_NFTs</h1>
 </p>
+<p align="center">
+<a href="https://twitter.com/LeonardTorrin" rel="nofollow"><img src="https://img.shields.io/badge/created%20by-@LeonardTorrin-4BBAAB.svg" alt="Created by Torrin Leonard"></a>
+<a href="https://www.gnu.org/licenses/gpl-3.0.en.html" rel="nofollow"><img src="https://img.shields.io/badge/license-GNU%20v3.0-brightgreen" alt="License"></a>
+<a href="" rel="nofollow"><img src="https://img.shields.io/github/stars/torrinworx/blend_my_nfts" alt="stars"></a>
+  
+<br/>
 
-# Blend_My_NFTs
-
-## Description
+# Description
 Blend_My_NFTs is an open source, free to use Blender add on that enables you to automatically generate thousands of 3D Models, Animations, and Images. This add on's primary purpose is to aid in the creation of large generative 3D NFT collections. 
 
 For support, help, and questions, please join our Discord where our wonderful community: https://discord.gg/UpZt5Un57t 
@@ -18,7 +22,7 @@ https://user-images.githubusercontent.com/82110564/147833465-965be08b-ca5f-47ba-
 The video above illustrates the first 10 Cozy Place NFTs generated with Blend_My_NFts.
 
 
-## Official Links: 
+# Official Links: 
 
 Website: https://thiscozystudio.com/
 
@@ -33,12 +37,12 @@ Instagram: https://www.instagram.com/this_cozy_studio/
 Reddit: https://www.reddit.com/r/ThisCozyPlace/
 
 
-## Case Studies
+# Case Studies
 This document has a list of projects that use Blend_My_NFTs to help facilitate them in the creation of their collection: 
 https://docs.google.com/document/d/e/2PACX-1vSHZS4GRu8xXDYpVPEaxyBeTzms9yrJEC9IoAcP38_U8x0C1kVrbtNZgh0zUmkzBoZQVwNvBf3ldRij/pub
 
 
-## Quick Disclaimer
+# Quick Disclaimer
 Blend_My_NFTs works with Blender 3.0.0 on Windows 10 or macOS Big Sur 11.6. Linux is supported, however I haven't had the chance to test this functionality and guarantee this. Any rendering engine works; Cycles, Eevee, and Octane have all been used by the community without issue. This add-on only works in Blender, a Cinima 4D port will be investigated in the future. 
 
 Blend_My_NFTs, this readme documenation, YouTube tutorials, live stream Q/As are all provided for free by This Cozy Studio for anyone to use and access. I only ask in return that you credit this software and kindly share what our team has built. A direct link to the Blend_My_NFTs Github page on your projects website (or equivelant social platform) would sefice. We ask you to share this tool because we feel there are many out there that would benefit from it, our only goal is to help those in need. It warms our hearts that so many people use this add-on. 
@@ -47,14 +51,13 @@ Thank you,
 
 - This Cozy Studio team
 
-## Table of Contents 
+# Table of Contents 
 
-- [Blend_My_NFTs](#blend_my_nfts)
-  - [Description](#description)
-  - [Official Links](#official-links)
-  - [Case Studies](#case-studies)
-  - [Quick Disclaimer](#quick-disclaimer)
-  - [Contents](#table-of-contents)
+- Description](#description)
+- [Official Links](#official-links)
+- [Case Studies](#case-studies)
+- [Quick Disclaimer](#quick-disclaimer)
+- [Table of Contents](#table-of-contents)
 - [Setup and Installation](#setup-and-installation)
 - [Important Terminology](#important-terminology)
 - [Blender File Organization and Structure](#blender-file-organization-and-structure)
