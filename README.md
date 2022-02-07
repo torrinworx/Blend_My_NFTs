@@ -6,10 +6,9 @@
 <a href="https://twitter.com/LeonardTorrin" rel="nofollow"><img src="https://img.shields.io/badge/created%20by-@LeonardTorrin-4BBAAB.svg" alt="Created by Torrin Leonard"></a>
 <a href="https://www.gnu.org/licenses/gpl-3.0.en.html" rel="nofollow"><img src="https://img.shields.io/badge/license-GNU%20v3.0-brightgreen" alt="License"></a>
 <a href="" rel="nofollow"><img src="https://img.shields.io/github/stars/torrinworx/blend_my_nfts" alt="stars"></a>
-  
-<br/>
+</p>
 
-# Description
+## Description
 Blend_My_NFTs is an open source, free to use Blender add on that enables you to automatically generate thousands of 3D Models, Animations, and Images. This add on's primary purpose is to aid in the creation of large generative 3D NFT collections. 
 
 For support, help, and questions, please join our Discord where our wonderful community: https://discord.gg/UpZt5Un57t 
@@ -22,7 +21,7 @@ https://user-images.githubusercontent.com/82110564/147833465-965be08b-ca5f-47ba-
 The video above illustrates the first 10 Cozy Place NFTs generated with Blend_My_NFts.
 
 
-# Official Links: 
+## Official Links: 
 
 Website: https://thiscozystudio.com/
 
@@ -37,12 +36,12 @@ Instagram: https://www.instagram.com/this_cozy_studio/
 Reddit: https://www.reddit.com/r/ThisCozyPlace/
 
 
-# Case Studies
+## Case Studies
 This document has a list of projects that use Blend_My_NFTs to help facilitate them in the creation of their collection: 
 https://docs.google.com/document/d/e/2PACX-1vSHZS4GRu8xXDYpVPEaxyBeTzms9yrJEC9IoAcP38_U8x0C1kVrbtNZgh0zUmkzBoZQVwNvBf3ldRij/pub
 
 
-# Quick Disclaimer
+## Quick Disclaimer
 Blend_My_NFTs works with Blender 3.0.0 on Windows 10 or macOS Big Sur 11.6. Linux is supported, however I haven't had the chance to test this functionality and guarantee this. Any rendering engine works; Cycles, Eevee, and Octane have all been used by the community without issue. This add-on only works in Blender, a Cinima 4D port will be investigated in the future. 
 
 Blend_My_NFTs, this readme documenation, YouTube tutorials, live stream Q/As are all provided for free by This Cozy Studio for anyone to use and access. I only ask in return that you credit this software and kindly share what our team has built. A direct link to the Blend_My_NFTs Github page on your projects website (or equivelant social platform) would sefice. We ask you to share this tool because we feel there are many out there that would benefit from it, our only goal is to help those in need. It warms our hearts that so many people use this add-on. 
@@ -51,13 +50,15 @@ Thank you,
 
 - This Cozy Studio team
 
-# Table of Contents 
+## Table of Contents 
 
-- Description](#description)
-- [Official Links](#official-links)
-- [Case Studies](#case-studies)
-- [Quick Disclaimer](#quick-disclaimer)
-- [Table of Contents](#table-of-contents)
+- [Blend_My_NFTs](#blend_my_nfts)
+
+  - [Description](#description)
+  - [Official Links](#official-links)
+  - [Case Studies](#case-studies)
+  - [Quick Disclaimer](#quick-disclaimer)
+  - [Table of Contents](#table-of-contents)
 - [Setup and Installation](#setup-and-installation)
 - [Important Terminology](#important-terminology)
 - [Blender File Organization and Structure](#blender-file-organization-and-structure)
@@ -69,6 +70,8 @@ Thank you,
 - [Notes on Rarity and Weighted Variants](#notes-on-rarity-and-weighted-variants)
   - [.Blend File Rarity Example](#blend-file-rarity-examples)
   - [More complex Rarity Example](#example-of-more-complex-rarity-structures)
+- [Notes on Meta Data and Standards](#notes-on-meta-data-and-standards)
+- [I have my NFTs, what next?](#i-have-my-nfts-what-next)
 
 
 # Setup and Installation
@@ -242,6 +245,23 @@ The code that determines rarity can be found the `Rarity_Sorter.py`.
 
 
 ## Notes on Meta Data and Standards
+
+Blend_My_NFTs can export Cardano, Solana, and ERC721 formatted metadata templates. After running `Refactor Batches & Create MetaData` a template will be generated for each NFT you have created; These templates will include properly formated names for each Attribute and Variant that was selected to create that NFT. 
+
+Blend_My_NFTs can only provide this information in the templates, you will have to add Policy ID and URL when you upload and mint your NFT collection. For more information on how to do this see [I have my NFTs, what next?](#i-have-my-nfts-what-next)
+
+### Meta Data Template Sources
+
+The list of meta data standard sources used to create the templates: 
+
+- `Cardano CIP25` --> https://cips.cardano.org/cips/cip25/
+- `Solana Metaplex` --> https://docs.metaplex.com/nft-standard
+- `ERC721` --> https://docs.opensea.io/docs/metadata-standards
+- `ERC1155` --> To be created...
+
+### Meta Data Disclaimer
+These meta data templates are based on the common standards for the given blockchain, you will have to modify and fill them in with a script of your own when you mint your NFT collection. These metadata templates are only provided for your convenience and are as accurate to the standards above that I could make them.
+
 
 ## I have my NFTs, what next? 
 
