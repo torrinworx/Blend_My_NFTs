@@ -7,7 +7,7 @@
 <a href="https://www.gnu.org/licenses/gpl-3.0.en.html" rel="nofollow"><img src="https://img.shields.io/badge/license-GPL%20v3.0-brightgreen" alt="License"></a>
 <a href="https://www.paypal.com/paypalme/TorrinLeonard" rel="nofollow"><img src="https://img.shields.io/badge/donate-PayPal-blue" alt="Donate"></a>
 <a href="" rel="nofollow"><img src="https://img.shields.io/github/stars/torrinworx/blend_my_nfts" alt="stars"></a>
-<a href="" rel="nofollow"><img src="https://visitor-badge.glitch.me/badge?page_id=torrinworx.Blend_My_NFTs" alt="stars"></a>
+<a href="" rel="nofollow"><img src="https://visitor-badge.glitch.me/badge?page_id=torrinworx.Blend_My_NFTs" alt="visitors"></a>
 </p>
 
 ## Description
