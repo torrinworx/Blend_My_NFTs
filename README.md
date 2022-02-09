@@ -70,15 +70,18 @@ Thank you,
 ## Quick Disclaimer
 Blend_My_NFTs works with Blender 3.0.0 on Windows 10 or macOS Big Sur 11.6. Linux is supported, however I haven't had the chance to test this functionality and guarantee this. Any rendering engine works; Cycles, Eevee, and Octane have all been used by the community without issue. This add-on only works in Blender, a Cinima 4D port will be investigated in the future.
 
+## Example Files
+The YouTube tutorials use three different .blend example files. This repository has all three and includes a readme.md file that outlines which videos use which files and by what date: https://github.com/torrinworx/BMNFTs_Examples
+
 ## Table of Contents 
 
 - [Blend_My_NFTs](#blend_my_nfts)
-
   - [Description](#description)
   - [Official Links](#official-links)
   - [Case Studies](#case-studies)
   - [Donations](#donations)
   - [Quick Disclaimer](#quick-disclaimer)
+  - [Example Files](#example-files)
   - [Table of Contents](#table-of-contents)
 - [Setup and Installation](#setup-and-installation)
 - [Important Terminology](#important-terminology)
@@ -177,7 +180,7 @@ Organizing your NFTs Attributes and Varariants in Blender is essential to genera
 
 In this example, notice how the main components in `Script_Ignore` can be any type of object. The collections `Body` and `Arms` are both Attribute collections; `Silver Body_1_75` and `Gold Body_2_25` are Variants of the `Body` Attribute, and have a 75% and 25% generation chance. `Silver Arms_1_75` and `Gold Arms_2_25` are Variants of the `Arm` Attribute and have the same weighted distribution as the `Body` Variants. Notice how the Variant collections in the `Arm` Attribute can contain more than one object and object type, this principle can be applied to any Variant collections.
 
-To download BMNFTs compatable example .blend files checkout this repo here: https://github.com/torrinworx/BMNFTs_Examples
+This repository contains three .blend example files that are compatable with Blend_My_NFTs: https://github.com/torrinworx/BMNFTs_Examples
 
 
 # Steps to Generate NFTs
