@@ -404,9 +404,9 @@ This results in the following two scenarios, say, at a fixed number of 10,000 NF
 
 2. Your .blend file has 10,000 possible combinations. This means all possible combinations of your NFT will be generated, meaning that no rarity can be taken into account.
 
-This is happens for following reasons: 
+This happens for the following reasons:
 
-1. The rarity is determined sudo randomly, but is weighted based on each Variants rarity percentage.
+1. The rarity is determined pseudo randomly, but is weighted based on each Variants rarity percentage.
 
 2. The scripts generally prioritize the number of NFTs to generate (`maxNFTs`) over rarity percentage
 
