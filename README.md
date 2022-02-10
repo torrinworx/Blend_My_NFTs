@@ -13,9 +13,9 @@
 ## Description
 Blend_My_NFTs is an open source, free to use Blender add on that enables you to automatically generate thousands of 3D Models, Animations, and Images. This add on's primary purpose is to aid in the creation of large generative 3D NFT collections. 
 
-For support, help, and questions, please join our Discord where our wonderful community: https://discord.gg/UpZt5Un57t 
+For support, help, and questions, please join our wonderful Discord community: https://discord.gg/UpZt5Un57t 
 
-This add on was origninal developed to create the NFT project This Cozy Place which is now availabe to mint on our website: https://thiscozystudio.com/
+This add on was developed to create the This Cozy Place NFT project which is now availabe to mint on [ThisCozyStudio.com](https://thiscozystudio.com/)
 
 
 https://user-images.githubusercontent.com/82110564/147833465-965be08b-ca5f-47ba-a159-b92ff775ee14.mov
