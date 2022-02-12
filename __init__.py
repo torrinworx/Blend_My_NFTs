@@ -121,8 +121,7 @@ def make_directories(save_path):
 
 # Update NFT count:
 combinations: int = 0
-
-offset: int = 10
+offset: int = 0
 
 @persistent
 def update_combinations(dummy1, dummy2):
