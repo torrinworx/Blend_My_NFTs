@@ -15,6 +15,8 @@ Blend_My_NFTs is an open source, free to use Blender add on that enables you to 
 
 For support, help, and questions, please join our wonderful Discord community: https://discord.gg/UpZt5Un57t 
 
+Checkout the newest tutorial on YouTube that goes along with this documentation: https://www.youtube.com/watch?v=SwU4iVy1XpU
+
 This add on was developed to create the This Cozy Place NFT project which is now availabe to mint on [ThisCozyStudio.com](https://thiscozystudio.com/)
 
 
