@@ -375,6 +375,8 @@ Congratulations!! You now have a complete 3D NFT collection that is ready to upl
 
 - Remember that each Attribute and each Variant are represented by a `collection` if this is not the case your `Max Number of NFTs` will be a negative number or 0.
 
+- If you make **ANY** changes to your Blender scene, you need to [re-Create NFT Data](#step-1---create-nft-data), otherwise Blend_My_NFTs wont be able to recognize the changes. 
+
 
 # Notes on Rarity and Weighted Variants
 
