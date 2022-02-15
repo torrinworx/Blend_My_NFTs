@@ -97,6 +97,7 @@ The YouTube tutorials use three different .blend example files. This repository 
   - [.Blend File Rarity Example](#blend-file-rarity-examples)
   - [More complex Rarity Example](#more-complex-rarity-example)
 - [Notes on Meta Data and Standards](#notes-on-meta-data-and-standards)
+- [Calculating Maximum Number of NFTs (Max Combinations)](#calculating-maximum-number-of-nfts-max-combinations)
 - [I have my NFTs, what next?](#i-have-my-nfts-what-next)
 
 
