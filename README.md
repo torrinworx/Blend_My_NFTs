@@ -452,6 +452,33 @@ In the example above, Green, Red, Blue, and Orange hats all have an equal chance
 
 The code that determines rarity can be found the `Rarity_Sorter.py`.
 
+## Calculating Maximum Number of NFTs (Max Combinations)
+
+Mutliply the number of Variants in each Attribute by each other. 
+
+### Example:
+
+<img width="527" alt="Screen Shot 2022-02-06 at 5 40 39 PM" src="https://user-images.githubusercontent.com/82110564/152704567-378ee98f-34a7-4cd7-8f62-441b7e1891b0.png">
+
+In the image above there are two `Attributes`; `Body`, and `Arms`. Each attribute has 2 `Variants`, so in order to find the Maximum Number of NFTs we do the following: 
+
+```
+Number of Variants in Arm Attribute = 2 
+Number of Variants in Body Attribute = 2 
+
+(Number of Variants in Arm Attribute)*(Number of Variants in Body Attribute) = Maximum Number of NFTs
+
+2*2 = 4
+
+∴ The Maximum Number of NFTs is 4
+```
+
+The formula for this equation can be simplified to the following: 
+
+
+N <sub>1</sub> *N <sub>2</sub> *N <sub>3</sub> *... = Max <sub>NFTs</sub>
+
+
 
 ## Notes on Meta Data and Standards
 
