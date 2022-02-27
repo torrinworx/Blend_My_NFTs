@@ -164,6 +164,7 @@ Let's say you are creating an NFT collection, the artwork is a .png of a person 
 
 
 # Blender File Organization and Structure
+**Important** - Every object, model, texture, camera, light etc. must be in the same .blend file! If you have mulitiple .blend files, Blend_My_NFTs is unable to open and process them. It's recommended to keep your file's total size 5gb, so if you have multiple files created already, reduce the size and then merge them to a master file. 
 
 Organizing your NFTs Attributes and Varariants in Blender is essential to generate files with Blend_My_NFTs. Follow the organizational rules below when making your NFT .blend file: 
 
