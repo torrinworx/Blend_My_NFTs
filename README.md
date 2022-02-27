@@ -508,7 +508,7 @@ These meta data templates are based on the common standards for the given blockc
 
 OpenSea and other NFT marketplaces and tools might require a specific naming convention for NFT media and metadata files. Blend_My_NFTs doesn't currently follow these file naming conventions, but this will be added in a future version. For now, the best no code workaround is to use a bulk file renamer suggested by `itachimoonshot | Kaavan Labs` in the This Cozy Studio Discord server: 
 
-(Microsoft Power Toys - Power Rename)[https://docs.microsoft.com/en-us/windows/powertoys/#powerrename] 
+[Microsoft Power Toys - Power Rename](https://docs.microsoft.com/en-us/windows/powertoys/#powerrename)
 
 More coming soon...
 
