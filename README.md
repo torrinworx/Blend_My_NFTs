@@ -371,6 +371,21 @@ After completeing the `Refactor Batches & Create MetaData` step, you should have
 Congratulations!! You now have a complete 3D NFT collection that is ready to upload to the blockchain of your choice!
 
 
+# Logic 
+
+This section will go over the process of using rules to determine what combinations are excluded or included in your NFT collection.
+
+## Logic.json
+To set rules create a json file called `Logic.json`.  
+
+
+
+
+
+
+
+
+
 ## Common Issues and Problems
 
 - The most common issues people face are naming convention issues (See [Blender File Organization and Structure](#blender-file-organization-and-structure)). People often miss the naming convention on one or two collections and this typically throws up an error. The best way to resolve this is by reviewing the Blender File Organization and Structure standards and go through each collection in your Blender scene.
