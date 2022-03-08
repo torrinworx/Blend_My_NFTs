@@ -92,8 +92,9 @@ def render_and_save_NFTs(nftName, maxNFTs, batchToGenerate, batch_json_save_path
         for c in dnaDictionary:
             collection = dnaDictionary[c]
             if not enableGeneration:
-                bpy.data.collections[collection].hide_render = False
-                bpy.data.collections[collection].hide_viewport = False
+                if collection != '0':
+                    bpy.data.collections[collection].hide_render = False
+                    bpy.data.collections[collection].hide_viewport = False
 
         time_start_2 = time.time()
 
@@ -167,8 +168,9 @@ def render_and_save_NFTs(nftName, maxNFTs, batchToGenerate, batch_json_save_path
             for i in dnaDictionary:
                 coll = dnaDictionary[i]
 
-                for obj in bpy.data.collections[coll].all_objects:
-                    obj.select_set(True)
+                if coll != '0':
+                    for obj in bpy.data.collections[coll].all_objects:
+                        obj.select_set(True)
 
             for obj in bpy.data.collections['Script_Ignore'].all_objects:
                 obj.select_set(True)
