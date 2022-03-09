@@ -13,7 +13,6 @@ bl_info = {
 import bpy
 from bpy.app.handlers import persistent
 
-
 import os
 import importlib
 
@@ -35,8 +34,6 @@ else:
         Exporter, \
         Batch_Refactorer, \
         get_combinations
-
-    from .ui_Lists import UIList
 
 
 # User input Property Group:
@@ -105,6 +102,17 @@ class BMNFTS_PGT_MyProperties(bpy.types.PropertyGroup):
     # API Panel properties:
     apiKey: bpy.props.StringProperty(name="API Key", subtype='PASSWORD')
 
+    # Logic:
+    enableLogic: bpy.props.BoolProperty(name="Enable Logic")
+    logicFile: bpy.props.StringProperty(
+                        name="Logic File",
+                        description="Path where Logic.txt is located.",
+                        default="",
+                        maxlen=1024,
+                        subtype="FILE_PATH"
+    )
+
+
 def make_directories(save_path):
     Blend_My_NFTs_Output = os.path.join(save_path, "Blend_My_NFTs Output", "NFT_Data")
     batch_json_save_path = os.path.join(Blend_My_NFTs_Output, "Batch_Data")
@@ -121,14 +129,16 @@ def make_directories(save_path):
 
 # Update NFT count:
 combinations: int = 0
-offset: int = 0
+recommended_limit: int = 0
 
 @persistent
 def update_combinations(dummy1, dummy2):
     global combinations
+    global recommended_limit
     global offset
 
-    combinations = (get_combinations.get_combinations_from_scene()) - offset
+    combinations = (get_combinations.get_combinations_from_scene())
+    recommended_limit = int(round(combinations/2))
 
     redraw_panel()
 
@@ -147,11 +157,14 @@ class createData(bpy.types.Operator):
         maxNFTs = bpy.context.scene.my_tool.collectionSize
         nftsPerBatch = bpy.context.scene.my_tool.nftsPerBatch
         save_path = bpy.path.abspath(bpy.context.scene.my_tool.save_path)
+        logicFile = bpy.path.abspath(bpy.context.scene.my_tool.logicFile)
+
         enableRarity = bpy.context.scene.my_tool.enableRarity
+        enableLogic = bpy.context.scene.my_tool.enableLogic
 
         Blend_My_NFTs_Output, batch_json_save_path, nftBatch_save_path = make_directories(save_path)
 
-        DNA_Generator.send_To_Record_JSON(nftName, maxNFTs, nftsPerBatch, save_path, enableRarity, Blend_My_NFTs_Output)
+        DNA_Generator.send_To_Record_JSON(nftName, maxNFTs, nftsPerBatch, save_path, enableRarity, enableLogic, logicFile, Blend_My_NFTs_Output)
         Batch_Sorter.makeBatches(nftName, maxNFTs, nftsPerBatch, save_path, batch_json_save_path)
         return {"FINISHED"}
 
@@ -227,13 +240,12 @@ class BMNFTS_PT_CreateData(bpy.types.Panel):
         scene = context.scene
         mytool = scene.my_tool
 
-        layout.label(text=f"Maximum Number Of NFTs: {combinations}")
-
-        row = layout.row()
-        layout.label(text="")
-
         row = layout.row()
         row.prop(mytool, "nftName")
+
+        row = layout.row()
+        layout.label(text=f"Maximum Number Of NFTs: {combinations}")
+        layout.label(text=f"Recommended limit: {recommended_limit}")
 
         row = layout.row()
         row.prop(mytool, "collectionSize")
@@ -246,6 +258,13 @@ class BMNFTS_PT_CreateData(bpy.types.Panel):
 
         row = layout.row()
         row.prop(mytool, "enableRarity")
+
+        row = layout.row()
+        row.prop(mytool, "enableLogic")
+
+        if bpy.context.scene.my_tool.enableLogic:
+            row = layout.row()
+            row.prop(mytool, "logicFile")
 
         row = layout.row()
         self.layout.operator("create.data", icon='DISCLOSURE_TRI_RIGHT', text="Create Data")
@@ -262,6 +281,9 @@ class BMNFTS_PT_GenerateNFTs(bpy.types.Panel):
         layout = self.layout
         scene = context.scene
         mytool = scene.my_tool
+
+        row = layout.row()
+        layout.label(text="NFT Media files:")
 
         row = layout.row()
         row.prop(mytool, "imageBool")
@@ -323,19 +345,19 @@ class BMNFTS_PT_Documentation(bpy.types.Panel):
         row.operator("wm.url_open", text="Documentation",
                      icon='URL').url = "https://github.com/torrinworx/Blend_My_NFTs"
 
-# # Logic Panel:
-# class BMNFTS_PT_LOGIC_Panel(bpy.types.Panel):
-#     bl_label = "Logic"
-#     bl_idname = "BMNFTS_PT_LOGIC_Panel"
-#     bl_space_type = 'VIEW_3D'
-#     bl_region_type = 'UI'
-#     bl_category = 'Blend_My_NFTs'
-#
-#     def draw(self, context):
-#         layout = self.layout
-#         scene = context.scene
-#         mytool = scene.my_tool
-#
+# Logic Panel:
+class BMNFTS_PT_LOGIC_Panel(bpy.types.Panel):
+    bl_label = "Logic"
+    bl_idname = "BMNFTS_PT_LOGIC_Panel"
+    bl_space_type = 'VIEW_3D'
+    bl_region_type = 'UI'
+    bl_category = 'Blend_My_NFTs'
+
+    def draw(self, context):
+        layout = self.layout
+        scene = context.scene
+        mytool = scene.my_tool
+
 # # Materials Panel:
 #
 # class BMNFTS_PT_MATERIALS_Panel(bpy.types.Panel):
@@ -385,26 +407,13 @@ classes = (
 
     # Other panels:
 
-    # BMNFTS_PT_LOGIC_Panel,
+    BMNFTS_PT_LOGIC_Panel,
     # BMNFTS_PT_MATERIALS_Panel,
     # BMNFTS_PT_API_Panel,
 
     createData,
     exportNFTs,
     refactor_Batches,
-
-    # UIList 1:
-
-    # UIList.CUSTOM_OT_actions,
-    # UIList.CUSTOM_OT_addViewportSelection,
-    # UIList.CUSTOM_OT_printItems,
-    # UIList.CUSTOM_OT_clearList,
-    # UIList.CUSTOM_OT_removeDuplicates,
-    # UIList.CUSTOM_OT_selectItems,
-    # UIList.CUSTOM_OT_deleteObject,
-    # UIList.CUSTOM_UL_items,
-    # UIList.CUSTOM_PT_objectList,
-    # UIList.CUSTOM_PG_objectCollection,
 )
 
 def register():
@@ -413,22 +422,12 @@ def register():
 
     bpy.types.Scene.my_tool = bpy.props.PointerProperty(type=BMNFTS_PGT_MyProperties)
 
-    # UIList1:
-
-    # bpy.types.Scene.custom = bpy.props.CollectionProperty(type=UIList.CUSTOM_PG_objectCollection)
-    # bpy.types.Scene.custom_index = bpy.props.IntProperty()
-
-
 def unregister():
     for cls in classes:
         bpy.utils.unregister_class(cls)
 
     del bpy.types.Scene.my_tool
 
-    # UIList 1:
-
-    # del bpy.types.Scene.custom
-    # del bpy.types.Scene.custom_index
 
 if __name__ == '__main__':
     register()

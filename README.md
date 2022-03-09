@@ -93,6 +93,8 @@ The YouTube tutorials use three different .blend example files. This repository 
   - [Step 1. Create NFT Data](#step-1---create-nft-data)
   - [Step 2. Generating NFTs](#step-2---generate-nfts)
   - [Step 3. Refactor Batches & Create MetaData](#step-3---refactor-batches--create-metadata)
+- [Logic](#logic)
+  - [Logic JSON Schema](#logic-json-schema)
 - [Notes on Rarity and Weighted Variants](#notes-on-rarity-and-weighted-variants)
   - [.Blend File Rarity Example](#blend-file-rarity-examples)
   - [More complex Rarity Example](#more-complex-rarity-example)
@@ -192,7 +194,7 @@ This repository contains three .blend example files that are compatable with Ble
 After you have formatted and organized your NFT collection in Blender to the rules outlined above in [Blender File Organization and Structure
 ](#blender-file-organization-and-structure) you can now go about generating your NFT collection. By the end of this process you will have a folder continaing the following: 
 
-1. NFT content files; images, animations, or 3D models in any format that you specify.
+1. NFT media files; images, animations, or 3D models in any format that you specify.
 2. Json metadata files; one fore each NFT content filem, formatted to the blockchain standard that you set. 
 
 Before you get started, open the .blend of your NFT collection and open the side panel of the `Layout` tab so that Blend_My_NFTs is visible: 
@@ -236,7 +238,12 @@ Desktop is recommended for easy access, but any easily accessable directory will
 
 <img width="428" alt="Screen Shot 2022-02-06 at 10 10 55 PM" src="https://user-images.githubusercontent.com/82110564/152718643-d1580692-eac4-47bf-a41a-0e4748517b0d.png">
 
-8. Lastly click the `Create Data` button: 
+
+7. Enable or Disable Logic with the checkbox `Enable Logic`. For more information on what affect this has on your NFT collection, see [Logic](#logic).
+  - If you enabled Logic, set the location of the Logic.json file you created in the ``Logic File`` field. Click on the file icon and navigate to the location of the json file. 
+  - To create a Logic.json file, see the [Logic](#logic) section. 
+
+9. Lastly click the `Create Data` button: 
 
 <img width="425" alt="Screen Shot 2022-02-06 at 10 12 37 PM" src="https://user-images.githubusercontent.com/82110564/152718783-8ee0d72a-9223-4168-9664-c55b9cb6d84f.png">
 
@@ -371,7 +378,61 @@ After completeing the `Refactor Batches & Create MetaData` step, you should have
 Congratulations!! You now have a complete 3D NFT collection that is ready to upload to the blockchain of your choice!
 
 
-## Common Issues and Problems
+# Logic 
+
+This section will go over the process of using rules to determine what combinations are excluded or included in your NFT collection.
+
+Logic is deterimened by a .json file that you manually create. For the purposes of this documentation, just think of JSON as a text file (.txt) that we can use to store information. You can name this file anything, but for this tutorial lets call it `Logic.json`.
+
+If you need help creating a JSON file, checkout this tutorial: [How to Create JSON File?](https://codebeautify.org/blog/how-to-create-json-file/)
+
+To learn more about JSON files and how to structure data read this article: [Working with JSON](https://developer.mozilla.org/en-US/docs/Learn/JavaScript/Objects/JSON)
+
+## Logic JSON Schema
+If you'd like, copy and paste this template into the JSON file you created above:
+
+```
+{
+    "Rule-1":{
+        "Items-1": [
+            "<attribute name>", 
+            "<variant name>", 
+        ],
+        "Rule": "Never with", 
+        "Items-2":[
+            "<attribute name>",
+             "<variant name>", 
+        ]
+    },
+    "Rule-2":{
+        "Items-1": [
+            "<attribute name>", 
+            "<variant name>", 
+        ],
+        "Rule": "Only with", 
+        "Items-2":[
+            "<attribute name>",
+             "<variant name>", 
+        ]
+    }
+}
+```
+The above Logic.json template outlines the 2 possible rules; ``Never with`` and ``Only with``.  
+
+- ``Rule-#`` A dictionary representing a single defined Rule of an NFT collection. There can be as many as you choose. Increment the ``#`` when you create a new rule. Note: The more rules you add the higher the chance a rule conflict may arise, and you may see Attribute and Variant behaviour that you do not desire.
+  - ``Items-1`` Created for each ``Rule-#``, a list of Attribute(s) or Variant(s) names.
+    - ``<attribute name>`` The full name of an Attribute, as seen in your .blend file scene collection. All Variants of this attribute will be included in the Rule. 
+    - ``<variant name>`` The full name of a Variant, as seen in your .blend file scene collection (include the order number and rarity percentage. e.g. ``Variant_1_0``)
+  - ``Rule`` The rule to govern the relation between ``Items-1`` and ``Items-2``. Has two possible values: ``Never with`` and ``Only with``. 
+    - ``Never with`` If selected, ``Items-1`` will never appear if ``Items-2`` are selected.
+    - ``Only with`` If selected, ``Items-1`` will only appear when ``Items-2`` are selected. 
+  - ``Items-2`` Created for each ``Rule-#``, a list of Attribute(s) or Variant(s) names.
+    - ``<attribute name>`` The full name of an Attribute, as seen in your .blend file scene collection. All Variants of this attribute will be included in the Rule. 
+    - ``<variant name>`` The full name of a Variant, as seen in your .blend file scene collection (include the order number and rarity percentage. e.g. ``Variant_1_0``)
+
+Now that you have a completed Logic.json file, you can now go back and complete [Step 1. Create Data](#step-1---create-nft-data)!
+
+# Common Issues and Problems
 
 - The most common issues people face are naming convention issues (See [Blender File Organization and Structure](#blender-file-organization-and-structure)). People often miss the naming convention on one or two collections and this typically throws up an error. The best way to resolve this is by reviewing the Blender File Organization and Structure standards and go through each collection in your Blender scene.
 

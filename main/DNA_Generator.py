@@ -11,8 +11,9 @@ import random
 import importlib
 from functools import partial
 
-from . import Rarity_Sorter
+from . import Rarity_Sorter, Logic
 importlib.reload(Rarity_Sorter)
+importlib.reload(Logic)
 
 enableGeneration = False
 colorList = []
@@ -266,7 +267,7 @@ def returnData(nftName, maxNFTs, nftsPerBatch, save_path, enableRarity):
 
    return listAllCollections, attributeCollections, attributeCollections1, hierarchy, possibleCombinations
 
-def generateNFT_DNA(nftName, maxNFTs, nftsPerBatch, save_path, enableRarity):
+def generateNFT_DNA(nftName, maxNFTs, nftsPerBatch, save_path, logicFile, enableRarity, enableLogic):
    """
    Returns batchDataDictionary containing the number of NFT combinations, hierarchy, and the DNAList.
    """
@@ -323,6 +324,13 @@ def generateNFT_DNA(nftName, maxNFTs, nftsPerBatch, save_path, enableRarity):
       possibleCombinations = maxNFTs
       DNAList = Rarity_Sorter.sortRarityWeights(hierarchy, listOptionVariant, DNAList, nftName, maxNFTs, nftsPerBatch, save_path, enableRarity)
 
+   if enableLogic:
+      print(f"{bcolors.OK} Logic is on. Rules listed in {logicFile} will be taken into account {bcolors.RESET}")
+
+      DNAList = Logic.logicafyDNAList(DNAList, hierarchy, logicFile)
+
+
+
    if len(DNAList) < maxNFTs:
       print(f"{bcolors.ERROR} \nWARNING: \n"
             f"You are seeing this warning because the program cannot generate {maxNFTs} NFTs with rarity enabled. "
@@ -337,7 +345,7 @@ def generateNFT_DNA(nftName, maxNFTs, nftsPerBatch, save_path, enableRarity):
 
    return DataDictionary, possibleCombinations, DNAList
 
-def send_To_Record_JSON(nftName, maxNFTs, nftsPerBatch, save_path, enableRarity, Blend_My_NFTs_Output):
+def send_To_Record_JSON(nftName, maxNFTs, nftsPerBatch, save_path, enableRarity, enableLogic, logicFile, Blend_My_NFTs_Output):
    """
    Creates NFTRecord.json file and sends "batchDataDictionary" to it. NFTRecord.json is a permanent record of all DNA
    you've generated with all attribute variants. If you add new variants or attributes to your .blend file, other scripts
@@ -345,7 +353,7 @@ def send_To_Record_JSON(nftName, maxNFTs, nftsPerBatch, save_path, enableRarity,
    repeate DNA.
    """
 
-   DataDictionary, possibleCombinations, DNAList = generateNFT_DNA(nftName, maxNFTs, nftsPerBatch, save_path, enableRarity)
+   DataDictionary, possibleCombinations, DNAList = generateNFT_DNA(nftName, maxNFTs, nftsPerBatch, save_path, logicFile, enableRarity, enableLogic)
 
    NFTRecord_save_path = os.path.join(Blend_My_NFTs_Output, "NFTRecord.json")
 
