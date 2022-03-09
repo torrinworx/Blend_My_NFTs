@@ -395,24 +395,20 @@ If you'd like, copy and paste this template into the JSON file you created above
 {
     "Rule-1":{
         "Items-1": [
-            "<attribute name>", 
-            "<variant name>", 
+            "<collection name>"
         ],
         "Rule": "Never with", 
         "Items-2":[
-            "<attribute name>",
-             "<variant name>", 
+            "<collection name>"
         ]
     },
     "Rule-2":{
         "Items-1": [
-            "<attribute name>", 
-            "<variant name>", 
+            "<collection name>"
         ],
         "Rule": "Only with", 
         "Items-2":[
-            "<attribute name>",
-             "<variant name>", 
+            "<collection name>"
         ]
     }
 }
@@ -421,14 +417,12 @@ The above Logic.json template outlines the 2 possible rules; ``Never with`` and 
 
 - ``Rule-#`` A dictionary representing a single defined Rule of an NFT collection. There can be as many as you choose. Increment the ``#`` when you create a new rule. Note: The more rules you add the higher the chance a rule conflict may arise, and you may see Attribute and Variant behaviour that you do not desire.
   - ``Items-1`` Created for each ``Rule-#``, a list of Attribute(s) or Variant(s) names.
-    - ``<attribute name>`` The full name of an Attribute, as seen in your .blend file scene collection. All Variants of this attribute will be included in the Rule. 
-    - ``<variant name>`` The full name of a Variant, as seen in your .blend file scene collection (include the order number and rarity percentage. e.g. ``Variant_1_0``)
+    - ``<collection name>`` The full name of an Attribute or a Variant, as seen in your .blend file scene collection. If an Attribute, all Variants of this attribute will be included in the Rule.
   - ``Rule`` The rule to govern the relation between ``Items-1`` and ``Items-2``. Has two possible values: ``Never with`` and ``Only with``. 
     - ``Never with`` If selected, ``Items-1`` will never appear if ``Items-2`` are selected.
     - ``Only with`` If selected, ``Items-1`` will only appear when ``Items-2`` are selected. 
   - ``Items-2`` Created for each ``Rule-#``, a list of Attribute(s) or Variant(s) names.
-    - ``<attribute name>`` The full name of an Attribute, as seen in your .blend file scene collection. All Variants of this attribute will be included in the Rule. 
-    - ``<variant name>`` The full name of a Variant, as seen in your .blend file scene collection (include the order number and rarity percentage. e.g. ``Variant_1_0``)
+    - ``<collection name>`` The full name of an Attribute or a Variant, as seen in your .blend file scene collection. If an Attribute, all Variants of this attribute will be included in the Rule.
 
 Now that you have a completed Logic.json file, you can now go back and complete [Step 1. Create Data](#step-1---create-nft-data)!
 
