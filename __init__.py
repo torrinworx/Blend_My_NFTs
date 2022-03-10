@@ -35,7 +35,6 @@ else:
         Batch_Refactorer, \
         get_combinations
 
-
 # User input Property Group:
 class BMNFTS_PGT_MyProperties(bpy.types.PropertyGroup):
 
@@ -345,19 +344,6 @@ class BMNFTS_PT_Documentation(bpy.types.Panel):
         row.operator("wm.url_open", text="Documentation",
                      icon='URL').url = "https://github.com/torrinworx/Blend_My_NFTs"
 
-# Logic Panel:
-class BMNFTS_PT_LOGIC_Panel(bpy.types.Panel):
-    bl_label = "Logic"
-    bl_idname = "BMNFTS_PT_LOGIC_Panel"
-    bl_space_type = 'VIEW_3D'
-    bl_region_type = 'UI'
-    bl_category = 'Blend_My_NFTs'
-
-    def draw(self, context):
-        layout = self.layout
-        scene = context.scene
-        mytool = scene.my_tool
-
 # # Materials Panel:
 #
 # class BMNFTS_PT_MATERIALS_Panel(bpy.types.Panel):
@@ -388,7 +374,6 @@ class BMNFTS_PT_LOGIC_Panel(bpy.types.Panel):
 #         row = layout.row()
 #         row.prop(mytool, "apiKey")
 
-
 def redraw_panel():
     try:
         bpy.utils.unregister_class(BMNFTS_PT_CreateData)
@@ -406,8 +391,6 @@ classes = (
     BMNFTS_PT_Documentation,
 
     # Other panels:
-
-    BMNFTS_PT_LOGIC_Panel,
     # BMNFTS_PT_MATERIALS_Panel,
     # BMNFTS_PT_API_Panel,
 
