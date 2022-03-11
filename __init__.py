@@ -35,7 +35,6 @@ else:
         Batch_Refactorer, \
         get_combinations
 
-
 # User input Property Group:
 class BMNFTS_PGT_MyProperties(bpy.types.PropertyGroup):
 
@@ -106,11 +105,31 @@ class BMNFTS_PGT_MyProperties(bpy.types.PropertyGroup):
     enableLogic: bpy.props.BoolProperty(name="Enable Logic")
     logicFile: bpy.props.StringProperty(
                         name="Logic File",
-                        description="Path where Logic.txt is located.",
+                        description="Path where Logic.json is located.",
                         default="",
                         maxlen=1024,
                         subtype="FILE_PATH"
     )
+
+    # Custom Metadata Fields:
+    enableCustomFields: bpy.props.BoolProperty(name="Enable Custom Metadata Fields")
+    customfieldsFile: bpy.props.StringProperty(
+                        name="Custom Fields File",
+                        description="Path where Custom_Fields.json is located.",
+                        default="",
+                        maxlen=1024,
+                        subtype="FILE_PATH"
+    )
+
+    # Cardano Custom Metadata Fields
+    cardano_description: bpy.props.StringProperty(name="Cardano description")
+
+    # Solana Custom Metadata Fields
+
+    solana_description: bpy.props.StringProperty(name="Solana description")
+
+    # ERC721 Custom Metadata Fields
+    erc721_description: bpy.props.StringProperty(name="ERC721 description")
 
 
 def make_directories(save_path):
@@ -127,6 +146,7 @@ def make_directories(save_path):
         os.makedirs(nftBatch_save_path)
     return Blend_My_NFTs_Output, batch_json_save_path, nftBatch_save_path
 
+
 # Update NFT count:
 combinations: int = 0
 recommended_limit: int = 0
@@ -141,6 +161,7 @@ def update_combinations(dummy1, dummy2):
     recommended_limit = int(round(combinations/2))
 
     redraw_panel()
+
 
 bpy.app.handlers.depsgraph_update_post.append(update_combinations)
 
@@ -212,16 +233,24 @@ class refactor_Batches(bpy.types.Operator):
     def execute(self, context):
         self.report({'INFO'}, "Batches Refactored, MetaData created!")
 
-        save_path = bpy.path.abspath(bpy.context.scene.my_tool.save_path)
+        class refactor_panel_input:
+            save_path = bpy.path.abspath(bpy.context.scene.my_tool.save_path)
 
-        cardanoMetaDataBool = bpy.context.scene.my_tool.cardanoMetaDataBool
-        solanaMetaDataBool = bpy.context.scene.my_tool.solanaMetaDataBool
-        erc721MetaData = bpy.context.scene.my_tool.erc721MetaData
+            custom_Fields_File = bpy.path.abspath(bpy.context.scene.my_tool.customfieldsFile)
+            enableCustomFields = bpy.context.scene.my_tool.enableCustomFields
 
-        Blend_My_NFTs_Output, batch_json_save_path, nftBatch_save_path = make_directories(save_path)
+            cardanoMetaDataBool = bpy.context.scene.my_tool.cardanoMetaDataBool
+            solanaMetaDataBool = bpy.context.scene.my_tool.solanaMetaDataBool
+            erc721MetaData = bpy.context.scene.my_tool.erc721MetaData
 
-        Batch_Refactorer.reformatNFTCollection(save_path, Blend_My_NFTs_Output, batch_json_save_path, nftBatch_save_path,
-                                               cardanoMetaDataBool, solanaMetaDataBool, erc721MetaData)
+            cardano_description = bpy.context.scene.my_tool.cardano_description
+            solana_description = bpy.context.scene.my_tool.solana_description
+            erc721_description = bpy.context.scene.my_tool.erc721_description
+
+            Blend_My_NFTs_Output, batch_json_save_path, nftBatch_save_path = make_directories(save_path)
+
+        Batch_Refactorer.reformatNFTCollection(refactor_panel_input)
+
         return {"FINISHED"}
 
     def invoke(self, context, event):
@@ -287,17 +316,17 @@ class BMNFTS_PT_GenerateNFTs(bpy.types.Panel):
 
         row = layout.row()
         row.prop(mytool, "imageBool")
-        if  bpy.context.scene.my_tool.imageBool == True:
+        if bpy.context.scene.my_tool.imageBool:
             row.prop(mytool, "imageEnum")
 
         row = layout.row()
         row.prop(mytool, "animationBool")
-        if  bpy.context.scene.my_tool.animationBool == True:
+        if bpy.context.scene.my_tool.animationBool:
             row.prop(mytool, "animationEnum")
 
         row = layout.row()
         row.prop(mytool, "modelBool")
-        if  bpy.context.scene.my_tool.modelBool == True:
+        if bpy.context.scene.my_tool.modelBool:
             row.prop(mytool, "modelEnum")
 
         row = layout.row()
@@ -324,8 +353,41 @@ class BMNFTS_PT_Refactor(bpy.types.Panel):
 
         row = layout.row()
         row.prop(mytool, "cardanoMetaDataBool")
+        if bpy.context.scene.my_tool.cardanoMetaDataBool:
+            row = layout.row()
+            row.prop(mytool, "cardano_description")
+
+            row = layout.row()
+            row.operator("wm.url_open", text="Cardano Metadata Documentation",
+                         icon='URL').url = "https://cips.cardano.org/cips/cip25/"
+
+        row = layout.row()
         row.prop(mytool, "solanaMetaDataBool")
+        if bpy.context.scene.my_tool.solanaMetaDataBool:
+            row = layout.row()
+            row.prop(mytool, "solana_description")
+
+            row = layout.row()
+            row.operator("wm.url_open", text="Solana Metadata Documentation",
+                         icon='URL').url = "https://docs.metaplex.com/token-metadata/specification"
+
+        row = layout.row()
         row.prop(mytool, "erc721MetaData")
+        if bpy.context.scene.my_tool.erc721MetaData:
+            row = layout.row()
+            row.prop(mytool, "erc721_description")
+
+            row = layout.row()
+            row.operator("wm.url_open", text="ERC721 Metadata Documentation",
+                         icon='URL').url = "https://docs.opensea.io/docs/metadata-standards"
+
+        row = layout.row()
+        row.prop(mytool, "enableCustomFields")
+        if bpy.context.scene.my_tool.enableCustomFields:
+            row = layout.row()
+            row.prop(mytool, "customfieldsFile")
+
+        row = layout.row()
         self.layout.operator("refactor.batches", icon='FOLDER_REDIRECT', text="Refactor Batches & create MetaData")
 
 # Documentation Panel:
@@ -344,19 +406,6 @@ class BMNFTS_PT_Documentation(bpy.types.Panel):
         row = layout.row()
         row.operator("wm.url_open", text="Documentation",
                      icon='URL').url = "https://github.com/torrinworx/Blend_My_NFTs"
-
-# Logic Panel:
-class BMNFTS_PT_LOGIC_Panel(bpy.types.Panel):
-    bl_label = "Logic"
-    bl_idname = "BMNFTS_PT_LOGIC_Panel"
-    bl_space_type = 'VIEW_3D'
-    bl_region_type = 'UI'
-    bl_category = 'Blend_My_NFTs'
-
-    def draw(self, context):
-        layout = self.layout
-        scene = context.scene
-        mytool = scene.my_tool
 
 # # Materials Panel:
 #
@@ -388,7 +437,6 @@ class BMNFTS_PT_LOGIC_Panel(bpy.types.Panel):
 #         row = layout.row()
 #         row.prop(mytool, "apiKey")
 
-
 def redraw_panel():
     try:
         bpy.utils.unregister_class(BMNFTS_PT_CreateData)
@@ -406,8 +454,6 @@ classes = (
     BMNFTS_PT_Documentation,
 
     # Other panels:
-
-    BMNFTS_PT_LOGIC_Panel,
     # BMNFTS_PT_MATERIALS_Panel,
     # BMNFTS_PT_API_Panel,
 

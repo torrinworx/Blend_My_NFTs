@@ -96,6 +96,7 @@ def render_and_save_NFTs(nftName, maxNFTs, batchToGenerate, batch_json_save_path
                     bpy.data.collections[collection].hide_render = False
                     bpy.data.collections[collection].hide_viewport = False
 
+
         time_start_2 = time.time()
 
         batchFolder = os.path.join(nftBatch_save_path, "Batch" + str(batchToGenerate))
@@ -130,7 +131,6 @@ def render_and_save_NFTs(nftName, maxNFTs, batchToGenerate, batch_json_save_path
                     collection = stripColorFromName(collection)
                     bpy.data.collections[collection].hide_render = False
                     bpy.data.collections[collection].hide_viewport = False
-
 
         if enableImages:
             print(f"{bcolors.OK}Rendering Image{bcolors.RESET}")
@@ -167,7 +167,6 @@ def render_and_save_NFTs(nftName, maxNFTs, batchToGenerate, batch_json_save_path
 
             for i in dnaDictionary:
                 coll = dnaDictionary[i]
-
                 if coll != '0':
                     for obj in bpy.data.collections[coll].all_objects:
                         obj.select_set(True)
@@ -197,7 +196,7 @@ def render_and_save_NFTs(nftName, maxNFTs, batchToGenerate, batch_json_save_path
             elif modelFileFormat == 'OBJ':
                 bpy.ops.export_scene.obj(filepath=f"{modelPath}.obj",
                                          check_existing=True,
-                                         use_selection=True)
+                                         use_selection=True,)
             elif modelFileFormat == 'X3D':
                 bpy.ops.export_scene.x3d(filepath=f"{modelPath}.x3d",
                                          check_existing=True,
@@ -211,6 +210,10 @@ def render_and_save_NFTs(nftName, maxNFTs, batchToGenerate, batch_json_save_path
 
         if not os.path.exists(metaDataFolder):
             os.makedirs(metaDataFolder)
+
+        for b in dnaDictionary:
+            if dnaDictionary[b] == "0":
+                dnaDictionary[b] = "Empty"
 
         metaDataDict = {"name": name, "NFT_DNA": a, "NFT_Variants": dnaDictionary}
 

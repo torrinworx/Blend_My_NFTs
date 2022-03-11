@@ -294,7 +294,7 @@ def generateNFT_DNA(nftName, maxNFTs, nftsPerBatch, save_path, logicFile, enable
          dnaStrList = []
 
          for i in listOptionVariant:
-            randomVariantNum = random.choices(i, k = 1)
+            randomVariantNum = random.choices(i, k=1)
             str1 = ''.join(str(e) for e in randomVariantNum)
             dnaStrList.append(str1)
 

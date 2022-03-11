@@ -59,55 +59,59 @@ def sendMetaDataToJson(metaDataDict, metaDataPath, jsonName):
     with open(os.path.join(metaDataPath, jsonName), 'w') as outfile:
         outfile.write(jsonMetaData + '\n')
 
-def renameMetaData(completeCollPath, completeMetaDataPath, cardanoMetaDataBool, solanaMetaDataBool, erc721MetaData):
-    metaDataListOld = os.listdir(completeMetaDataPath)
-    cardanoMetaDataPath = os.path.join(completeCollPath, "Cardano_metaData")
-    solanaMetaDataPath = os.path.join(completeCollPath, "Solana_metaData")
-    erc721MetaDataPath = os.path.join(completeCollPath, "Erc721_metaData")
+def renameMetaData(rename_MetaData_Variables):
+    metaDataListOld = os.listdir(rename_MetaData_Variables.completeMetaDataPath)
+    cardanoMetaDataPath = os.path.join(rename_MetaData_Variables.completeCollPath, "Cardano_metaData")
+    solanaMetaDataPath = os.path.join(rename_MetaData_Variables.completeCollPath, "Solana_metaData")
+    erc721MetaDataPath = os.path.join(rename_MetaData_Variables.completeCollPath, "Erc721_metaData")
 
     for i in metaDataListOld:
-        name, NFT_DNA, NFT_Variants = getMetaDataDirty(completeMetaDataPath, i)
+        name, NFT_DNA, NFT_Variants = getMetaDataDirty(rename_MetaData_Variables.completeMetaDataPath, i)
 
         file_name = os.path.splitext(i)[0]
         file_num = file_name.split("_")[1]
 
-        if cardanoMetaDataBool:
+        if rename_MetaData_Variables.cardanoMetaDataBool:
             if not os.path.exists(cardanoMetaDataPath):
                 os.mkdir(cardanoMetaDataPath)
 
             cardanoJsonNew = "Cardano_" + i
             cardanoNewName = name.split("_")[0] + "_" + str(file_num)
 
-            metaDataDictCardano = metaData.returnCardanoMetaData(cardanoNewName, NFT_DNA, NFT_Variants)
-            sendMetaDataToJson(metaDataDictCardano, cardanoMetaDataPath, cardanoJsonNew)
+            metaDataDictCardano = metaData.returnCardanoMetaData(cardanoNewName, NFT_DNA, NFT_Variants, rename_MetaData_Variables.custom_Fields_File, rename_MetaData_Variables.enableCustomFields, rename_MetaData_Variables.cardano_description)
 
-        if solanaMetaDataBool:
+            sendMetaDataToJson(metaDataDictCardano, cardanoMetaDataPath, cardanoJsonNew,)
+
+        if rename_MetaData_Variables.solanaMetaDataBool:
             if not os.path.exists(solanaMetaDataPath):
                 os.mkdir(solanaMetaDataPath)
 
             solanaJsonNew = "Solana_" + i
             solanaNewName = name.split("_")[0] + "_" + str(file_num)
 
-            metaDataDictSolana = metaData.returnSolanaMetaData(solanaNewName, NFT_DNA, NFT_Variants)
+            metaDataDictSolana = metaData.returnSolanaMetaData(solanaNewName, NFT_DNA, NFT_Variants, rename_MetaData_Variables.custom_Fields_File, rename_MetaData_Variables.enableCustomFields, rename_MetaData_Variables.solana_description)
+
             sendMetaDataToJson(metaDataDictSolana, solanaMetaDataPath, solanaJsonNew)
 
-        if erc721MetaData:
+        if rename_MetaData_Variables.erc721MetaData:
             if not os.path.exists(erc721MetaDataPath):
                 os.mkdir(erc721MetaDataPath)
 
             erc721JsonNew = "Erc721_" + i
             erc721NewName = name.split("_")[0] + "_" + str(file_num)
 
-            metaDataDictErc721 = metaData.returnErc721MetaData(erc721NewName, NFT_DNA, NFT_Variants)
+            metaDataDictErc721 = metaData.returnErc721MetaData(erc721NewName, NFT_DNA, NFT_Variants, rename_MetaData_Variables.custom_Fields_File, rename_MetaData_Variables.enableCustomFields, rename_MetaData_Variables.erc721_description)
+
             sendMetaDataToJson(metaDataDictErc721, erc721MetaDataPath, erc721JsonNew)
     return
 
-def reformatNFTCollection(save_path, Blend_My_NFTs_Output, batch_json_save_path, nftBatch_save_path, cardanoMetaDataBool,
-                          solanaMetaDataBool, erc721MetaData):
+def reformatNFTCollection(refactor_panel_input):
+    images, animations, models, metaData = getNFType(refactor_panel_input.nftBatch_save_path)
 
-    images, animations, models, metaData = getNFType(nftBatch_save_path)
+    global completeCollPath
+    global completeMetaDataPath
 
-    completeCollPath = os.path.join(save_path, "Blend_My_NFTs Output", "Complete_Collection")
+    completeCollPath = os.path.join(refactor_panel_input.save_path, "Blend_My_NFTs Output", "Complete_Collection")
     completeImagePath = os.path.join(completeCollPath, "Images")
     completeAnimationsPath = os.path.join(completeCollPath, "Animations")
     completeModelsPath = os.path.join(completeCollPath, "Models")
@@ -124,7 +128,7 @@ def reformatNFTCollection(save_path, Blend_My_NFTs_Output, batch_json_save_path,
     if metaData and not os.path.exists(completeMetaDataPath):
         os.mkdir(completeMetaDataPath)
 
-    batchListDirty = os.listdir(nftBatch_save_path)
+    batchListDirty = os.listdir(refactor_panel_input.nftBatch_save_path)
     batchList = [x for x in batchListDirty if (x not in removeList)]
 
     imageCount = 1
@@ -133,11 +137,11 @@ def reformatNFTCollection(save_path, Blend_My_NFTs_Output, batch_json_save_path,
     dataCount = 1
     for i in batchList:
         if images:
-            imagesDir = os.path.join(nftBatch_save_path, i, "Images")
+            imagesDir = os.path.join(refactor_panel_input.nftBatch_save_path, i, "Images")
             imagesList = sorted(os.listdir(imagesDir))
 
             for j in imagesList:
-                imageOldPath = os.path.join(nftBatch_save_path, i, "Images", j)
+                imageOldPath = os.path.join(refactor_panel_input.nftBatch_save_path, i, "Images", j)
                 nameOldDirty = copy.deepcopy(os.path.splitext(j)[0])
                 extension = copy.deepcopy(os.path.splitext(j)[1])
                 nameOldClean = nameOldDirty.split("_")[0]
@@ -150,11 +154,11 @@ def reformatNFTCollection(save_path, Blend_My_NFTs_Output, batch_json_save_path,
                 imageCount += 1
 
         if animations:
-            animationsDir = os.path.join(nftBatch_save_path, i, "Animations")
+            animationsDir = os.path.join(refactor_panel_input.nftBatch_save_path, i, "Animations")
             animationsList = sorted(os.listdir(animationsDir))
             
             for j in animationsList: 
-                animationOldPath = os.path.join(nftBatch_save_path, i, "Animations", j)
+                animationOldPath = os.path.join(refactor_panel_input.nftBatch_save_path, i, "Animations", j)
                 nameOldDirty = copy.deepcopy(os.path.splitext(j)[0])
                 extension = copy.deepcopy(os.path.splitext(j)[1])
                 nameOldClean = nameOldDirty.split("_")[0]
@@ -167,11 +171,11 @@ def reformatNFTCollection(save_path, Blend_My_NFTs_Output, batch_json_save_path,
                 animationCount += 1
 
         if models:
-            modelsDir = os.path.join(nftBatch_save_path, i, "Models")
+            modelsDir = os.path.join(refactor_panel_input.nftBatch_save_path, i, "Models")
             modelsList = sorted(os.listdir(modelsDir))
 
             for j in modelsList:
-                modelOldPath = os.path.join(nftBatch_save_path, i, "Models", j)
+                modelOldPath = os.path.join(refactor_panel_input.nftBatch_save_path, i, "Models", j)
                 nameOldDirty = copy.deepcopy(os.path.splitext(j)[0])
                 extension = copy.deepcopy(os.path.splitext(j)[1])
                 nameOldClean = nameOldDirty.split("_")[0]
@@ -184,11 +188,11 @@ def reformatNFTCollection(save_path, Blend_My_NFTs_Output, batch_json_save_path,
                 modelCount += 1
 
         if metaData:
-            dataDir = os.path.join(nftBatch_save_path, i, "BMNFT_metaData")
+            dataDir = os.path.join(refactor_panel_input.nftBatch_save_path, i, "BMNFT_metaData")
             dataList = sorted(os.listdir(dataDir))
 
             for j in dataList:
-                dataOldPath = os.path.join(nftBatch_save_path, i, "BMNFT_metaData", j)
+                dataOldPath = os.path.join(refactor_panel_input.nftBatch_save_path, i, "BMNFT_metaData", j)
                 nameOldDirty = copy.deepcopy(os.path.splitext(j)[0])
                 extension = copy.deepcopy(os.path.splitext(j)[1])
                 nameOldClean = nameOldDirty.split("_")[0]
@@ -207,11 +211,28 @@ def reformatNFTCollection(save_path, Blend_My_NFTs_Output, batch_json_save_path,
 
                 dataCount += 1
 
-    print(f"All NFT files stored and sorted to the Complete_Collection folder in {save_path}")
+    print(f"All NFT files stored and sorted to the Complete_Collection folder in {refactor_panel_input.save_path}")
 
-    renameMetaData(completeCollPath, completeMetaDataPath, cardanoMetaDataBool, solanaMetaDataBool, erc721MetaData)
+    class rename_MetaData_Variables:
+        completeCollPath = completeCollPath
+        completeMetaDataPath = completeMetaDataPath
 
-    shutil.rmtree(nftBatch_save_path)
+        cardanoMetaDataBool = refactor_panel_input.cardanoMetaDataBool
+        solanaMetaDataBool = refactor_panel_input.solanaMetaDataBool
+        erc721MetaData = refactor_panel_input.erc721MetaData
+
+        custom_Fields_File = refactor_panel_input.custom_Fields_File
+        enableCustomFields = refactor_panel_input.enableCustomFields
+
+
+        cardano_description = refactor_panel_input.cardano_description
+        solana_description = refactor_panel_input.solana_description
+        erc721_description = refactor_panel_input.erc721_description
+
+
+    renameMetaData(rename_MetaData_Variables)
+
+    shutil.rmtree(refactor_panel_input.nftBatch_save_path)
 
 if __name__ == '__main__':
     reformatNFTCollection()
