@@ -548,9 +548,8 @@ Blend_My_NFTs can only provide this information in the templates, you will have 
 The list of meta data standard sources used to create the templates: 
 
 - `Cardano CIP25` --> https://cips.cardano.org/cips/cip25/
-- `Solana Metaplex` --> https://docs.metaplex.com/nft-standard
+- `Solana Metaplex` --> https://docs.metaplex.com/token-metadata/specification
 - `ERC721` --> https://docs.opensea.io/docs/metadata-standards
-- `ERC1155` --> To be created...
 
 The Blend_My_NFTs code implementation for the above standards can be found in `main>metaData.py`.
 
