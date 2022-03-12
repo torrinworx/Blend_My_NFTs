@@ -12,7 +12,7 @@ import importlib
 from functools import partial
 
 from . import Rarity, Logic
-importlib.reload(Rarity_Sorter)
+importlib.reload(Rarity)
 importlib.reload(Logic)
 
 enableGeneration = False
@@ -254,17 +254,6 @@ def returnData(nftName, maxNFTs, nftsPerBatch, save_path, enableRarity):
 
    possibleCombinations = numOfCombinations(hierarchy)
 
-   for i in variantMetaData:
-      def cameraToggle(i, toggle=True):
-         if enableGeneration:
-            """
-            Remove Color code so blender recognises the collection
-            """
-            i = stripColorFromName(i)
-         bpy.data.collections[i].hide_render = toggle
-         bpy.data.collections[i].hide_viewport = toggle
-      cameraToggle(i)
-
    return listAllCollections, attributeCollections, attributeCollections1, hierarchy, possibleCombinations
 
 def generateNFT_DNA(nftName, maxNFTs, nftsPerBatch, save_path, logicFile, enableRarity, enableLogic):
@@ -325,7 +314,7 @@ def generateNFT_DNA(nftName, maxNFTs, nftsPerBatch, save_path, logicFile, enable
          singleDNA = createDNArandom()
       # print("============")
       if enableRarity:
-         singleDNA = Rarity_Sorter.createDNArarity(hierarchy)
+         singleDNA = Rarity.createDNArarity(hierarchy)
       # print(f"Rarity DNA: {singleDNA}")
 
       if enableLogic:

@@ -4,12 +4,8 @@
 import bpy
 import json
 import random
-import importlib
 import collections
 
-from . import Metadata
-
-importlib.reload(metaData)
 removeList = [".gitignore", ".DS_Store"]
 
 

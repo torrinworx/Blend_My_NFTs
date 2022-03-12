@@ -1,7 +1,7 @@
 bl_info = {
     "name": "Blend_My_NFTs",
     "author": "Torrin Leonard, This Cozy Studio Inc",
-    "version": (1, 0, 0),
+    "version": (2, 0, 0),
     "blender": (3, 0, 0),
     "location": "View3D",
     "description": "Blend_My_NFTs UI Edition",
@@ -24,9 +24,8 @@ if bpy in locals():
         importlib.reload(DNA_Generator)
         importlib.reload(Batch_Sorter)
         importlib.reload(Exporter)
-        importlib.reload(Batch_Refactorer)
+        importlib.reload(Refactorer)
         importlib.reload(get_combinations)
-        importlib.reload(UIList)
 else:
     from .main import \
         DNA_Generator, \
@@ -187,6 +186,9 @@ class createData(bpy.types.Operator):
 
         DNA_Generator.send_To_Record_JSON(nftName, maxNFTs, nftsPerBatch, save_path, enableRarity, enableLogic, logicFile, Blend_My_NFTs_Output)
         Batch_Sorter.makeBatches(nftName, maxNFTs, nftsPerBatch, save_path, batch_json_save_path)
+
+        self.report({'INFO'}, f"NFT Data created!")
+
         return {"FINISHED"}
 
 class exportNFTs(bpy.types.Operator):
@@ -217,10 +219,13 @@ class exportNFTs(bpy.types.Operator):
                                       imageFileFormat, enableAnimations, animationFileFormat, enableModelsBlender,
                                       modelFileFormat
                                       )
+
+        self.report({'INFO'}, f"All NFTs generated for batch {batchToGenerate}!")
+
         return {"FINISHED"}
 
 class refactor_Batches(bpy.types.Operator):
-    """Refactor your Batches? This action cannot be undone."""
+    """Refactor your collection? This action cannot be undone."""
     bl_idname = 'refactor.batches'
     bl_label = 'Refactor your Batches?'
     bl_description = 'This action cannot be undone.'
@@ -231,7 +236,6 @@ class refactor_Batches(bpy.types.Operator):
         return True
 
     def execute(self, context):
-        self.report({'INFO'}, "Batches Refactored, MetaData created!")
 
         class refactor_panel_input:
             save_path = bpy.path.abspath(bpy.context.scene.my_tool.save_path)
@@ -249,7 +253,8 @@ class refactor_Batches(bpy.types.Operator):
 
             Blend_My_NFTs_Output, batch_json_save_path, nftBatch_save_path = make_directories(save_path)
 
-        Batch_Refactorer.reformatNFTCollection(refactor_panel_input)
+        Refactorer.reformatNFTCollection(refactor_panel_input)
+        self.report({'INFO'}, "Batches Refactored, MetaData created!")
 
         return {"FINISHED"}
 

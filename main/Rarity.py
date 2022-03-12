@@ -2,10 +2,7 @@
 # This file sorts the Variants in DNA slots based on the rarity value set in the name.
 
 import bpy
-import os
-import sys
 import random
-from functools import partial
 
 def createDNArarity(hierarchy):
     """
