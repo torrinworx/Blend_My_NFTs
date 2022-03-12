@@ -32,7 +32,7 @@ else:
         DNA_Generator, \
         Batch_Sorter, \
         Exporter, \
-        Batch_Refactorer, \
+        Refactorer, \
         get_combinations
 
 # User input Property Group:

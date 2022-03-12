@@ -8,7 +8,7 @@ import json
 import shutil
 import importlib
 
-from . import metaData
+from . import Metadata
 
 importlib.reload(metaData)
 
