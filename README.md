@@ -93,11 +93,15 @@ The YouTube tutorials use three different .blend example files. This repository 
   - [Step 1. Create NFT Data](#step-1---create-nft-data)
   - [Step 2. Generating NFTs](#step-2---generate-nfts)
   - [Step 3. Refactor Batches & Create MetaData](#step-3---refactor-batches--create-metadata)
+- [Custom Metadata Fields](#custom-metadata-fields)
+  - [Custom Fields Schema](#custom-fields-schema)
 - [Logic](#logic)
   - [Logic JSON Schema](#logic-json-schema)
     - [Schema Definition](#schema-definition)
     - [Rule Types](#rule-types)
-    - [Understanding Logic](#understanding-logic)
+  - [Example Logic.json File](#example-logicjson-file)
+    - [Never with, Logic Rule Examples](#never-with-logic-rule-examples)
+    - [Only with, Logic Rule Examples](#only-with-logic-rule-examples)
 - [Notes on Rarity and Weighted Variants](#notes-on-rarity-and-weighted-variants)
   - [.Blend File Rarity Example](#blend-file-rarity-examples)
   - [More complex Rarity Example](#more-complex-rarity-example)
@@ -380,6 +384,51 @@ After completeing the `Refactor Batches & Create MetaData` step, you should have
 
 Congratulations!! You now have a complete 3D NFT collection that is ready to upload to the blockchain of your choice!
 
+# Custom Metadata Fields
+This section will cover how to implement custom metadata fields. The method is the same for the Cardano CIP-25, Solana, and ERC721 standards. 
+
+These fields are determined by a .json file that you manually create. For the pruposes of this documentation, just think of JSON as a text file (.txt) that we can use to store information. You can name this file anything, but for this tutorial lets call it `Custom_Fields.json`.
+
+If you need help creating a JSON file, checkout this tutorial: [How to Create JSON File?](https://codebeautify.org/blog/how-to-create-json-file/)
+
+To learn more about JSON files and how to structure data read this article: [Working with JSON](https://developer.mozilla.org/en-US/docs/Learn/JavaScript/Objects/JSON)
+
+## Custom Fields Schema
+If you'd like, copy and paste this template into the JSON file you created above: 
+
+```
+{
+  "<item 1>": "<content of item 1>", 
+  "<item 2>": "<content of item 2>", 
+  "<item 3>": "<content of item 3>", 
+  "<item 4>": "<content of item 4>"
+  ...
+}
+```
+
+Each item in this dictionary will be sent to the attributes feild of a given metadata standard. For example, this is what a Cardano template would look like once these fields are applied:
+
+```
+{
+ "721": {
+  "<policy_id>": {
+   "Logic Test_1": {
+    "name": "Logic Test_1",
+    "image": "",
+    "mediaType": "",
+    "description": "",
+    "Cube": "Red Cube",
+    "Sphere": "Red Sphere",
+    "<item 1>": "<content of item 1>", 
+    "<item 2>": "<content of item 2>", 
+    "<item 3>": "<content of item 3>", 
+    "<item 4>": "<content of item 4>"
+   }
+  },
+  "version": "1.0"
+ }
+}
+```
 
 # Logic 
 
@@ -440,7 +489,7 @@ Say we have the following scene in a .blend file:
 <img width="420" alt="Screen Shot 2022-03-13 at 4 21 52 PM" src="https://user-images.githubusercontent.com/82110564/158077693-86f961cf-c121-4d0e-8a84-1d6a39e7cafc.png">
 Note that we have two Attributes, ``Cube`` and ``Sphere``, and that they have 4 Variants. If you'd like to follow along with this exmaple I'd recommend downloading the [Logic_Example.blend](https://github.com/torrinworx/BMNFTs_Examples/blob/main/Logic_Example.blend).
 
-### Never with, Rule Examples
+### Never with, Logic Rule Examples
 - **Never with, Variants example:**
   In this example, the Variant ``Red Cube_1_25`` never appears with ``Red Sphere_1_25``:
   ```
@@ -474,7 +523,7 @@ Note that we have two Attributes, ``Cube`` and ``Sphere``, and that they have 4 
    }
   ```
 
-### Only with, Rule Examples
+### Only with, Logic Rule Examples
 - **Only with, Variants example:**
   In this example, the Variant ``Red Cube_1_25`` only appears with ``Red Sphere_1_25``:
   ```
