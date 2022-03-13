@@ -218,14 +218,19 @@ Blend_My_NFTs needs data to understand your .blend file, in this step you will c
 
 <img width="463" alt="Screen Shot 2022-02-06 at 9 56 12 PM" src="https://user-images.githubusercontent.com/82110564/152717434-92fa39a9-6f3a-4a43-b755-95b7c082c35c.png">
 
-2. Note - `Maximum Number Of NFTs: ###` is the maximum number of NFTs your collection can contain with it's current number of Attirbutes and Variants. If you need this number to be higher create more Attributes and Variants.
-<img width="420" alt="Screen Shot 2022-02-06 at 9 59 42 PM" src="https://user-images.githubusercontent.com/82110564/152717757-ea58e112-a79e-43c1-b91a-49acf23b7662.png">
-
-4. Set the name of your NFT collection in the `NFT Name:` text field:
+2. Set the name of your NFT collection in the `NFT Name:` text field:
 
 <img width="429" alt="Screen Shot 2022-02-06 at 10 01 19 PM" src="https://user-images.githubusercontent.com/82110564/152717855-078fed04-ab77-4362-95de-f7af12cc01d0.png">
 
 This name will be in the metadata and in the name of each NFT content file. 
+
+3. Note - `Maximum Number Of NFTs: ###` is the maximum number of NFTs your collection can contain with it's current number of Attirbutes and Variants.
+
+<img width="420" alt="Screen Shot 2022-02-06 at 9 59 42 PM" src="https://user-images.githubusercontent.com/82110564/152717757-ea58e112-a79e-43c1-b91a-49acf23b7662.png">
+
+4. Note - `Recommended Limit: ##` is the recommended number of NFTs Blend_My_NFTs is able to generate. Higher than this, e.i. closer to `Maximum Number of NFTs` can result it loss of NFT count and weighted Variants not appear as often as you expect them to. It is recommended that you keep your `NFT Collection Size` below this number.
+
+<img width="382" alt="Screen Shot 2022-03-13 at 5 30 31 PM" src="https://user-images.githubusercontent.com/82110564/158080032-6e48fb2e-2d41-4224-b108-02035cf20246.png">
 
 5. Set your NFT collection size with the `NFT Collection Size` field:
 
@@ -233,24 +238,32 @@ This name will be in the metadata and in the name of each NFT content file.
 
 **Important:** This number must be greater than 0 and less than `Maximum Number Of NFTs` shown at the top of the `Create NFT Data` panel. 
 
-6. Set the `Save Path` of your `Blend_My_NFTs Output` folder by clicking on the file icon and navigating to a directory: 
+6. Set the NFTs per batch with the `NFTs Per Batch` field:
+
+<img width="368" alt="Screen Shot 2022-03-13 at 5 34 09 PM" src="https://user-images.githubusercontent.com/82110564/158080174-b19c2fc7-af0c-4c05-8987-8f518f384850.png">
+
+**Important:** This number must be greater than 0 and less than or equal to `Maximum Number Of NFTs` shown at the top of the `Create NFT Data` panel. 
+
+
+7. Set the `Save Path` of your `Blend_My_NFTs Output` folder by clicking on the file icon and navigating to a directory: 
 
 <img width="418" alt="Screen Shot 2022-02-06 at 10 04 43 PM" src="https://user-images.githubusercontent.com/82110564/152718246-a52cb8ce-9af3-480c-ae82-aa665196b6e6.png">
 
 Then click the `Accept` button. 
 
-Desktop is recommended for easy access, but any easily accessable directory will do. 
+Desktop is recommended for easy access, but any directory will do. 
 
-7. Enable or Disable Rarity and Weighted Variants with the checkbox `Enable Rarity`. For more information on what affect this has on your NFT collection, see [Blender File Organization and Structure](#blender-file-organization-and-structure)and [Notes on Rarity and Weighted Variants](#notes-on-rarity-and-weighted-variants). 
+8. Enable or Disable Rarity and Weighted Variants with the checkbox `Enable Rarity`. For more information on what affect this has on your NFT collection, see [Blender File Organization and Structure](#blender-file-organization-and-structure)and [Notes on Rarity and Weighted Variants](#notes-on-rarity-and-weighted-variants). 
 
 <img width="428" alt="Screen Shot 2022-02-06 at 10 10 55 PM" src="https://user-images.githubusercontent.com/82110564/152718643-d1580692-eac4-47bf-a41a-0e4748517b0d.png">
 
+9. Enable or Disable Logic with the checkbox `Enable Logic`. For more information on what affect this has on your NFT collection, see [Logic](#logic).
 
-7. Enable or Disable Logic with the checkbox `Enable Logic`. For more information on what affect this has on your NFT collection, see [Logic](#logic).
-  - If you enabled Logic, set the location of the Logic.json file you created in the ``Logic File`` field. Click on the file icon and navigate to the location of the json file. 
-  - To create a Logic.json file, see the [Logic](#logic) section. 
+<img width="380" alt="Screen Shot 2022-03-13 at 5 37 02 PM" src="https://user-images.githubusercontent.com/82110564/158080236-318135ab-a87c-40bf-b9d7-2bd9a70653e8.png">
 
-9. Lastly click the `Create Data` button: 
+  - If you enabled Logic, set the location of the Logic.json file you created in the ``Logic File`` field. Click on the file icon and navigate to the location of the json file. To create a Logic.json file, see the [Logic](#logic) section. 
+
+10. Lastly click the `Create Data` button:
 
 <img width="425" alt="Screen Shot 2022-02-06 at 10 12 37 PM" src="https://user-images.githubusercontent.com/82110564/152718783-8ee0d72a-9223-4168-9664-c55b9cb6d84f.png">
 
@@ -350,14 +363,21 @@ This step is to be done after you have completely rendered and generated all of 
 
 For more information on the metadata generated by Blend_My_NFTs and the standards that are followed see [Notes on Meta Data and Standards](#notes-on-meta-data-and-standards).
 
-3. Click the `Refactor Batches & Create MetaData` button:
+3. For each metadata template standard you can set a description, this will appear in the metadata json file of the given template. 
+
+<img width="512" alt="Screen Shot 2022-03-13 at 5 40 37 PM" src="https://user-images.githubusercontent.com/82110564/158080364-c88e77d1-06f2-47b4-b869-ba66d289117e.png">
+
+4. If you want custom metadata fields, check the `Enable Custom Metadata Fields` checkbox and set `Custom Fields File` to the Custom_Fields.json file you create in the [Custom Metadata Fields](#custom-metadata-fields) section.
+
+5. Click the `Refactor Batches & Create MetaData` button:
+
 <img width="343" alt="Screen Shot 2022-02-08 at 4 32 46 PM" src="https://user-images.githubusercontent.com/82110564/153079285-93ef31af-633a-4d39-bd35-44a4412f3660.png">
 
-4. Confirm you wish to refactor your batches by clicking the `Refactor your Batches?` button in the popup dialogue: 
+6. Confirm you wish to refactor your batches by clicking the `Refactor your Batches?` button in the popup dialogue: 
 
 <img width="456" alt="Screen Shot 2022-02-08 at 4 34 30 PM" src="https://user-images.githubusercontent.com/82110564/153079554-e4a359a6-9ca9-45eb-81a3-6e74c54dd697.png">
 
-After completeing the `Refactor Batches & Create MetaData` step, you should have the following files and folders located at the `Save Path` set in [Step 1. Create NFT Data](#step-1---create-nft-data) above;
+After completeing the `Refactor Batches & Create MetaData` step, you should have the following files and folders located at the `Save Path` set in [Step 1. Create NFT Data](#step-1---create-nft-data) above:
 
 - `Blend_My_NFTs Outuput` folder. A directory that contains all output files from Blend_My_NFTs. 
   - `NFT_Data` folder. This contains the following `NFTRecord.json` and `Batch#.json` files. 
