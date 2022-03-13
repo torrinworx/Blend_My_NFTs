@@ -95,6 +95,9 @@ The YouTube tutorials use three different .blend example files. This repository 
   - [Step 3. Refactor Batches & Create MetaData](#step-3---refactor-batches--create-metadata)
 - [Logic](#logic)
   - [Logic JSON Schema](#logic-json-schema)
+    - [Schema Definition](#schema-definition)
+    - [Rule Types](#rule-types)
+    - [Understanding Logic](#understanding-logic)
 - [Notes on Rarity and Weighted Variants](#notes-on-rarity-and-weighted-variants)
   - [.Blend File Rarity Example](#blend-file-rarity-examples)
   - [More complex Rarity Example](#more-complex-rarity-example)
@@ -380,7 +383,7 @@ Congratulations!! You now have a complete 3D NFT collection that is ready to upl
 
 # Logic 
 
-This section will go over the process of using rules to determine what combinations are excluded or included in your NFT collection.
+This section will go over the process of creating and using rules for your NFT collection, we will refer to this process as Logic.
 
 Logic is deterimened by a .json file that you manually create. For the purposes of this documentation, just think of JSON as a text file (.txt) that we can use to store information. You can name this file anything, but for this tutorial lets call it `Logic.json`.
 
@@ -397,7 +400,7 @@ If you'd like, copy and paste this template into the JSON file you created above
         "Items-1": [
             "<collection name>"
         ],
-        "Rule-Type": "Never with", 
+        "Rule-Type": "<rule type>", 
         "Items-2":[
             "<collection name>"
         ]
@@ -406,25 +409,106 @@ If you'd like, copy and paste this template into the JSON file you created above
         "Items-1": [
             "<collection name>"
         ],
-        "Rule-Type": "Only with", 
+        "Rule-Type": "<rule type>", 
         "Items-2":[
             "<collection name>"
         ]
     }
 }
 ```
-The above Logic.json template outlines the 2 possible rules; ``Never with`` and ``Only with``.  
 
-- ``Rule-#`` A dictionary representing a single defined Rule of an NFT collection. There can be as many as you choose. Increment the ``#`` when you create a new rule. Note: The more rules you add the higher the chance a rule conflict may arise, and you may see Attribute and Variant behaviour that you do not desire.
-  - ``Items-1`` Created for each ``Rule-#``, a list of Attribute(s) or Variant(s) names.
-    - ``<collection name>`` The full name of an Attribute or a Variant, as seen in your .blend file scene collection. If an Attribute, all Variants of this attribute will be included in the Rule.
-  - ``Rule`` The rule to govern the relation between ``Items-1`` and ``Items-2``. Has two possible values: ``Never with`` and ``Only with``. 
-    - ``Never with`` If selected, ``Items-1`` will never appear if ``Items-2`` are selected.
-    - ``Only with`` If selected, ``Items-1`` will only appear when ``Items-2`` are selected. 
-  - ``Items-2`` Created for each ``Rule-#``, a list of Attribute(s) or Variant(s) names.
-    - ``<collection name>`` The full name of an Attribute or a Variant, as seen in your .blend file scene collection. If an Attribute, all Variants of this attribute will be included in the Rule.
+### Schema Definition
+- ``Rule-#`` A dictionary representing the information of a single defined Rule of an NFT collection. There can be as many as you choose. Increment the ``#`` when you create a new rule.
+- ``Items-1`` A list of strings representing the names of Attribute(s) or Variant(s).
+- ``Rule-Type`` The rule that governs the relation between ``Items-1`` and ``Items-2``. Has two possible values: ``Never with`` and ``Only with``.
+- ``Items-2`` A list of strings representing the names of Attribute(s) or Variant(s).
+
+### Rule Types
+There are two rule types:
+- ``Never with`` --> If selected, ``Items-1`` will never appear if ``Items-2`` are selected. For each NFT DNA that is generated, either ``Items-1`` or ``Items-2`` are randomly selected. That selected ``Items List`` is then acted upon depending on if the items in the list are Attributes or Variants: 
+  - If ``Items List`` contains complete Attribute(s), those Attribute(s) will be set to Empty automatically.
+  - If ``Items List`` contains Variant(s), the other Variants in that Variants Attribute will be randomly or weightedly selected depending on if you have ``Enable Rarity`` selected when you create NFT data.
+ 
+- ``Only with`` --> If selected, ``Items-1`` will only appear if ``Items-2`` are selected. If ``Items-1`` contains complete Attribute(s), those Attribute(s) will be set to Empty automatically. Meaning they will not appear if you export images, animations, or 3D models.
+
+The best way to understand how Logic works is to think of it as a sentence, example: ``"Items-1 Never goes with Items-2"`` or ``"Items-1 Only goes with Items-2"``.
+
+**Important:** The more rules you add the higher the chance a rule conflict may arise, and you may see Attribute and Variant behaviour that you do not desire. 
+
+## Example Logic.json File
+Say we have the following scene in a .blend file: 
+<img width="420" alt="Screen Shot 2022-03-13 at 4 21 52 PM" src="https://user-images.githubusercontent.com/82110564/158077693-86f961cf-c121-4d0e-8a84-1d6a39e7cafc.png">
+Note that we have two Attributes, ``Cube`` and ``Sphere``, and that they have 4 Variants. If you'd like to follow along with this exmaple I'd recommend downloading the [Logic_Example.blend](https://github.com/torrinworx/BMNFTs_Examples/blob/main/Logic_Example.blend).
+
+### Never with, Rule Examples
+- **Never with, Variants example:**
+  In this example, the Variant ``Red Cube_1_25`` never appears with ``Red Sphere_1_25``:
+  ```
+  {
+    "Rule-1":{
+        "Items-1": [
+            "Red Cube_1_25"
+        ],
+        "Rule-Type": "Never with", 
+        "Items-2":[
+            "Red Sphere_1_25"
+        ]
+    }
+   }
+  ```
+  
+
+- **Never with, Attributes example:**
+  In this example, the Attribute ``Cube`` never appears with ``Red Sphere_1_25``. When ``Red Sphere_1_25`` is selected, no Variants in the Cube Attribute are selected, and hence the Attribute is set to "Empty": 
+  ```
+  {
+    "Rule-1":{
+        "Items-1": [
+            "Cube"
+        ],
+        "Rule-Type": "Never with", 
+        "Items-2":[
+            "Red Sphere_1_25"
+        ]
+    }
+   }
+  ```
+
+### Only with, Rule Examples
+- **Only with, Variants example:**
+  In this example, the Variant ``Red Cube_1_25`` only appears with ``Red Sphere_1_25``:
+  ```
+  {
+    "Rule-1":{
+        "Items-1": [
+            "Red Cube_1_25"
+        ],
+        "Rule-Type": "Only with", 
+        "Items-2":[
+            "Red Sphere_1_25"
+        ]
+    }
+   }
+  ```
+
+- **Only with, Attributes example:**
+  In this example, the Attribute ``Cube`` only appears with ``Red Sphere_1_25``:
+  ```
+  {
+    "Rule-1":{
+        "Items-1": [
+            "Cube"
+        ],
+        "Rule-Type": "Never with", 
+        "Items-2":[
+            "Red Sphere_1_25"
+        ]
+    }
+   }
+  ```
 
 Now that you have a completed Logic.json file, you can now go back and complete [Step 1. Create Data](#step-1---create-nft-data)!
+
 
 # Common Issues and Problems
 
