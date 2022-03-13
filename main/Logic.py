@@ -2,17 +2,12 @@
 # The purpose of this file is to add logic and rules to the DNA that are sent to the NFTRecord.json file in DNA_Generator.py
 
 import bpy
-import os
-import sys
 import json
 import random
-import importlib
 import collections
 
-from . import metaData
-
-importlib.reload(metaData)
 removeList = [".gitignore", ".DS_Store"]
+
 
 # Helper Functions
 def isAttorVar(hierarchy, items_List):
@@ -57,7 +52,6 @@ def items_to_num(hierarchy, items_List):
     return num_List
 
 def rar_selectVar(hierarchy, items_List, deconstructed_DNA):
-
     for attribute in items_List:
 
         a_attribute_index = getAttIndex(hierarchy, attribute)
@@ -98,25 +92,50 @@ def rar_selectVar(hierarchy, items_List, deconstructed_DNA):
 
     return deconstructed_DNA
 
+
+# Rule Check:
+def never_with_Rule_Check(hierarchy, deconstructed_DNA, num_List1, num_List2):
+    """Returns True if singleDNA violates Never with Rule stated in Logic.json."""
+    violates_rule = None
+    for a in num_List1:
+        for b in num_List2:
+            if str(deconstructed_DNA[getAttIndex(hierarchy, a)]) in num_List1[a] and \
+                    str(deconstructed_DNA[getAttIndex(hierarchy, b)]) in num_List2[b]:
+                violates_rule = True
+                return violates_rule
+            else:
+                violates_rule = False
+    return violates_rule
+
+def only_with_Rule_Check(hierarchy, deconstructed_DNA, num_List1, num_List2):
+    """Returns true if singleDNA violates Only with RUle stated in Logic.json."""
+    violates_rule = None
+    for a in num_List1:
+        for b in num_List2:
+            if str(deconstructed_DNA[getAttIndex(hierarchy, a)]) in num_List1[a] and \
+                    str(deconstructed_DNA[getAttIndex(hierarchy, b)]) not in num_List2[b]:
+                violates_rule = True
+                return violates_rule
+
+            else:
+                violates_rule = False
+    return violates_rule
+
+
 # Main Function
-def logicafyDNAList(DNAList, hierarchy, logicFile):
+def logicafyDNAsingle(hierarchy, singleDNA, logicFile):
     logicFile = json.load(open(logicFile))
-    LogicDNAList_deconstructed = []
-    items_List1 = []
-    items_List2 = []
+    deconstructed_DNA = singleDNA.split("-")
 
-    for a in logicFile:
-        items_List1 = isAttorVar(hierarchy, logicFile[a]["Items-1"])
-        items_List2 = isAttorVar(hierarchy, logicFile[a]["Items-2"])
+    for rule in logicFile:
+        items_List1 = isAttorVar(hierarchy, logicFile[rule]["Items-1"])
+        items_List2 = isAttorVar(hierarchy, logicFile[rule]["Items-2"])
+        num_List1 = items_to_num(hierarchy, items_List1)
+        num_List2 = items_to_num(hierarchy, items_List2)
 
-    # Convert String Attributes to DNA Index number, and String Variants to Order number. Variant == 0 if Empty given.
-    num_List1 = items_to_num(hierarchy, items_List1)
-    num_List2 = items_to_num(hierarchy, items_List2)
+        if logicFile[rule]["Rule-Type"] == "Never with":
+            if never_with_Rule_Check(hierarchy, deconstructed_DNA, num_List1, num_List2):
 
-    for a in DNAList:
-        deconstructed_DNA = a.split("-")
-        for b in logicFile:
-            if logicFile[b]["Rule"] == "Never with":
                 rand_bool = bool(random.getrandbits(1))
 
                 if rand_bool:
@@ -125,24 +144,23 @@ def logicafyDNAList(DNAList, hierarchy, logicFile):
                 if not rand_bool:
                     deconstructed_DNA = rar_selectVar(hierarchy, items_List1, deconstructed_DNA)
 
-            if logicFile[b]["Rule"] == "Only with":
-                for c in list(num_List2.keys()):
-                    for d in num_List2[c]:
-                        if deconstructed_DNA[c] not in d:
-                            for e in list(num_List1.keys()):
-                                deconstructed_DNA[e] = '0'
-        LogicDNAList_deconstructed.append(deconstructed_DNA)
+        if logicFile[rule]["Rule-Type"] == "Only with":
+            if only_with_Rule_Check(hierarchy, deconstructed_DNA, num_List1, num_List2):
+                for b in num_List1:
+                    if "0" in num_List1[b]:  # If complete attribute
+                        deconstructed_DNA[getAttIndex(hierarchy, b)] = "0"
 
-    LogicDNAList = []
+                    if "0" not in num_List1[b]:  # Not complete attribute, select from other variants with rarity:
+                        deconstructed_DNA = rar_selectVar(hierarchy, items_List1, deconstructed_DNA)
 
-    for a in LogicDNAList_deconstructed:
         reconstructed_DNA = ""
-        for b in a:
-            num = "-" + str(b)
+        for a in deconstructed_DNA:
+            num = "-" + str(a)
             reconstructed_DNA += num
-        LogicDNAList.append(''.join(reconstructed_DNA.split('-', 1)))
-    return LogicDNAList
+        singleDNA = (''.join(reconstructed_DNA.split('-', 1)))
+
+    return singleDNA
 
 
 if __name__ == '__main__':
-    logicafyDNAList()
+    logicafyDNAsingle()

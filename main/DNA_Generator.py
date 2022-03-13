@@ -11,8 +11,8 @@ import random
 import importlib
 from functools import partial
 
-from . import Rarity_Sorter, Logic
-importlib.reload(Rarity_Sorter)
+from . import Rarity, Logic
+importlib.reload(Rarity)
 importlib.reload(Logic)
 
 enableGeneration = False
@@ -254,17 +254,6 @@ def returnData(nftName, maxNFTs, nftsPerBatch, save_path, enableRarity):
 
    possibleCombinations = numOfCombinations(hierarchy)
 
-   for i in variantMetaData:
-      def cameraToggle(i, toggle=True):
-         if enableGeneration:
-            """
-            Remove Color code so blender recognises the collection
-            """
-            i = stripColorFromName(i)
-         bpy.data.collections[i].hide_render = toggle
-         bpy.data.collections[i].hide_viewport = toggle
-      cameraToggle(i)
-
    return listAllCollections, attributeCollections, attributeCollections1, hierarchy, possibleCombinations
 
 def generateNFT_DNA(nftName, maxNFTs, nftsPerBatch, save_path, logicFile, enableRarity, enableLogic):
@@ -274,63 +263,83 @@ def generateNFT_DNA(nftName, maxNFTs, nftsPerBatch, save_path, logicFile, enable
 
    listAllCollections, attributeCollections, attributeCollections1, hierarchy, possibleCombinations = returnData(nftName, maxNFTs, nftsPerBatch, save_path, enableRarity)
 
+   # Messages:
    print(f"NFT Combinations: {possibleCombinations}\n")
    print(f"Generating {maxNFTs} combinations of DNA.\n")
+   if nftsPerBatch > maxNFTs:
+      print(bcolors.WARNING + "\nWARNING:" + bcolors.RESET)
+      print(
+         f"The Max num of NFTs you chose is smaller than the NFTs Per Batch you set. Only {maxNFTs} were added to 1 batch")
 
+   if not enableRarity and not enableLogic:
+      print(f"{bcolors.OK}DNA will be determined randomly, no special properties applied. {bcolors.RESET}")
+
+   if enableRarity:
+      print(f"{bcolors.OK}Rarity is ON. Weights listed in .blend will be taken into account.{bcolors.RESET}")
+
+   if enableLogic:
+      print(f"{bcolors.OK}Logic is ON. Rules listed in {logicFile} will be taken into account.{bcolors.RESET}")
+
+   # DNA random, Rarity and Logic methods:
    DataDictionary = {}
-   listOptionVariant = []
-   DNAList = []
 
-   if not enableRarity:
-      DNASet = set()
+   def createDNArandom():
+      """Creates a single DNA randomly without Rarity or Logic."""
+      dnaStr = ""
+      dnaStrList = []
+      listOptionVariant = []
 
       for i in hierarchy:
          numChild = len(hierarchy[i])
          possibleNums = list(range(1, numChild + 1))
          listOptionVariant.append(possibleNums)
 
-      def createDNARandom():
-         dnaStr = ""
-         dnaStrList = []
+      for i in listOptionVariant:
+         randomVariantNum = random.choices(i, k=1)
+         str1 = ''.join(str(e) for e in randomVariantNum)
+         dnaStrList.append(str1)
 
-         for i in listOptionVariant:
-            randomVariantNum = random.choices(i, k=1)
-            str1 = ''.join(str(e) for e in randomVariantNum)
-            dnaStrList.append(str1)
+      for i in dnaStrList:
+         num = "-" + str(i)
+         dnaStr += num
 
-         for i in dnaStrList:
-            num = "-" + str(i)
-            dnaStr += num
+      dna = ''.join(dnaStr.split('-', 1))
 
-         dna = ''.join(dnaStr.split('-', 1))
+      return str(dna)
 
-         return str(dna)
+   def singleCompleteDNA():
+      """This function applies Rarity and Logic to a single DNA created by createDNASingle() if Rarity or Logic specified"""
+      singleDNA = ""
+      if not enableRarity:
+         singleDNA = createDNArandom()
+      # print("============")
+      if enableRarity:
+         singleDNA = Rarity.createDNArarity(hierarchy)
+      # print(f"Rarity DNA: {singleDNA}")
+
+      if enableLogic:
+         singleDNA = Logic.logicafyDNAsingle(hierarchy, singleDNA, logicFile)
+      # print(f"Logic DNA: {singleDNA}")
+      # print("============\n")
+      return singleDNA
+
+   def create_DNAList():
+      """Creates DNAList. Loops through createDNARandom() and applies Rarity, and Logic while checking if all DNA are unique"""
+      DNASetReturn = set()
 
       for i in range(maxNFTs):
-         dnaPushToList = partial(createDNARandom)
+         dnaPushToList = partial(singleCompleteDNA)
 
-         DNASet |= {''.join([dnaPushToList()]) for _ in range(maxNFTs - len(DNASet))}
+         DNASetReturn |= {''.join([dnaPushToList()]) for _ in range(maxNFTs - len(DNASetReturn))}
 
-      DNAList = list(DNASet)
+      DNAListReturn = list(DNASetReturn)
 
-      possibleCombinations = maxNFTs
+      return DNAListReturn
 
-      if nftsPerBatch > maxNFTs:
-         print(bcolors.WARNING + "\nWARNING:" + bcolors.RESET)
-         print(f"The Max num of NFTs you chose is smaller than the NFTs Per Batch you set. Only {maxNFTs} were added to 1 batch")
+   DNAList = create_DNAList()
+   print(f"DNAList = {DNAList}")
 
-   if enableRarity:
-      print(f"{bcolors.OK} Rarity is on. Weights listed in .blend will be taken into account {bcolors.RESET}")
-      possibleCombinations = maxNFTs
-      DNAList = Rarity_Sorter.sortRarityWeights(hierarchy, listOptionVariant, DNAList, nftName, maxNFTs, nftsPerBatch, save_path, enableRarity)
-
-   if enableLogic:
-      print(f"{bcolors.OK} Logic is on. Rules listed in {logicFile} will be taken into account {bcolors.RESET}")
-
-      DNAList = Logic.logicafyDNAList(DNAList, hierarchy, logicFile)
-
-
-
+   # Messages:
    if len(DNAList) < maxNFTs:
       print(f"{bcolors.ERROR} \nWARNING: \n"
             f"You are seeing this warning because the program cannot generate {maxNFTs} NFTs with rarity enabled. "
