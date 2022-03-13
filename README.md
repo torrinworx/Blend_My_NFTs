@@ -397,7 +397,7 @@ If you'd like, copy and paste this template into the JSON file you created above
         "Items-1": [
             "<collection name>"
         ],
-        "Rule": "Never with", 
+        "Rule-Type": "Never with", 
         "Items-2":[
             "<collection name>"
         ]
@@ -406,7 +406,7 @@ If you'd like, copy and paste this template into the JSON file you created above
         "Items-1": [
             "<collection name>"
         ],
-        "Rule": "Only with", 
+        "Rule-Type": "Only with", 
         "Items-2":[
             "<collection name>"
         ]
