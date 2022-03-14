@@ -367,7 +367,7 @@ def send_To_Record_JSON(nftName, maxNFTs, nftsPerBatch, save_path, enableRarity,
 
    NFTRecord_save_path = os.path.join(Blend_My_NFTs_Output, "NFTRecord.json")
 
-   Checks.check_Rarity(DataDictionary["hierarchy"], DataDictionary["DNAList"], os.path.join(save_path, "Blend_My_NFTs Output"))
+   Checks.check_Rarity(DataDictionary["hierarchy"], DataDictionary["DNAList"], os.path.join(save_path, "Blend_My_NFTs Output/NFT_Data"))
    Checks.check_Duplicates(DataDictionary["DNAList"])
 
    try:
