@@ -129,6 +129,7 @@ class BMNFTS_PGT_MyProperties(bpy.types.PropertyGroup):
 
     # ERC721 Custom Metadata Fields
     erc721_description: bpy.props.StringProperty(name="ERC721 description")
+    erc721_ipfs: bpy.props.StringProperty(name="ERC721 IPFS")
 
 
 def make_directories(save_path):
@@ -250,6 +251,16 @@ class refactor_Batches(bpy.types.Operator):
             cardano_description = bpy.context.scene.my_tool.cardano_description
             solana_description = bpy.context.scene.my_tool.solana_description
             erc721_description = bpy.context.scene.my_tool.erc721_description
+            erc721_ipfs = bpy.context.scene.my_tool.erc721_ipfs
+            
+            enableImages = bpy.context.scene.my_tool.imageBool
+            imageFileFormat = bpy.context.scene.my_tool.imageEnum
+
+            enableAnimations = bpy.context.scene.my_tool.animationBool
+            animationFileFormat = bpy.context.scene.my_tool.animationEnum
+
+            enableModelsBlender = bpy.context.scene.my_tool.modelBool
+            modelFileFormat = bpy.context.scene.my_tool.modelEnum
 
             Blend_My_NFTs_Output, batch_json_save_path, nftBatch_save_path = make_directories(save_path)
 
@@ -381,6 +392,8 @@ class BMNFTS_PT_Refactor(bpy.types.Panel):
         if bpy.context.scene.my_tool.erc721MetaData:
             row = layout.row()
             row.prop(mytool, "erc721_description")
+            row = layout.row()
+            row.prop(mytool, "erc721_ipfs")
 
             row = layout.row()
             row.operator("wm.url_open", text="ERC721 Metadata Documentation",
