@@ -11,9 +11,11 @@ import random
 import importlib
 from functools import partial
 
-from . import Rarity, Logic
+from . import Rarity, Logic, Checks
 importlib.reload(Rarity)
 importlib.reload(Logic)
+importlib.reload(Checks)
+
 
 enableGeneration = False
 colorList = []
@@ -337,7 +339,6 @@ def generateNFT_DNA(nftName, maxNFTs, nftsPerBatch, save_path, logicFile, enable
       return DNAListReturn
 
    DNAList = create_DNAList()
-   print(f"DNAList = {DNAList}")
 
    # Messages:
    if len(DNAList) < maxNFTs:
@@ -352,7 +353,7 @@ def generateNFT_DNA(nftName, maxNFTs, nftsPerBatch, save_path, logicFile, enable
    DataDictionary["hierarchy"] = hierarchy
    DataDictionary["DNAList"] = DNAList
 
-   return DataDictionary, possibleCombinations, DNAList
+   return DataDictionary, possibleCombinations
 
 def send_To_Record_JSON(nftName, maxNFTs, nftsPerBatch, save_path, enableRarity, enableLogic, logicFile, Blend_My_NFTs_Output):
    """
@@ -362,15 +363,18 @@ def send_To_Record_JSON(nftName, maxNFTs, nftsPerBatch, save_path, enableRarity,
    repeate DNA.
    """
 
-   DataDictionary, possibleCombinations, DNAList = generateNFT_DNA(nftName, maxNFTs, nftsPerBatch, save_path, logicFile, enableRarity, enableLogic)
+   DataDictionary, possibleCombinations = generateNFT_DNA(nftName, maxNFTs, nftsPerBatch, save_path, logicFile, enableRarity, enableLogic)
 
    NFTRecord_save_path = os.path.join(Blend_My_NFTs_Output, "NFTRecord.json")
+
+   Checks.check_Rarity(DataDictionary["hierarchy"], DataDictionary["DNAList"], os.path.join(save_path, "Blend_My_NFTs Output"))
+   Checks.check_Duplicates(DataDictionary["DNAList"])
 
    try:
       ledger = json.dumps(DataDictionary, indent=1, ensure_ascii=True)
       with open(NFTRecord_save_path, 'w') as outfile:
          outfile.write(ledger + '\n')
-      print(f"{bcolors.OK}{len(DNAList)} NFT DNA saved to {NFTRecord_save_path}\n"
+      print(f"{bcolors.OK}{len(DataDictionary['DNAList'])} NFT DNA saved to {NFTRecord_save_path}\n"
             f"NFT DNA Successfully created. {bcolors.RESET}")
 
    except:
