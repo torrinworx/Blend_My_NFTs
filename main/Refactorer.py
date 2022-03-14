@@ -97,10 +97,18 @@ def renameMetaData(rename_MetaData_Variables):
             if not os.path.exists(erc721MetaDataPath):
                 os.mkdir(erc721MetaDataPath)
 
+            if rename_MetaData_Variables.enableImages == True:
+                ipfsFileType = rename_MetaData_Variables.imageFileFormat
+            if rename_MetaData_Variables.enableAnimations == True:
+                ipfsFileType = rename_MetaData_Variables.animationFileFormat
+            if rename_MetaData_Variables.enableModelsBlender == True:
+                ipfsFileType = rename_MetaData_Variables.modelFileFormat
+
             erc721JsonNew = "Erc721_" + i
             erc721NewName = name.split("_")[0] + "_" + str(file_num)
-
-            metaDataDictErc721 = Metadata.returnErc721MetaData(erc721NewName, NFT_DNA, NFT_Variants, rename_MetaData_Variables.custom_Fields_File, rename_MetaData_Variables.enableCustomFields, rename_MetaData_Variables.erc721_description)
+            erc721IpfsUrl = "ipfs://" + rename_MetaData_Variables.erc721_ipfs + "/" + erc721NewName + "." + ipfsFileType.lower()
+            
+            metaDataDictErc721 = Metadata.returnErc721MetaData(erc721NewName, NFT_DNA, NFT_Variants, rename_MetaData_Variables.custom_Fields_File, rename_MetaData_Variables.enableCustomFields, rename_MetaData_Variables.erc721_description, erc721IpfsUrl)
 
             sendMetaDataToJson(metaDataDictErc721, erc721MetaDataPath, erc721JsonNew)
     return
@@ -216,6 +224,13 @@ def reformatNFTCollection(refactor_panel_input):
     class rename_MetaData_Variables:
         completeCollPath = completeCollPath
         completeMetaDataPath = completeMetaDataPath
+        
+        enableImages = refactor_panel_input.enableImages
+        imageFileFormat = refactor_panel_input.imageFileFormat
+        enableAnimations = refactor_panel_input.enableAnimations
+        animationFileFormat = refactor_panel_input.animationFileFormat
+        enableModelsBlender = refactor_panel_input.enableModelsBlender
+        modelFileFormat = refactor_panel_input.modelFileFormat
 
         cardanoMetaDataBool = refactor_panel_input.cardanoMetaDataBool
         solanaMetaDataBool = refactor_panel_input.solanaMetaDataBool
@@ -228,6 +243,7 @@ def reformatNFTCollection(refactor_panel_input):
         cardano_description = refactor_panel_input.cardano_description
         solana_description = refactor_panel_input.solana_description
         erc721_description = refactor_panel_input.erc721_description
+        erc721_ipfs = refactor_panel_input.erc721_ipfs
 
 
     renameMetaData(rename_MetaData_Variables)
