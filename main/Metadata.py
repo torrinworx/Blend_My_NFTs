@@ -104,8 +104,45 @@ def returnErc721MetaData(name, NFT_DNA, NFT_Variants, custom_Fields_File, enable
 
     return metaDataDictErc721
 
+def returnOpenSeaMetaData(name, NFT_DNA, NFT_Variants, custom_Fields_File, enableCustomFields, erc721_description):
+    dna = NFT_DNA.replace("-", "")
+    metaDataDictErc721 = {
+        "name": name+"_"+dna,
+        "description": erc721_description,
+        "image": "",
+        "attributes": None,
+    }
+
+    metaDataDictErc721['custom_fields'] = {
+        'edition': int(dna)
+    }
+
+    attributes = []
+
+    for i in NFT_Variants:
+        dictionary = {
+            "trait_type": i,
+            "value": NFT_Variants[i]
+        }
+
+        attributes.append(dictionary)
+
+    # Custom Fields:
+    if enableCustomFields:
+        custom_Fields = json.load(open(custom_Fields_File))
+        for i in custom_Fields:
+            dictionary = {
+                "trait_type": i,
+                "value": custom_Fields[i]
+            }
+            attributes.append(dictionary)
+
+    metaDataDictErc721["attributes"] = attributes
+
+    return metaDataDictErc721
 
 if __name__ == '__main__':
     returnSolanaMetaData()
     returnCardanoMetaData()
     returnErc721MetaData()
+    returnOpenSeaMetaData()

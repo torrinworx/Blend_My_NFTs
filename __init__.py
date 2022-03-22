@@ -26,13 +26,15 @@ if bpy in locals():
         importlib.reload(Exporter)
         importlib.reload(Refactorer)
         importlib.reload(get_combinations)
+        importlib.reload(Uploader)
 else:
     from .main import \
         DNA_Generator, \
         Batch_Sorter, \
         Exporter, \
         Refactorer, \
-        get_combinations
+        get_combinations, \
+        Uploader
 
 # User input Property Group:
 class BMNFTS_PGT_MyProperties(bpy.types.PropertyGroup):
@@ -96,6 +98,7 @@ class BMNFTS_PGT_MyProperties(bpy.types.PropertyGroup):
     cardanoMetaDataBool: bpy.props.BoolProperty(name="Cardano Cip")
     solanaMetaDataBool: bpy.props.BoolProperty(name="Solana Metaplex")
     erc721MetaData: bpy.props.BoolProperty(name="ERC721")
+    openSeaMetaData: bpy.props.BoolProperty(name="OpenSea")
 
     # API Panel properties:
     apiKey: bpy.props.StringProperty(name="API Key", subtype='PASSWORD')
@@ -129,6 +132,14 @@ class BMNFTS_PGT_MyProperties(bpy.types.PropertyGroup):
 
     # ERC721 Custom Metadata Fields
     erc721_description: bpy.props.StringProperty(name="ERC721 description")
+    
+    openSea_description: bpy.props.StringProperty(name="Description")
+
+    nftport_api_key: bpy.props.StringProperty(name="Nft Port API Key")
+
+    wallet_address: bpy.props.StringProperty(name="Wallet address")
+
+    contract_address: bpy.props.StringProperty(name="Contract address")
 
 
 def make_directories(save_path):
@@ -246,10 +257,12 @@ class refactor_Batches(bpy.types.Operator):
             cardanoMetaDataBool = bpy.context.scene.my_tool.cardanoMetaDataBool
             solanaMetaDataBool = bpy.context.scene.my_tool.solanaMetaDataBool
             erc721MetaData = bpy.context.scene.my_tool.erc721MetaData
+            openSeaMetaData = bpy.context.scene.my_tool.openSeaMetaData
 
             cardano_description = bpy.context.scene.my_tool.cardano_description
             solana_description = bpy.context.scene.my_tool.solana_description
             erc721_description = bpy.context.scene.my_tool.erc721_description
+            openSea_description = bpy.context.scene.my_tool.openSea_description
 
             Blend_My_NFTs_Output, batch_json_save_path, nftBatch_save_path = make_directories(save_path)
 
@@ -260,6 +273,26 @@ class refactor_Batches(bpy.types.Operator):
 
     def invoke(self, context, event):
         return context.window_manager.invoke_confirm(self, event)
+
+class uploadNFTs(bpy.types.Operator):
+    bl_idname = 'uploader.nfts'
+    bl_label = 'Upload NFTs'
+    bl_description = 'Upload NFTs.'
+    bl_options = {"REGISTER", "UNDO"}
+
+    def execute(self, context):
+
+        class uploader_panel_input:
+            save_path = bpy.path.abspath(bpy.context.scene.my_tool.save_path)
+            nftport_api_key = bpy.context.scene.my_tool.nftport_api_key.strip()
+            contract_address = bpy.context.scene.my_tool.contract_address.strip()
+            wallet_address = bpy.context.scene.my_tool.wallet_address.strip()
+
+        Uploader.uploadNFTCollection(uploader_panel_input)
+
+        self.report({'INFO'}, "NFTs Uploaded")
+
+        return {"FINISHED"}
 
 # Create Data Panel:
 class BMNFTS_PT_CreateData(bpy.types.Panel):
@@ -387,6 +420,12 @@ class BMNFTS_PT_Refactor(bpy.types.Panel):
                          icon='URL').url = "https://docs.opensea.io/docs/metadata-standards"
 
         row = layout.row()
+        row.prop(mytool, "openSeaMetaData")
+        if bpy.context.scene.my_tool.openSeaMetaData:
+            row = layout.row()
+            row.prop(mytool, "openSea_description")
+
+        row = layout.row()
         row.prop(mytool, "enableCustomFields")
         if bpy.context.scene.my_tool.enableCustomFields:
             row = layout.row()
@@ -411,6 +450,33 @@ class BMNFTS_PT_Documentation(bpy.types.Panel):
         row = layout.row()
         row.operator("wm.url_open", text="Documentation",
                      icon='URL').url = "https://github.com/torrinworx/Blend_My_NFTs"
+
+class BMNFTS_PT_NFTPORT_Uploader(bpy.types.Panel):
+    bl_label = "NFTPort Uploader"
+    bl_idname = "BMNFTS_PT_NFTPORT_Uploader"
+    bl_space_type = 'VIEW_3D'
+    bl_region_type = 'UI'
+    bl_category = 'Blend_My_NFTs'
+
+    def draw(self, context):
+        layout = self.layout
+        scene = context.scene
+        mytool = scene.my_tool
+
+        row = layout.row()
+        row.prop(mytool, "nftport_api_key")
+
+        row = layout.row()
+        row.prop(mytool, "contract_address")
+
+        row = layout.row()
+        row.prop(mytool, "wallet_address")
+
+        row = layout.row()
+        self.layout.operator("uploader.nfts", icon='DISCLOSURE_TRI_RIGHT', text="Upload To IPFS & Mint")
+        row = layout.row()
+        row.operator("wm.url_open", text="Documentation",
+                     icon='URL').url = "https://github.com/aizwellenstan/Blend_My_NFTs_Doc"
 
 # # Materials Panel:
 #
@@ -457,6 +523,7 @@ classes = (
     BMNFTS_PT_GenerateNFTs,
     BMNFTS_PT_Refactor,
     BMNFTS_PT_Documentation,
+    BMNFTS_PT_NFTPORT_Uploader,
 
     # Other panels:
     # BMNFTS_PT_MATERIALS_Panel,
@@ -465,6 +532,7 @@ classes = (
     createData,
     exportNFTs,
     refactor_Batches,
+    uploadNFTs
 )
 
 def register():

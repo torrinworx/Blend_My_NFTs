@@ -64,6 +64,7 @@ def renameMetaData(rename_MetaData_Variables):
     cardanoMetaDataPath = os.path.join(rename_MetaData_Variables.completeCollPath, "Cardano_metaData")
     solanaMetaDataPath = os.path.join(rename_MetaData_Variables.completeCollPath, "Solana_metaData")
     erc721MetaDataPath = os.path.join(rename_MetaData_Variables.completeCollPath, "Erc721_metaData")
+    openSeaMetaDataPath = os.path.join(rename_MetaData_Variables.completeCollPath, "OpenSea_metaData")
 
     for i in metaDataListOld:
         name, NFT_DNA, NFT_Variants = getMetaDataDirty(rename_MetaData_Variables.completeMetaDataPath, i)
@@ -103,6 +104,19 @@ def renameMetaData(rename_MetaData_Variables):
             metaDataDictErc721 = Metadata.returnErc721MetaData(erc721NewName, NFT_DNA, NFT_Variants, rename_MetaData_Variables.custom_Fields_File, rename_MetaData_Variables.enableCustomFields, rename_MetaData_Variables.erc721_description)
 
             sendMetaDataToJson(metaDataDictErc721, erc721MetaDataPath, erc721JsonNew)
+
+        if rename_MetaData_Variables.openSeaMetaData:
+            if not os.path.exists(openSeaMetaDataPath):
+                os.mkdir(openSeaMetaDataPath)
+
+            openSeaFileName =name.split("_")[0] + "_" + str(file_num)+".json"
+            openSeaNewName = name.split("_")[0]
+            if len(rename_MetaData_Variables.openSea_description) < 1:
+                rename_MetaData_Variables.openSea_description = openSeaNewName
+
+            metaDataDictOpenSea = Metadata.returnOpenSeaMetaData(openSeaNewName, NFT_DNA, NFT_Variants, rename_MetaData_Variables.custom_Fields_File, rename_MetaData_Variables.enableCustomFields, rename_MetaData_Variables.openSea_description)
+
+            sendMetaDataToJson(metaDataDictOpenSea, openSeaMetaDataPath, openSeaFileName)
     return
 
 def reformatNFTCollection(refactor_panel_input):
@@ -220,6 +234,7 @@ def reformatNFTCollection(refactor_panel_input):
         cardanoMetaDataBool = refactor_panel_input.cardanoMetaDataBool
         solanaMetaDataBool = refactor_panel_input.solanaMetaDataBool
         erc721MetaData = refactor_panel_input.erc721MetaData
+        openSeaMetaData = refactor_panel_input.openSeaMetaData
 
         custom_Fields_File = refactor_panel_input.custom_Fields_File
         enableCustomFields = refactor_panel_input.enableCustomFields
@@ -228,6 +243,7 @@ def reformatNFTCollection(refactor_panel_input):
         cardano_description = refactor_panel_input.cardano_description
         solana_description = refactor_panel_input.solana_description
         erc721_description = refactor_panel_input.erc721_description
+        openSea_description = refactor_panel_input.openSea_description
 
 
     renameMetaData(rename_MetaData_Variables)
