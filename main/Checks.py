@@ -9,11 +9,8 @@
 
 import bpy
 import os
-import sys
 import json
-import importlib
-from collections import Counter
-from collections import defaultdict
+from collections import Counter, defaultdict
 
 
 class bcolors:
@@ -26,9 +23,15 @@ class bcolors:
     ERROR = '\033[91m'  # RED
     RESET = '\033[0m'  # RESET COLOR
 
+# Checks:
+def check_Scene():
+    """
+    Checks if Blender file Scene follows the Blend_My_NFTs conventions. If not, raises error with all instances of
+    violations.
+    """
 
-# Rarity Check
 def check_Rarity(hierarchy, DNAList, save_path):
+    """Checks rarity percentage of each Variant, then sends it to RarityData.json in NFT_Data folder."""
     numNFTsGenerated = len(DNAList)
 
     attributeNames = []
@@ -102,6 +105,65 @@ def check_Duplicates(DNAList):
 
     print(f"NFTRecord.json contains {duplicates} duplicate NFT DNA.")
 
-if __name__ == '__main__':
-    check_Rarity()
-    check_Duplicates()
+# Raise Errors:
+def raise_Error_ScriptIgnore():
+    """Checks if Script_Ignore collection exists, if not raises error."""
+
+    try:
+        scriptIgnore = bpy.data.collections["Script_Ignore"]
+        return scriptIgnore
+    except KeyError:
+        raise KeyError(
+            f"\n{bcolors.ERROR}Blend_My_NFTs Error:\n"
+            f"Script_Ignore collection not found in Blender scene. Please add the Script_Ignore "
+            f"collection to Blender scene or ensure the spelling is exactly 'Script_Ignore'. For more information, "
+            f"see:\n{bcolors.RESET}"
+            f"https://github.com/torrinworx/Blend_My_NFTs#blender-file-organization-and-structure\n{bcolors.RESET}"
+        )
+
+def raise_Error_numBatches(maxNFTs, nftsPerBatch):
+    """Checks if number of Batches is less than maxNFTs, if not raises error."""
+
+    try:
+        numBatches = maxNFTs / nftsPerBatch
+        return numBatches
+    except ZeroDivisionError:
+        print(f"{bcolors.ERROR} ERROR:\nnftsPerBatch in config.py needs to be a positive integer. {bcolors.RESET}")
+        raise ZeroDivisionError(
+            f"\n{bcolors.ERROR}Blend_My_NFTs Error:\n"
+            f"The number of combinations is less than the number of \n{bcolors.RESET}"
+        )
+
+def raise_Error_ZeroCombinations(combinations):
+    """Checks if combinations is greater than 0, if so, raises error."""
+    if combinations == 0:
+        raise ValueError(
+            f"\n{bcolors.ERROR}Blend_My_NFTs Error:\n"
+            f"The number of all possible combinations is ZERO. Please review your Blender scene and ensure it follows "
+            f"the naming conventions and scene structure. For more information, "
+            f"see:\n{bcolors.RESET}"
+            f"https://github.com/torrinworx/Blend_My_NFTs#blender-file-organization-and-structure\n{bcolors.RESET}"
+        )
+
+def raise_Error_numBatchesGreaterThan(numBatches):
+    if numBatches < 1:
+        raise ValueError(
+            f"\n{bcolors.ERROR}Blend_My_NFTs Error:\n"
+            f"The number of Batches is less than 1. Please review your Blender scene and ensure it follows "
+            f"the naming conventions and scene structure. For more information, "
+            f"see:\n{bcolors.RESET}"
+            f"https://github.com/torrinworx/Blend_My_NFTs#blender-file-organization-and-structure\n{bcolors.RESET}"
+        )
+
+# Raise Warnings:
+
+def raise_Warning_maxNFTs(nftsPerBatch, maxNFTs):
+    """
+
+    """
+
+    if nftsPerBatch > maxNFTs:
+        raise (
+            f"\n{bcolors.WARNING}Blend_My_NFTs Warning:\n"
+            f"The number of NFTs Per Batch you set is smaller than the NFT Collection Size you set.\n{bcolors.RESET}"
+        )

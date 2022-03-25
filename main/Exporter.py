@@ -7,6 +7,10 @@ import os
 import time
 import json
 
+import sys
+import itertools
+import threading
+from .loading_animation import Loader
 
 enableGeneration = False
 colorList = []
@@ -110,103 +114,127 @@ def render_and_save_NFTs(nftName, maxNFTs, batchToGenerate, batch_json_save_path
         modelFolder = os.path.join(batchFolder, "Models")
         metaDataFolder = os.path.join(batchFolder, "BMNFT_metaData")
 
-        # Material handling:
-        if enableGeneration:
-            for c in dnaDictionary:
-                collection = dnaDictionary[c]
-                if stripColorFromName(collection) in colorList:
-                    colorVal = int(collection.rsplit("_", 1)[1])-1
-                    collection = stripColorFromName(collection)
-                    bpy.data.collections[collection].hide_render = False
-                    bpy.data.collections[collection].hide_viewport = False
-                    if generationType == 'color':
-                        for activeObject in bpy.data.collections[collection].all_objects: 
-                            mat = bpy.data.materials.new("PKHG")
-                            mat.diffuse_color = colorList[collection][colorVal]
-                            activeObject.active_material = mat
-                    if generationType == 'material':
-                        for activeObject in bpy.data.collections[collection].all_objects: 
-                            activeObject.material_slots[0].material = bpy.data.materials[colorList[collection][colorVal]]
-                else:
-                    collection = stripColorFromName(collection)
-                    bpy.data.collections[collection].hide_render = False
-                    bpy.data.collections[collection].hide_viewport = False
+        # Generation/Rendering:
 
         if enableImages:
-            print(f"{bcolors.OK}Rendering Image{bcolors.RESET}")
+            print(f"{bcolors.OK}---Image---{bcolors.RESET}")
 
-            if not os.path.exists(imageFolder):
-                os.makedirs(imageFolder)
+            image_render_time_start = time.time()
 
-            bpy.context.scene.render.filepath = imagePath
-            bpy.context.scene.render.image_settings.file_format = imageFileFormat
-            bpy.ops.render.render(write_still=True)
+            def render_image():
+                if not os.path.exists(imageFolder):
+                    os.makedirs(imageFolder)
+
+                bpy.context.scene.render.filepath = imagePath
+                bpy.context.scene.render.image_settings.file_format = imageFileFormat
+                bpy.ops.render.render(write_still=True)
+
+            # Loading Animation:
+            loading = Loader(f'Rendering Image {x}/{NFTs_in_Batch}...', '').start()
+            render_image()
+            loading.stop()
+
+            image_render_time_end = time.time()
+
+            print(
+                f"{bcolors.OK}Rendered image in {image_render_time_end - image_render_time_start}s.\n{bcolors.RESET}"
+            )
 
         if enableAnimations:
-            print(f"{bcolors.OK}Rendering Animation{bcolors.RESET}")
-            if not os.path.exists(animationFolder):
-                os.makedirs(animationFolder)
+            print(f"{bcolors.OK}---Animation---{bcolors.RESET}")
 
-            bpy.context.scene.render.filepath = animationPath
+            animation_render_time_start = time.time()
 
-            if animationFileFormat == 'MP4':
-                bpy.context.scene.render.image_settings.file_format = "FFMPEG"
+            def render_animation():
+                if not os.path.exists(animationFolder):
+                    os.makedirs(animationFolder)
 
-                bpy.context.scene.render.ffmpeg.format = 'MPEG4'
-                bpy.context.scene.render.ffmpeg.codec = 'H264'
-                bpy.ops.render.render(animation=True)
+                bpy.context.scene.render.filepath = animationPath
 
-            else:
-                bpy.context.scene.render.image_settings.file_format = animationFileFormat
-                bpy.ops.render.render(animation=True)
+                if animationFileFormat == 'MP4':
+                    bpy.context.scene.render.image_settings.file_format = "FFMPEG"
+
+                    bpy.context.scene.render.ffmpeg.format = 'MPEG4'
+                    bpy.context.scene.render.ffmpeg.codec = 'H264'
+                    bpy.ops.render.render(animation=True)
+
+                else:
+                    bpy.context.scene.render.image_settings.file_format = animationFileFormat
+                    bpy.ops.render.render(animation=True)
+
+            # Loading Animation:
+            loading = Loader(f'Rendering Animation {x}/{NFTs_in_Batch}...', '').start()
+            render_animation()
+            loading.stop()
+
+            animation_render_time_end = time.time()
+
+            print(
+                f"{bcolors.OK}Rendered animation in {animation_render_time_end - animation_render_time_start}s.\n{bcolors.RESET}"
+            )
 
         if enableModelsBlender:
-            print(f"{bcolors.OK}Generating 3D Model{bcolors.RESET}")
-            if not os.path.exists(modelFolder):
-                os.makedirs(modelFolder)
+            print(f"{bcolors.OK}---3D Model---{bcolors.RESET}")
 
-            for i in dnaDictionary:
-                coll = dnaDictionary[i]
-                if coll != '0':
-                    for obj in bpy.data.collections[coll].all_objects:
-                        obj.select_set(True)
+            model_generation_time_start = time.time()
 
-            for obj in bpy.data.collections['Script_Ignore'].all_objects:
-                obj.select_set(True)
+            def generate_models():
+                if not os.path.exists(modelFolder):
+                    os.makedirs(modelFolder)
 
-            if modelFileFormat == 'GLB':
-                bpy.ops.export_scene.gltf(filepath=f"{modelPath}.glb",
-                                          check_existing=True,
-                                          export_format='GLB',
-                                          use_selection=True)
-            if modelFileFormat == 'GLTF_SEPARATE':
-                bpy.ops.export_scene.gltf(filepath=f"{modelPath}",
-                                          check_existing=True,
-                                          export_format='GLTF_SEPARATE',
-                                          use_selection=True)
-            if modelFileFormat == 'GLTF_EMBEDDED':
-                bpy.ops.export_scene.gltf(filepath=f"{modelPath}.gltf",
-                                          check_existing=True,
-                                          export_format='GLTF_EMBEDDED',
-                                          use_selection=True)
-            elif modelFileFormat == 'FBX':
-                bpy.ops.export_scene.fbx(filepath=f"{modelPath}.fbx",
-                                         check_existing=True,
-                                         use_selection=True)
-            elif modelFileFormat == 'OBJ':
-                bpy.ops.export_scene.obj(filepath=f"{modelPath}.obj",
-                                         check_existing=True,
-                                         use_selection=True,)
-            elif modelFileFormat == 'X3D':
-                bpy.ops.export_scene.x3d(filepath=f"{modelPath}.x3d",
-                                         check_existing=True,
-                                         use_selection=True)
-            elif modelFileFormat == 'STL':
-                bpy.ops.export_mesh.stl(filepath=f"{modelPath}.stl",
-                                        check_existing=True,
-                                        use_selection=True)
-            elif modelFileFormat == 'VOX':
-                bpy.ops.export_vox.some_data(filepath=f"{modelPath}.vox")
+                for i in dnaDictionary:
+                    coll = dnaDictionary[i]
+                    if coll != '0':
+                        for obj in bpy.data.collections[coll].all_objects:
+                            obj.select_set(True)
+
+                for obj in bpy.data.collections['Script_Ignore'].all_objects:
+                    obj.select_set(True)
+
+                if modelFileFormat == 'GLB':
+                    bpy.ops.export_scene.gltf(filepath=f"{modelPath}.glb",
+                                              check_existing=True,
+                                              export_format='GLB',
+                                              use_selection=True)
+                if modelFileFormat == 'GLTF_SEPARATE':
+                    bpy.ops.export_scene.gltf(filepath=f"{modelPath}",
+                                              check_existing=True,
+                                              export_format='GLTF_SEPARATE',
+                                              use_selection=True)
+                if modelFileFormat == 'GLTF_EMBEDDED':
+                    bpy.ops.export_scene.gltf(filepath=f"{modelPath}.gltf",
+                                              check_existing=True,
+                                              export_format='GLTF_EMBEDDED',
+                                              use_selection=True)
+                elif modelFileFormat == 'FBX':
+                    bpy.ops.export_scene.fbx(filepath=f"{modelPath}.fbx",
+                                             check_existing=True,
+                                             use_selection=True)
+                elif modelFileFormat == 'OBJ':
+                    bpy.ops.export_scene.obj(filepath=f"{modelPath}.obj",
+                                             check_existing=True,
+                                             use_selection=True, )
+                elif modelFileFormat == 'X3D':
+                    bpy.ops.export_scene.x3d(filepath=f"{modelPath}.x3d",
+                                             check_existing=True,
+                                             use_selection=True)
+                elif modelFileFormat == 'STL':
+                    bpy.ops.export_mesh.stl(filepath=f"{modelPath}.stl",
+                                            check_existing=True,
+                                            use_selection=True)
+                elif modelFileFormat == 'VOX':
+                    bpy.ops.export_vox.some_data(filepath=f"{modelPath}.vox")
+
+            # Loading Animation:
+            loading = Loader(f'Rendering Animation {x}/{NFTs_in_Batch}...', '').start()
+            generate_models()
+            loading.stop()
+
+            model_generation_time_end = time.time()
+
+            print(
+                f"{bcolors.OK}Generated model in {model_generation_time_end - model_generation_time_start}s.\n{bcolors.RESET}"
+            )
 
         if not os.path.exists(metaDataFolder):
             os.makedirs(metaDataFolder)
@@ -222,19 +250,18 @@ def render_and_save_NFTs(nftName, maxNFTs, batchToGenerate, batch_json_save_path
         with open(os.path.join(metaDataFolder, "Data_" + name + ".json"), 'w') as outfile:
             outfile.write(jsonMetaData + '\n')
 
-        print("Completed {} render in ".format(name) + "%.4f seconds" % (time.time() - time_start_2))
+        print(f"Completed {name} render in {time.time() - time_start_2}s")
         x += 1
 
-    for a in BatchDNAList:
-        for i in hierarchy:
-            for j in hierarchy[i]:
-                if enableGeneration:
-                    j = stripColorFromName(j)
-                bpy.data.collections[j].hide_render = False
-                bpy.data.collections[j].hide_viewport = False
+    for i in hierarchy:
+        for j in hierarchy[i]:
+            if enableGeneration:
+                j = stripColorFromName(j)
+            bpy.data.collections[j].hide_render = False
+            bpy.data.collections[j].hide_viewport = False
 
-    print(f"\nAll NFTs successfully generated and sent to {nftBatch_save_path}")
-    print("Completed all renders in Batch{}.json in ".format(batchToGenerate) + "%.4f seconds" % (time.time() - time_start_1) + "\n")
+    print(f"\nAll NFTs successfully generated and sent to {nftBatch_save_path}"
+          f"\nCompleted all renders in Batch{batchToGenerate}.json in {time.time() - time_start_1}s\n")
 
 
 if __name__ == '__main__':
