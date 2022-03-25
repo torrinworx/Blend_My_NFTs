@@ -8,13 +8,10 @@ import copy
 import time
 import json
 import random
-import importlib
 from functools import partial
-
+from .loading_animation import Loader
 from . import Rarity, Logic, Checks
-importlib.reload(Rarity)
-importlib.reload(Logic)
-importlib.reload(Checks)
+
 
 class bcolors:
    """
@@ -286,15 +283,28 @@ def send_To_Record_JSON(maxNFTs, nftsPerBatch, save_path, enableRarity, enableLo
 
    time_start = time.time()
    def create_nft_data():
-      DataDictionary, possibleCombinations = generateNFT_DNA(maxNFTs, nftsPerBatch, logicFile, enableRarity, enableLogic)
-      NFTRecord_save_path = os.path.join(Blend_My_NFTs_Output, "NFTRecord.json")
+      try:
+         DataDictionary, possibleCombinations = generateNFT_DNA(maxNFTs, nftsPerBatch, logicFile, enableRarity, enableLogic)
+         NFTRecord_save_path = os.path.join(Blend_My_NFTs_Output, "NFTRecord.json")
 
-      # Checks:
-      Checks.raise_Warning_maxNFTs(nftsPerBatch, maxNFTs)
+         # Checks:
+         Checks.raise_Warning_maxNFTs(nftsPerBatch, maxNFTs)
 
-      Checks.check_Rarity(DataDictionary["hierarchy"], DataDictionary["DNAList"], os.path.join(save_path, "Blend_My_NFTs Output/NFT_Data"))
+         Checks.check_Rarity(DataDictionary["hierarchy"], DataDictionary["DNAList"], os.path.join(save_path, "Blend_My_NFTs Output/NFT_Data"))
 
-      Checks.check_Duplicates(DataDictionary["DNAList"])
+         Checks.check_Duplicates(DataDictionary["DNAList"])
+      except FileNotFoundError:
+         raise FileNotFoundError(
+            f"\n{bcolors.ERROR}Blend_My_NFTs Error:\n"
+            f"Data not saved to NFTRecord.json. Please review your Blender scene and ensure it follows "
+            f"the naming conventions and scene structure. For more information, "
+            f"see:\n{bcolors.RESET}"
+            f"https://github.com/torrinworx/Blend_My_NFTs#blender-file-organization-and-structure\n"
+         )
+      else:
+         print("Something unexpected happened. Please check Blender System Console Traceback error for more information.")
+      finally:
+         loading.stop()
 
       try:
          ledger = json.dumps(DataDictionary, indent=1, ensure_ascii=True)
@@ -313,34 +323,16 @@ def send_To_Record_JSON(maxNFTs, nftsPerBatch, save_path, enableRarity, enableLo
             f"see:\n{bcolors.RESET}"
             f"https://github.com/torrinworx/Blend_My_NFTs#blender-file-organization-and-structure\n"
          )
-      return True
 
-   # Loading Animations:
-   bar = [
-      " [=     ]",
-      " [ =    ]",
-      " [  =   ]",
-      " [   =  ]",
-      " [    = ]",
-      " [     =]",
-      " [    = ]",
-      " [   =  ]",
-      " [  =   ]",
-      " [ =    ]",
-   ]
-   i = 0
 
-   while not create_nft_data():
-      print(bar[i % len(bar)], end="\r")
-      time.sleep(.2)
-      i += 1
+
+   # Loading Animation:
+   loading = Loader(f'Creating NFT DNA...', '').start()
+   create_nft_data()
+   loading.stop()
 
    time_end = time.time()
 
    print(
-      f"Created NFT Data in {time_end - time_start}s.\n"
+      f"{bcolors.OK}Created and saved NFT DNA in {time_end - time_start}s.\n{bcolors.RESET}"
    )
-
-
-if __name__ == '__main__':
-   send_To_Record_JSON()

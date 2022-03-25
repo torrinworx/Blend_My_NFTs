@@ -2,9 +2,6 @@ import bpy
 import re
 import copy
 
-enableGeneration = False
-colorList = []
-
 class bcolors:
    """
    The colour of console messages.
@@ -42,33 +39,8 @@ def get_combinations_from_scene():
    for c in traverse_tree(coll):
       listAllCollInScene.append(c)
 
-   def listSubIgnoreCollections():
-      def getParentSubCollections(collection):
-         yield collection
-         for child in collection.children:
-            yield from getParentSubCollections(child)
-
-      collList = []
-      for c in getParentSubCollections(scriptIgnore):
-         collList.append(c.name)
-      return collList
-
-   ignoreList = listSubIgnoreCollections()
-
    for i in listAllCollInScene:
-      if enableGeneration:
-         if i.name in colorList:
-            for j in range(len(colorList[i.name])):
-               if i.name[-1].isdigit() and i.name not in ignoreList:
-                  listAllCollections.append(i.name + "_" + str(j + 1))
-               elif j == 0:
-                  listAllCollections.append(i.name)
-         elif i.name[-1].isdigit() and i.name not in ignoreList:
-            listAllCollections.append(i.name + "_0")
-         else:
-            listAllCollections.append(i.name)
-      else:
-         listAllCollections.append(i.name)
+      listAllCollections.append(i.name)
 
    listAllCollections.remove(scriptIgnore.name)
 
@@ -145,21 +117,9 @@ def get_combinations_from_scene():
 
          elif len(orderRarity) > 0:
             number = orderRarity[0]
-            if enableGeneration:
-               if count == 1 or count == 0:
-                  previousAttribute = i.partition("_")[0]
-                  count +=1
-               elif i.partition("_")[0] == previousAttribute:
-                  count +=1
-               else:
-                  count = 1
-               number = str(count)
             rarity = orderRarity[1]
-            if enableGeneration and stripColorFromName(i) in colorList:
-               color = orderRarity[2]
-            else:
-               color = "0"
-            eachObject = {"name": name, "number": number, "rarity": rarity, "color": color}
+
+            eachObject = {"name": name, "number": number, "rarity": rarity}
             allAttDataList[i] = eachObject
       return allAttDataList
 
@@ -174,17 +134,7 @@ def get_combinations_from_scene():
          colParLong = list(bpy.data.collections[str(i)].children)
          colParShort = {}
          for x in colParLong:
-            if enableGeneration:
-               """
-               Append colors to blender name for PNG generator and NFTRecord.json to create the correct list
-               """
-               if x.name in colorList:
-                  for j in range(len(colorList[x.name])):
-                     colParShort[x.name + "_" + str(j+1)] = None
-               else:
-                  colParShort[x.name + "_0"] = None
-            else:
-               colParShort[x.name] = None
+            colParShort[x.name] = None
          hierarchy[i] = colParShort
 
       for a in hierarchy:
@@ -227,7 +177,3 @@ def get_combinations_from_scene():
    possibleCombinations = numOfCombinations(hierarchy)
 
    return possibleCombinations
-
-
-if __name__ == '__main__':
-   get_combinations_from_scene()

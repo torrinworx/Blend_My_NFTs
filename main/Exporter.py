@@ -6,15 +6,8 @@ import bpy
 import os
 import time
 import json
-
-import sys
-import itertools
-import threading
 from .loading_animation import Loader
 
-enableGeneration = False
-colorList = []
-generationType = None
 
 class bcolors:
    '''
@@ -26,9 +19,6 @@ class bcolors:
    RESET = '\033[0m'  # RESET COLOR
 
 
-def stripColorFromName(name):
-   return "_".join(name.split("_")[:-1])
-   
 def getBatchData(batchToGenerate, batch_json_save_path):
     """
     Retrieves a given batches data determined by renderBatch in config.py
@@ -60,11 +50,6 @@ def render_and_save_NFTs(nftName, maxNFTs, batchToGenerate, batch_json_save_path
     for a in BatchDNAList:
         for i in hierarchy:
             for j in hierarchy[i]:
-                if enableGeneration:
-                    """
-                     Remove Color code so blender recognises the collection
-                    """
-                    j = stripColorFromName(j)
                 bpy.data.collections[j].hide_render = True
                 bpy.data.collections[j].hide_viewport = True
 
@@ -95,10 +80,9 @@ def render_and_save_NFTs(nftName, maxNFTs, batchToGenerate, batch_json_save_path
 
         for c in dnaDictionary:
             collection = dnaDictionary[c]
-            if not enableGeneration:
-                if collection != '0':
-                    bpy.data.collections[collection].hide_render = False
-                    bpy.data.collections[collection].hide_viewport = False
+            if collection != '0':
+                bpy.data.collections[collection].hide_render = False
+                bpy.data.collections[collection].hide_viewport = False
 
 
         time_start_2 = time.time()
@@ -255,14 +239,8 @@ def render_and_save_NFTs(nftName, maxNFTs, batchToGenerate, batch_json_save_path
 
     for i in hierarchy:
         for j in hierarchy[i]:
-            if enableGeneration:
-                j = stripColorFromName(j)
             bpy.data.collections[j].hide_render = False
             bpy.data.collections[j].hide_viewport = False
 
     print(f"\nAll NFTs successfully generated and sent to {nftBatch_save_path}"
           f"\nCompleted all renders in Batch{batchToGenerate}.json in {time.time() - time_start_1}s\n")
-
-
-if __name__ == '__main__':
-    render_and_save_NFTs()

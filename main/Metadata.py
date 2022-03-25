@@ -103,9 +103,3 @@ def returnErc721MetaData(name, NFT_DNA, NFT_Variants, custom_Fields_File, enable
     metaDataDictErc721["attributes"] = attributes
 
     return metaDataDictErc721
-
-
-if __name__ == '__main__':
-    returnSolanaMetaData()
-    returnCardanoMetaData()
-    returnErc721MetaData()

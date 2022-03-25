@@ -189,7 +189,3 @@ def logicafyDNAsingle(hierarchy, singleDNA, logicFile):
                 break
 
     return resultDNA
-
-
-if __name__ == '__main__':
-    logicafyDNAsingle()

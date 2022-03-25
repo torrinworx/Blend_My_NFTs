@@ -66,7 +66,3 @@ def makeBatches(nftName, maxNFTs, nftsPerBatch, save_path, batch_json_save_path)
 
         with open(os.path.join(batch_json_save_path, ("Batch{}.json".format(i + 1))), "w") as outfile2:
             outfile2.write(incompleteBatch)
-
-
-if __name__ == '__main__':
-    makeBatches()
