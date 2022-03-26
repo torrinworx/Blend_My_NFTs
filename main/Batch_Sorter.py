@@ -42,7 +42,9 @@ def makeBatches(nftName, maxNFTs, nftsPerBatch, save_path, batch_json_save_path)
         j = 0
         while (j < nftsPerBatch) and (DNAList):
             oneDNA = random.choice(DNAList)
-            BatchDNAList.append(oneDNA)
+            BatchDNAList.append({
+                oneDNA: {"Complete": False}
+            })
             DNAList.remove(oneDNA)
             j += 1
 
@@ -57,7 +59,7 @@ def makeBatches(nftName, maxNFTs, nftsPerBatch, save_path, batch_json_save_path)
 
         i += 1
 
-    if len(DNAList) > 0:
+    if len(DNAList) > 0:  # Add to Checks.py
         print(f"One batch could not be filled completely and will contain {len(DNAList)} NFTs.")
 
         incompleteBatch = {"NFTs_in_Batch": int(len(DNAList)), "hierarchy": hierarchy, "BatchDNAList": DNAList}

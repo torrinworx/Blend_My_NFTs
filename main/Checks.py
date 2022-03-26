@@ -6,7 +6,6 @@
 # This file is provided for transparency. The accuracy of the rarity values you set in your .blend file as outlined in
 # the README.md file are dependent on the maxNFTs, and the maximum number of combinations of your NFT collection.
 
-
 import bpy
 import os
 import json
@@ -104,6 +103,27 @@ def check_Duplicates(DNAList):
         seen.add(x)
 
     print(f"NFTRecord.json contains {duplicates} duplicate NFT DNA.")
+
+def check_FailedBatches(batch_json_save_path):
+    batch_folders = os.listdir(batch_json_save_path)
+    fail_state = False
+    failed_batch = None
+    failed_dna = None
+    failed_dna_index = None
+
+    for i in batch_folders:
+        batch = json.load(open(os.path.join(batch_json_save_path, i)))
+        NFTs_in_Batch = batch["NFTs_in_Batch"]
+        if "Generation Save" in batch:
+            dna_generated = batch["Generation Save"][-1]["DNA Generated"]
+            if dna_generated < NFTs_in_Batch:
+                fail_state = True
+                failed_batch = int(i.removeprefix("Batch").removesuffix(".json"))
+                failed_dna = dna_generated
+
+
+    return fail_state, failed_batch, failed_dna, failed_dna_index
+
 
 # Raise Errors:
 def raise_Error_ScriptIgnore():
