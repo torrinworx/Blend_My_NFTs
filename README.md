@@ -509,7 +509,7 @@ The best way to understand how Logic works is to think of it as a sentence, exam
 ## Example Logic.json File
 Say we have the following scene in a .blend file: 
 <img width="420" alt="Screen Shot 2022-03-13 at 4 21 52 PM" src="https://user-images.githubusercontent.com/82110564/158077693-86f961cf-c121-4d0e-8a84-1d6a39e7cafc.png">
-Note that we have two Attributes, ``Cube`` and ``Sphere``, and that they have 4 Variants. If you'd like to follow along with this exmaple I'd recommend downloading the [Logic_Example.blend](https://github.com/torrinworx/BMNFTs_Examples/blob/main/Logic_Example.blend).
+Note that we have two Attributes, ``Cube`` and ``Sphere``, and that they have 4 Variants. If you'd like to follow along with this example I'd recommend downloading the [Logic_Example.blend](https://github.com/torrinworx/BMNFTs_Examples/blob/main/Logic_Example.blend).
 
 ### Never with, Logic Rule Examples
 - **Never with, Variants example:**

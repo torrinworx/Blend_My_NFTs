@@ -6,11 +6,7 @@ import os
 import copy
 import json
 import shutil
-import importlib
-
 from . import Metadata
-
-importlib.reload(Metadata)
 
 removeList = [".gitignore", ".DS_Store"]
 
@@ -233,6 +229,3 @@ def reformatNFTCollection(refactor_panel_input):
     renameMetaData(rename_MetaData_Variables)
 
     shutil.rmtree(refactor_panel_input.nftBatch_save_path)
-
-if __name__ == '__main__':
-    reformatNFTCollection()

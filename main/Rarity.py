@@ -32,15 +32,11 @@ def createDNArarity(hierarchy):
             elif x != 0:
                 ifZeroBool = False
 
-        if ifZeroBool == True:
+        if ifZeroBool:
             variantByNum = random.choices(number_List_Of_i, k=1)
-        elif ifZeroBool == False:
+        elif not ifZeroBool:
             variantByNum = random.choices(number_List_Of_i, weights=rarity_List_Of_i, k=1)
 
         singleDNA += "-" + str(variantByNum[0])
     singleDNA = ''.join(singleDNA.split('-', 1))
     return singleDNA
-
-
-if __name__ == '__main__':
-    createDNArarity()
