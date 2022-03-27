@@ -1,10 +1,10 @@
 bl_info = {
     "name": "Blend_My_NFTs",
     "author": "Torrin Leonard, This Cozy Studio Inc",
-    "version": (2, 1, 0),
+    "version": (3, 0, 0),
     "blender": (3, 0, 0),
     "location": "View3D",
-    "description": "Blend_My_NFTs UI Edition",
+    "description": "An open source, free to use Blender add-on that enables you to create thousands of unique images, animations, and 3D models.",
     "category": "Development",
 }
 
@@ -446,7 +446,7 @@ class BMNFTS_PT_Refactor(bpy.types.Panel):
             row.prop(mytool, "customfieldsFile")
 
         row = layout.row()
-        self.layout.operator("refactor.batches", icon='FOLDER_REDIRECT', text="Refactor Batches & create MetaData")
+        self.layout.operator("refactor.batches", icon='FOLDER_REDIRECT', text="Refactor Batches & Create MetaData")
 
 # Documentation Panel:
 class BMNFTS_PT_Documentation(bpy.types.Panel):
