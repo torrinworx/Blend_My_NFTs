@@ -500,6 +500,8 @@ There are two rule types:
  
 - ``Only with`` --> If selected, ``Items-1`` will only appear if ``Items-2`` are selected. If ``Items-1`` contains complete Attribute(s), those Attribute(s) will be set to Empty automatically. Meaning they will not appear if you export images, animations, or 3D models.
 
+- ``Always with`` --> If selected, ``Items-1`` will always appear if ``Items-2`` are selected.``Items-1`` CANNOT contain complete Attribute(s) and is limited to single Variants. The list can contain multiple Variants, however they must be from seperate Attributes.
+
 The best way to understand how Logic works is to think of it as a sentence, example: ``"Items-1 Never goes with Items-2"`` or ``"Items-1 Only goes with Items-2"``.
 
 **Important:** The more rules you add the higher the chance a rule conflict may arise, and you may see Attribute and Variant behaviour that you do not desire. 
