@@ -33,7 +33,7 @@ Discord: https://discord.gg/UpZt5Un57t
 
 Youtube: https://www.youtube.com/c/ThisCozyStudio
 
-Twitter: https://twitter.com/CozyPlaceNFT
+Twitter: https://twitter.com/ThisCozyStudio
 
 Instagram: https://www.instagram.com/this_cozy_studio/
 
