@@ -72,11 +72,11 @@ def returnSolanaMetaData(name, NFT_DNA, NFT_Variants, custom_Fields_File, enable
     return metaDataDictSolana
 
 # ERC721 Template
-def returnErc721MetaData(name, NFT_DNA, NFT_Variants, custom_Fields_File, enableCustomFields, erc721_description):
+def returnErc721MetaData(name, NFT_DNA, NFT_Variants, custom_Fields_File, enableCustomFields, erc721_description, erc721IpfsUrl):
     metaDataDictErc721 = {
         "name": name,
         "description": erc721_description,
-        "image": "",
+        "image": erc721IpfsUrl,
         "attributes": None,
     }
 
