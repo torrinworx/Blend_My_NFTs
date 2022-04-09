@@ -157,9 +157,8 @@ def update_combinations(dummy1, dummy2):
     global recommended_limit
     global offset
 
-    combinations = (get_combinations.get_combinations_from_scene())
+    combinations = (get_combinations.get_combinations())
     recommended_limit = int(round(combinations/2))
-
     redraw_panel()
 
 
@@ -176,7 +175,7 @@ class createData(bpy.types.Operator):
     def execute(self, context):
 
         nftName = bpy.context.scene.my_tool.nftName
-        maxNFTs = bpy.context.scene.my_tool.collectionSize
+        collectionSize = bpy.context.scene.my_tool.collectionSize
         nftsPerBatch = bpy.context.scene.my_tool.nftsPerBatch
         save_path = bpy.path.abspath(bpy.context.scene.my_tool.save_path)
         logicFile = bpy.path.abspath(bpy.context.scene.my_tool.logicFile)
@@ -186,8 +185,8 @@ class createData(bpy.types.Operator):
 
         Blend_My_NFTs_Output, batch_json_save_path, nftBatch_save_path = make_directories(save_path)
 
-        DNA_Generator.send_To_Record_JSON(maxNFTs, nftsPerBatch, save_path, enableRarity, enableLogic, logicFile, Blend_My_NFTs_Output)
-        Batch_Sorter.makeBatches(nftName, maxNFTs, nftsPerBatch, save_path, batch_json_save_path)
+        DNA_Generator.send_To_Record_JSON(collectionSize, nftsPerBatch, save_path, enableRarity, enableLogic, logicFile, Blend_My_NFTs_Output)
+        Batch_Sorter.makeBatches(nftName, collectionSize, nftsPerBatch, save_path, batch_json_save_path)
 
         self.report({'INFO'}, f"NFT Data created!")
 
@@ -203,7 +202,7 @@ class exportNFTs(bpy.types.Operator):
         nftName = bpy.context.scene.my_tool.nftName
         save_path = bpy.path.abspath(bpy.context.scene.my_tool.save_path)
         batchToGenerate = bpy.context.scene.my_tool.batchToGenerate
-        maxNFTs = bpy.context.scene.my_tool.collectionSize
+        collectionSize = bpy.context.scene.my_tool.collectionSize
 
         Blend_My_NFTs_Output, batch_json_save_path, nftBatch_save_path = make_directories(save_path)
 
@@ -222,7 +221,7 @@ class exportNFTs(bpy.types.Operator):
         failed_dna = None
         failed_dna_index = None
 
-        Exporter.render_and_save_NFTs(nftName, maxNFTs, batchToGenerate, batch_json_save_path, nftBatch_save_path, enableImages,
+        Exporter.render_and_save_NFTs(nftName, collectionSize, batchToGenerate, batch_json_save_path, nftBatch_save_path, enableImages,
                                       imageFileFormat, enableAnimations, animationFileFormat, enableModelsBlender,
                                       modelFileFormat, fail_state, failed_batch, failed_dna, failed_dna_index
                                       )
@@ -241,7 +240,7 @@ class resume_failed_batch(bpy.types.Operator):
         nftName = bpy.context.scene.my_tool.nftName
         save_path = bpy.path.abspath(bpy.context.scene.my_tool.save_path)
         batchToGenerate = bpy.context.scene.my_tool.batchToGenerate
-        maxNFTs = bpy.context.scene.my_tool.collectionSize
+        collectionSize = bpy.context.scene.my_tool.collectionSize
 
         Blend_My_NFTs_Output, batch_json_save_path, nftBatch_save_path = make_directories(save_path)
         fail_state, failed_batch, failed_dna, failed_dna_index = Checks.check_FailedBatches(batch_json_save_path)
@@ -257,7 +256,7 @@ class resume_failed_batch(bpy.types.Operator):
         enableModelsBlender = batch["Generation Save"][-1]["Render_Settings"]["enableModelsBlender"]
         modelFileFormat = batch["Generation Save"][-1]["Render_Settings"]["modelFileFormat"]
 
-        Exporter.render_and_save_NFTs(nftName, maxNFTs, failed_batch, batch_json_save_path, nftBatch_save_path, enableImages,
+        Exporter.render_and_save_NFTs(nftName, collectionSize, failed_batch, batch_json_save_path, nftBatch_save_path, enableImages,
                                       imageFileFormat, enableAnimations, animationFileFormat, enableModelsBlender,
                                       modelFileFormat, fail_state, failed_batch, failed_dna, failed_dna_index
                                       )
@@ -380,8 +379,12 @@ class BMNFTS_PT_GenerateNFTs(bpy.types.Panel):
         row.prop(mytool, "batchToGenerate")
 
         save_path = bpy.path.abspath(bpy.context.scene.my_tool.save_path)
-        Blend_My_NFTs_Output, batch_json_save_path, nftBatch_save_path = make_directories(save_path)
+        Blend_My_NFTs_Output = os.path.join(save_path, "Blend_My_NFTs Output", "NFT_Data")
+        batch_json_save_path = os.path.join(Blend_My_NFTs_Output, "Batch_Data")
+        nftBatch_save_path = os.path.join(save_path, "Blend_My_NFTs Output", "Generated NFT Batches")
+
         fail_state, failed_batch, failed_dna, failed_dna_index = Checks.check_FailedBatches(batch_json_save_path)
+
         if fail_state:
             row = layout.row()
             self.layout.operator("exporter.nfts", icon='RENDER_RESULT', text="Generate NFTs")

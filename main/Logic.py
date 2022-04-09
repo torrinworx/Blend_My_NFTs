@@ -99,10 +99,21 @@ def reconstructDNA(deconstructedDNA):
         reconstructed_DNA += num
     return (''.join(reconstructed_DNA.split('-', 1)))
 
+def strip_empty_variant(num_list):
+    for i in num_list:
+        var_list = num_list[i]
+        var_list.remove("0")
+        num_list[i] = var_list
+    return num_list
+
 # Rule Checks:
 def never_with_Rule_Check(hierarchy, deconstructed_DNA, num_List1, num_List2):
     """Returns True if singleDNA violates Never with Rule stated in Logic.json."""
     violates_rule = None
+
+    num_List1 = strip_empty_variant(num_List1)
+    num_List2 = strip_empty_variant(num_List2)
+
     for a in num_List1:
         for b in num_List2:
             if str(deconstructed_DNA[getAttIndex(hierarchy, a)]) in num_List1[a] and \
@@ -116,6 +127,7 @@ def never_with_Rule_Check(hierarchy, deconstructed_DNA, num_List1, num_List2):
 def only_with_Rule_Check(hierarchy, deconstructed_DNA, num_List1, num_List2):
     """Returns True if singleDNA violates Only with Rule stated in Logic.json."""
     violates_rule = None
+
     for a in num_List1:
         for b in num_List2:
             if str(deconstructed_DNA[getAttIndex(hierarchy, a)]) in num_List1[a] and \
@@ -130,6 +142,7 @@ def only_with_Rule_Check(hierarchy, deconstructed_DNA, num_List1, num_List2):
 def always_with_Rule_Check(hierarchy, deconstructed_DNA, num_List1, num_List2):
     """Returns True if singleDNA violates Always with Rule stated in Logic.json."""
     violates_rule = None
+
     for a in num_List2:
         if str(deconstructed_DNA[getAttIndex(hierarchy, a)]) not in num_List2[a]:
             violates_rule = True
@@ -147,7 +160,6 @@ def logicafyDNAsingle(hierarchy, singleDNA, logicFile):
 
     didReconstruct = True
     originalDNA = str(singleDNA)
-    resultDNA = str(singleDNA)
 
     while didReconstruct:
         didReconstruct = False
@@ -168,6 +180,12 @@ def logicafyDNAsingle(hierarchy, singleDNA, logicFile):
                     if not rand_bool:
                         deconstructed_DNA = rar_selectVar(hierarchy, items_List1, deconstructed_DNA)
 
+                    newDNA = reconstructDNA(deconstructed_DNA)
+                    if newDNA != originalDNA:
+                        originalDNA = str(newDNA)
+                        didReconstruct = True
+                        break
+
             if logicFile[rule]["Rule-Type"] == "Only with":
                 if only_with_Rule_Check(hierarchy, deconstructed_DNA, num_List1, num_List2):
                     for b in num_List1:
@@ -177,15 +195,20 @@ def logicafyDNAsingle(hierarchy, singleDNA, logicFile):
                         if "0" not in num_List1[b]:  # Not complete attribute, select from other variants with rarity:
                             deconstructed_DNA = rar_selectVar(hierarchy, items_List1, deconstructed_DNA)
 
+                    newDNA = reconstructDNA(deconstructed_DNA)
+                    if newDNA != originalDNA:
+                        originalDNA = str(newDNA)
+                        didReconstruct = True
+                        break
+
             if logicFile[rule]["Rule-Type"] == "Always with":
                 if always_with_Rule_Check(hierarchy, deconstructed_DNA, num_List1, num_List2):
                     deconstructed_DNA = rar_selectVar(hierarchy, items_List1, deconstructed_DNA)
 
-            newDNA = reconstructDNA(deconstructed_DNA)
-            if newDNA != originalDNA:
-                originalDNA = str(newDNA)
-                didReconstruct = True
-                resultDNA = str(newDNA)
-                break
+                    newDNA = reconstructDNA(deconstructed_DNA)
+                    if newDNA != originalDNA:
+                        originalDNA = str(newDNA)
+                        didReconstruct = True
+                        break
 
-    return resultDNA
+    return str(reconstructDNA(deconstructed_DNA))
