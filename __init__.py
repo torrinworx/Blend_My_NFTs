@@ -14,9 +14,12 @@ import bpy
 from bpy.app.handlers import persistent
 
 import os
+import sys
 import json
 import importlib
 
+#a little hacky bs
+sys.path.append(os.path.dirname(os.path.realpath(__file__)))
 
 if bpy in locals():
         importlib.reload(DNA_Generator)
@@ -27,7 +30,7 @@ if bpy in locals():
         importlib.reload(Checks)
 
 else:
-    from .main import \
+    from main import \
         DNA_Generator, \
         Batch_Sorter, \
         Exporter, \
@@ -480,10 +483,9 @@ class export_settings(bpy.types.Operator):
         save_path = bpy.path.abspath(bpy.context.scene.my_tool.save_path)
         filename = "Config.cfg"
         
-        #self.report({'INFO'}, f"Saved settings to: {save_path + filename}!")
-
         settings = bpy.context.scene.my_tool;
 
+        #could probably have made this a lot cleaner looking
         with open(save_path + filename, 'w') as f:
             output =  "#This file was auto-generated from the Blend_My_NFTs addon and is used" + "\n"
             output += "#when running Blend_My_NFTs in a headless environment." + "\n"
@@ -526,6 +528,8 @@ class export_settings(bpy.types.Operator):
             output += "enableCustomFields=" + str(settings.enableCustomFields) + "\n"
 
             print(output, file=f)
+
+        self.report({'INFO'}, f"Saved settings to: {save_path + filename}!")
 
         return {"FINISHED"}
 
@@ -598,7 +602,6 @@ def unregister():
         bpy.utils.unregister_class(cls)
 
     del bpy.types.Scene.my_tool
-
 
 if __name__ == '__main__':
     register()
