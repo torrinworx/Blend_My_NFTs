@@ -476,7 +476,57 @@ class export_settings(bpy.types.Operator):
     bl_description = 'Save your settings to a configuration file'
     bl_options = {"REGISTER", "UNDO"}
 
-    def execute(self, context):
+    def execute(self, context): 
+        save_path = bpy.path.abspath(bpy.context.scene.my_tool.save_path)
+        filename = "Config.cfg"
+        
+        #self.report({'INFO'}, f"Saved settings to: {save_path + filename}!")
+
+        settings = bpy.context.scene.my_tool;
+
+        with open(save_path + filename, 'w') as f:
+            output =  "#This file was auto-generated from the Blend_My_NFTs addon and is used" + "\n"
+            output += "#when running Blend_My_NFTs in a headless environment." + "\n"
+            output += "\n"
+            output += "#The name of your nft project" + "\n"
+            output += "nftName=" + settings.nftName + "\n"
+            output += "\n"
+            output += "#The number of NFTs to generate per batch" + "\n"
+            output += "nftsPerBatch=" + str(settings.nftsPerBatch) + "\n"
+            output += "\n"
+            output += "#Save path for your NFT files" + "\n"
+            output += "save_path=" + settings.save_path + "\n"
+            output += "\n"
+            output += "#Enable Rarity" + "\n"
+            output += "enableRarity=" + str(settings.enableRarity) + "\n"
+            output += "\n"
+            output += "#Enable Logic" + "\n"
+            output += "enableLogic=" + str(settings.enableLogic) + "\n"
+            output += "\n"
+            output += "#NFT Media output type(s):" + "\n"
+            output += "imageBool=" + str(settings.imageBool) + "\n"
+            output += "imageEnum=" + settings.imageEnum + "\n"
+            output += "animationBool=" + str(settings.animationBool) + "\n"
+            output += "animationEnum=" + settings.animationEnum + "\n"
+            output += "modelBool=" + str(settings.modelBool) + "\n"
+            output += "modelEnum=" + settings.modelEnum + "\n"
+            output += "\n"
+            output += "#Batch to generate" + "\n"
+            output += "batchToGenerate=" + str(settings.batchToGenerate) + "\n"
+            output += "\n"
+            output += "#Metadata Format"
+            output += "cardanoMetaDataBool=" + str(settings.cardanoMetaDataBool) + "\n"
+            output += "cardano_description=" + settings.cardano_description + "\n"
+            output += "erc721MetaData=" + str(settings.erc721MetaData) + "\n"
+            output += "erc721_description=" + settings.erc721_description + "\n"
+            output += "solanaMetaDataBool=" + str(settings.solanaMetaDataBool) + "\n"
+            output += "solana_description=" + settings.solana_description + "\n"
+            output += "\n"
+            output += "#Enable Custom Fields" + "\n"
+            output += "enableCustomFields=" + str(settings.enableCustomFields) + "\n"
+
+            print(output, file=f)
+
         return {"FINISHED"}
 
 class BMNFTS_PT_ExportSettings(bpy.types.Panel):
