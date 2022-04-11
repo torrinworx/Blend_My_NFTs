@@ -465,6 +465,36 @@ class BMNFTS_PT_Documentation(bpy.types.Panel):
         row.operator("wm.url_open", text="Documentation",
                      icon='URL').url = "https://github.com/torrinworx/Blend_My_NFTs"
 
+#Export Settings Panel
+#This panel gives the user the option to export all settings from the Blend_My_NFTs addon into a config file.
+#Settings will be read from the config file when running headlessly.
+
+class export_settings(bpy.types.Operator):
+    """Export your settings into a configuration file"""
+    bl_idname = 'export.settings'
+    bl_label = 'Export Settings'
+    bl_description = 'Save your settings to a configuration file'
+    bl_options = {"REGISTER", "UNDO"}
+
+    def execute(self, context):
+        return {"FINISHED"}
+
+class BMNFTS_PT_ExportSettings(bpy.types.Panel):
+    bl_label = "Export Settings"
+    bl_idname = "BMNFTS_PT_ExportSettings"
+    bl_space_type = 'VIEW_3D'
+    bl_region_type = 'UI'
+    bl_category = 'Blend_My_NFTs'
+
+    def draw(self, context):
+        layout = self.layout
+        scene = context.scene
+        mytool = scene.my_tool
+
+        row = layout.row()
+        self.layout.operator("export.settings", icon='FOLDER_REDIRECT', text="Export BMNFT settings to a file")
+
+
 # # Materials Panel:
 #
 # class BMNFTS_PT_MATERIALS_Panel(bpy.types.Panel):
@@ -495,6 +525,7 @@ classes = (
     BMNFTS_PT_GenerateNFTs,
     BMNFTS_PT_Refactor,
     BMNFTS_PT_Documentation,
+    BMNFTS_PT_ExportSettings,
 
     # Other panels:
     # BMNFTS_PT_MATERIALS_Panel,
@@ -503,6 +534,7 @@ classes = (
     exportNFTs,
     resume_failed_batch,
     refactor_Batches,
+    export_settings
 )
 
 def register():
