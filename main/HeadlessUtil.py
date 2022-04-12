@@ -22,7 +22,7 @@ def getPythonArgs():
     
     parser = argparse.ArgumentParser(description=usage_text)
     
-    parser.add_argument("-c", "--config-file",
+    parser.add_argument("--config-file",
                         dest="config_path",
                         metavar='FILE',
                         required=True,
