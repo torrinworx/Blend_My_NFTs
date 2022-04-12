@@ -734,12 +734,12 @@ Once you have this config file, you can run this addon in Blender headlessly by 
 
 On Windows
 ```
-.\blender.exe --background <path to your .blend file> --Python <path to Blend_My_NFTs __init__.py> -- --config-file <path to the generated config.cfg> --operation create-dna
+.\blender.exe --background <path to your .blend file> --python <path to Blend_My_NFTs __init__.py> -- --config-file <path to the generated config.cfg> --operation create-dna
 ```
 
 On Linux
 ```
-./blender --background <path to your .blend file> --Python <Path to Blend_My_NFTs __init__.py> -- --config-file <path to the generated config.cfg> --operation create-dna
+./blender --background <path to your .blend file> --python <Path to Blend_My_NFTs __init__.py> -- --config-file <path to the generated config.cfg> --operation create-dna
 ```
 
 There are two mandatory arguments that you need to run this script from the terminal/command line:
@@ -767,12 +767,12 @@ You can also view this information from your terminal/command line by running:
 
 On Windows
 ```
-.\blender.exe --background --Python <path to Blend_My_NFTs __init__.py> -- --help
+.\blender.exe --background --python <path to Blend_My_NFTs __init__.py> -- --help
 ```
 
 On Linux
 ```
-./blender --background --Python <Path to Blend_My_NFTs __init__.py> -- --help
+./blender --background --python <Path to Blend_My_NFTs __init__.py> -- --help
 ```
 
 It is important that you place the python arguments after the `--` because of how blender parses arguments from the command line. More info about blender command line arguments can be found [here](https://docs.blender.org/manual/en/3.0/advanced/command_line/arguments.html).
