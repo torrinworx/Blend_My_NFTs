@@ -493,6 +493,9 @@ class export_settings(bpy.types.Operator):
                 "#The name of your nft project\n"
                 f"nftName={settings.nftName}\n"
                 "\n"
+                "#NFT Collection Size\n"
+                f"collectionSize={settings.collectionSize}\n"
+                "\n"
                 "#The number of NFTs to generate per batch\n"
                 f"nftsPerBatch={str(settings.nftsPerBatch)}\n"
                 "\n"
@@ -612,6 +615,7 @@ def runAsHeadless():
     def dumpSettings(settings):
         output = (
             f"nftName={settings.nftName}\n"
+            f"collectionSize={str(settings.collectionSize)}\n"
             f"nftsPerBatch={str(settings.nftsPerBatch)}\n"
             f"save_path={settings.save_path}\n"
             f"enableRarity={(settings.enableRarity)}\n"
@@ -645,26 +649,29 @@ def runAsHeadless():
 
         pairs = [config.strip().split('=') for config in configs]
 
+        print(pairs)
+
         settings.nftName                = pairs[0][1]
-        settings.nftsPerBatch           = int(pairs[1][1])
-        settings.save_path              = pairs[2][1]
-        settings.enableRarity           = pairs[3][1] == 'True'
-        settings.enableLogic            = pairs[4][1] == 'True'
-        settings.imageBool              = pairs[5][1] == 'True' 
-        settings.imageEnum              = pairs[6][1]
-        settings.animationBool          = pairs[7][1] == 'True'
-        settings.animationEnum          = pairs[8][1]
-        settings.modelBool              = pairs[9][1] == 'True'
-        settings.modelEnum              = pairs[10][1]
-        settings.batchToGenerate        = int(pairs[11][1])
-        settings.cardanoMetaDataBool    = pairs[12][1] == 'True'
-        settings.cardano_description    = pairs[13][1]
-        settings.erc721MetaData         = pairs[14][1] == 'True'
-        settings.erc721_description     = pairs[15][1]
-        settings.solanaMetaDataBool     = pairs[16][1] == 'True'
-        settings.solanaDescription      = pairs[17][1]
-        settings.enableCustomFields     = pairs[18][1] == 'True'
-        settings.customfieldsFile       = pairs[19][1]
+        settings.collectionSize         = int(pairs[1][1])
+        settings.nftsPerBatch           = int(pairs[2][1])
+        settings.save_path              = pairs[3][1]
+        settings.enableRarity           = pairs[4][1] == 'True'
+        settings.enableLogic            = pairs[5][1] == 'True'
+        settings.imageBool              = pairs[6][1] == 'True' 
+        settings.imageEnum              = pairs[7][1]
+        settings.animationBool          = pairs[8][1] == 'True'
+        settings.animationEnum          = pairs[9][1]
+        settings.modelBool              = pairs[10][1] == 'True'
+        settings.modelEnum              = pairs[11][1]
+        settings.batchToGenerate        = int(pairs[12][1])
+        settings.cardanoMetaDataBool    = pairs[13][1] == 'True'
+        settings.cardano_description    = pairs[14][1]
+        settings.erc721MetaData         = pairs[15][1] == 'True'
+        settings.erc721_description     = pairs[16][1]
+        settings.solanaMetaDataBool     = pairs[17][1] == 'True'
+        settings.solanaDescription      = pairs[18][1]
+        settings.enableCustomFields     = pairs[19][1] == 'True'
+        settings.customfieldsFile       = pairs[20][1]
 
     if args.save_path:
         settings.save_path = args.save_path
