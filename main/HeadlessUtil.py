@@ -43,4 +43,10 @@ def getPythonArgs():
                         help="Overwrite the save path in the config file"
                         )
 
+    parser.add_argument("--batch",
+                        dest="batch_number",
+                        required=False,
+                        help="Overwrite the batch number in the config file"
+                        )
+
     return (parser.parse_args(argv), parser)

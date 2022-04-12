@@ -637,7 +637,10 @@ def runAsHeadless():
         bpy.context.scene.my_tool.customfieldsFile = pairs[19][1]
 
     if args.save_path:
-        bpy.context.scene.my_tool.save_path = save_path
+        bpy.context.scene.my_tool.save_path = args.save_path
+
+    if args.batch_number:
+        bpy.context.scene.my_tool.batchToGenerate = args.batch_number
         
     #don't mind me, just copy-pasting code around...
     if args.operation == 'create-dna':
