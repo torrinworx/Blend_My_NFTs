@@ -481,7 +481,7 @@ class export_settings(bpy.types.Operator):
 
     def execute(self, context): 
         save_path = bpy.path.abspath(bpy.context.scene.my_tool.save_path)
-        filename = "Config.cfg"
+        filename = "config.cfg"
         
         settings = bpy.context.scene.my_tool;
 
@@ -516,7 +516,7 @@ class export_settings(bpy.types.Operator):
             output += "#Batch to generate" + "\n"
             output += "batchToGenerate=" + str(settings.batchToGenerate) + "\n"
             output += "\n"
-            output += "#Metadata Format"
+            output += "#Metadata Format" + "\n"
             output += "cardanoMetaDataBool=" + str(settings.cardanoMetaDataBool) + "\n"
             output += "cardano_description=" + settings.cardano_description + "\n"
             output += "erc721MetaData=" + str(settings.erc721MetaData) + "\n"
@@ -526,6 +526,7 @@ class export_settings(bpy.types.Operator):
             output += "\n"
             output += "#Enable Custom Fields" + "\n"
             output += "enableCustomFields=" + str(settings.enableCustomFields) + "\n"
+            output += "customfieldsFile=" + settings.customfieldsFile + "\n"
 
             print(output, file=f)
 
@@ -603,5 +604,102 @@ def unregister():
 
     del bpy.types.Scene.my_tool
 
+#For use when running from the command line
+from main import HeadlessUtil
+
+def runAsHeadless():
+    args, parser = HeadlessUtil.getPythonArgs()
+
+    with open(args.config_path, 'r') as f:
+        settings = [line.strip() for line in f.readlines() if not(line[0] == '#' or len(line.strip()) < 1)]
+
+        pairs = [setting.strip().split('=') for setting in settings]
+
+        bpy.context.scene.my_tool.nftName = pairs[0][1]
+        bpy.context.scene.my_tool.nftsPerBatch = int(pairs[1][1])
+        bpy.context.scene.my_tool.save_path = pairs[2][1]
+        bpy.context.scene.my_tool.enableRarity = bool(pairs[3][1])
+        bpy.context.scene.my_tool.enableLogic = bool(pairs[4][1])
+        bpy.context.scene.my_tool.imageBool = bool(pairs[5][1])
+        bpy.context.scene.my_tool.imageEnum = pairs[6][1]
+        bpy.context.scene.my_tool.animationBool = bool(pairs[7][1])
+        bpy.context.scene.my_tool.animationEnum = pairs[8][1]
+        bpy.context.scene.my_tool.modelBool = bool(pairs[9][1])
+        bpy.context.scene.my_tool.modelEnum = pairs[10][1]
+        bpy.context.scene.my_tool.batchToGenerate = int(pairs[11][1])
+        bpy.context.scene.my_tool.cardanoMetaDataBool = bool(pairs[12][1])
+        bpy.context.scene.my_tool.cardano_description = pairs[13][1]
+        bpy.context.scene.my_tool.erc721MetaData = bool(pairs[14][1])
+        bpy.context.scene.my_tool.erc721_description = pairs[15][1]
+        bpy.context.scene.my_tool.solanaMetaDataBool = bool(pairs[16][1])
+        bpy.context.scene.my_tool.solanaDescription = pairs[17][1]
+        bpy.context.scene.my_tool.enableCustomFields = bool(pairs[18][1])
+        bpy.context.scene.my_tool.customfieldsFile = pairs[19][1]
+        
+    #don't mind me, just copy-pasting code around...
+    if args.operation == 'create-dna':
+        nftName = bpy.context.scene.my_tool.nftName
+        maxNFTs = bpy.context.scene.my_tool.collectionSize
+        nftsPerBatch = bpy.context.scene.my_tool.nftsPerBatch
+        save_path = bpy.path.abspath(bpy.context.scene.my_tool.save_path)
+        logicFile = bpy.path.abspath(bpy.context.scene.my_tool.logicFile)
+
+        enableRarity = bpy.context.scene.my_tool.enableRarity
+        enableLogic = bpy.context.scene.my_tool.enableLogic
+
+        Blend_My_NFTs_Output, batch_json_save_path, nftBatch_save_path = make_directories(save_path)
+
+        DNA_Generator.send_To_Record_JSON(maxNFTs, nftsPerBatch, save_path, enableRarity, enableLogic, logicFile, Blend_My_NFTs_Output)
+        Batch_Sorter.makeBatches(nftName, maxNFTs, nftsPerBatch, save_path, batch_json_save_path)
+        
+    elif args.operation == 'generate-nfts':
+        nftName = bpy.context.scene.my_tool.nftName
+        save_path = bpy.path.abspath(bpy.context.scene.my_tool.save_path)
+        batchToGenerate = bpy.context.scene.my_tool.batchToGenerate
+        maxNFTs = bpy.context.scene.my_tool.collectionSize
+
+        Blend_My_NFTs_Output, batch_json_save_path, nftBatch_save_path = make_directories(save_path)
+
+        enableImages = bpy.context.scene.my_tool.imageBool
+        imageFileFormat = bpy.context.scene.my_tool.imageEnum
+
+        enableAnimations = bpy.context.scene.my_tool.animationBool
+        animationFileFormat = bpy.context.scene.my_tool.animationEnum
+
+        enableModelsBlender = bpy.context.scene.my_tool.modelBool
+        modelFileFormat = bpy.context.scene.my_tool.modelEnum
+
+        # fail state variables, set to no fail due to resume_failed_batch() Operator in BMNFTS_PT_GenerateNFTs Panel
+        fail_state = False
+        failed_batch = None
+        failed_dna = None
+        failed_dna_index = None
+
+        Exporter.render_and_save_NFTs(nftName, maxNFTs, batchToGenerate, batch_json_save_path, nftBatch_save_path, enableImages,
+                                      imageFileFormat, enableAnimations, animationFileFormat, enableModelsBlender,
+                                      modelFileFormat, fail_state, failed_batch, failed_dna, failed_dna_index
+                                      )
+    elif args.operation == 'refactor-batches':
+        class refactorData:
+            save_path = bpy.path.abspath(bpy.context.scene.my_tool.save_path)
+
+            custom_Fields_File = bpy.path.abspath(bpy.context.scene.my_tool.customfieldsFile)
+            enableCustomFields = bpy.context.scene.my_tool.enableCustomFields
+
+            cardanoMetaDataBool = bpy.context.scene.my_tool.cardanoMetaDataBool
+            solanaMetaDataBool = bpy.context.scene.my_tool.solanaMetaDataBool
+            erc721MetaData = bpy.context.scene.my_tool.erc721MetaData
+
+            cardano_description = bpy.context.scene.my_tool.cardano_description
+            solana_description = bpy.context.scene.my_tool.solana_description
+            erc721_description = bpy.context.scene.my_tool.erc721_description
+
+            Blend_My_NFTs_Output, batch_json_save_path, nftBatch_save_path = make_directories(save_path)
+
+        Refactorer.reformatNFTCollection(refactorData)
+
+        
 if __name__ == '__main__':
     register()
+    
+    runAsHeadless()
