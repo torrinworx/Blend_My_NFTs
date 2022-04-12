@@ -618,22 +618,22 @@ def runAsHeadless():
         bpy.context.scene.my_tool.nftName = pairs[0][1]
         bpy.context.scene.my_tool.nftsPerBatch = int(pairs[1][1])
         bpy.context.scene.my_tool.save_path = pairs[2][1]
-        bpy.context.scene.my_tool.enableRarity = bool(pairs[3][1])
-        bpy.context.scene.my_tool.enableLogic = bool(pairs[4][1])
-        bpy.context.scene.my_tool.imageBool = bool(pairs[5][1])
+        bpy.context.scene.my_tool.enableRarity = pairs[3][1] == 'True'
+        bpy.context.scene.my_tool.enableLogic = pairs[4][1] == 'True'
+        bpy.context.scene.my_tool.imageBool = pairs[5][1] == 'True' 
         bpy.context.scene.my_tool.imageEnum = pairs[6][1]
-        bpy.context.scene.my_tool.animationBool = bool(pairs[7][1])
+        bpy.context.scene.my_tool.animationBool = pairs[7][1] == 'True'
         bpy.context.scene.my_tool.animationEnum = pairs[8][1]
-        bpy.context.scene.my_tool.modelBool = bool(pairs[9][1])
+        bpy.context.scene.my_tool.modelBool = pairs[9][1] == 'True'
         bpy.context.scene.my_tool.modelEnum = pairs[10][1]
         bpy.context.scene.my_tool.batchToGenerate = int(pairs[11][1])
-        bpy.context.scene.my_tool.cardanoMetaDataBool = bool(pairs[12][1])
+        bpy.context.scene.my_tool.cardanoMetaDataBool = pairs[12][1] == 'True'
         bpy.context.scene.my_tool.cardano_description = pairs[13][1]
-        bpy.context.scene.my_tool.erc721MetaData = bool(pairs[14][1])
+        bpy.context.scene.my_tool.erc721MetaData = pairs[14][1] == 'True'
         bpy.context.scene.my_tool.erc721_description = pairs[15][1]
-        bpy.context.scene.my_tool.solanaMetaDataBool = bool(pairs[16][1])
+        bpy.context.scene.my_tool.solanaMetaDataBool = pairs[16][1] == 'True'
         bpy.context.scene.my_tool.solanaDescription = pairs[17][1]
-        bpy.context.scene.my_tool.enableCustomFields = bool(pairs[18][1])
+        bpy.context.scene.my_tool.enableCustomFields = pairs[18][1] == 'True'
         bpy.context.scene.my_tool.customfieldsFile = pairs[19][1]
 
     if args.save_path:
