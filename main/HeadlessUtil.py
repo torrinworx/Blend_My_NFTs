@@ -29,14 +29,14 @@ def getPythonArgs():
                         help="Provide the full file path of the config.cfg file generated from the addon"
                         )
 
-    parser.add_argument("-o", "--operation",
+    parser.add_argument("--operation",
                         dest="operation",
                         choices=['create-dna', 'generate-nfts', 'refactor-batches'],
                         required=True,
                         help="Choose which operation you want to perform"
                         )
 
-    parser.add_argument("-s", "--save-path",
+    parser.add_argument("--save-path",
                         dest="save_path",
                         metavar='FOLDER',
                         required=False,
