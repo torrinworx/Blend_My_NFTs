@@ -36,4 +36,11 @@ def getPythonArgs():
                         help="Choose which operation you want to perform"
                         )
 
+    parser.add_argument("-s", "--save-path",
+                        dest="save_path",
+                        metavar='FOLDER',
+                        required=False,
+                        help="Overwrite the save path in the config file"
+                        )
+
     return (parser.parse_args(argv), parser)

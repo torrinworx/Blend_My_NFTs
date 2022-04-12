@@ -635,6 +635,9 @@ def runAsHeadless():
         bpy.context.scene.my_tool.solanaDescription = pairs[17][1]
         bpy.context.scene.my_tool.enableCustomFields = bool(pairs[18][1])
         bpy.context.scene.my_tool.customfieldsFile = pairs[19][1]
+
+    if args.save_path:
+        bpy.context.scene.my_tool.save_path = save_path
         
     #don't mind me, just copy-pasting code around...
     if args.operation == 'create-dna':
