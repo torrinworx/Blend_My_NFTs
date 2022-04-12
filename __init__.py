@@ -1,8 +1,8 @@
 bl_info = {
     "name": "Blend_My_NFTs",
     "author": "Torrin Leonard, This Cozy Studio Inc",
-    "version": (3, 0, 0),
-    "blender": (3, 0, 0),
+    "version": (3, 1, 0),
+    "blender": (3, 1, 3),
     "location": "View3D",
     "description": "An open source, free to use Blender add-on that enables you to create thousands of unique images, animations, and 3D models.",
     "category": "Development",

@@ -100,9 +100,11 @@ def reconstructDNA(deconstructedDNA):
     return (''.join(reconstructed_DNA.split('-', 1)))
 
 def strip_empty_variant(num_list):
+    """Strips empty variants if full attribute collection. Used for processing below."""
     for i in num_list:
         var_list = num_list[i]
-        var_list.remove("0")
+        if "0" in var_list:
+            var_list.remove("0")
         num_list[i] = var_list
     return num_list
 
