@@ -108,6 +108,7 @@ The YouTube tutorials use three different .blend example files. This repository 
 - [Notes on Meta Data and Standards](#notes-on-meta-data-and-standards)
 - [Calculating Maximum Number of NFTs (Max Combinations)](#calculating-maximum-number-of-nfts-max-combinations)
 - [I have my NFTs, what next?](#i-have-my-nfts-what-next)
+- [Running Blend_My_NFTs Headlessly](#running-blend_my_nfts-headlessly)
 
 
 # Setup and Installation
@@ -719,6 +720,62 @@ These meta data templates are based on the common standards for the given blockc
 OpenSea and other NFT marketplaces and tools might require a specific naming convention for NFT media and metadata files. Blend_My_NFTs doesn't currently follow these file naming conventions, but this will be added in a future version. For now, the best no code workaround is to use a bulk file renamer suggested by `itachimoonshot | Kaavan Labs` in the This Cozy Studio Discord server: 
 
 [Microsoft Power Toys - Power Rename](https://docs.microsoft.com/en-us/windows/powertoys/#powerrename)
+
+
+## Running Blend_My_NFTs Headlessly
+
+If you are working with Blender in an environment where you can't use the user interface to change settings within the addon, such as Google Colab, you can instead pass in a config file containing the settings from your local instance.
+
+In order to generate this config file, you can use the `Export BMNFT settings to a file` button.
+![image](https://user-images.githubusercontent.com/16054364/162890685-142ebefe-9ec1-4ff9-9f28-60e800345444.png)
+This file will be saved in the folder indicated by the `Save Path` field.
+
+Once you have this config file, you can run this addon in Blender headlessly by running this command from the directory of your Blender installation:
+
+On Windows
+```
+.\blender.exe --background <path to your .blend file> --python <path to Blend_My_NFTs __init__.py> -- --config-file <path to the generated config.cfg> --operation create-dna
+```
+
+On Linux
+```
+./blender --background <path to your .blend file> --python <Path to Blend_My_NFTs __init__.py> -- --config-file <path to the generated config.cfg> --operation create-dna
+```
+
+There are two mandatory arguments that you need to run this script from the terminal/command line:
+  - Config file location
+    This argument tells Blend_My_NFTs where to find your `config.cfg` file in order to load your desired settings.
+    
+    `--config-file`
+  - Operation
+    This argument tells Blend_My_NFTs which operation you want to perform.
+    
+    `--operation` or `-o` with one of the following three options afterwards:
+    ```
+    create-dna
+    generate-nfts
+    refactor-batches
+    ```
+
+There are also additional optional arguments that you can use:
+  - Change save location
+    This argument takes priority over the save path indicated in `config.cfg`.
+    
+    `--save-path` or `-s`
+
+You can also view this information from your terminal/command line by running:
+
+On Windows
+```
+.\blender.exe --background --python <path to Blend_My_NFTs __init__.py> -- --help
+```
+
+On Linux
+```
+./blender --background --python <Path to Blend_My_NFTs __init__.py> -- --help
+```
+
+It is important that you place the python arguments after the `--` because of how blender parses arguments from the command line. More info about blender command line arguments can be found [here](https://docs.blender.org/manual/en/3.0/advanced/command_line/arguments.html).
 
 More coming soon...
 
