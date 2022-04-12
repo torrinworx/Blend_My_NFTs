@@ -744,10 +744,12 @@ On Linux
 
 There are two mandatory arguments that you need to run this script from the terminal/command line:
   - Config file location
+    
     This argument tells Blend_My_NFTs where to find your `config.cfg` file in order to load your desired settings.
     
     `--config-file`
   - Operation
+    
     This argument tells Blend_My_NFTs which operation you want to perform.
     
     `--operation` or `-o` with one of the following three options afterwards:
@@ -759,6 +761,7 @@ There are two mandatory arguments that you need to run this script from the term
 
 There are also additional optional arguments that you can use:
   - Change save location
+    
     This argument takes priority over the save path indicated in `config.cfg`.
     
     `--save-path` or `-s`
