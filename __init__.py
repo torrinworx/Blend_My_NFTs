@@ -609,11 +609,37 @@ def unregister():
 from main import HeadlessUtil
 
 def runAsHeadless():
+    def dumpSettings(settings):
+        output = (
+            f"nftName={settings.nftName}\n"
+            f"nftsPerBatch={str(settings.nftsPerBatch)}\n"
+            f"save_path={settings.save_path}\n"
+            f"enableRarity={(settings.enableRarity)}\n"
+            f"enableLogic={str(settings.enableLogic)}\n"
+            f"imageBool={str(settings.imageBool)}\n"
+            f"imageEnum={settings.imageEnum}\n"
+            f"animationBool={str(settings.animationBool)}\n"
+            f"animationEnum={settings.animationEnum}\n"
+            f"modelBool={str(settings.modelBool)}\n"
+            f"modelEnum={settings.modelEnum}\n"
+            f"batchToGenerate={str(settings.batchToGenerate)}\n"
+            f"cardanoMetaDataBool={str(settings.cardanoMetaDataBool)}\n"
+            f"cardano_description={settings.cardano_description}\n"
+            f"erc721MetaData={str(settings.erc721MetaData)}\n"
+            f"erc721_description={settings.erc721_description}\n"
+            f"solanaMetaDataBool={str(settings.solanaMetaDataBool)}\n"
+            f"solana_description={settings.solana_description}\n"
+            f"enableCustomFields={str(settings.enableCustomFields)}\n"
+            f"customfieldsFile={settings.customfieldsFile}\n"
+        )
+        print(output)
+
     args, parser = HeadlessUtil.getPythonArgs()
 
     settings = bpy.context.scene.my_tool
 
-    """
+    dumpSettings(settings)
+
     with open(args.config_path, 'r') as f:
         configs = [line.strip() for line in f.readlines() if not(line[0] == '#' or len(line.strip()) < 1)]
 
@@ -639,14 +665,15 @@ def runAsHeadless():
         settings.solanaDescription      = pairs[17][1]
         settings.enableCustomFields     = pairs[18][1] == 'True'
         settings.customfieldsFile       = pairs[19][1]
-    """
-    
+
     if args.save_path:
         settings.save_path = args.save_path
 
     if args.batch_number:
         settings.batchToGenerate = args.batch_number
         
+    dumpSettings(settings)
+
     #don't mind me, just copy-pasting code around...
     if args.operation == 'create-dna':
         nftName = settings.nftName

@@ -22,6 +22,13 @@ def getPythonArgs():
     
     parser = argparse.ArgumentParser(description=usage_text)
     
+    parser.add_argument("--config-file",
+                        dest="config_path",
+                        metavar='FILE',
+                        required=True,
+                        help="Provide the full file path of the config.cfg file generated from the addon"
+                        )
+
     parser.add_argument("--operation",
                         dest="operation",
                         choices=['create-dna', 'generate-nfts', 'refactor-batches'],
@@ -39,7 +46,6 @@ def getPythonArgs():
     parser.add_argument("--batch",
                         dest="batch_number",
                         required=False,
-                        type=int,
                         help="Overwrite the batch number in the config file"
                         )
 
