@@ -642,14 +642,14 @@ def runAsHeadless():
 
     settings = bpy.context.scene.my_tool
 
-    dumpSettings(settings)
+    #dumpSettings(settings)
 
     with open(args.config_path, 'r') as f:
         configs = [line.strip() for line in f.readlines() if not(line[0] == '#' or len(line.strip()) < 1)]
 
         pairs = [config.strip().split('=') for config in configs]
 
-        print(pairs)
+        #print(pairs)
 
         settings.nftName                = pairs[0][1]
         settings.collectionSize         = int(pairs[1][1])
@@ -679,7 +679,7 @@ def runAsHeadless():
     if args.batch_number:
         settings.batchToGenerate = args.batch_number
         
-    dumpSettings(settings)
+    #dumpSettings(settings)
 
     #don't mind me, just copy-pasting code around...
     if args.operation == 'create-dna':
