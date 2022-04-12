@@ -746,7 +746,7 @@ There are two mandatory arguments that you need to run this script from the term
   - Config file location
     This argument tells Blend_My_NFTs where to find your `config.cfg` file in order to load your desired settings.
     
-    `--config-file` or `-c`
+    `--config-file`
   - Operation
     This argument tells Blend_My_NFTs which operation you want to perform.
     
