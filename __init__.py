@@ -613,6 +613,7 @@ def runAsHeadless():
 
     settings = bpy.context.scene.my_tool
 
+    """
     with open(args.config_path, 'r') as f:
         configs = [line.strip() for line in f.readlines() if not(line[0] == '#' or len(line.strip()) < 1)]
 
@@ -638,7 +639,8 @@ def runAsHeadless():
         settings.solanaDescription      = pairs[17][1]
         settings.enableCustomFields     = pairs[18][1] == 'True'
         settings.customfieldsFile       = pairs[19][1]
-
+    """
+    
     if args.save_path:
         settings.save_path = args.save_path
 
