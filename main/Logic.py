@@ -6,8 +6,6 @@ import json
 import random
 import collections
 
-removeList = [".gitignore", ".DS_Store"]
-
 
 # Helper Functions
 def isAttorVar(hierarchy, items_List):

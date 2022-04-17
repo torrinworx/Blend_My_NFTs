@@ -2,8 +2,8 @@
 #Used this as a basis:
 #https://developer.blender.org/diffusion/B/browse/master/release/scripts/templates_py/background_job.py
 
-import argparse
 import sys
+import argparse
 
 def getPythonArgs():
 

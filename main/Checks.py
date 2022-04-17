@@ -12,20 +12,11 @@ import json
 from collections import Counter, defaultdict
 
 from . import DNA_Generator, get_combinations
-
-class bcolors:
-    """
-    The colour of console messages.
-    """
-
-    OK = '\033[92m'  # GREEN
-    WARNING = '\033[93m'  # YELLOW
-    ERROR = '\033[91m'  # RED
-    RESET = '\033[0m'  # RESET COLOR
+from .Constants import bcolors, removeList
 
 
 # Checks:
-def check_Scene():
+def check_Scene():  # Not complete
     """
     Checks if Blender file Scene follows the Blend_My_NFTs conventions. If not, raises error with all instances of
     violations.
@@ -55,7 +46,6 @@ def check_Scene():
     print(collections)
 
     # attribute_naming_conventions
-
 
 def check_Rarity(hierarchy, DNAList, save_path):
     """Checks rarity percentage of each Variant, then sends it to RarityData.json in NFT_Data folder."""
@@ -141,6 +131,8 @@ def check_FailedBatches(batch_json_save_path):
 
     if os.path.isdir(batch_json_save_path):
         batch_folders = os.listdir(batch_json_save_path)
+
+        batch_folders = [x for x in batch_folders if (x not in removeList)]
 
         for i in batch_folders:
             batch = json.load(open(os.path.join(batch_json_save_path, i)))

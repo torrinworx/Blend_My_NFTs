@@ -8,7 +8,7 @@ import json
 import shutil
 from . import Metadata
 
-removeList = [".gitignore", ".DS_Store"]
+from .Constants import bcolors, removeList
 
 
 def getNFType(nftBatch_save_path):
