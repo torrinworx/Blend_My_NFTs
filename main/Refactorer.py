@@ -8,7 +8,7 @@ import json
 import shutil
 from . import Metadata
 
-from .Constants import bcolors, removeList
+from .Constants import bcolors, removeList, remove_file_by_extension
 
 
 def getNFType(nftBatch_save_path):
@@ -17,9 +17,8 @@ def getNFType(nftBatch_save_path):
     models = False
     metaData = False
 
-    batch1 = [x for x in os.listdir(nftBatch_save_path) if (x not in removeList)][0]  # Gets first Batch and ignores removeList files
-    batchContent = os.listdir(os.path.join(nftBatch_save_path, batch1))
-    batchContent = [x for x in batchContent if (x not in removeList)]
+    batch1 = sorted(remove_file_by_extension(os.listdir(nftBatch_save_path)))[0]
+    batchContent = remove_file_by_extension(os.listdir(os.path.join(nftBatch_save_path, batch1)))
 
     if "Images" in batchContent:
         images = True

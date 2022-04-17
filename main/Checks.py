@@ -12,7 +12,7 @@ import json
 from collections import Counter, defaultdict
 
 from . import DNA_Generator, get_combinations
-from .Constants import bcolors, removeList
+from .Constants import bcolors, removeList, remove_file_by_extension
 
 
 # Checks:
@@ -130,9 +130,7 @@ def check_FailedBatches(batch_json_save_path):
     failed_dna_index = None
 
     if os.path.isdir(batch_json_save_path):
-        batch_folders = os.listdir(batch_json_save_path)
-
-        batch_folders = [x for x in batch_folders if (x not in removeList)]
+        batch_folders = remove_file_by_extension(os.listdir(batch_json_save_path))
 
         for i in batch_folders:
             batch = json.load(open(os.path.join(batch_json_save_path, i)))

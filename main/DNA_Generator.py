@@ -11,7 +11,7 @@ import random
 from functools import partial
 from .loading_animation import Loader
 from . import Rarity, Logic, Checks
-from .Constants import bcolors, removeList
+from .Constants import bcolors, removeList, remove_file_by_extension
 
 
 def get_hierarchy():
