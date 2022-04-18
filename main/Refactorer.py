@@ -73,9 +73,12 @@ def renameMetaData(rename_MetaData_Variables):
             cardanoJsonNew = "Cardano_" + i
             cardanoNewName = name.split("_")[0] + "_" + str(file_num)
 
-            metaDataDictCardano = Metadata.returnCardanoMetaData(cardanoNewName, NFT_DNA, NFT_Variants, rename_MetaData_Variables.custom_Fields_File, rename_MetaData_Variables.enableCustomFields, rename_MetaData_Variables.cardano_description)
+            metaDataDictCardano = Metadata.returnCardanoMetaData(cardanoNewName, NFT_DNA, NFT_Variants,
+                                                                 rename_MetaData_Variables.custom_Fields,
+                                                                 rename_MetaData_Variables.enableCustomFields,
+                                                                 rename_MetaData_Variables.cardano_description)
 
-            sendMetaDataToJson(metaDataDictCardano, cardanoMetaDataPath, cardanoJsonNew,)
+            sendMetaDataToJson(metaDataDictCardano, cardanoMetaDataPath, cardanoJsonNew, )
 
         if rename_MetaData_Variables.solanaMetaDataBool:
             if not os.path.exists(solanaMetaDataPath):
@@ -84,7 +87,10 @@ def renameMetaData(rename_MetaData_Variables):
             solanaJsonNew = "Solana_" + i
             solanaNewName = name.split("_")[0] + "_" + str(file_num)
 
-            metaDataDictSolana = Metadata.returnSolanaMetaData(solanaNewName, NFT_DNA, NFT_Variants, rename_MetaData_Variables.custom_Fields_File, rename_MetaData_Variables.enableCustomFields, rename_MetaData_Variables.solana_description)
+            metaDataDictSolana = Metadata.returnSolanaMetaData(solanaNewName, NFT_DNA, NFT_Variants,
+                                                               rename_MetaData_Variables.custom_Fields,
+                                                               rename_MetaData_Variables.enableCustomFields,
+                                                               rename_MetaData_Variables.solana_description)
 
             sendMetaDataToJson(metaDataDictSolana, solanaMetaDataPath, solanaJsonNew)
 
@@ -95,7 +101,10 @@ def renameMetaData(rename_MetaData_Variables):
             erc721JsonNew = "Erc721_" + i
             erc721NewName = name.split("_")[0] + "_" + str(file_num)
 
-            metaDataDictErc721 = Metadata.returnErc721MetaData(erc721NewName, NFT_DNA, NFT_Variants, rename_MetaData_Variables.custom_Fields_File, rename_MetaData_Variables.enableCustomFields, rename_MetaData_Variables.erc721_description)
+            metaDataDictErc721 = Metadata.returnErc721MetaData(erc721NewName, NFT_DNA, NFT_Variants,
+                                                               rename_MetaData_Variables.custom_Fields,
+                                                               rename_MetaData_Variables.enableCustomFields,
+                                                               rename_MetaData_Variables.erc721_description)
 
             sendMetaDataToJson(metaDataDictErc721, erc721MetaDataPath, erc721JsonNew)
     return
@@ -216,7 +225,7 @@ def reformatNFTCollection(refactor_panel_input):
         solanaMetaDataBool = refactor_panel_input.solanaMetaDataBool
         erc721MetaData = refactor_panel_input.erc721MetaData
 
-        custom_Fields_File = refactor_panel_input.custom_Fields_File
+        custom_Fields = refactor_panel_input.custom_Fields
         enableCustomFields = refactor_panel_input.enableCustomFields
 
 

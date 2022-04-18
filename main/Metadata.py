@@ -6,10 +6,9 @@
 # This file returns the specified meta data format to the Exporter.py for a given NFT DNA.
 
 import bpy
-import json
 
 # Cardano Template
-def returnCardanoMetaData(name, NFT_DNA, NFT_Variants, custom_Fields_File, enableCustomFields, cardano_description):
+def returnCardanoMetaData(name, NFT_DNA, NFT_Variants, custom_Fields, enableCustomFields, cardano_description):
     metaDataDictCardano = {"721": {
         "<policy_id>": {
             name: {
@@ -27,14 +26,13 @@ def returnCardanoMetaData(name, NFT_DNA, NFT_Variants, custom_Fields_File, enabl
 
     # Custom Fields:
     if enableCustomFields:
-        custom_Fields = json.load(open(custom_Fields_File))
         for i in custom_Fields:
             metaDataDictCardano["721"]["<policy_id>"][name][i] = custom_Fields[i]
 
     return metaDataDictCardano
 
 # Solana Template
-def returnSolanaMetaData(name, NFT_DNA, NFT_Variants, custom_Fields_File, enableCustomFields, solana_description):
+def returnSolanaMetaData(name, NFT_DNA, NFT_Variants, custom_Fields, enableCustomFields, solana_description):
     metaDataDictSolana = {"name": name, "symbol": "", "description": solana_description, "seller_fee_basis_points": None,
                           "image": "", "animation_url": "", "external_url": ""}
 
@@ -50,7 +48,6 @@ def returnSolanaMetaData(name, NFT_DNA, NFT_Variants, custom_Fields_File, enable
 
     # Custom Fields:
     if enableCustomFields:
-        custom_Fields = json.load(open(custom_Fields_File))
         for i in custom_Fields:
             dictionary = {
                 "trait_type": i,
@@ -72,7 +69,7 @@ def returnSolanaMetaData(name, NFT_DNA, NFT_Variants, custom_Fields_File, enable
     return metaDataDictSolana
 
 # ERC721 Template
-def returnErc721MetaData(name, NFT_DNA, NFT_Variants, custom_Fields_File, enableCustomFields, erc721_description):
+def returnErc721MetaData(name, NFT_DNA, NFT_Variants, custom_Fields, enableCustomFields, erc721_description):
     metaDataDictErc721 = {
         "name": name,
         "description": erc721_description,
@@ -92,7 +89,6 @@ def returnErc721MetaData(name, NFT_DNA, NFT_Variants, custom_Fields_File, enable
 
     # Custom Fields:
     if enableCustomFields:
-        custom_Fields = json.load(open(custom_Fields_File))
         for i in custom_Fields:
             dictionary = {
                 "trait_type": i,

@@ -13,6 +13,16 @@ bl_info = {
 
 import bpy
 from bpy.app.handlers import persistent
+from bpy.props import (IntProperty,
+                       BoolProperty,
+                       StringProperty,
+                       EnumProperty,
+                       CollectionProperty)
+
+from bpy.types import (Operator,
+                       Panel,
+                       PropertyGroup,
+                       UIList)
 
 import os
 import sys
@@ -22,24 +32,40 @@ import importlib
 # "a little hacky bs" - Matthew TheBrochacho ;)
 sys.path.append(os.path.dirname(os.path.realpath(__file__)))
 
-if bpy in locals():
-        importlib.reload(DNA_Generator)
-        importlib.reload(Batch_Sorter)
-        importlib.reload(Exporter)
-        importlib.reload(Refactorer)
-        importlib.reload(get_combinations)
-        importlib.reload(Checks)
-        importlib.reload(HeadlessUtil)
-else:
-    from main import \
-        DNA_Generator, \
-        Batch_Sorter, \
-        Exporter, \
-        Refactorer, \
-        get_combinations, \
-        Checks, \
-        HeadlessUtil
+from main import \
+    Batch_Sorter, \
+    Checks, \
+    DNA_Generator, \
+    Exporter, \
+    get_combinations, \
+    HeadlessUtil, \
+    loading_animation, \
+    Logic, \
+    Metadata, \
+    Rarity, \
+    Refactorer, \
+    UILists
 
+if "bpy" in locals():
+
+    modules = {
+        "Batch_Sorter": Batch_Sorter,
+        "Checks": Checks,
+        "DNA_Generator": DNA_Generator,
+        "Exporter": Exporter,
+        "get_combinations": get_combinations,
+        "HeadlessUtil": HeadlessUtil,
+        "loading_animation": loading_animation,
+        "Logic": Logic,
+        "Metadata": Metadata,
+        "Rarity": Rarity,
+        "Refactorer": Refactorer,
+        "UILists": UILists
+    }
+
+    for i in modules:
+        if i in locals():
+            importlib.reload(modules[i])
 
 # ======== Persistant UI Refresh ======== #
 
@@ -433,17 +459,22 @@ class refactor_Batches(bpy.types.Operator):
     bl_description = 'This action cannot be undone.'
     bl_options = {'REGISTER', 'INTERNAL'}
 
+    reverse_order: BoolProperty(
+        default=False,
+        name="Reverse Order")
+
     @classmethod
     def poll(cls, context):
-        return True
+        return bool(context.scene.custom)
 
     def execute(self, context):
 
         class refactor_panel_input:
+
             save_path = bpy.path.abspath(bpy.context.scene.input_tool.save_path)
 
-            custom_Fields_File = bpy.path.abspath(bpy.context.scene.input_tool.customfieldsFile)
             enableCustomFields = bpy.context.scene.input_tool.enableCustomFields
+            custom_Fields = {}
 
             cardanoMetaDataBool = bpy.context.scene.input_tool.cardanoMetaDataBool
             solanaMetaDataBool = bpy.context.scene.input_tool.solanaMetaDataBool
@@ -455,6 +486,26 @@ class refactor_Batches(bpy.types.Operator):
 
             Blend_My_NFTs_Output, batch_json_save_path, nftBatch_save_path = make_directories(save_path)
 
+        # Handling Custom Fields UIList input:
+        if refactor_panel_input.enableCustomFields:
+            scn = context.scene
+            if self.reverse_order:
+                for i in range(scn.custom_index, -1, -1):
+                    item = scn.custom[i]
+                    if item.field_name in list(refactor_panel_input.custom_Fields.keys()):
+                        raise ValueError(f"A duplicate of '{item.field_name}' was found. Please ensure all Custom Metadata field Names are unique.")
+                    else:
+                        refactor_panel_input.custom_Fields[item.field_name] = item.field_value
+            else:
+                for item in scn.custom:
+                    if item.field_name in list(refactor_panel_input.custom_Fields.keys()):
+                        raise ValueError(f"A duplicate of '{item.field_name}' was found. Please ensure all Custom Metadata field Names are unique.")
+                    else:
+                        refactor_panel_input.custom_Fields[item.field_name] = item.field_value
+
+        print(refactor_panel_input.custom_Fields)
+
+        # Passing info to main functions for refactoring:
         Refactorer.reformatNFTCollection(refactor_panel_input)
         self.report({'INFO'}, "Batches Refactored, MetaData created!")
 
@@ -671,9 +722,28 @@ class BMNFTS_PT_Refactor(bpy.types.Panel):
 
         row = layout.row()
         row.prop(input_tool_scene, "enableCustomFields")
+
         if bpy.context.scene.input_tool.enableCustomFields:
+            layout = self.layout
+            scn = bpy.context.scene
+
+            rows = 2
             row = layout.row()
-            row.prop(input_tool_scene, "customfieldsFile")
+            row.template_list("CUSTOM_UL_items", "", scn, "custom", scn, "custom_index", rows=rows)
+
+            col = row.column(align=True)
+            col.operator("custom.list_action", icon='ZOOM_IN', text="").action = 'ADD'
+            col.operator("custom.list_action", icon='ZOOM_OUT', text="").action = 'REMOVE'
+            col.separator()
+            col.operator("custom.list_action", icon='TRIA_UP', text="").action = 'UP'
+            col.operator("custom.list_action", icon='TRIA_DOWN', text="").action = 'DOWN'
+
+            row = layout.row()
+            col = row.column(align=True)
+            row = col.row(align=True)
+            row.label(text=f"*Field Names must be unique.")
+            row = col.row(align=True)
+            row.operator("custom.clear_list", icon="X")
 
         row = layout.row()
         self.layout.operator("refactor.batches", icon='FOLDER_REDIRECT', text="Refactor Batches & Create Metadata")
@@ -714,6 +784,11 @@ class BMNFTS_PT_Other(bpy.types.Panel):
         row.operator("wm.url_open", text="YouTube Tutorials",
                      icon='URL').url = "https://www.youtube.com/watch?v=ygKJYz4BjRs&list=PLuVvzaanutXcYtWmPVKu2bx83EYNxLRsX"
 
+        row = layout.row()
+        row.operator("wm.url_open", text="Join Our Discord Community!",
+                     icon='URL').url = "https://discord.gg/UpZt5Un57t"
+
+
 
 # ======== Blender add-on register/unregister handling ======== #
 classes = (
@@ -732,19 +807,24 @@ classes = (
     BMNFTS_PT_GenerateNFTs,
     BMNFTS_PT_Refactor,
     BMNFTS_PT_Other,
-)
+) + UILists.classes_UILists
 
 def register():
     for cls in classes:
         bpy.utils.register_class(cls)
 
     bpy.types.Scene.input_tool = bpy.props.PointerProperty(type=BMNFTS_PGT_Input_Properties)
+    bpy.types.Scene.custom = CollectionProperty(type=UILists.CUSTOM_objectCollection)
+    bpy.types.Scene.custom_index = IntProperty()
+
 
 def unregister():
-    for cls in classes:
+    for cls in reversed(classes):
         bpy.utils.unregister_class(cls)
 
     del bpy.types.Scene.input_tool
+    del bpy.types.Scene.custom
+    del bpy.types.Scene.custom_index
 
 
 if __name__ == '__main__':
