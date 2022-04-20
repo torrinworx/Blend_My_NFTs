@@ -27,7 +27,7 @@ def select_material(materialList):
     for x in rarity_List_Of_i:
         if x == 0:
             ifZeroBool = True
-            return
+            break
         elif x != 0:
             ifZeroBool = False
 
@@ -36,7 +36,7 @@ def select_material(materialList):
     elif not ifZeroBool:
         selected_material = random.choices(number_List_Of_i, weights=rarity_List_Of_i, k=1)
 
-    return selected_material
+    return selected_material[0]
 
 def get_variant_att_index(variant, hierarchy):
     variant_attribute = None
@@ -49,7 +49,6 @@ def get_variant_att_index(variant, hierarchy):
     attribute_index = list(hierarchy.keys()).index(variant_attribute)
     variant_order_num = variant.split("_")[1]
     return attribute_index, variant_order_num
-
 
 def match_DNA_to_Variant(hierarchy, singleDNA):
     """
@@ -78,80 +77,24 @@ def apply_materials(hierarchy, singleDNA, materialsFile):
     list in the Variant_Material.json file.
     """
 
-    deconstructed_DNA = singleDNA.split("-")
-    singelDNADict = match_DNA_to_Variant(hierarchy, singleDNA)
-
+    singleDNADict = match_DNA_to_Variant(hierarchy, singleDNA)
     materialsFile = json.load(open(materialsFile))
-
     deconstructed_MaterialDNA = {}
 
-    for a in singelDNADict:
+    for a in singleDNADict:
+        complete = False
         for b in materialsFile:
-            print(f"{singelDNADict[a]} = {b}")
-            if singelDNADict[a] == b:
-                deconstructed_MaterialDNA[a] = select_material(materialsFile[b]['Material List'])
+            if singleDNADict[a] == b:
+                mat = select_material(materialsFile[b]['Material List'])
+                deconstructed_MaterialDNA[a] = mat
+                complete = True
+        if not complete:
+            deconstructed_MaterialDNA[a] = "0"
 
+    material_DNA = ""
+    for a in deconstructed_MaterialDNA:
+        num = "-" + str(deconstructed_MaterialDNA[a])
+        material_DNA += num
+    material_DNA = ''.join(material_DNA.split('-', 1))
 
-
-        # for variant_m in materialsFile:
-        #     if
-        #
-        #
-        #         materialList = materialsFile[variant_m]['Material List']
-        #         selected_material = select_material(materialList)
-        #
-        #         attribute_index, variant_order_num = get_variant_att_index(variant_m, hierarchy)
-        #
-        #         if variant_order_num == deconstructed_DNA[attribute_index]:
-        #             deconstructed_MaterialDNA[attribute_index] = selected_material
-
-
-    return singleDNA
-
-
-
-
-
-    # As of now deconstructed_MaterialDNA only has variants and attribute_index's with materials applied, now add '0' (empty) material variant to each appropriate attribute slot
-
-
-
-
-
-
-
-
-
-
-
-            # This code should be in the Exporter:
-            #
-            # if not materialsFile[variant]['Variant Objects']:
-            #     """
-            #     If objects to apply material to not specified, apply to all objects in Variant collection.
-            #     """
-            #
-            #     for obj in bpy.data.collections[variant].all_objects:
-            #         selected_object = bpy.data.objects.get(obj)
-            #         selected_object.active_material = selected_material
-            #
-            # if materialsFile[variant]['Variant Objects']:
-            #     """
-            #     If objects to apply material to are specified, apply material only to objects specified withing the Variant collection.
-            #     """
-            #     for obj in materialsFile[variant]['Variant Objects']:
-            #         selected_object = bpy.data.objects.get(obj)
-            #         selected_object.active_material = selected_material
-
-        # material_name = variant[]
-        #
-        # material = bpy.data.materials.get(material_name)
-        # if material is None:
-        #     material = bpy.data.materials.new(material_name)
-        # material.use_nodes = True
-        #
-        # principled_bsdf = material.node_tree.nodes['Principled BSDF']
-        # principled_bsdf.inputs[0].default_value = selected_colour_RGBA
-        #
-        # selected_object.active_material = material
-
+    return f"{singleDNA}:{material_DNA}"

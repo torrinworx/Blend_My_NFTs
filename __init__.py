@@ -394,8 +394,7 @@ class createData(bpy.types.Operator):
         enableLogic = bpy.context.scene.input_tool.enableLogic
         enable_Logic_Json = bpy.context.scene.input_tool.enable_Logic_Json
         logicFile = bpy.path.abspath(bpy.context.scene.input_tool.logicFile)
-        Logic_Dict = {}
-        
+
         enableMaterials = bpy.context.scene.input_tool.enableMaterials
         materialsFile = bpy.path.abspath(bpy.context.scene.input_tool.materialsFile)
 
@@ -408,6 +407,7 @@ class createData(bpy.types.Operator):
                 DNA_Generator.send_To_Record_JSON(collectionSize, nftsPerBatch, save_path, enableRarity, enableLogic, logicFile,
                                                   enableMaterials, materialsFile, Blend_My_NFTs_Output)
                 Batch_Sorter.makeBatches(nftName, collectionSize, nftsPerBatch, save_path, batch_json_save_path)
+
             if enable_Logic_Json and not logicFile:
                 self.report({'ERROR'}, f"No Logic.json file path set. Please set the file path to your Logic.json file.")
 
@@ -482,6 +482,9 @@ class exportNFTs(bpy.types.Operator):
         enableModelsBlender = bpy.context.scene.input_tool.modelBool
         modelFileFormat = bpy.context.scene.input_tool.modelEnum
 
+        enableMaterials = bpy.context.scene.input_tool.enableMaterials
+        materialsFile = bpy.path.abspath(bpy.context.scene.input_tool.materialsFile)
+
         # fail state variables, set to no fail due to resume_failed_batch() Operator in BMNFTS_PT_GenerateNFTs Panel
         fail_state = False
         failed_batch = None
@@ -491,7 +494,8 @@ class exportNFTs(bpy.types.Operator):
         Exporter.render_and_save_NFTs(nftName, collectionSize, batchToGenerate, batch_json_save_path,
                                       nftBatch_save_path, enableImages,
                                       imageFileFormat, enableAnimations, animationFileFormat, enableModelsBlender,
-                                      modelFileFormat, fail_state, failed_batch, failed_dna, failed_dna_index
+                                      modelFileFormat, fail_state, failed_batch, failed_dna, failed_dna_index,
+                                      enableMaterials, materialsFile
                                       )
 
         self.report({'INFO'}, f"All NFTs generated for batch {batchToGenerate}!")
@@ -912,43 +916,6 @@ class BMNFTS_PT_Other(bpy.types.Panel):
                      icon='URL').url = "https://discord.gg/UpZt5Un57t"
 
 
-# ======== UI Panels ======== #
-class BMNFTS_PT_Materials_Panel(bpy.types.Panel):
-    bl_label = "Materials"
-    bl_idname = "BMNFTS_PT_Materials_Panel"
-    bl_space_type = 'VIEW_3D'
-    bl_region_type = 'UI'
-    bl_category = 'Blend_My_NFTs'
-
-    def draw(self, context):
-        layout = self.layout
-        scene = context.scene
-        input_tool_scene = scene.input_tool
-
-        layout.label(text=f"Running Blend_My_NFTs Headless:")
-
-        row = layout.row()
-        self.layout.operator("export.settings", icon='FOLDER_REDIRECT', text="Export BMNFTs Settings to a File")
-
-        row = layout.row()
-        layout.label(text=f"Looking for help?")
-
-        row = layout.row()
-        row.operator("wm.url_open", text="Blend_My_NFTs Documentation",
-                     icon='URL').url = "https://github.com/torrinworx/Blend_My_NFTs"
-
-        row = layout.row()
-        row.operator("wm.url_open", text="YouTube Tutorials",
-                     icon='URL').url = "https://www.youtube.com/watch?v=ygKJYz4BjRs&list=PLuVvzaanutXcYtWmPVKu2bx83EYNxLRsX"
-        row = layout.row()
-        row.operator("wm.url_open", text="Join Our Discord Community!",
-                     icon='URL').url = "https://discord.gg/UpZt5Un57t"
-
-        row = layout.row()
-        row.operator("wm.url_open", text="Join Our Discord Community!",
-                     icon='URL').url = "https://discord.gg/UpZt5Un57t"
-
-
 # ======== Blender add-on register/unregister handling ======== #
 classes = (
     # Property Group Classes:
@@ -966,7 +933,6 @@ classes = (
     BMNFTS_PT_GenerateNFTs,
     BMNFTS_PT_Refactor,
     BMNFTS_PT_Other,
-    BMNFTS_PT_Materials_Panel,
 ) + Custom_Metadata_UIList.classes_Custom_Metadata_UIList + Logic_UIList.classes_Logic_UIList
 
 
