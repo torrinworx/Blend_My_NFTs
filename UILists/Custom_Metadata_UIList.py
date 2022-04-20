@@ -11,15 +11,10 @@ from bpy.types import (Operator,
                        PropertyGroup,
                        UIList)
 
-# ======== Custom Metadata Fields UIList ======== #
-
-# -------------------------------------------------------------------
-#   Operators
-# -------------------------------------------------------------------
-
-class CUSTOM_OT_actions(Operator):
+# ======== Operators ======== #
+class CUSTOM_OT_custom_metadata_fields_actions(Operator):
     """Move items up and down, add and remove"""
-    bl_idname = "custom.list_action"
+    bl_idname = "custom_metadata_fields_uilist.list_action"
     bl_label = "List Actions"
     bl_description = "Move items up and down, add and remove"
     bl_options = {'REGISTER'}
@@ -33,38 +28,38 @@ class CUSTOM_OT_actions(Operator):
 
     def invoke(self, context, event):
         scn = context.scene
-        idx = scn.custom_index
+        idx = scn.custom_metadata_fields_index
 
         try:
-            item = scn.custom[idx]
+            item = scn.custom_metadata_fields[idx]
         except IndexError:
             pass
         else:
-            if self.action == 'DOWN' and idx < len(scn.custom) - 1:
-                item_next = scn.custom[idx + 1].name
-                scn.custom.move(idx, idx + 1)
-                scn.custom_index += 1
-                info = 'Item "%s" moved to position %d' % (item.name, scn.custom_index + 1)
+            if self.action == 'DOWN' and idx < len(scn.custom_metadata_fields) - 1:
+                item_next = scn.custom_metadata_fields[idx + 1].name
+                scn.custom_metadata_fields.move(idx, idx + 1)
+                scn.custom_metadata_fields_index += 1
+                info = 'Item "%s" moved to position %d' % (item.name, scn.custom_metadata_fields_index + 1)
                 self.report({'INFO'}, info)
 
             elif self.action == 'UP' and idx >= 1:
-                item_prev = scn.custom[idx - 1].name
-                scn.custom.move(idx, idx - 1)
-                scn.custom_index -= 1
-                info = 'Item "%s" moved to position %d' % (item.name, scn.custom_index + 1)
+                item_prev = scn.custom_metadata_fields[idx - 1].name
+                scn.custom_metadata_fields.move(idx, idx - 1)
+                scn.custom_metadata_fields_index -= 1
+                info = 'Item "%s" moved to position %d' % (item.name, scn.custom_metadata_fields_index + 1)
                 self.report({'INFO'}, info)
 
             elif self.action == 'REMOVE':
-                info = 'Item "%s" removed from list' % (scn.custom[idx].name)
-                scn.custom_index -= 1
-                scn.custom.remove(idx)
+                info = 'Item "%s" removed from list' % (scn.custom_metadata_fields[idx].name)
+                scn.custom_metadata_fields_index -= 1
+                scn.custom_metadata_fields.remove(idx)
                 self.report({'INFO'}, info)
 
         if self.action == 'ADD':
             if context.object:
-                item = scn.custom.add()
+                item = scn.custom_metadata_fields.add()
                 item.name = "Custom Metadata Field"  # The name of each object
-                scn.custom_index = len(scn.custom) - 1
+                scn.custom_metadata_fields_index = len(scn.custom_metadata_fields) - 1
                 info = '"%s" added to list' % (item.name)
                 self.report({'INFO'}, info)
             else:
@@ -72,31 +67,31 @@ class CUSTOM_OT_actions(Operator):
         return {"FINISHED"}
 
 
-class CUSTOM_OT_clearList(Operator):
+class CUSTOM_OT_custom_metadata_fields_clearList(Operator):
     """Clear all items of the list"""
-    bl_idname = "custom.clear_list"
+    bl_idname = "custom_metadata_fields_uilist.clear_list"
     bl_label = "Clear Custom Fields"
     bl_description = "Clear all items of the list"
     bl_options = {'INTERNAL'}
 
     @classmethod
     def poll(cls, context):
-        return bool(context.scene.custom)
+        return bool(context.scene.custom_metadata_fields)
 
     def invoke(self, context, event):
         return context.window_manager.invoke_confirm(self, event)
 
     def execute(self, context):
-        if bool(context.scene.custom):
-            context.scene.custom.clear()
+        if bool(context.scene.custom_metadata_fields):
+            context.scene.custom_metadata_fields.clear()
             self.report({'INFO'}, "All items removed")
         else:
             self.report({'INFO'}, "Nothing to remove")
         return {'FINISHED'}
 
 
-# UIList class
-class CUSTOM_UL_items(UIList):
+# ======== UILists ======== #
+class CUSTOM_UL_custom_metadata_fields_items(UIList):
     def draw_item(self, context, layout, data, item, icon, active_data, active_propname, index):
         split = layout.split(factor=0.1)
         split.label(text=f"{index + 1}")
@@ -108,11 +103,8 @@ class CUSTOM_UL_items(UIList):
     def invoke(self, context, event):
         pass
 
-# -------------------------------------------------------------------
-#   Collection
-# -------------------------------------------------------------------
-
-class CUSTOM_objectCollection(PropertyGroup):
+# ======== Property Collection ======== #
+class CUSTOM_custom_metadata_fields_objectCollection(PropertyGroup):
     # name: StringProperty() -> Instantiated by default
     obj_type: StringProperty()
     obj_id: IntProperty()
@@ -120,13 +112,10 @@ class CUSTOM_objectCollection(PropertyGroup):
     field_value: StringProperty(default="Value")
 
 
-# -------------------------------------------------------------------
-#   Register & Unregister
-# -------------------------------------------------------------------
-
-classes_UILists = (
-    CUSTOM_OT_actions,
-    CUSTOM_OT_clearList,
-    CUSTOM_UL_items,
-    CUSTOM_objectCollection,
+# ======== Register/Unregister Classes (Passed to __init__.py for operation) ======== #
+classes_Custom_Metadata_UIList = (
+    CUSTOM_OT_custom_metadata_fields_actions,
+    CUSTOM_OT_custom_metadata_fields_clearList,
+    CUSTOM_UL_custom_metadata_fields_items,
+    CUSTOM_custom_metadata_fields_objectCollection,
 )
