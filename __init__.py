@@ -8,7 +8,6 @@ bl_info = {
     "category": "Development",
 }
 
-
 # ======== Import handling ======== #
 
 import bpy
@@ -34,15 +33,16 @@ from main import \
     HeadlessUtil, \
     loading_animation, \
     Logic, \
+    Material_Generator, \
     Metadata, \
     Rarity, \
     Refactorer
+
 from UILists import \
     Custom_Metadata_UIList, \
     Logic_UIList
 
 if "bpy" in locals():
-
     modules = {
         "Batch_Sorter": Batch_Sorter,
         "Checks": Checks,
@@ -52,6 +52,7 @@ if "bpy" in locals():
         "HeadlessUtil": HeadlessUtil,
         "loading_animation": loading_animation,
         "Logic": Logic,
+        "Material_Generator": Material_Generator,
         "Metadata": Metadata,
         "Rarity": Rarity,
         "Refactorer": Refactorer,
@@ -69,6 +70,7 @@ if "bpy" in locals():
 combinations: int = 0
 recommended_limit: int = 0
 
+
 @persistent
 def Refresh_UI(dummy1, dummy2):
     """
@@ -79,7 +81,7 @@ def Refresh_UI(dummy1, dummy2):
     global recommended_limit
 
     combinations = (get_combinations.get_combinations())
-    recommended_limit = int(round(combinations/2))
+    recommended_limit = int(round(combinations / 2))
 
     # Add panel classes that require refresh to this refresh_panels tuple:
     refresh_panel_classes = (
@@ -95,6 +97,7 @@ def Refresh_UI(dummy1, dummy2):
             bpy.utils.register_class(i)
 
     redraw_panel(refresh_panel_classes)
+
 
 bpy.app.handlers.depsgraph_update_post.append(Refresh_UI)
 
@@ -115,10 +118,12 @@ def make_directories(save_path):
         os.makedirs(nftBatch_save_path)
     return Blend_My_NFTs_Output, batch_json_save_path, nftBatch_save_path
 
+
 def runAsHeadless():
     """
     For use when running from the command line.
     """
+
     def dumpSettings(settings):
         output = (
             f"nftName={settings.nftName}\n"
@@ -142,6 +147,8 @@ def runAsHeadless():
             f"solana_description={settings.solana_description}\n"
             f"enableCustomFields={str(settings.enableCustomFields)}\n"
             f"customfieldsFile={settings.customfieldsFile}\n"
+            f"enableMaterials={str(settings.customfieldsFile)}\n"
+            f"materialsFile={settings.materialsFile}\n"
         )
         print(output)
 
@@ -179,6 +186,8 @@ def runAsHeadless():
         settings.solanaDescription = pairs[18][1]
         settings.enableCustomFields = pairs[19][1] == 'True'
         settings.customfieldsFile = pairs[20][1]
+        settings.enableMaterials = pairs[21][1] == 'True'
+        settings.materialsFile = pairs[22][1]
 
     if args.save_path:
         settings.save_path = args.save_path
@@ -199,10 +208,13 @@ def runAsHeadless():
         enableRarity = settings.enableRarity
         enableLogic = settings.enableLogic
 
+        enableMaterials = settings.enableMaterials
+        materialsFile = settings.materialsFile
+
         Blend_My_NFTs_Output, batch_json_save_path, nftBatch_save_path = make_directories(save_path)
 
         DNA_Generator.send_To_Record_JSON(maxNFTs, nftsPerBatch, save_path, enableRarity, enableLogic, logicFile,
-                                          Blend_My_NFTs_Output)
+                                          enableMaterials, materialsFile, Blend_My_NFTs_Output)
         Batch_Sorter.makeBatches(nftName, maxNFTs, nftsPerBatch, save_path, batch_json_save_path)
 
     elif args.operation == 'generate-nfts':
@@ -255,7 +267,6 @@ def runAsHeadless():
 
 # ======== User input Property Group ======== #
 class BMNFTS_PGT_Input_Properties(bpy.types.PropertyGroup):
-
     # Create NFT Data Panel:
 
     nftName: bpy.props.StringProperty(name="NFT Name")
@@ -264,11 +275,11 @@ class BMNFTS_PGT_Input_Properties(bpy.types.PropertyGroup):
     nftsPerBatch: bpy.props.IntProperty(name="NFTs Per Batch", default=1, min=1)  # max=(combinations - offset)
 
     save_path: bpy.props.StringProperty(
-                        name="Save Path",
-                        description="Save path for NFT files",
-                        default="",
-                        maxlen=1024,
-                        subtype="DIR_PATH"
+        name="Save Path",
+        description="Save path for NFT files",
+        default="",
+        maxlen=1024,
+        subtype="DIR_PATH"
     )
 
     enableRarity: bpy.props.BoolProperty(name="Enable Rarity")
@@ -276,18 +287,27 @@ class BMNFTS_PGT_Input_Properties(bpy.types.PropertyGroup):
     enableLogic: bpy.props.BoolProperty(name="Enable Logic")
     enable_Logic_Json: bpy.props.BoolProperty(name="Use Logic.json instead")
     logicFile: bpy.props.StringProperty(
-                        name="Logic File Path",
-                        description="Path where Logic.json is located.",
-                        default="",
-                        maxlen=1024,
-                        subtype="FILE_PATH"
+        name="Logic File Path",
+        description="Path where Logic.json is located.",
+        default="",
+        maxlen=1024,
+        subtype="FILE_PATH"
+    )
+
+    enableMaterials: bpy.props.BoolProperty(name="Enable Materials")
+    materialsFile: bpy.props.StringProperty(
+        name="Materials File",
+        description="Path where Materials.json is located.",
+        default="",
+        maxlen=1024,
+        subtype="FILE_PATH"
     )
 
     # Generate NFTs Panel:
     imageBool: bpy.props.BoolProperty(name="Image")
     imageEnum: bpy.props.EnumProperty(
-        name="Image File Format", 
-        description="Select Image file format", 
+        name="Image File Format",
+        description="Select Image file format",
         items=[
             ('PNG', ".PNG", "Export NFT as PNG"),
             ('JPEG', ".JPEG", "Export NFT as JPEG")
@@ -296,8 +316,8 @@ class BMNFTS_PGT_Input_Properties(bpy.types.PropertyGroup):
 
     animationBool: bpy.props.BoolProperty(name="Animation")
     animationEnum: bpy.props.EnumProperty(
-        name="Animation File Format", 
-        description="Select Animation file format", 
+        name="Animation File Format",
+        description="Select Animation file format",
         items=[
             ('AVI_JPEG', '.avi (AVI_JPEG)', 'Export NFT as AVI_JPEG'),
             ('AVI_RAW', '.avi (AVI_RAW)', 'Export NFT as AVI_RAW'),
@@ -308,21 +328,24 @@ class BMNFTS_PGT_Input_Properties(bpy.types.PropertyGroup):
 
     modelBool: bpy.props.BoolProperty(name="3D Model")
     modelEnum: bpy.props.EnumProperty(
-        name="3D Model File Format", 
-        description="Select 3D Model file format", 
+        name="3D Model File Format",
+        description="Select 3D Model file format",
         items=[
             ('GLB', '.glb', 'Export NFT as .glb'),
-            ('GLTF_SEPARATE', '.gltf + .bin + textures', 'Export NFT as .gltf with separated textures in .bin + textures.'),
+            ('GLTF_SEPARATE', '.gltf + .bin + textures',
+             'Export NFT as .gltf with separated textures in .bin + textures.'),
             ('GLTF_EMBEDDED', '.gltf', 'Export NFT as embedded .gltf file that contains textures.'),
             ('FBX', '.fbx', 'Export NFT as .fbx'),
             ('OBJ', '.obj', 'Export NFT as .obj'),
             ('X3D', '.x3d', 'Export NFT as .x3d'),
             ('STL', '.stl', 'Export NFT as .stl'),
-            ('VOX', '.vox (Experimental)', 'Export NFT as .vox, requires the voxwriter add on: https://github.com/Spyduck/voxwriter')
+            ('VOX', '.vox (Experimental)',
+             'Export NFT as .vox, requires the voxwriter add on: https://github.com/Spyduck/voxwriter')
         ]
     )
 
-    batchToGenerate: bpy.props.IntProperty(name="Batch To Generate", default=1, min=1)  # max=(collectionSize / nftsPerBatch)
+    batchToGenerate: bpy.props.IntProperty(name="Batch To Generate", default=1,
+                                           min=1)
 
     # Refactor Batches & Create Metadata Panel:
     cardanoMetaDataBool: bpy.props.BoolProperty(name="Cardano Cip")
@@ -336,11 +359,11 @@ class BMNFTS_PGT_Input_Properties(bpy.types.PropertyGroup):
 
     enableCustomFields: bpy.props.BoolProperty(name="Enable Custom Metadata Fields")
     customfieldsFile: bpy.props.StringProperty(
-                        name="Custom Fields File",
-                        description="Path where Custom_Fields.json is located.",
-                        default="",
-                        maxlen=1024,
-                        subtype="FILE_PATH"
+        name="Custom Fields File",
+        description="Path where Custom_Fields.json is located.",
+        default="",
+        maxlen=1024,
+        subtype="FILE_PATH"
     )
 
     # Other Panel:
@@ -361,19 +384,19 @@ class createData(bpy.types.Operator):
         name="Reverse Order")
 
     def execute(self, context):
-
         nftName = bpy.context.scene.input_tool.nftName
         collectionSize = bpy.context.scene.input_tool.collectionSize
         nftsPerBatch = bpy.context.scene.input_tool.nftsPerBatch
         save_path = bpy.path.abspath(bpy.context.scene.input_tool.save_path)
-        logicFile = bpy.path.abspath(bpy.context.scene.input_tool.logicFile)  # Logic_Dict will replace this, remove the open(logicFile)
 
         enableRarity = bpy.context.scene.input_tool.enableRarity
+
         enableLogic = bpy.context.scene.input_tool.enableLogic
         enable_Logic_Json = bpy.context.scene.input_tool.enable_Logic_Json
+        logicFile = bpy.path.abspath(bpy.context.scene.input_tool.logicFile)
 
-        Logic_Dict = {}
-
+        enableMaterials = bpy.context.scene.input_tool.enableMaterials
+        materialsFile = bpy.path.abspath(bpy.context.scene.input_tool.materialsFile)
 
         # Handling Custom Fields UIList input:
         if enableLogic:
@@ -381,9 +404,10 @@ class createData(bpy.types.Operator):
                 logicFile = json.load(open(logicFile))
 
                 Blend_My_NFTs_Output, batch_json_save_path, nftBatch_save_path = make_directories(save_path)
-                DNA_Generator.send_To_Record_JSON(collectionSize, nftsPerBatch, save_path, enableRarity, enableLogic,
-                                                  logicFile, Blend_My_NFTs_Output)
+                DNA_Generator.send_To_Record_JSON(collectionSize, nftsPerBatch, save_path, enableRarity, enableLogic, logicFile,
+                                                  enableMaterials, materialsFile, Blend_My_NFTs_Output)
                 Batch_Sorter.makeBatches(nftName, collectionSize, nftsPerBatch, save_path, batch_json_save_path)
+
             if enable_Logic_Json and not logicFile:
                 self.report({'ERROR'}, f"No Logic.json file path set. Please set the file path to your Logic.json file.")
 
@@ -405,9 +429,8 @@ class createData(bpy.types.Operator):
                         }
                         num += 1
                     Blend_My_NFTs_Output, batch_json_save_path, nftBatch_save_path = make_directories(save_path)
-                    DNA_Generator.send_To_Record_JSON(collectionSize, nftsPerBatch, save_path, enableRarity,
-                                                      enableLogic,
-                                                      logicFile, Blend_My_NFTs_Output)
+                    DNA_Generator.send_To_Record_JSON(collectionSize, nftsPerBatch, save_path, enableRarity, enableLogic, logicFile,
+                                                      enableMaterials, materialsFile, Blend_My_NFTs_Output)
                     Batch_Sorter.makeBatches(nftName, collectionSize, nftsPerBatch, save_path, batch_json_save_path)
                 else:
                     logicFile = {}
@@ -423,18 +446,18 @@ class createData(bpy.types.Operator):
                         }
                         num += 1
                     Blend_My_NFTs_Output, batch_json_save_path, nftBatch_save_path = make_directories(save_path)
-                    DNA_Generator.send_To_Record_JSON(collectionSize, nftsPerBatch, save_path, enableRarity,
-                                                      enableLogic,
-                                                      logicFile, Blend_My_NFTs_Output)
+                    DNA_Generator.send_To_Record_JSON(collectionSize, nftsPerBatch, save_path, enableRarity, enableLogic, logicFile,
+                                                      enableMaterials, materialsFile, Blend_My_NFTs_Output)
                     Batch_Sorter.makeBatches(nftName, collectionSize, nftsPerBatch, save_path, batch_json_save_path)
-        
+
         if not enableLogic:
-            Blend_My_NFTs_Output, batch_json_save_path, nftBatch_save_path = make_directories(save_path)
-            DNA_Generator.send_To_Record_JSON(collectionSize, nftsPerBatch, save_path, enableRarity, enableLogic,
-                                              logicFile, Blend_My_NFTs_Output)
-            Batch_Sorter.makeBatches(nftName, collectionSize, nftsPerBatch, save_path, batch_json_save_path)
+          Blend_My_NFTs_Output, batch_json_save_path, nftBatch_save_path = make_directories(save_path)
+          DNA_Generator.send_To_Record_JSON(collectionSize, nftsPerBatch, save_path, enableRarity, enableLogic, logicFile,
+                                            enableMaterials, materialsFile, Blend_My_NFTs_Output)
+          Batch_Sorter.makeBatches(nftName, collectionSize, nftsPerBatch, save_path, batch_json_save_path)
         self.report({'INFO'}, f"NFT Data created!")
         return {"FINISHED"}
+
 
 class exportNFTs(bpy.types.Operator):
     bl_idname = 'exporter.nfts'
@@ -459,20 +482,26 @@ class exportNFTs(bpy.types.Operator):
         enableModelsBlender = bpy.context.scene.input_tool.modelBool
         modelFileFormat = bpy.context.scene.input_tool.modelEnum
 
+        enableMaterials = bpy.context.scene.input_tool.enableMaterials
+        materialsFile = bpy.path.abspath(bpy.context.scene.input_tool.materialsFile)
+
         # fail state variables, set to no fail due to resume_failed_batch() Operator in BMNFTS_PT_GenerateNFTs Panel
         fail_state = False
         failed_batch = None
         failed_dna = None
         failed_dna_index = None
 
-        Exporter.render_and_save_NFTs(nftName, collectionSize, batchToGenerate, batch_json_save_path, nftBatch_save_path, enableImages,
+        Exporter.render_and_save_NFTs(nftName, collectionSize, batchToGenerate, batch_json_save_path,
+                                      nftBatch_save_path, enableImages,
                                       imageFileFormat, enableAnimations, animationFileFormat, enableModelsBlender,
-                                      modelFileFormat, fail_state, failed_batch, failed_dna, failed_dna_index
+                                      modelFileFormat, fail_state, failed_batch, failed_dna, failed_dna_index,
+                                      enableMaterials, materialsFile
                                       )
 
         self.report({'INFO'}, f"All NFTs generated for batch {batchToGenerate}!")
 
         return {"FINISHED"}
+
 
 class resume_failed_batch(bpy.types.Operator):
     bl_idname = 'exporter.resume_nfts'
@@ -500,7 +529,8 @@ class resume_failed_batch(bpy.types.Operator):
         enableModelsBlender = batch["Generation Save"][-1]["Render_Settings"]["enableModelsBlender"]
         modelFileFormat = batch["Generation Save"][-1]["Render_Settings"]["modelFileFormat"]
 
-        Exporter.render_and_save_NFTs(nftName, collectionSize, failed_batch, batch_json_save_path, nftBatch_save_path, enableImages,
+        Exporter.render_and_save_NFTs(nftName, collectionSize, failed_batch, batch_json_save_path, nftBatch_save_path,
+                                      enableImages,
                                       imageFileFormat, enableAnimations, animationFileFormat, enableModelsBlender,
                                       modelFileFormat, fail_state, failed_batch, failed_dna, failed_dna_index
                                       )
@@ -508,6 +538,7 @@ class resume_failed_batch(bpy.types.Operator):
         self.report({'INFO'}, f"Resuming Failed Batch Generation!")
 
         return {"FINISHED"}
+
 
 class refactor_Batches(bpy.types.Operator):
     """Refactor your collection? This action cannot be undone."""
@@ -562,6 +593,7 @@ class refactor_Batches(bpy.types.Operator):
 
     def invoke(self, context, event):
         return context.window_manager.invoke_confirm(self, event)
+
 
 class export_settings(bpy.types.Operator):
     """Export your settings into a configuration file."""
@@ -621,6 +653,10 @@ class export_settings(bpy.types.Operator):
                 "#Enable Custom Fields\n"
                 f"enableCustomFields={str(settings.enableCustomFields)}\n"
                 f"customfieldsFile={settings.customfieldsFile}\n"
+                "\n"
+                "#Enable Materials\n"
+                f"enableMaterials={str(settings.enableMaterials)}\n"
+                f"materialsFile={settings.materialsFile}\n"
             )
 
             print(output, file=config)
@@ -697,7 +733,15 @@ class BMNFTS_PT_CreateData(bpy.types.Panel):
                 row.prop(input_tool_scene, "logicFile")
 
         row = layout.row()
+        row.prop(input_tool_scene, "enableMaterials")
+
+        if bpy.context.scene.input_tool.enableMaterials:
+            row = layout.row()
+            row.prop(input_tool_scene, "materialsFile")
+
+        row = layout.row()
         self.layout.operator("create.data", icon='DISCLOSURE_TRI_RIGHT', text="Create Data")
+
 
 class BMNFTS_PT_GenerateNFTs(bpy.types.Panel):
     bl_label = "Generate NFTs"
@@ -750,6 +794,7 @@ class BMNFTS_PT_GenerateNFTs(bpy.types.Panel):
         if not fail_state:
             row = layout.row()
             self.layout.operator("exporter.nfts", icon='RENDER_RESULT', text="Generate NFTs")
+
 
 class BMNFTS_PT_Refactor(bpy.types.Panel):
     bl_label = "Refactor Batches & Create Metadata"
@@ -825,6 +870,7 @@ class BMNFTS_PT_Refactor(bpy.types.Panel):
         row = layout.row()
         self.layout.operator("refactor.batches", icon='FOLDER_REDIRECT', text="Refactor Batches & Create Metadata")
 
+
 class BMNFTS_PT_Other(bpy.types.Panel):
     bl_label = "Other"
     bl_idname = "BMNFTS_PT_Other"
@@ -854,13 +900,17 @@ class BMNFTS_PT_Other(bpy.types.Panel):
             layout.label(text=f"**Set a Save Path in Create NFT Data to Export Settings")
 
         row = layout.row()
+
+        row = layout.row()
+        layout.label(text=f"Looking for help?")
+
+        row = layout.row()
         row.operator("wm.url_open", text="Blend_My_NFTs Documentation",
                      icon='URL').url = "https://github.com/torrinworx/Blend_My_NFTs"
 
         row = layout.row()
         row.operator("wm.url_open", text="YouTube Tutorials",
                      icon='URL').url = "https://www.youtube.com/watch?v=ygKJYz4BjRs&list=PLuVvzaanutXcYtWmPVKu2bx83EYNxLRsX"
-
         row = layout.row()
         row.operator("wm.url_open", text="Join Our Discord Community!",
                      icon='URL').url = "https://discord.gg/UpZt5Un57t"
@@ -885,6 +935,7 @@ classes = (
     BMNFTS_PT_Other,
 ) + Custom_Metadata_UIList.classes_Custom_Metadata_UIList + Logic_UIList.classes_Logic_UIList
 
+
 def register():
     for cls in classes:
         bpy.utils.register_class(cls)
@@ -896,7 +947,6 @@ def register():
 
     bpy.types.Scene.logic_fields = CollectionProperty(type=Logic_UIList.CUSTOM_logic_objectCollection)
     bpy.types.Scene.logic_fields_index = IntProperty()
-
 
 def unregister():
     for cls in reversed(classes):

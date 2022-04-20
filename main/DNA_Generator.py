@@ -10,7 +10,7 @@ import json
 import random
 from functools import partial
 from .loading_animation import Loader
-from . import Rarity, Logic, Checks
+from . import Rarity, Logic, Checks, Material_Generator
 from .Constants import bcolors, removeList, remove_file_by_extension
 
 
@@ -126,7 +126,7 @@ def get_hierarchy():
 
    return hierarchy
 
-def generateNFT_DNA(collectionSize, logicFile, enableRarity, enableLogic):
+def generateNFT_DNA(collectionSize, enableRarity, enableLogic, logicFile, enableMaterials, materialsFile):
    """
    Returns batchDataDictionary containing the number of NFT combinations, hierarchy, and the DNAList.
    """
@@ -172,8 +172,14 @@ def generateNFT_DNA(collectionSize, logicFile, enableRarity, enableLogic):
 
       if enableLogic:
          singleDNA = Logic.logicafyDNAsingle(hierarchy, singleDNA, logicFile)
-      # print(f"Logic DNA: {singleDNA}")
-      # print("============\n")
+      print(f"Original DNA: {singleDNA}")
+      print("============\n")
+
+      if enableMaterials:
+         singleDNA = Material_Generator.apply_materials(hierarchy, singleDNA, materialsFile)
+      print(f"Materials DNA: {singleDNA}")
+      print("============\n")
+
       return singleDNA
 
    def create_DNAList():
@@ -202,7 +208,8 @@ def generateNFT_DNA(collectionSize, logicFile, enableRarity, enableLogic):
 
    return DataDictionary
 
-def send_To_Record_JSON(collectionSize, nftsPerBatch, save_path, enableRarity, enableLogic, logicFile, Blend_My_NFTs_Output):
+def send_To_Record_JSON(collectionSize, nftsPerBatch, save_path, enableRarity, enableLogic, logicFile, enableMaterials,
+                        materialsFile, Blend_My_NFTs_Output):
    """
    Creates NFTRecord.json file and sends "batchDataDictionary" to it. NFTRecord.json is a permanent record of all DNA
    you've generated with all attribute variants. If you add new variants or attributes to your .blend file, other scripts
@@ -232,7 +239,8 @@ def send_To_Record_JSON(collectionSize, nftsPerBatch, save_path, enableRarity, e
 
    def create_nft_data():
       try:
-         DataDictionary = generateNFT_DNA(collectionSize, logicFile, enableRarity, enableLogic)
+         DataDictionary = generateNFT_DNA(collectionSize, enableRarity, enableLogic, logicFile, enableMaterials,
+                        materialsFile)
          NFTRecord_save_path = os.path.join(Blend_My_NFTs_Output, "NFTRecord.json")
 
          # Checks:
