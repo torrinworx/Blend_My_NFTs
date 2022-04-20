@@ -301,5 +301,13 @@ def render_and_save_NFTs(nftName, maxNFTs, batchToGenerate, batch_json_save_path
             bpy.data.collections[j].hide_render = False
             bpy.data.collections[j].hide_viewport = False
 
+    batch_complete_time = time.time() - time_start_1
+
     print(f"\nAll NFTs successfully generated and sent to {nftBatch_save_path}"
-          f"\nCompleted all renders in Batch{batchToGenerate}.json in {time.time() - time_start_1}s\n")
+          f"\nCompleted all renders in Batch{batchToGenerate}.json in {batch_complete_time}s\n")
+
+    batch_info = {"Batch Render Time": batch_complete_time, "Number of NFTs generated in Batch": x - 1,
+                  "Average time per generation": batch_complete_time / x - 1}
+
+    batch_infoFolder = os.path.join(nftBatch_save_path, "Batch" + str(batchToGenerate), "batch_info.json")
+    save_batch(batch_info, batch_infoFolder)

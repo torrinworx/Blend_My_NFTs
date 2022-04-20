@@ -139,6 +139,8 @@ def reformatNFTCollection(refactor_panel_input):
     animationCount = 1
     modelCount = 1
     dataCount = 1
+
+    collection_info = {"Total Time": 0}
     for i in batchList:
         if images:
             imagesDir = os.path.join(refactor_panel_input.nftBatch_save_path, i, "Images")
@@ -215,6 +217,15 @@ def reformatNFTCollection(refactor_panel_input):
 
                 dataCount += 1
 
+        batch_info = json.load(open(os.path.join(refactor_panel_input.nftBatch_save_path, i, "batch_info.json")))
+        collection_info[os.path.basename(i)] = batch_info
+
+        collection_info["Total Time"] = collection_info["Total Time"] + batch_info["Batch Render Time"]
+
+    collection_info = json.dumps(collection_info, indent=1, ensure_ascii=True)
+    with open(os.path.join(completeCollPath, "collection_info.json"), 'w') as outfile:
+        outfile.write(collection_info + '\n')
+
     print(f"All NFT files stored and sorted to the Complete_Collection folder in {refactor_panel_input.save_path}")
 
     class rename_MetaData_Variables:
@@ -233,7 +244,5 @@ def reformatNFTCollection(refactor_panel_input):
         solana_description = refactor_panel_input.solana_description
         erc721_description = refactor_panel_input.erc721_description
 
-
     renameMetaData(rename_MetaData_Variables)
-
     shutil.rmtree(refactor_panel_input.nftBatch_save_path)

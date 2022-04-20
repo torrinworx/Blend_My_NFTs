@@ -427,7 +427,12 @@ class createData(bpy.types.Operator):
                                                       enableLogic,
                                                       logicFile, Blend_My_NFTs_Output)
                     Batch_Sorter.makeBatches(nftName, collectionSize, nftsPerBatch, save_path, batch_json_save_path)
-
+        
+        if not enableLogic:
+            Blend_My_NFTs_Output, batch_json_save_path, nftBatch_save_path = make_directories(save_path)
+            DNA_Generator.send_To_Record_JSON(collectionSize, nftsPerBatch, save_path, enableRarity, enableLogic,
+                                              logicFile, Blend_My_NFTs_Output)
+            Batch_Sorter.makeBatches(nftName, collectionSize, nftsPerBatch, save_path, batch_json_save_path)
         self.report({'INFO'}, f"NFT Data created!")
         return {"FINISHED"}
 
