@@ -12,6 +12,9 @@ bl_info = {
 
 import bpy
 from bpy.app.handlers import persistent
+from bpy.props import (IntProperty,
+                       BoolProperty,
+                       CollectionProperty)
 
 import os
 import sys
@@ -35,9 +38,11 @@ from main import \
     Rarity, \
     Refactorer
 
-if "bpy" in locals():
-    import importlib
+from UILists import \
+    Custom_Metadata_UIList, \
+    Logic_UIList
 
+if "bpy" in locals():
     modules = {
         "Batch_Sorter": Batch_Sorter,
         "Checks": Checks,
@@ -50,7 +55,9 @@ if "bpy" in locals():
         "Material_Generator": Material_Generator,
         "Metadata": Metadata,
         "Rarity": Rarity,
-        "Refactorer": Refactorer
+        "Refactorer": Refactorer,
+        "Custom_Metadata_UIList": Custom_Metadata_UIList,
+        "Logic_UIList": Logic_UIList,
     }
 
     for i in modules:
@@ -278,8 +285,9 @@ class BMNFTS_PGT_Input_Properties(bpy.types.PropertyGroup):
     enableRarity: bpy.props.BoolProperty(name="Enable Rarity")
 
     enableLogic: bpy.props.BoolProperty(name="Enable Logic")
+    enable_Logic_Json: bpy.props.BoolProperty(name="Use Logic.json instead")
     logicFile: bpy.props.StringProperty(
-        name="Logic File",
+        name="Logic File Path",
         description="Path where Logic.json is located.",
         default="",
         maxlen=1024,
@@ -371,6 +379,10 @@ class createData(bpy.types.Operator):
     bl_description = 'Creates NFT Data. Run after any changes were made to scene.'
     bl_options = {"REGISTER", "UNDO"}
 
+    reverse_order: BoolProperty(
+        default=False,
+        name="Reverse Order")
+
     def execute(self, context):
         nftName = bpy.context.scene.input_tool.nftName
         collectionSize = bpy.context.scene.input_tool.collectionSize
@@ -380,19 +392,70 @@ class createData(bpy.types.Operator):
         enableRarity = bpy.context.scene.input_tool.enableRarity
 
         enableLogic = bpy.context.scene.input_tool.enableLogic
+        enable_Logic_Json = bpy.context.scene.input_tool.enable_Logic_Json
         logicFile = bpy.path.abspath(bpy.context.scene.input_tool.logicFile)
-
+        Logic_Dict = {}
+        
         enableMaterials = bpy.context.scene.input_tool.enableMaterials
         materialsFile = bpy.path.abspath(bpy.context.scene.input_tool.materialsFile)
 
-        Blend_My_NFTs_Output, batch_json_save_path, nftBatch_save_path = make_directories(save_path)
+        # Handling Custom Fields UIList input:
+        if enableLogic:
+            if enable_Logic_Json and logicFile:
+                logicFile = json.load(open(logicFile))
 
-        DNA_Generator.send_To_Record_JSON(collectionSize, nftsPerBatch, save_path, enableRarity, enableLogic, logicFile,
-                                          enableMaterials, materialsFile, Blend_My_NFTs_Output)
-        Batch_Sorter.makeBatches(nftName, collectionSize, nftsPerBatch, save_path, batch_json_save_path)
+                Blend_My_NFTs_Output, batch_json_save_path, nftBatch_save_path = make_directories(save_path)
+                DNA_Generator.send_To_Record_JSON(collectionSize, nftsPerBatch, save_path, enableRarity, enableLogic, logicFile,
+                                                  enableMaterials, materialsFile, Blend_My_NFTs_Output)
+                Batch_Sorter.makeBatches(nftName, collectionSize, nftsPerBatch, save_path, batch_json_save_path)
+            if enable_Logic_Json and not logicFile:
+                self.report({'ERROR'}, f"No Logic.json file path set. Please set the file path to your Logic.json file.")
 
+            if not enable_Logic_Json:
+                scn = context.scene
+                if self.reverse_order:
+                    logicFile = {}
+                    num = 1
+                    for i in range(scn.logic_fields_index, -1, -1):
+                        item = scn.logic_fields[i]
+
+                        item_list1 = item.item_list1
+                        rule_type = item.rule_type
+                        item_list2 = item.item_list2
+                        logicFile[f"Rule-{num}"] = {
+                                "Items-1": item_list1.split(','),
+                                "Rule-Type": rule_type,
+                                "Items-2": item_list2.split(',')
+                        }
+                        num += 1
+                    Blend_My_NFTs_Output, batch_json_save_path, nftBatch_save_path = make_directories(save_path)
+                    DNA_Generator.send_To_Record_JSON(collectionSize, nftsPerBatch, save_path, enableRarity, enableLogic, logicFile,
+                                                      enableMaterials, materialsFile, Blend_My_NFTs_Output)
+                    Batch_Sorter.makeBatches(nftName, collectionSize, nftsPerBatch, save_path, batch_json_save_path)
+                else:
+                    logicFile = {}
+                    num = 1
+                    for item in scn.logic_fields:
+                        item_list1 = item.item_list1
+                        rule_type = item.rule_type
+                        item_list2 = item.item_list2
+                        logicFile[f"Rule-{num}"] = {
+                            "Items-1": item_list1.split(','),
+                            "Rule-Type": rule_type,
+                            "Items-2": item_list2.split(',')
+                        }
+                        num += 1
+                    Blend_My_NFTs_Output, batch_json_save_path, nftBatch_save_path = make_directories(save_path)
+                    DNA_Generator.send_To_Record_JSON(collectionSize, nftsPerBatch, save_path, enableRarity, enableLogic, logicFile,
+                                                      enableMaterials, materialsFile, Blend_My_NFTs_Output)
+                    Batch_Sorter.makeBatches(nftName, collectionSize, nftsPerBatch, save_path, batch_json_save_path)
+
+        if not enableLogic:
+          Blend_My_NFTs_Output, batch_json_save_path, nftBatch_save_path = make_directories(save_path)
+          DNA_Generator.send_To_Record_JSON(collectionSize, nftsPerBatch, save_path, enableRarity, enableLogic, logicFile,
+                                            enableMaterials, materialsFile, Blend_My_NFTs_Output)
+          Batch_Sorter.makeBatches(nftName, collectionSize, nftsPerBatch, save_path, batch_json_save_path)
         self.report({'INFO'}, f"NFT Data created!")
-
         return {"FINISHED"}
 
 
@@ -480,16 +543,17 @@ class refactor_Batches(bpy.types.Operator):
     bl_description = 'This action cannot be undone.'
     bl_options = {'REGISTER', 'INTERNAL'}
 
-    @classmethod
-    def poll(cls, context):
-        return True
+    reverse_order: BoolProperty(
+        default=False,
+        name="Reverse Order")
 
     def execute(self, context):
         class refactor_panel_input:
+
             save_path = bpy.path.abspath(bpy.context.scene.input_tool.save_path)
 
-            custom_Fields_File = bpy.path.abspath(bpy.context.scene.input_tool.customfieldsFile)
             enableCustomFields = bpy.context.scene.input_tool.enableCustomFields
+            custom_Fields = {}
 
             cardanoMetaDataBool = bpy.context.scene.input_tool.cardanoMetaDataBool
             solanaMetaDataBool = bpy.context.scene.input_tool.solanaMetaDataBool
@@ -501,9 +565,26 @@ class refactor_Batches(bpy.types.Operator):
 
             Blend_My_NFTs_Output, batch_json_save_path, nftBatch_save_path = make_directories(save_path)
 
+        # Handling Custom Fields UIList input:
+        if refactor_panel_input.enableCustomFields:
+            scn = context.scene
+            if self.reverse_order:
+                for i in range(scn.custom_metadata_fields_index, -1, -1):
+                    item = scn.custom_metadata_fields[i]
+                    if item.field_name in list(refactor_panel_input.custom_Fields.keys()):
+                        raise ValueError(f"A duplicate of '{item.field_name}' was found. Please ensure all Custom Metadata field Names are unique.")
+                    else:
+                        refactor_panel_input.custom_Fields[item.field_name] = item.field_value
+            else:
+                for item in scn.custom_metadata_fields:
+                    if item.field_name in list(refactor_panel_input.custom_Fields.keys()):
+                        raise ValueError(f"A duplicate of '{item.field_name}' was found. Please ensure all Custom Metadata field Names are unique.")
+                    else:
+                        refactor_panel_input.custom_Fields[item.field_name] = item.field_value
+
+        # Passing info to main functions for refactoring:
         Refactorer.reformatNFTCollection(refactor_panel_input)
         self.report({'INFO'}, "Batches Refactored, MetaData created!")
-
         return {"FINISHED"}
 
     def invoke(self, context, event):
@@ -616,9 +697,36 @@ class BMNFTS_PT_CreateData(bpy.types.Panel):
         row = layout.row()
         row.prop(input_tool_scene, "enableLogic")
 
+        # Logic_UIList implementation:
         if bpy.context.scene.input_tool.enableLogic:
+            layout = self.layout
+            scn = bpy.context.scene
+
+            rows = 2
             row = layout.row()
-            row.prop(input_tool_scene, "logicFile")
+            row.template_list("CUSTOM_UL_logic_items", "", scn, "logic_fields", scn,
+                              "logic_fields_index", rows=rows)
+
+            col = row.column(align=True)
+            col.operator("logic_uilist.logic_list_action", icon='ZOOM_IN', text="").action = 'ADD'
+            col.operator("logic_uilist.logic_list_action", icon='ZOOM_OUT', text="").action = 'REMOVE'
+            col.separator()
+            col.operator("logic_uilist.logic_list_action", icon='TRIA_UP', text="").action = 'UP'
+            col.operator("logic_uilist.logic_list_action", icon='TRIA_DOWN', text="").action = 'DOWN'
+
+            row = layout.row()
+            col = row.column(align=True)
+            row = col.row(align=True)
+            row.operator("logic_uilist.logic_clear_list", icon="X")
+            row = col.row(align=True)
+            row.label(text=f"*Field Names must be unique.")
+
+            row = layout.row()
+            row.prop(input_tool_scene, "enable_Logic_Json")
+
+            if bpy.context.scene.input_tool.enable_Logic_Json:
+                row = layout.row()
+                row.prop(input_tool_scene, "logicFile")
 
         row = layout.row()
         row.prop(input_tool_scene, "enableMaterials")
@@ -731,9 +839,29 @@ class BMNFTS_PT_Refactor(bpy.types.Panel):
 
         row = layout.row()
         row.prop(input_tool_scene, "enableCustomFields")
+
+        # Custom Metadata Fields UIList:
         if bpy.context.scene.input_tool.enableCustomFields:
+            layout = self.layout
+            scn = bpy.context.scene
+
+            rows = 2
             row = layout.row()
-            row.prop(input_tool_scene, "customfieldsFile")
+            row.template_list("CUSTOM_UL_custom_metadata_fields_items", "", scn, "custom_metadata_fields", scn, "custom_metadata_fields_index", rows=rows)
+
+            col = row.column(align=True)
+            col.operator("custom_metadata_fields_uilist.list_action", icon='ZOOM_IN', text="").action = 'ADD'
+            col.operator("custom_metadata_fields_uilist.list_action", icon='ZOOM_OUT', text="").action = 'REMOVE'
+            col.separator()
+            col.operator("custom_metadata_fields_uilist.list_action", icon='TRIA_UP', text="").action = 'UP'
+            col.operator("custom_metadata_fields_uilist.list_action", icon='TRIA_DOWN', text="").action = 'DOWN'
+
+            row = layout.row()
+            col = row.column(align=True)
+            row = col.row(align=True)
+            row.label(text=f"*Field Names must be unique.")
+            row = col.row(align=True)
+            row.operator("custom_metadata_fields_uilist.clear_list", icon="X")
 
         row = layout.row()
         self.layout.operator("refactor.batches", icon='FOLDER_REDIRECT', text="Refactor Batches & Create Metadata")
@@ -816,6 +944,10 @@ class BMNFTS_PT_Materials_Panel(bpy.types.Panel):
         row.operator("wm.url_open", text="Join Our Discord Community!",
                      icon='URL').url = "https://discord.gg/UpZt5Un57t"
 
+        row = layout.row()
+        row.operator("wm.url_open", text="Join Our Discord Community!",
+                     icon='URL').url = "https://discord.gg/UpZt5Un57t"
+
 
 # ======== Blender add-on register/unregister handling ======== #
 classes = (
@@ -835,7 +967,7 @@ classes = (
     BMNFTS_PT_Refactor,
     BMNFTS_PT_Other,
     BMNFTS_PT_Materials_Panel,
-)
+) + Custom_Metadata_UIList.classes_Custom_Metadata_UIList + Logic_UIList.classes_Logic_UIList
 
 
 def register():
@@ -844,12 +976,23 @@ def register():
 
     bpy.types.Scene.input_tool = bpy.props.PointerProperty(type=BMNFTS_PGT_Input_Properties)
 
+    bpy.types.Scene.custom_metadata_fields = CollectionProperty(type=Custom_Metadata_UIList.CUSTOM_custom_metadata_fields_objectCollection)
+    bpy.types.Scene.custom_metadata_fields_index = IntProperty()
+
+    bpy.types.Scene.logic_fields = CollectionProperty(type=Logic_UIList.CUSTOM_logic_objectCollection)
+    bpy.types.Scene.logic_fields_index = IntProperty()
 
 def unregister():
-    for cls in classes:
+    for cls in reversed(classes):
         bpy.utils.unregister_class(cls)
 
     del bpy.types.Scene.input_tool
+
+    del bpy.types.Scene.custom_metadata_fields
+    del bpy.types.Scene.custom_metadata_fields_index
+
+    del bpy.types.Scene.logic_fields
+    del bpy.types.Scene.logic_fields_index
 
 
 if __name__ == '__main__':

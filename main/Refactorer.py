@@ -8,7 +8,7 @@ import json
 import shutil
 from . import Metadata
 
-removeList = [".gitignore", ".DS_Store"]
+from .Constants import bcolors, removeList, remove_file_by_extension
 
 
 def getNFType(nftBatch_save_path):
@@ -17,9 +17,8 @@ def getNFType(nftBatch_save_path):
     models = False
     metaData = False
 
-    batch1 = [x for x in os.listdir(nftBatch_save_path) if (x not in removeList)][0]  # Gets first Batch and ignores removeList files
-    batchContent = os.listdir(os.path.join(nftBatch_save_path, batch1))
-    batchContent = [x for x in batchContent if (x not in removeList)]
+    batch1 = sorted(remove_file_by_extension(os.listdir(nftBatch_save_path)))[0]
+    batchContent = remove_file_by_extension(os.listdir(os.path.join(nftBatch_save_path, batch1)))
 
     if "Images" in batchContent:
         images = True
@@ -74,9 +73,12 @@ def renameMetaData(rename_MetaData_Variables):
             cardanoJsonNew = "Cardano_" + i
             cardanoNewName = name.split("_")[0] + "_" + str(file_num)
 
-            metaDataDictCardano = Metadata.returnCardanoMetaData(cardanoNewName, NFT_DNA, NFT_Variants, rename_MetaData_Variables.custom_Fields_File, rename_MetaData_Variables.enableCustomFields, rename_MetaData_Variables.cardano_description)
+            metaDataDictCardano = Metadata.returnCardanoMetaData(cardanoNewName, NFT_DNA, NFT_Variants,
+                                                                 rename_MetaData_Variables.custom_Fields,
+                                                                 rename_MetaData_Variables.enableCustomFields,
+                                                                 rename_MetaData_Variables.cardano_description)
 
-            sendMetaDataToJson(metaDataDictCardano, cardanoMetaDataPath, cardanoJsonNew,)
+            sendMetaDataToJson(metaDataDictCardano, cardanoMetaDataPath, cardanoJsonNew, )
 
         if rename_MetaData_Variables.solanaMetaDataBool:
             if not os.path.exists(solanaMetaDataPath):
@@ -85,7 +87,10 @@ def renameMetaData(rename_MetaData_Variables):
             solanaJsonNew = "Solana_" + i
             solanaNewName = name.split("_")[0] + "_" + str(file_num)
 
-            metaDataDictSolana = Metadata.returnSolanaMetaData(solanaNewName, NFT_DNA, NFT_Variants, rename_MetaData_Variables.custom_Fields_File, rename_MetaData_Variables.enableCustomFields, rename_MetaData_Variables.solana_description)
+            metaDataDictSolana = Metadata.returnSolanaMetaData(solanaNewName, NFT_DNA, NFT_Variants,
+                                                               rename_MetaData_Variables.custom_Fields,
+                                                               rename_MetaData_Variables.enableCustomFields,
+                                                               rename_MetaData_Variables.solana_description)
 
             sendMetaDataToJson(metaDataDictSolana, solanaMetaDataPath, solanaJsonNew)
 
@@ -96,7 +101,10 @@ def renameMetaData(rename_MetaData_Variables):
             erc721JsonNew = "Erc721_" + i
             erc721NewName = name.split("_")[0] + "_" + str(file_num)
 
-            metaDataDictErc721 = Metadata.returnErc721MetaData(erc721NewName, NFT_DNA, NFT_Variants, rename_MetaData_Variables.custom_Fields_File, rename_MetaData_Variables.enableCustomFields, rename_MetaData_Variables.erc721_description)
+            metaDataDictErc721 = Metadata.returnErc721MetaData(erc721NewName, NFT_DNA, NFT_Variants,
+                                                               rename_MetaData_Variables.custom_Fields,
+                                                               rename_MetaData_Variables.enableCustomFields,
+                                                               rename_MetaData_Variables.erc721_description)
 
             sendMetaDataToJson(metaDataDictErc721, erc721MetaDataPath, erc721JsonNew)
     return
@@ -131,6 +139,8 @@ def reformatNFTCollection(refactor_panel_input):
     animationCount = 1
     modelCount = 1
     dataCount = 1
+
+    collection_info = {"Total Time": 0}
     for i in batchList:
         if images:
             imagesDir = os.path.join(refactor_panel_input.nftBatch_save_path, i, "Images")
@@ -207,6 +217,15 @@ def reformatNFTCollection(refactor_panel_input):
 
                 dataCount += 1
 
+        batch_info = json.load(open(os.path.join(refactor_panel_input.nftBatch_save_path, i, "batch_info.json")))
+        collection_info[os.path.basename(i)] = batch_info
+
+        collection_info["Total Time"] = collection_info["Total Time"] + batch_info["Batch Render Time"]
+
+    collection_info = json.dumps(collection_info, indent=1, ensure_ascii=True)
+    with open(os.path.join(completeCollPath, "collection_info.json"), 'w') as outfile:
+        outfile.write(collection_info + '\n')
+
     print(f"All NFT files stored and sorted to the Complete_Collection folder in {refactor_panel_input.save_path}")
 
     class rename_MetaData_Variables:
@@ -217,7 +236,7 @@ def reformatNFTCollection(refactor_panel_input):
         solanaMetaDataBool = refactor_panel_input.solanaMetaDataBool
         erc721MetaData = refactor_panel_input.erc721MetaData
 
-        custom_Fields_File = refactor_panel_input.custom_Fields_File
+        custom_Fields = refactor_panel_input.custom_Fields
         enableCustomFields = refactor_panel_input.enableCustomFields
 
 
@@ -225,7 +244,5 @@ def reformatNFTCollection(refactor_panel_input):
         solana_description = refactor_panel_input.solana_description
         erc721_description = refactor_panel_input.erc721_description
 
-
     renameMetaData(rename_MetaData_Variables)
-
     shutil.rmtree(refactor_panel_input.nftBatch_save_path)
