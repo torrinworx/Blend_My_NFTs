@@ -752,7 +752,7 @@ There are two mandatory arguments that you need to run this script from the term
     
     This argument tells Blend_My_NFTs which operation you want to perform.
     
-    `--operation` or `-o` with one of the following three options afterwards:
+    `--operation` with one of the following three options afterwards:
     ```
     create-dna
     generate-nfts
@@ -760,11 +760,23 @@ There are two mandatory arguments that you need to run this script from the term
     ```
 
 There are also additional optional arguments that you can use:
-  - Change save location
+  - Change Save Location
     
     This argument takes priority over the save path indicated in `config.cfg`.
     
-    `--save-path` or `-s`
+    `--save-path`
+   
+  - Change Batch Number
+    
+    This argument takes priority over the batch number specified in `config.cfg`.
+    
+    `--batch-number`
+    
+  - Use Batch Data in a non standard location
+  
+    Use batch data from a separate folder rather than the folder Blend My NFTs uses by default.
+    
+    `--batch-data`
 
 You can also view this information from your terminal/command line by running:
 

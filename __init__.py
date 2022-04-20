@@ -191,6 +191,9 @@ def runAsHeadless():
 
         Blend_My_NFTs_Output, batch_json_save_path, nftBatch_save_path = make_directories(save_path)
 
+        if args.batch_data_path:
+            batch_json_save_path = args.batch_data_path;
+
         enableImages = settings.imageBool
         imageFileFormat = settings.imageEnum
 
