@@ -55,7 +55,8 @@ if "bpy" in locals():
         "Metadata": Metadata,
         "Rarity": Rarity,
         "Refactorer": Refactorer,
-        "Custom_Metadata_UIList": Custom_Metadata_UIList
+        "Custom_Metadata_UIList": Custom_Metadata_UIList,
+        "Logic_UIList": Logic_UIList,
     }
 
     for i in modules:
