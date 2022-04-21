@@ -18,7 +18,6 @@ def save_batch(batch, file_name):
     with open(os.path.join(file_name), 'w') as outfile:
         outfile.write(saved_batch + '\n')
 
-
 def save_generation_state(batchToGenerate, batch_json_save_path, nftBatch_save_path, enableImages, imageFileFormat,
                           enableAnimations,
                           animationFileFormat, enableModelsBlender, modelFileFormat):
@@ -93,7 +92,6 @@ def render_and_save_NFTs(nftName, collectionSize, batchToGenerate, batch_json_sa
     """
 
     NFTs_in_Batch, hierarchy, BatchDNAList = getBatchData(batchToGenerate, batch_json_save_path)
-    materialsFile = json.load(open(materialsFile))
     time_start_1 = time.time()
 
     if fail_state:
@@ -109,7 +107,11 @@ def render_and_save_NFTs(nftName, collectionSize, batchToGenerate, batch_json_sa
 
     for a in BatchDNAList:
         full_single_dna = list(a.keys())[0]
-        single_dna, material_dna = full_single_dna.split(':')
+
+        if enableMaterials:
+            single_dna, material_dna = full_single_dna.split(':')
+        if not enableMaterials:
+            single_dna = full_single_dna
 
         for i in hierarchy:
             for j in hierarchy[i]:
@@ -135,7 +137,7 @@ def render_and_save_NFTs(nftName, collectionSize, batchToGenerate, batch_json_sa
                         dnaDictionary.update({x: k})
             return dnaDictionary
 
-        def match_materialDNA_to_Material(single_dna, material_dna):
+        def match_materialDNA_to_Material(single_dna, material_dna, materialsFile):
             """
             Matches the Material DNA to it's selected Materials unless a 0 is present meaning no material for that variant was selected.
             """
@@ -169,7 +171,8 @@ def render_and_save_NFTs(nftName, collectionSize, batchToGenerate, batch_json_sa
         print(f"DNA attribute list:\n{dnaDictionary}\nDNA Code:{single_dna}")
 
         if enableMaterials:
-            materialdnaDictionary = match_materialDNA_to_Material(single_dna, material_dna)
+            materialsFile = json.load(open(materialsFile))
+            materialdnaDictionary = match_materialDNA_to_Material(single_dna, material_dna, materialsFile)
 
             for var_mat in list(materialdnaDictionary.keys()):
                 if materialdnaDictionary[var_mat] != '0':
