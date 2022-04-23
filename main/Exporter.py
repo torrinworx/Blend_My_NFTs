@@ -18,9 +18,10 @@ def save_batch(batch, file_name):
     with open(os.path.join(file_name), 'w') as outfile:
         outfile.write(saved_batch + '\n')
 
+
 def save_generation_state(batchToGenerate, batch_json_save_path, nftBatch_save_path, enableImages, imageFileFormat,
-                          enableAnimations,
-                          animationFileFormat, enableModelsBlender, modelFileFormat):
+                          enableAnimations, animationFileFormat, enableModelsBlender, modelFileFormat, enableMaterials,
+                          materialsFile):
     """Saves date and time of generation start, and generation types; Images, Animations, 3D Models, and the file types for each."""
     file_name = os.path.join(batch_json_save_path, "Batch{}.json".format(batchToGenerate))
     batch = json.load(open(file_name))
@@ -47,6 +48,8 @@ def save_generation_state(batchToGenerate, batch_json_save_path, nftBatch_save_p
             "animationFileFormat": animationFileFormat,
             "enableModelsBlender": enableModelsBlender,
             "modelFileFormat": modelFileFormat,
+            "enableMaterials": enableMaterials,
+            "materialsFile": materialsFile,
         },
     })
 
@@ -81,35 +84,41 @@ def getBatchData(batchToGenerate, batch_json_save_path):
     return NFTs_in_Batch, hierarchy, BatchDNAList
 
 
-def render_and_save_NFTs(nftName, collectionSize, batchToGenerate, batch_json_save_path,
-                         nftBatch_save_path, enableImages,
-                         imageFileFormat, enableAnimations, animationFileFormat, enableModelsBlender,
-                         modelFileFormat, fail_state, failed_batch, failed_dna, failed_dna_index,
-                         enableMaterials, materialsFile):
+def render_and_save_NFTs(nftName, collectionSize, batchToGenerate, batch_json_save_path, nftBatch_save_path,
+                         enableImages, imageFileFormat, enableAnimations, animationFileFormat, enableModelsBlender,
+                         modelFileFormat, fail_state, failed_batch, failed_dna, failed_dna_index, enableMaterials,
+                         materialsFile):
     """
     Renders the NFT DNA in a Batch#.json, where # is renderBatch in config.py. Turns off the viewport camera and
     the render camera for all items in hierarchy.
     """
+    print(f"\nFAILED BATCH = {failed_batch}\n")
+    print(f"\nBATCH TO GENERATE = {batchToGenerate}\n")
 
-    NFTs_in_Batch, hierarchy, BatchDNAList = getBatchData(batchToGenerate, batch_json_save_path)
     time_start_1 = time.time()
 
     if fail_state:
+        NFTs_in_Batch, hierarchy, BatchDNAList = getBatchData(failed_batch, batch_json_save_path)
         for a in range(failed_dna):
             del BatchDNAList[0]
         x = failed_dna + 1
 
     else:
+        NFTs_in_Batch, hierarchy, BatchDNAList = getBatchData(batchToGenerate, batch_json_save_path)
         save_generation_state(batchToGenerate, batch_json_save_path, nftBatch_save_path, enableImages, imageFileFormat,
-                              enableAnimations,
-                              animationFileFormat, enableModelsBlender, modelFileFormat)
+                              enableAnimations, animationFileFormat, enableModelsBlender, modelFileFormat, enableMaterials,
+                              materialsFile)
         x = 1
+
+    if enableMaterials:
+        materialsFile = json.load(open(materialsFile))
 
     for a in BatchDNAList:
         full_single_dna = list(a.keys())[0]
 
         if enableMaterials:
             single_dna, material_dna = full_single_dna.split(':')
+
         if not enableMaterials:
             single_dna = full_single_dna
 
@@ -170,8 +179,9 @@ def render_and_save_NFTs(nftName, collectionSize, batchToGenerate, batch_json_sa
         print(f"\n{bcolors.OK}|---Generating NFT {x}/{NFTs_in_Batch} ---|{bcolors.RESET}")
         print(f"DNA attribute list:\n{dnaDictionary}\nDNA Code:{single_dna}")
 
+        metadataMaterialDict = {}
+
         if enableMaterials:
-            materialsFile = json.load(open(materialsFile))
             materialdnaDictionary = match_materialDNA_to_Material(single_dna, material_dna, materialsFile)
 
             for var_mat in list(materialdnaDictionary.keys()):
@@ -180,6 +190,7 @@ def render_and_save_NFTs(nftName, collectionSize, batchToGenerate, batch_json_sa
                         """
                         If objects to apply material to not specified, apply to all objects in Variant collection.
                         """
+                        metadataMaterialDict[var_mat] = materialdnaDictionary[var_mat]
 
                         for obj in bpy.data.collections[var_mat].all_objects:
                             selected_object = bpy.data.objects.get(obj.name)
@@ -189,6 +200,8 @@ def render_and_save_NFTs(nftName, collectionSize, batchToGenerate, batch_json_sa
                         """
                         If objects to apply material to are specified, apply material only to objects specified withing the Variant collection.
                         """
+                        metadataMaterialDict[var_mat] = materialdnaDictionary[var_mat]
+
                         for obj in materialsFile[var_mat]['Variant Objects']:
                             selected_object = bpy.data.objects.get(obj)
                             selected_object.active_material = bpy.data.materials[materialdnaDictionary[var_mat]]
@@ -341,6 +354,8 @@ def render_and_save_NFTs(nftName, collectionSize, batchToGenerate, batch_json_sa
                 dnaDictionary[b] = "Empty"
 
         metaDataDict = {"name": name, "NFT_DNA": a, "NFT_Variants": dnaDictionary}
+
+        metaDataDict["Material_Attributes"] = metadataMaterialDict
 
         jsonMetaData = json.dumps(metaDataDict, indent=1, ensure_ascii=True)
 

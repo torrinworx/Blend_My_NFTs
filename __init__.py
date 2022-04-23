@@ -200,7 +200,7 @@ def runAsHeadless():
     # don't mind me, just copy-pasting code around...
     if args.operation == 'create-dna':
         nftName = settings.nftName
-        maxNFTs = settings.collectionSize
+        collectionSize = settings.collectionSize
         nftsPerBatch = settings.nftsPerBatch
         save_path = bpy.path.abspath(settings.save_path)
         logicFile = bpy.path.abspath(settings.logicFile)
@@ -213,15 +213,15 @@ def runAsHeadless():
 
         Blend_My_NFTs_Output, batch_json_save_path, nftBatch_save_path = make_directories(save_path)
 
-        DNA_Generator.send_To_Record_JSON(maxNFTs, nftsPerBatch, save_path, enableRarity, enableLogic, logicFile,
+        DNA_Generator.send_To_Record_JSON(collectionSize, nftsPerBatch, save_path, enableRarity, enableLogic, logicFile,
                                           enableMaterials, materialsFile, Blend_My_NFTs_Output)
-        Batch_Sorter.makeBatches(nftName, maxNFTs, nftsPerBatch, save_path, batch_json_save_path)
+        Batch_Sorter.makeBatches(nftName, collectionSize, nftsPerBatch, save_path, batch_json_save_path)
 
     elif args.operation == 'generate-nfts':
         nftName = settings.nftName
         save_path = bpy.path.abspath(settings.save_path)
         batchToGenerate = settings.batchToGenerate
-        maxNFTs = settings.collectionSize
+        collectionSize = settings.collectionSize
 
         Blend_My_NFTs_Output, batch_json_save_path, nftBatch_save_path = make_directories(save_path)
 
@@ -234,16 +234,20 @@ def runAsHeadless():
         enableModelsBlender = settings.modelBool
         modelFileFormat = settings.modelEnum
 
+        enableMaterials = settings.enableMaterials
+        materialsFile = settings.materialsFile
+
         # fail state variables, set to no fail due to resume_failed_batch() Operator in BMNFTS_PT_GenerateNFTs Panel
         fail_state = False
         failed_batch = None
         failed_dna = None
         failed_dna_index = None
 
-        Exporter.render_and_save_NFTs(nftName, maxNFTs, batchToGenerate, batch_json_save_path, nftBatch_save_path,
-                                      enableImages,
+        Exporter.render_and_save_NFTs(nftName, collectionSize, batchToGenerate, batch_json_save_path,
+                                      nftBatch_save_path, enableImages,
                                       imageFileFormat, enableAnimations, animationFileFormat, enableModelsBlender,
-                                      modelFileFormat, fail_state, failed_batch, failed_dna, failed_dna_index
+                                      modelFileFormat, fail_state, failed_batch, failed_dna, failed_dna_index,
+                                      enableMaterials, materialsFile
                                       )
     elif args.operation == 'refactor-batches':
         class refactorData:
@@ -528,12 +532,13 @@ class resume_failed_batch(bpy.types.Operator):
         animationFileFormat = batch["Generation Save"][-1]["Render_Settings"]["animationFileFormat"]
         enableModelsBlender = batch["Generation Save"][-1]["Render_Settings"]["enableModelsBlender"]
         modelFileFormat = batch["Generation Save"][-1]["Render_Settings"]["modelFileFormat"]
+        enableMaterials = batch["Generation Save"][-1]["Render_Settings"]["enableMaterials"]
+        materialsFile = batch["Generation Save"][-1]["Render_Settings"]["materialsFile"]
 
-        Exporter.render_and_save_NFTs(nftName, collectionSize, failed_batch, batch_json_save_path, nftBatch_save_path,
-                                      enableImages,
-                                      imageFileFormat, enableAnimations, animationFileFormat, enableModelsBlender,
-                                      modelFileFormat, fail_state, failed_batch, failed_dna, failed_dna_index
-                                      )
+        Exporter.render_and_save_NFTs(nftName, collectionSize, batchToGenerate, batch_json_save_path, nftBatch_save_path,
+                         enableImages, imageFileFormat, enableAnimations, animationFileFormat, enableModelsBlender,
+                         modelFileFormat, fail_state, failed_batch, failed_dna, failed_dna_index, enableMaterials,
+                         materialsFile)
 
         self.report({'INFO'}, f"Resuming Failed Batch Generation!")
 
