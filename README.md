@@ -15,9 +15,9 @@ Blend_My_NFTs is an open source, free to use Blender add on that enables you to 
 
 For support, help, and questions, please join our wonderful Discord community: https://discord.gg/UpZt5Un57t 
 
-Checkout the newest tutorial on YouTube that goes along with this documentation: https://www.youtube.com/watch?v=SwU4iVy1XpU
+Checkout the newest tutorial on YouTube that goes along with this documentation: https://www.youtube.com/watch?v=ygKJYz4BjRs
 
-This add on was developed to create the This Cozy Place NFT project which is now availabe to mint on [ThisCozyStudio.com](https://thiscozystudio.com/)
+This add on was developed to create the This Cozy Place NFT project which is now availabe to mint on [ThisCozyStudio.com](https://www.thiscozystudio.com/cozy-mint/)
 
 
 https://user-images.githubusercontent.com/82110564/147833465-965be08b-ca5f-47ba-a159-b92ff775ee14.mov
@@ -40,37 +40,8 @@ Instagram: https://www.instagram.com/this_cozy_studio/
 Reddit: https://www.reddit.com/r/ThisCozyPlace/
 
 
-## Case Studies
-This document has a list of projects that use Blend_My_NFTs to help facilitate them in the creation of their collection: 
-https://docs.google.com/document/d/e/2PACX-1vSHZS4GRu8xXDYpVPEaxyBeTzms9yrJEC9IoAcP38_U8x0C1kVrbtNZgh0zUmkzBoZQVwNvBf3ldRij/pub
-
-
-## Donations
-
-Blend_My_NFTs, this readme documenation, YouTube tutorials, live stream Q/As, and the Discord community are all provided for free by This Cozy Studio for anyone to use and access. We only ask in return that you credit this software and kindly share what our team has built. A direct link to the Blend_My_NFTs Github page on your projects website (or equivelant social platform) would sefice. We ask you to share this tool because we feel there are many out there that would benefit from it, our only goal is to help those in need. It warms our hearts that so many people use this add-on.
-
-Any donations to the following methods will be put towards developing Blend_My_NFTs and future related Metaverse/Blockchain projects. This Cozy Studio has big plans for Blend_My_NFTs in 2022 and we value your support! 
-
-  - PayPal: https://www.paypal.com/paypalme/TorrinLeonard
-
-Crypto Addresses: 
-
-  - Cardano: `addr1qxzuqz0c32ucga8amwk53unt7vhyf56q73x55aec2lm8esv9cqyl3z4es360mkadfrexhuewgnf5pazdffmns4lk0nqsfylz24`
-
-  - Solana: `A7NuHB79DKfkdZMvqVzBrYN4NXRqP7LVFjMdVoKRfVmo`
-
-  - Ethereum: `0x335408858ce319Cb411090792Ba4BCEE6a2d10CB`
-
-  - USDC (ETH Network): `0x335408858ce319Cb411090792Ba4BCEE6a2d10CB`
-
-We at This Cozy Studio really appreciate all the support our community has given us, you push us forward and inspire us to accomplish great things. We are nothing without you. 
-
-Thank you, 
-
-- This Cozy Studio team
-
 ## Quick Disclaimer
-Blend_My_NFTs works with Blender 3.0.0 on Windows 10 or macOS Big Sur 11.6. Linux is supported, however I haven't had the chance to test this functionality and guarantee this. Any rendering engine works; Cycles, Eevee, and Octane have all been used by the community without issue. This add-on only works in Blender, a Cinima 4D port will be investigated in the future.
+Blend_My_NFTs works with Blender 3.1.0+ on Windows 10 or macOS Big Sur 11.6. Linux is supported, however we haven't had the chance to test and guarantee this functionality. Any rendering engine works; Cycles, Eevee, and Octane have all been used by the community. This add-on only works in Blender, a Cinima 4D port is being investigated.
 
 ## Example Files
 The YouTube tutorials use three different .blend example files. This repository has all three and includes a readme.md file that outlines which videos use which files and by what date: https://github.com/torrinworx/BMNFTs_Examples
@@ -96,7 +67,7 @@ The YouTube tutorials use three different .blend example files. This repository 
 - [Custom Metadata Fields](#custom-metadata-fields)
   - [Custom Fields Schema](#custom-fields-schema)
 - [Logic](#logic)
-  - [Logic JSON Schema](#logic-json-schema)
+  - [Logic JSON File Schema](#logic-json-schema)
     - [Schema Definition](#schema-definition)
     - [Rule Types](#rule-types)
   - [Example Logic.json File](#example-logicjson-file)
@@ -406,62 +377,57 @@ After completeing the `Refactor Batches & Create MetaData` step, you should have
 Congratulations!! You now have a complete 3D NFT collection that is ready to upload to the blockchain of your choice!
 
 # Custom Metadata Fields
-This section will cover how to implement custom metadata fields. The method is the same for the Cardano CIP-25, Solana, and ERC721 standards. 
 
-These fields are determined by a .json file that you manually create. For the pruposes of this documentation, just think of JSON as a text file (.txt) that we can use to store information. You can name this file anything, but for this tutorial lets call it `Custom_Fields.json`.
+Custom Metadata fields can be added to the ERC721, CIP 25 and Solana templates. In the `Refactor Batches & Create Metadata` panel check the `Enable Custome Metadata Fields` checkbox:
 
-If you need help creating a JSON file, checkout this tutorial: [How to Create JSON File?](https://codebeautify.org/blog/how-to-create-json-file/)
+<img width="671" alt="Screen Shot 2022-04-24 at 3 50 27 PM" src="https://user-images.githubusercontent.com/82110564/164993989-e34f4ecc-37d3-41cf-9bcc-222727a2ab8d.png">
 
-To learn more about JSON files and how to structure data read this article: [Working with JSON](https://developer.mozilla.org/en-US/docs/Learn/JavaScript/Objects/JSON)
+You can add and remove Custome Fields in this list using the two + and - buttons: <img width="34" alt="Screen Shot 2022-04-24 at 3 35 16 PM" src="https://user-images.githubusercontent.com/82110564/164993415-71feb5e0-56d1-4143-b423-3e3cde97de30.png">
 
-## Custom Fields Schema
-If you'd like, copy and paste this template into the JSON file you created above: 
+Each item in the list has two inputs; the `Name` and the `Value`. Each of these fields will be added to the Metadata Template you select when you refactor your batches.
 
-```
-{
-  "<item 1>": "<content of item 1>", 
-  "<item 2>": "<content of item 2>", 
-  "<item 3>": "<content of item 3>", 
-  "<item 4>": "<content of item 4>"
-  ...
-}
-```
+**Important:** All Feild `Names` must be unique. 
 
-Each item in this dictionary will be sent to the attributes feild of a given metadata standard. For example, this is what a Cardano template would look like once these fields are applied:
 
-```
-{
- "721": {
-  "<policy_id>": {
-   "Logic Test_1": {
-    "name": "Logic Test_1",
-    "image": "",
-    "mediaType": "",
-    "description": "",
-    "Cube": "Red Cube",
-    "Sphere": "Red Sphere",
-    "<item 1>": "<content of item 1>", 
-    "<item 2>": "<content of item 2>", 
-    "<item 3>": "<content of item 3>", 
-    "<item 4>": "<content of item 4>"
-   }
-  },
-  "version": "1.0"
- }
-}
-```
+# Logic
 
-# Logic 
+This section will go over the process of creating and using rules for your NFT collection, we will refer to this process as Logic. To enable Logic, check the `Enable Logic` checkbox in the `Create NFT Data` panel:
 
-This section will go over the process of creating and using rules for your NFT collection, we will refer to this process as Logic.
+<img width="438" alt="Screen Shot 2022-04-24 at 3 32 43 PM" src="https://user-images.githubusercontent.com/82110564/164993321-50381d0c-bf95-4046-af9e-bd1a6eeb8bdf.png">
 
-Logic is deterimened by a .json file that you manually create. For the purposes of this documentation, just think of JSON as a text file (.txt) that we can use to store information. You can name this file anything, but for this tutorial lets call it `Logic.json`.
+You can add and remove Rules in this list using the two + and - buttons: <img width="34" alt="Screen Shot 2022-04-24 at 3 35 16 PM" src="https://user-images.githubusercontent.com/82110564/164993415-71feb5e0-56d1-4143-b423-3e3cde97de30.png">
 
-If you need help creating a JSON file, checkout this tutorial: [How to Create JSON File?](https://codebeautify.org/blog/how-to-create-json-file/)
+Each item in the list will have two text fields labled `Item List 1` and `Item List 2` and a drop down menu where you can select the type of rule:
 
-To learn more about JSON files and how to structure data read this article: [Working with JSON](https://developer.mozilla.org/en-US/docs/Learn/JavaScript/Objects/JSON)
+<img width="552" alt="Screen Shot 2022-04-24 at 3 37 03 PM" src="https://user-images.githubusercontent.com/82110564/164993481-335bcc86-1fd1-4a7f-9e82-58c4a4b31642.png">
+
+The best way to understand how Logic works is to think of it as a sentence, example: ``"Items List 1 Never goes With Items List 2"`` or ``"Items List 1 Only goes With Items List 2"``.
+
+Both `Item Lists` can contain either multiple Variants or Attributes, however this is limited depending on the type of Rule that is selected (See [Rule Types](#rule-types)). All items in the `Item Lists` are seperated by a comma (`,`), NO SPACES!
+
+It's reccomended if you have a large NFT collection to create a Logic.json file so that your Rules are stored safely. See [Logic JSON Schema](#logic-json-schema).
+
+
+## Rule Types
+
+There are two rule types:
+- ``Never with`` --> If selected, ``Items List 1`` will never appear if ``Items List 2`` are selected. For each NFT DNA that is generated, either ``Items List 1`` or ``Items List 2`` are randomly selected. That selected ``Items List`` is then acted upon depending on if the items in the list are Attributes or Variants: 
+  - If ``Items List`` contains complete Attribute(s), those Attribute(s) will be set to Empty automatically.
+  - If ``Items List`` contains Variant(s), the other Variants in that Variants Attribute will be randomly or weightedly selected depending on if you have ``Enable Rarity`` selected when you create NFT data.
+ 
+- ``Only with`` --> If selected, ``Items List 1`` will only appear if ``Items List 2`` are selected. If ``Items List 1`` contains complete Attribute(s), those Attribute(s) will be set to Empty automatically. Meaning they will not appear if you export images, animations, or 3D models.
+
+- ``Always with`` --> If selected, ``Items List 1`` will always appear if ``Items List 2`` are selected.``Items List 1`` CANNOT contain complete Attribute(s) and is limited to single Variants. The list can contain multiple Variants, however they must be from seperate Attributes.
+
+**Important:** The more rules you add the higher the chance a rule conflict may arise, and you may see Attribute and Variant behaviour that you do not desire.
 
 ## Logic JSON Schema
+
+Logic can also be deterimened by a .json file that you manually create. For the purposes of this documentation, just think of JSON as a text file (.txt) that we can use to store information. You can name this file anything, but for this tutorial lets call it `Logic.json`.
+
+If you need help creating a JSON file, checkout this tutorial: [How to Create JSON File?](https://codebeautify.org/blog/how-to-create-json-file/)
+
+To learn more about JSON files and how to structure data read this article: [Working with JSON](https://developer.mozilla.org/en-US/docs/Learn/JavaScript/Objects/JSON)
 If you'd like, copy and paste this template into the JSON file you created above:
 
 ```
@@ -492,20 +458,6 @@ If you'd like, copy and paste this template into the JSON file you created above
 - ``Items-1`` A list of strings representing the names of Attribute(s) or Variant(s).
 - ``Rule-Type`` The rule that governs the relation between ``Items-1`` and ``Items-2``. Has two possible values: ``Never with`` and ``Only with``.
 - ``Items-2`` A list of strings representing the names of Attribute(s) or Variant(s).
-
-### Rule Types
-There are two rule types:
-- ``Never with`` --> If selected, ``Items-1`` will never appear if ``Items-2`` are selected. For each NFT DNA that is generated, either ``Items-1`` or ``Items-2`` are randomly selected. That selected ``Items List`` is then acted upon depending on if the items in the list are Attributes or Variants: 
-  - If ``Items List`` contains complete Attribute(s), those Attribute(s) will be set to Empty automatically.
-  - If ``Items List`` contains Variant(s), the other Variants in that Variants Attribute will be randomly or weightedly selected depending on if you have ``Enable Rarity`` selected when you create NFT data.
- 
-- ``Only with`` --> If selected, ``Items-1`` will only appear if ``Items-2`` are selected. If ``Items-1`` contains complete Attribute(s), those Attribute(s) will be set to Empty automatically. Meaning they will not appear if you export images, animations, or 3D models.
-
-- ``Always with`` --> If selected, ``Items-1`` will always appear if ``Items-2`` are selected.``Items-1`` CANNOT contain complete Attribute(s) and is limited to single Variants. The list can contain multiple Variants, however they must be from seperate Attributes.
-
-The best way to understand how Logic works is to think of it as a sentence, example: ``"Items-1 Never goes with Items-2"`` or ``"Items-1 Only goes with Items-2"``.
-
-**Important:** The more rules you add the higher the chance a rule conflict may arise, and you may see Attribute and Variant behaviour that you do not desire. 
 
 ## Example Logic.json File
 Say we have the following scene in a .blend file: 
