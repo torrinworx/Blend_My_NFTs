@@ -376,6 +376,39 @@ After completeing the `Refactor Batches & Create MetaData` step, you should have
 
 Congratulations!! You now have a complete 3D NFT collection that is ready to upload to the blockchain of your choice!
 
+
+# Randomizing Materials
+To enable the Material Randomizer check the `Enable Materials` check box in the `Create NFT Data`:
+
+<img width="668" alt="Screen Shot 2022-04-24 at 4 01 41 PM" src="https://user-images.githubusercontent.com/82110564/164994393-ccdade65-df9c-460b-ae3e-0806f9d08692.png">
+
+Materials are deterimened by a .json file that you manually create. For the purposes of this documentation, just think of JSON as a text file (.txt) that we can use to store information. You can name this file anything, but for this tutorial lets call it `Logic.json`.
+
+If you need help creating a JSON file, checkout this tutorial: [How to Create JSON File?](https://codebeautify.org/blog/how-to-create-json-file/)
+
+To learn more about JSON files and how to structure data read this article: [Working with JSON](https://developer.mozilla.org/en-US/docs/Learn/JavaScript/Objects/JSON)
+
+Material Randomizer compatable materials must follow this naming convention: `<Material Name>_<Material Order Number>_<Material Rarity>`
+
+## Material Randomizer JSON Schema
+
+If you'd like, copy and paste this template into the JSON file you created above:
+
+```
+{
+    "<Variant Name>": {
+        "Variant Objects":["<Object in Variant Collection 1>", "<Object in Variant Collection 1>"],
+        "Material List": ["<Material Name>_<Material Order Number>_<Material Rarity>", "<Material Name>_<Material Order Number>_<Material Rarity>"]
+    },
+    "Red Cone_1_0": {
+        "Variant Objects":["<Object in Variant Collection 1>", "<Object in Variant Collection 1>"],
+        "Material List": ["<Material Name>_<Material Order Number>_<Material Rarity>", "<Material Name>_<Material Order Number>_<Material Rarity>"]
+    }
+}
+
+```
+
+
 # Custom Metadata Fields
 
 Custom Metadata fields can be added to the ERC721, CIP 25 and Solana templates. In the `Refactor Batches & Create Metadata` panel check the `Enable Custome Metadata Fields` checkbox:
