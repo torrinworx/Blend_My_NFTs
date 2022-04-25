@@ -157,12 +157,12 @@ def render_and_save_NFTs(nftName, maxNFTs, batchToGenerate, batch_json_save_path
         obj = bpy.context.active_object
         # You can choose your texture size (This will be the de bake image)
         image_name = obj.name + '_BakedTexture'
-        img = bpy.data.images.new(image_name,4096,4096)
+        image = bpy.data.images.new(image_name,4096,4096)
         context = bpy.context
         nodes = context.active_object.active_material.node_tree.nodes
         links = context.active_object.active_material.node_tree.links
-        ps = nodes.get('Principled BSDF')
-        texture_node =nodes.new('ShaderNodeTexImage')
+        bsdf = nodes.get('Principled BSDF')
+        texture_node = nodes.new('ShaderNodeTexImage')
             
         #Due to the presence of any multiple materials, it seems necessary to iterate on all the materials, and assign them a node + the image to bake.
         for mat in obj.data.materials:
@@ -177,10 +177,11 @@ def render_and_save_NFTs(nftName, maxNFTs, batchToGenerate, batch_json_save_path
             
         bpy.context.view_layer.objects.active = obj
         bpy.ops.object.bake(type='DIFFUSE', save_mode='EXTERNAL')
-a
-        img.save_render(filepath='C:\\TEMP\\baked.png')
+        
+        if image: 
+            image.save_render(filepath='C:\\TEMP\\baked.png')
 
-        links.new(texture_node.outputs[0], ps.inputs[0])
+        links.new(texture_node.outputs[0], bsdf.inputs[0])
         print("done")
             
 
