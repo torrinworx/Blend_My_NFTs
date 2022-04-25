@@ -47,7 +47,7 @@ https://docs.google.com/document/d/e/2PACX-1vSHZS4GRu8xXDYpVPEaxyBeTzms9yrJEC9Io
 
 ## Donations
 
-Blend_My_NFTs, this readme documenation, YouTube tutorials, live stream Q/As, and the Discord community are all provided for free by This Cozy Studio for anyone to use and access. We only ask in return that you credit this software and kindly share what our team has built. A direct link to the Blend_My_NFTs Github page on your projects website (or equivelant social platform) would sefice. We ask you to share this tool because we feel there are many out there that would benefit from it, our only goal is to help those in need. It warms our hearts that so many people use this add-on.
+Blend_My_NFTs, this readme documentation, YouTube tutorials, live stream Q/As, and the Discord community are all provided for free by This Cozy Studio for anyone to use and access. We only ask in return that you credit this software and kindly share what our team has built. A direct link to the Blend_My_NFTs Github page on your projects website (or equivalent social platform) would suffice. We ask you to share this tool because we feel there are many out there that would benefit from it, our only goal is to help those in need. It warms our hearts that so many people use this add-on.
 
 Any donations to the following methods will be put towards developing Blend_My_NFTs and future related Metaverse/Blockchain projects. This Cozy Studio has big plans for Blend_My_NFTs in 2022 and we value your support! 
 
@@ -70,7 +70,7 @@ Thank you,
 - This Cozy Studio team
 
 ## Quick Disclaimer
-Blend_My_NFTs works with Blender 3.0.0 on Windows 10 or macOS Big Sur 11.6. Linux is supported, however I haven't had the chance to test this functionality and guarantee this. Any rendering engine works; Cycles, Eevee, and Octane have all been used by the community without issue. This add-on only works in Blender, a Cinima 4D port will be investigated in the future.
+Blend_My_NFTs works with Blender 3.0.0 on Windows 10 or macOS Big Sur 11.6. Linux is supported, however I haven't had the chance to test this functionality and guarantee this. Any rendering engine works; Cycles, Eevee, and Octane have all been used by the community without issue. This add-on only works in Blender, a Cinema 4D port will be investigated in the future.
 
 ## Example Files
 The YouTube tutorials use three different .blend example files. This repository has all three and includes a readme.md file that outlines which videos use which files and by what date: https://github.com/torrinworx/BMNFTs_Examples

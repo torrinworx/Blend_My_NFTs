@@ -154,39 +154,35 @@ def render_and_save_NFTs(nftName, maxNFTs, batchToGenerate, batch_json_save_path
         animationFolder = os.path.join(batchFolder, "Animations")
         modelFolder = os.path.join(batchFolder, "Models")
         metaDataFolder = os.path.join(batchFolder, "BMNFT_metaData")
-        
-        def BakeFirst():
-            obj = bpy.context.active_object
-            # You can choose your texture size (This will be the de bake image)
-            image_name = obj.name + '_BakedTexture'
-            img = bpy.data.images.new(image_name,4096,4096)
-            context = bpy.context
-            nodes = context.active_object.active_material.node_tree.nodes
-            links = context.active_object.active_material.node_tree.links
-            ps = nodes.get('Principled BSDF')
-            texture_node =nodes.new('ShaderNodeTexImage')
-               
-            #Due to the presence of any multiple materials, it seems necessary to iterate on all the materials, and assign them a node + the image to bake.
-            for mat in obj.data.materials:
-
-                mat.use_nodes = True #Here it is assumed that the materials have been created with nodes, otherwise it would not be possible to assign a node for the Bake, so this step is a bit useless
-                nodes = mat.node_tree.nodes
-                
-                texture_node.name = 'Bake_node'
-                texture_node.select = True
-                nodes.active = texture_node
-                texture_node.image = img #Assign the image to the node
-
-                
-            bpy.context.view_layer.objects.active = obj
-            bpy.ops.object.bake(type='DIFFUSE', save_mode='EXTERNAL')
-a
-            img.save_render(filepath='C:\\TEMP\\baked.png')
-
-            links.new(texture_node.outputs[0], ps.inputs[0])
-            print("done")
+        obj = bpy.context.active_object
+        # You can choose your texture size (This will be the de bake image)
+        image_name = obj.name + '_BakedTexture'
+        img = bpy.data.images.new(image_name,4096,4096)
+        context = bpy.context
+        nodes = context.active_object.active_material.node_tree.nodes
+        links = context.active_object.active_material.node_tree.links
+        ps = nodes.get('Principled BSDF')
+        texture_node =nodes.new('ShaderNodeTexImage')
             
-        BakeFirst()
+        #Due to the presence of any multiple materials, it seems necessary to iterate on all the materials, and assign them a node + the image to bake.
+        for mat in obj.data.materials:
+
+            mat.use_nodes = True #Here it is assumed that the materials have been created with nodes, otherwise it would not be possible to assign a node for the Bake, so this step is a bit useless
+            nodes = mat.node_tree.nodes
+            
+            texture_node.name = 'Bake_node'
+            texture_node.select = True
+            nodes.active = texture_node
+            texture_node.image = img #Assign the image to the node
+            
+        bpy.context.view_layer.objects.active = obj
+        bpy.ops.object.bake(type='DIFFUSE', save_mode='EXTERNAL')
+a
+        img.save_render(filepath='C:\\TEMP\\baked.png')
+
+        links.new(texture_node.outputs[0], ps.inputs[0])
+        print("done")
+            
 
         # Generation/Rendering:
         if enableImages:
