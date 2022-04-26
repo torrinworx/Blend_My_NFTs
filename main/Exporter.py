@@ -106,7 +106,8 @@ def render_and_save_NFTs(nftName, collectionSize, batchToGenerate, batch_json_sa
     else:
         NFTs_in_Batch, hierarchy, BatchDNAList = getBatchData(batchToGenerate, batch_json_save_path)
         save_generation_state(batchToGenerate, batch_json_save_path, nftBatch_save_path, enableImages, imageFileFormat,
-                              enableAnimations, animationFileFormat, enableModelsBlender, modelFileFormat, enableMaterials,
+                              enableAnimations, animationFileFormat, enableModelsBlender, modelFileFormat,
+                              enableMaterials,
                               materialsFile)
         x = 1
 
@@ -115,6 +116,10 @@ def render_and_save_NFTs(nftName, collectionSize, batchToGenerate, batch_json_sa
 
     for a in BatchDNAList:
         full_single_dna = list(a.keys())[0]
+
+        # Change Text Object in Scene to match DNA string:
+        # ob = bpy.data.objects['Text']  # Object name
+        # ob.data.body = str(f"DNA: {full_single_dna}")  # Set text of Text Object ob
 
         if enableMaterials:
             single_dna, material_dna = full_single_dna.split(':')
