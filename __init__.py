@@ -1,5 +1,5 @@
 bl_info = {
-    "name": "Blend_My_NFTs",
+    "name": "Blend_My_NFTs V4 Alpha",
     "author": "Torrin Leonard, This Cozy Studio Inc",
     "version": (4, 0, 0),
     "blender": (3, 1, 3),
