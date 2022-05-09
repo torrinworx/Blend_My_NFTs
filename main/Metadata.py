@@ -14,8 +14,8 @@ def returnCardanoMetaData(name, NFT_DNA, NFT_Variants, custom_Fields_File, enabl
         "<policy_id>": {
             name: {
                 "name": name,
-                "image": "",
-                "mediaType": "",
+                "image": "<ipfs_link>",
+                "mediaType": "<mime_type>",
                 "description": cardano_description,
             }
         },
