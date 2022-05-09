@@ -9,13 +9,13 @@ import bpy
 import json
 
 # Cardano Template
-def returnCardanoMetaData(name, NFT_DNA, NFT_Variants, custom_Fields_File, enableCustomFields, cardano_description):
+def returnCardanoMetaData(name, NFT_DNA, NFT_Variants, custom_Fields_File, enableCustomFields, cardano_description, metadata_baseuri, media_format):
     metaDataDictCardano = {"721": {
         "<policy_id>": {
             name: {
                 "name": name,
-                "image": "",
-                "mediaType": "",
+                "image": metadata_baseuri+"/"+name+"."+media_format,
+                "mediaType": media_format,
                 "description": cardano_description,
             }
         },
@@ -34,9 +34,9 @@ def returnCardanoMetaData(name, NFT_DNA, NFT_Variants, custom_Fields_File, enabl
     return metaDataDictCardano
 
 # Solana Template
-def returnSolanaMetaData(name, NFT_DNA, NFT_Variants, custom_Fields_File, enableCustomFields, solana_description):
+def returnSolanaMetaData(name, NFT_DNA, NFT_Variants, custom_Fields_File, enableCustomFields, solana_description, metadata_baseuri, media_format):
     metaDataDictSolana = {"name": name, "symbol": "", "description": solana_description, "seller_fee_basis_points": None,
-                          "image": "", "animation_url": "", "external_url": ""}
+                          "image": metadata_baseuri+"/"+name+"."+media_format, "animation_url": "", "external_url": ""}
 
     attributes = []
 
@@ -72,11 +72,11 @@ def returnSolanaMetaData(name, NFT_DNA, NFT_Variants, custom_Fields_File, enable
     return metaDataDictSolana
 
 # ERC721 Template
-def returnErc721MetaData(name, NFT_DNA, NFT_Variants, custom_Fields_File, enableCustomFields, erc721_description):
+def returnErc721MetaData(name, NFT_DNA, NFT_Variants, custom_Fields_File, enableCustomFields, erc721_description, metadata_baseuri, media_format):
     metaDataDictErc721 = {
         "name": name,
         "description": erc721_description,
-        "image": "",
+        "image": metadata_baseuri+"/"+name+"."+media_format,
         "attributes": None,
     }
 
