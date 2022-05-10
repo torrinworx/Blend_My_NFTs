@@ -9,6 +9,7 @@ import json
 import datetime
 from .loading_animation import Loader
 from .Constants import bcolors, removeList, remove_file_by_extension
+from .Metadata import createCardanoMetadata, createSolanaMetaData, createErc721MetaData
 
 
 # Save info
@@ -19,11 +20,9 @@ def save_batch(batch, file_name):
         outfile.write(saved_batch + '\n')
 
 
-def save_generation_state(batchToGenerate, batch_json_save_path, nftBatch_save_path, enableImages, imageFileFormat,
-                          enableAnimations, animationFileFormat, enableModelsBlender, modelFileFormat, enableMaterials,
-                          materialsFile):
+def save_generation_state(input):
     """Saves date and time of generation start, and generation types; Images, Animations, 3D Models, and the file types for each."""
-    file_name = os.path.join(batch_json_save_path, "Batch{}.json".format(batchToGenerate))
+    file_name = os.path.join(input.batch_json_save_path, "Batch{}.json".format(input.batchToGenerate))
     batch = json.load(open(file_name))
 
     CURRENT_TIME = datetime.datetime.now().strftime("%H:%M:%S")
@@ -41,15 +40,39 @@ def save_generation_state(batchToGenerate, batch_json_save_path, nftBatch_save_p
         "DNA Generated": None,
         "Generation Start Date and Time": [CURRENT_TIME, CURRENT_DATE, LOCAL_TIMEZONE],
         "Render_Settings": {
-            "nftBatch_save_path": nftBatch_save_path,
-            "enableImages": enableImages,
-            "imageFileFormat": imageFileFormat,
-            "enableAnimations": enableAnimations,
-            "animationFileFormat": animationFileFormat,
-            "enableModelsBlender": enableModelsBlender,
-            "modelFileFormat": modelFileFormat,
-            "enableMaterials": enableMaterials,
-            "materialsFile": materialsFile,
+
+            "nftName": input.nftName,
+            "save_path": input.save_path,
+            "batchToGenerate": input.batchToGenerate,
+            "collectionSize": input.collectionSize,
+
+            "Blend_My_NFTs_Output": input.Blend_My_NFTs_Output,
+            "batch_json_save_path": input.batch_json_save_path,
+            "nftBatch_save_path": input.nftBatch_save_path,
+
+            "enableImages": input.enableImages,
+            "imageFileFormat": input.imageFileFormat,
+
+            "enableAnimations": input.enableAnimations,
+            "animationFileFormat": input.animationFileFormat,
+
+            "enableModelsBlender": input.enableModelsBlender,
+            "modelFileFormat": input.modelFileFormat,
+
+            "enableCustomFields": input.enableCustomFields,
+            "custom_Fields": input.custom_Fields,
+
+            "cardanoMetaDataBool": input.cardanoMetaDataBool,
+            "solanaMetaDataBool": input.solanaMetaDataBool,
+            "erc721MetaData": input.erc721MetaData,
+
+            "cardano_description": input.cardano_description,
+            "solana_description": input.solana_description,
+            "erc721_description": input.erc721_description,
+
+            "enableMaterials": input.enableMaterials,
+            "materialsFile": input.materialsFile,
+
         },
     })
 
@@ -84,53 +107,44 @@ def getBatchData(batchToGenerate, batch_json_save_path):
     return NFTs_in_Batch, hierarchy, BatchDNAList
 
 
-def render_and_save_NFTs(nftName, collectionSize, batchToGenerate, batch_json_save_path, nftBatch_save_path,
-                         enableImages, imageFileFormat, enableAnimations, animationFileFormat, enableModelsBlender,
-                         modelFileFormat, fail_state, failed_batch, failed_dna, failed_dna_index, enableMaterials,
-                         materialsFile):
+def render_and_save_NFTs(input):
     """
     Renders the NFT DNA in a Batch#.json, where # is renderBatch in config.py. Turns off the viewport camera and
     the render camera for all items in hierarchy.
     """
-    print(f"\nFAILED BATCH = {failed_batch}\n")
-    print(f"\nBATCH TO GENERATE = {batchToGenerate}\n")
+    print(f"\nFAILED BATCH = {input.failed_batch}\n")
+    print(f"\nBATCH TO GENERATE = {input.batchToGenerate}\n")
 
     time_start_1 = time.time()
 
-    if fail_state:
-        NFTs_in_Batch, hierarchy, BatchDNAList = getBatchData(failed_batch, batch_json_save_path)
-        for a in range(failed_dna):
+    if input.fail_state:
+        NFTs_in_Batch, hierarchy, BatchDNAList = getBatchData(input.failed_batch, input.batch_json_save_path)
+        for a in range(input.failed_dna):
             del BatchDNAList[0]
-        x = failed_dna + 1
+        x = input.failed_dna + 1
 
     else:
-        NFTs_in_Batch, hierarchy, BatchDNAList = getBatchData(batchToGenerate, batch_json_save_path)
-        save_generation_state(batchToGenerate, batch_json_save_path, nftBatch_save_path, enableImages, imageFileFormat,
-                              enableAnimations, animationFileFormat, enableModelsBlender, modelFileFormat,
-                              enableMaterials,
-                              materialsFile)
+        NFTs_in_Batch, hierarchy, BatchDNAList = getBatchData(input.batchToGenerate, input.batch_json_save_path)
+        save_generation_state(input)
         x = 1
 
-    if enableMaterials:
-        materialsFile = json.load(open(materialsFile))
+    if input.enableMaterials:
+        materialsFile = json.load(open(input.materialsFile))
 
     for a in BatchDNAList:
         full_single_dna = list(a.keys())[0]
+        Order_Num = a[full_single_dna]['Order_Num']
 
         # Change Text Object in Scene to match DNA string:
         # ob = bpy.data.objects['Text']  # Object name
         # ob.data.body = str(f"DNA: {full_single_dna}")  # Set text of Text Object ob
 
-        if enableMaterials:
+        # Material handling:
+        if input.enableMaterials:
             single_dna, material_dna = full_single_dna.split(':')
 
-        if not enableMaterials:
+        if not input.enableMaterials:
             single_dna = full_single_dna
-
-        for i in hierarchy:
-            for j in hierarchy[i]:
-                bpy.data.collections[j].hide_render = True
-                bpy.data.collections[j].hide_viewport = True
 
         def match_DNA_to_Variant(single_dna):
             """
@@ -178,15 +192,9 @@ def render_and_save_NFTs(nftName, collectionSize, batchToGenerate, batch_json_sa
 
             return full_dna_dict
 
-        dnaDictionary = match_DNA_to_Variant(single_dna)
-        name = nftName + "_" + str(x)
-
-        print(f"\n{bcolors.OK}|---Generating NFT {x}/{NFTs_in_Batch} ---|{bcolors.RESET}")
-        print(f"DNA attribute list:\n{dnaDictionary}\nDNA Code:{single_dna}")
-
         metadataMaterialDict = {}
 
-        if enableMaterials:
+        if input.enableMaterials:
             materialdnaDictionary = match_materialDNA_to_Material(single_dna, material_dna, materialsFile)
 
             for var_mat in list(materialdnaDictionary.keys()):
@@ -211,6 +219,18 @@ def render_and_save_NFTs(nftName, collectionSize, batchToGenerate, batch_json_sa
                             selected_object = bpy.data.objects.get(obj)
                             selected_object.active_material = bpy.data.materials[materialdnaDictionary[var_mat]]
 
+        # Turn off render camera and viewport camera for all collections in hierarchy
+        for i in hierarchy:
+            for j in hierarchy[i]:
+                bpy.data.collections[j].hide_render = True
+                bpy.data.collections[j].hide_viewport = True
+
+        dnaDictionary = match_DNA_to_Variant(single_dna)
+        name = input.nftName + "_" + str(Order_Num)
+
+        print(f"\n{bcolors.OK}|--- Generating NFT {x}/{NFTs_in_Batch}: {name} ---|{bcolors.RESET}")
+        print(f"DNA attribute list:\n{dnaDictionary}\nDNA Code:{single_dna}")
+
         for c in dnaDictionary:
             collection = dnaDictionary[c]
             if collection != '0':
@@ -219,7 +239,8 @@ def render_and_save_NFTs(nftName, collectionSize, batchToGenerate, batch_json_sa
 
         time_start_2 = time.time()
 
-        batchFolder = os.path.join(nftBatch_save_path, "Batch" + str(batchToGenerate))
+        # Main paths for batch subfolders:
+        batchFolder = os.path.join(input.nftBatch_save_path, "Batch" + str(input.batchToGenerate))
 
         imagePath = os.path.join(batchFolder, "Images", name)
         animationPath = os.path.join(batchFolder, "Animations", name)
@@ -228,10 +249,14 @@ def render_and_save_NFTs(nftName, collectionSize, batchToGenerate, batch_json_sa
         imageFolder = os.path.join(batchFolder, "Images")
         animationFolder = os.path.join(batchFolder, "Animations")
         modelFolder = os.path.join(batchFolder, "Models")
-        metaDataFolder = os.path.join(batchFolder, "BMNFT_metaData")
+        BMNFT_metaData_Folder = os.path.join(batchFolder, "BMNFT_metadata")
+
+        cardanoMetadataPath = os.path.join(batchFolder, "Cardano_metadata")
+        solanaMetadataPath = os.path.join(batchFolder, "Solana_metadata")
+        erc721MetadataPath = os.path.join(batchFolder, "Erc721_metadata")
 
         # Generation/Rendering:
-        if enableImages:
+        if input.enableImages:
             print(f"{bcolors.OK}---Image---{bcolors.RESET}")
 
             image_render_time_start = time.time()
@@ -241,7 +266,7 @@ def render_and_save_NFTs(nftName, collectionSize, batchToGenerate, batch_json_sa
                     os.makedirs(imageFolder)
 
                 bpy.context.scene.render.filepath = imagePath
-                bpy.context.scene.render.image_settings.file_format = imageFileFormat
+                bpy.context.scene.render.image_settings.file_format = input.imageFileFormat
                 bpy.ops.render.render(write_still=True)
 
             # Loading Animation:
@@ -255,7 +280,7 @@ def render_and_save_NFTs(nftName, collectionSize, batchToGenerate, batch_json_sa
                 f"{bcolors.OK}Rendered image in {image_render_time_end - image_render_time_start}s.\n{bcolors.RESET}"
             )
 
-        if enableAnimations:
+        if input.enableAnimations:
             print(f"{bcolors.OK}---Animation---{bcolors.RESET}")
 
             animation_render_time_start = time.time()
@@ -266,7 +291,7 @@ def render_and_save_NFTs(nftName, collectionSize, batchToGenerate, batch_json_sa
 
                 bpy.context.scene.render.filepath = animationPath
 
-                if animationFileFormat == 'MP4':
+                if input.animationFileFormat == 'MP4':
                     bpy.context.scene.render.image_settings.file_format = "FFMPEG"
 
                     bpy.context.scene.render.ffmpeg.format = 'MPEG4'
@@ -274,7 +299,7 @@ def render_and_save_NFTs(nftName, collectionSize, batchToGenerate, batch_json_sa
                     bpy.ops.render.render(animation=True)
 
                 else:
-                    bpy.context.scene.render.image_settings.file_format = animationFileFormat
+                    bpy.context.scene.render.image_settings.file_format = input.animationFileFormat
                     bpy.ops.render.render(animation=True)
 
             # Loading Animation:
@@ -288,7 +313,7 @@ def render_and_save_NFTs(nftName, collectionSize, batchToGenerate, batch_json_sa
                 f"{bcolors.OK}Rendered animation in {animation_render_time_end - animation_render_time_start}s.\n{bcolors.RESET}"
             )
 
-        if enableModelsBlender:
+        if input.enableModelsBlender:
             print(f"{bcolors.OK}---3D Model---{bcolors.RESET}")
 
             model_generation_time_start = time.time()
@@ -306,38 +331,38 @@ def render_and_save_NFTs(nftName, collectionSize, batchToGenerate, batch_json_sa
                 for obj in bpy.data.collections['Script_Ignore'].all_objects:
                     obj.select_set(True)
 
-                if modelFileFormat == 'GLB':
+                if input.modelFileFormat == 'GLB':
                     bpy.ops.export_scene.gltf(filepath=f"{modelPath}.glb",
                                               check_existing=True,
                                               export_format='GLB',
                                               use_selection=True)
-                if modelFileFormat == 'GLTF_SEPARATE':
+                if input.modelFileFormat == 'GLTF_SEPARATE':
                     bpy.ops.export_scene.gltf(filepath=f"{modelPath}",
                                               check_existing=True,
                                               export_format='GLTF_SEPARATE',
                                               use_selection=True)
-                if modelFileFormat == 'GLTF_EMBEDDED':
+                if input.modelFileFormat == 'GLTF_EMBEDDED':
                     bpy.ops.export_scene.gltf(filepath=f"{modelPath}.gltf",
                                               check_existing=True,
                                               export_format='GLTF_EMBEDDED',
                                               use_selection=True)
-                elif modelFileFormat == 'FBX':
+                elif input.modelFileFormat == 'FBX':
                     bpy.ops.export_scene.fbx(filepath=f"{modelPath}.fbx",
                                              check_existing=True,
                                              use_selection=True)
-                elif modelFileFormat == 'OBJ':
+                elif input.modelFileFormat == 'OBJ':
                     bpy.ops.export_scene.obj(filepath=f"{modelPath}.obj",
                                              check_existing=True,
                                              use_selection=True, )
-                elif modelFileFormat == 'X3D':
+                elif input.modelFileFormat == 'X3D':
                     bpy.ops.export_scene.x3d(filepath=f"{modelPath}.x3d",
                                              check_existing=True,
                                              use_selection=True)
-                elif modelFileFormat == 'STL':
+                elif input.modelFileFormat == 'STL':
                     bpy.ops.export_mesh.stl(filepath=f"{modelPath}.stl",
                                             check_existing=True,
                                             use_selection=True)
-                elif modelFileFormat == 'VOX':
+                elif input.modelFileFormat == 'VOX':
                     bpy.ops.export_vox.some_data(filepath=f"{modelPath}.vox")
 
             # Loading Animation:
@@ -351,25 +376,43 @@ def render_and_save_NFTs(nftName, collectionSize, batchToGenerate, batch_json_sa
                 f"{bcolors.OK}Generated model in {model_generation_time_end - model_generation_time_start}s.\n{bcolors.RESET}"
             )
 
-        if not os.path.exists(metaDataFolder):
-            os.makedirs(metaDataFolder)
+        # Generating Metadata:
+        if input.cardanoMetaDataBool:
+            if not os.path.exists(cardanoMetadataPath):
+                os.makedirs(cardanoMetadataPath)
+            createCardanoMetadata(name, Order_Num, full_single_dna, dnaDictionary, metadataMaterialDict, input.custom_Fields,
+                                  input.enableCustomFields, input.cardano_description, cardanoMetadataPath)
+
+        if input.solanaMetaDataBool:
+            if not os.path.exists(solanaMetadataPath):
+                os.makedirs(solanaMetadataPath)
+            createSolanaMetaData(name, Order_Num, full_single_dna, dnaDictionary, metadataMaterialDict, input.custom_Fields,
+                                 input.enableCustomFields, input.cardano_description, solanaMetadataPath)
+
+        if input.erc721MetaData:
+            if not os.path.exists(erc721MetadataPath):
+                os.makedirs(erc721MetadataPath)
+            createErc721MetaData(name, Order_Num, full_single_dna, dnaDictionary, metadataMaterialDict, input.custom_Fields,
+                                 input.enableCustomFields, input.cardano_description, erc721MetadataPath)
+
+        if not os.path.exists(BMNFT_metaData_Folder):
+            os.makedirs(BMNFT_metaData_Folder)
 
         for b in dnaDictionary:
             if dnaDictionary[b] == "0":
                 dnaDictionary[b] = "Empty"
 
-        metaDataDict = {"name": name, "NFT_DNA": a, "NFT_Variants": dnaDictionary}
-
-        metaDataDict["Material_Attributes"] = metadataMaterialDict
+        metaDataDict = {"name": name, "NFT_DNA": a, "NFT_Variants": dnaDictionary,
+                        "Material_Attributes": metadataMaterialDict}
 
         jsonMetaData = json.dumps(metaDataDict, indent=1, ensure_ascii=True)
 
-        with open(os.path.join(metaDataFolder, "Data_" + name + ".json"), 'w') as outfile:
+        with open(os.path.join(BMNFT_metaData_Folder, "Data_" + name + ".json"), 'w') as outfile:
             outfile.write(jsonMetaData + '\n')
 
         print(f"Completed {name} render in {time.time() - time_start_2}s")
 
-        save_completed(full_single_dna, a, x, batch_json_save_path, batchToGenerate)
+        save_completed(full_single_dna, a, x, input.batch_json_save_path, input.batchToGenerate)
 
         x += 1
 
@@ -380,11 +423,11 @@ def render_and_save_NFTs(nftName, collectionSize, batchToGenerate, batch_json_sa
 
     batch_complete_time = time.time() - time_start_1
 
-    print(f"\nAll NFTs successfully generated and sent to {nftBatch_save_path}"
-          f"\nCompleted all renders in Batch{batchToGenerate}.json in {batch_complete_time}s\n")
+    print(f"\nAll NFTs successfully generated and sent to {input.nftBatch_save_path}"
+          f"\nCompleted all renders in Batch{input.batchToGenerate}.json in {batch_complete_time}s\n")
 
     batch_info = {"Batch Render Time": batch_complete_time, "Number of NFTs generated in Batch": x - 1,
                   "Average time per generation": batch_complete_time / x - 1}
 
-    batch_infoFolder = os.path.join(nftBatch_save_path, "Batch" + str(batchToGenerate), "batch_info.json")
+    batch_infoFolder = os.path.join(input.nftBatch_save_path, "Batch" + str(input.batchToGenerate), "batch_info.json")
     save_batch(batch_info, batch_infoFolder)

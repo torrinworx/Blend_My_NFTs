@@ -6,17 +6,23 @@
 # This file returns the specified meta data format to the Exporter.py for a given NFT DNA.
 
 import bpy
+import os
+import json
+
+def sendMetaDataToJson(metaDataDict, save_path, file_name):
+    jsonMetaData = json.dumps(metaDataDict, indent=1, ensure_ascii=True)
+    with open(os.path.join(save_path, f"{file_name}.json"), 'w') as outfile:
+        outfile.write(jsonMetaData + '\n')
+
 
 # Cardano Template
-
-
-def returnCardanoMetaData(cardanoNewName, NFT_DNA, NFT_Variants, Material_Attributes,
-                          custom_Fields, enableCustomFields, cardano_description):
+def createCardanoMetadata(name, Order_Num, NFT_DNA, NFT_Variants, Material_Attributes,
+                          custom_Fields, enableCustomFields, cardano_description, cardanoMetadataPath):
 
     metaDataDictCardano = {"721": {
         "<policy_id>": {
-            cardanoNewName: {
-                "name": cardanoNewName,
+            name: {
+                "name": name,
                 "image": "",
                 "mediaType": "",
                 "description": cardano_description,
@@ -27,23 +33,24 @@ def returnCardanoMetaData(cardanoNewName, NFT_DNA, NFT_Variants, Material_Attrib
 
     # Variants and Attributes:
     for i in NFT_Variants:
-        metaDataDictCardano["721"]["<policy_id>"][cardanoNewName][i] = NFT_Variants[i]
+        metaDataDictCardano["721"]["<policy_id>"][name][i] = NFT_Variants[i]
 
     # Material Variants and Attributes:
     for i in Material_Attributes:
-        metaDataDictCardano["721"]["<policy_id>"][cardanoNewName][i] = Material_Attributes[i]
+        metaDataDictCardano["721"]["<policy_id>"][name][i] = Material_Attributes[i]
 
     # Custom Fields:
     if enableCustomFields:
         for i in custom_Fields:
-            metaDataDictCardano["721"]["<policy_id>"][cardanoNewName][i] = custom_Fields[i]
+            metaDataDictCardano["721"]["<policy_id>"][name][i] = custom_Fields[i]
 
-    return metaDataDictCardano
+    sendMetaDataToJson(metaDataDictCardano, cardanoMetadataPath, name)
+
 
 # Solana Template
-def returnSolanaMetaData(solanaNewName, NFT_DNA, NFT_Variants, Material_Attributes, custom_Fields, enableCustomFields,
-                         solana_description):
-    metaDataDictSolana = {"name": solanaNewName, "symbol": "", "description": solana_description, "seller_fee_basis_points": None,
+def createSolanaMetaData(name, Order_Num, NFT_DNA, NFT_Variants, Material_Attributes, custom_Fields, enableCustomFields,
+                         solana_description, solanaMetadataPath):
+    metaDataDictSolana = {"name": name, "symbol": "", "description": solana_description, "seller_fee_basis_points": None,
                           "image": "", "animation_url": "", "external_url": ""}
 
     attributes = []
@@ -84,13 +91,15 @@ def returnSolanaMetaData(solanaNewName, NFT_DNA, NFT_Variants, Material_Attribut
         "category": "",
         "creators": [{"address": "", "share": None}]
     }
-    return metaDataDictSolana
+
+    sendMetaDataToJson(metaDataDictSolana, solanaMetadataPath, name)
+
 
 # ERC721 Template
-def returnErc721MetaData(erc721NewName, NFT_DNA, NFT_Variants, Material_Attributes, custom_Fields, enableCustomFields,
-                         erc721_description):
+def createErc721MetaData(name, Order_Num, NFT_DNA, NFT_Variants, Material_Attributes, custom_Fields, enableCustomFields,
+                         erc721_description, erc721MetadataPath):
     metaDataDictErc721 = {
-        "name": erc721NewName,
+        "name": name,
         "description": erc721_description,
         "image": "",
         "attributes": None,
@@ -115,6 +124,7 @@ def returnErc721MetaData(erc721NewName, NFT_DNA, NFT_Variants, Material_Attribut
         }
 
         attributes.append(dictionary)
+
     # Custom Fields:
     if enableCustomFields:
         for i in custom_Fields:
@@ -126,4 +136,5 @@ def returnErc721MetaData(erc721NewName, NFT_DNA, NFT_Variants, Material_Attribut
 
     metaDataDictErc721["attributes"] = attributes
 
-    return metaDataDictErc721
+    sendMetaDataToJson(metaDataDictErc721, erc721MetadataPath, name)
+

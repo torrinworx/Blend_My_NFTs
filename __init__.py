@@ -25,7 +25,6 @@ import importlib
 sys.path.append(os.path.dirname(os.path.realpath(__file__)))
 
 from main import \
-    Batch_Sorter, \
     Checks, \
     DNA_Generator, \
     Exporter, \
@@ -44,7 +43,6 @@ from UILists import \
 
 if "bpy" in locals():
     modules = {
-        "Batch_Sorter": Batch_Sorter,
         "Checks": Checks,
         "DNA_Generator": DNA_Generator,
         "Exporter": Exporter,
@@ -86,6 +84,7 @@ def Refresh_UI(dummy1, dummy2):
     # Add panel classes that require refresh to this refresh_panels tuple:
     refresh_panel_classes = (
         BMNFTS_PT_CreateData,
+        BMNFTS_PT_GenerateNFTs,
     )
 
     def redraw_panel(refresh_panel_classes):
@@ -213,9 +212,8 @@ def runAsHeadless():
 
         Blend_My_NFTs_Output, batch_json_save_path, nftBatch_save_path = make_directories(save_path)
 
-        DNA_Generator.send_To_Record_JSON(collectionSize, nftsPerBatch, save_path, enableRarity, enableLogic, logicFile,
-                                          enableMaterials, materialsFile, Blend_My_NFTs_Output)
-        Batch_Sorter.makeBatches(nftName, collectionSize, nftsPerBatch, save_path, batch_json_save_path)
+        DNA_Generator.send_To_Record_JSON(collectionSize, nftsPerBatch, save_path, enableRarity, enableLogic, logicFile, enableMaterials,
+                        materialsFile, Blend_My_NFTs_Output, batch_json_save_path)
 
     elif args.operation == 'generate-nfts':
         nftName = settings.nftName
@@ -380,7 +378,7 @@ class BMNFTS_PGT_Input_Properties(bpy.types.PropertyGroup):
 class createData(bpy.types.Operator):
     bl_idname = 'create.data'
     bl_label = 'Create Data'
-    bl_description = 'Creates NFT Data. Run after any changes were made to scene.'
+    bl_description = 'Creates NFT Data. Run after any changes were made to scene. All previous data will be overwritten and cannot be recovered.'
     bl_options = {"REGISTER", "UNDO"}
 
     reverse_order: BoolProperty(
@@ -408,9 +406,8 @@ class createData(bpy.types.Operator):
                 logicFile = json.load(open(logicFile))
 
                 Blend_My_NFTs_Output, batch_json_save_path, nftBatch_save_path = make_directories(save_path)
-                DNA_Generator.send_To_Record_JSON(collectionSize, nftsPerBatch, save_path, enableRarity, enableLogic, logicFile,
-                                                  enableMaterials, materialsFile, Blend_My_NFTs_Output)
-                Batch_Sorter.makeBatches(nftName, collectionSize, nftsPerBatch, save_path, batch_json_save_path)
+                DNA_Generator.send_To_Record_JSON(collectionSize, nftsPerBatch, save_path, enableRarity, enableLogic, logicFile, enableMaterials,
+                        materialsFile, Blend_My_NFTs_Output, batch_json_save_path)
 
             if enable_Logic_Json and not logicFile:
                 self.report({'ERROR'}, f"No Logic.json file path set. Please set the file path to your Logic.json file.")
@@ -433,9 +430,8 @@ class createData(bpy.types.Operator):
                         }
                         num += 1
                     Blend_My_NFTs_Output, batch_json_save_path, nftBatch_save_path = make_directories(save_path)
-                    DNA_Generator.send_To_Record_JSON(collectionSize, nftsPerBatch, save_path, enableRarity, enableLogic, logicFile,
-                                                      enableMaterials, materialsFile, Blend_My_NFTs_Output)
-                    Batch_Sorter.makeBatches(nftName, collectionSize, nftsPerBatch, save_path, batch_json_save_path)
+                    DNA_Generator.send_To_Record_JSON(collectionSize, nftsPerBatch, save_path, enableRarity, enableLogic, logicFile, enableMaterials,
+                        materialsFile, Blend_My_NFTs_Output, batch_json_save_path)
                 else:
                     logicFile = {}
                     num = 1
@@ -450,17 +446,18 @@ class createData(bpy.types.Operator):
                         }
                         num += 1
                     Blend_My_NFTs_Output, batch_json_save_path, nftBatch_save_path = make_directories(save_path)
-                    DNA_Generator.send_To_Record_JSON(collectionSize, nftsPerBatch, save_path, enableRarity, enableLogic, logicFile,
-                                                      enableMaterials, materialsFile, Blend_My_NFTs_Output)
-                    Batch_Sorter.makeBatches(nftName, collectionSize, nftsPerBatch, save_path, batch_json_save_path)
+                    DNA_Generator.send_To_Record_JSON(collectionSize, nftsPerBatch, save_path, enableRarity, enableLogic, logicFile, enableMaterials,
+                        materialsFile, Blend_My_NFTs_Output, batch_json_save_path)
 
         if not enableLogic:
           Blend_My_NFTs_Output, batch_json_save_path, nftBatch_save_path = make_directories(save_path)
-          DNA_Generator.send_To_Record_JSON(collectionSize, nftsPerBatch, save_path, enableRarity, enableLogic, logicFile,
-                                            enableMaterials, materialsFile, Blend_My_NFTs_Output)
-          Batch_Sorter.makeBatches(nftName, collectionSize, nftsPerBatch, save_path, batch_json_save_path)
+          DNA_Generator.send_To_Record_JSON(collectionSize, nftsPerBatch, save_path, enableRarity, enableLogic, logicFile, enableMaterials,
+                        materialsFile, Blend_My_NFTs_Output, batch_json_save_path)
         self.report({'INFO'}, f"NFT Data created!")
         return {"FINISHED"}
+
+    def invoke(self, context, event):
+        return context.window_manager.invoke_confirm(self, event)
 
 
 class exportNFTs(bpy.types.Operator):
@@ -469,40 +466,68 @@ class exportNFTs(bpy.types.Operator):
     bl_description = 'Generate and export a given batch of NFTs.'
     bl_options = {"REGISTER", "UNDO"}
 
+    reverse_order: BoolProperty(
+        default=False,
+        name="Reverse Order")
+
     def execute(self, context):
-        nftName = bpy.context.scene.input_tool.nftName
-        save_path = bpy.path.abspath(bpy.context.scene.input_tool.save_path)
-        batchToGenerate = bpy.context.scene.input_tool.batchToGenerate
-        collectionSize = bpy.context.scene.input_tool.collectionSize
+        class input:
+            nftName = bpy.context.scene.input_tool.nftName
+            save_path = bpy.path.abspath(bpy.context.scene.input_tool.save_path)
+            batchToGenerate = bpy.context.scene.input_tool.batchToGenerate
+            collectionSize = bpy.context.scene.input_tool.collectionSize
 
-        Blend_My_NFTs_Output, batch_json_save_path, nftBatch_save_path = make_directories(save_path)
+            Blend_My_NFTs_Output, batch_json_save_path, nftBatch_save_path = make_directories(save_path)
 
-        enableImages = bpy.context.scene.input_tool.imageBool
-        imageFileFormat = bpy.context.scene.input_tool.imageEnum
+            enableImages = bpy.context.scene.input_tool.imageBool
+            imageFileFormat = bpy.context.scene.input_tool.imageEnum
 
-        enableAnimations = bpy.context.scene.input_tool.animationBool
-        animationFileFormat = bpy.context.scene.input_tool.animationEnum
+            enableAnimations = bpy.context.scene.input_tool.animationBool
+            animationFileFormat = bpy.context.scene.input_tool.animationEnum
 
-        enableModelsBlender = bpy.context.scene.input_tool.modelBool
-        modelFileFormat = bpy.context.scene.input_tool.modelEnum
+            enableModelsBlender = bpy.context.scene.input_tool.modelBool
+            modelFileFormat = bpy.context.scene.input_tool.modelEnum
 
-        enableMaterials = bpy.context.scene.input_tool.enableMaterials
-        materialsFile = bpy.path.abspath(bpy.context.scene.input_tool.materialsFile)
+            enableCustomFields = bpy.context.scene.input_tool.enableCustomFields
+            custom_Fields = {}
 
-        # fail state variables, set to no fail due to resume_failed_batch() Operator in BMNFTS_PT_GenerateNFTs Panel
-        fail_state = False
-        failed_batch = None
-        failed_dna = None
-        failed_dna_index = None
+            cardanoMetaDataBool = bpy.context.scene.input_tool.cardanoMetaDataBool
+            solanaMetaDataBool = bpy.context.scene.input_tool.solanaMetaDataBool
+            erc721MetaData = bpy.context.scene.input_tool.erc721MetaData
 
-        Exporter.render_and_save_NFTs(nftName, collectionSize, batchToGenerate, batch_json_save_path,
-                                      nftBatch_save_path, enableImages,
-                                      imageFileFormat, enableAnimations, animationFileFormat, enableModelsBlender,
-                                      modelFileFormat, fail_state, failed_batch, failed_dna, failed_dna_index,
-                                      enableMaterials, materialsFile
-                                      )
+            cardano_description = bpy.context.scene.input_tool.cardano_description
+            solana_description = bpy.context.scene.input_tool.solana_description
+            erc721_description = bpy.context.scene.input_tool.erc721_description
 
-        self.report({'INFO'}, f"All NFTs generated for batch {batchToGenerate}!")
+            enableMaterials = bpy.context.scene.input_tool.enableMaterials
+            materialsFile = bpy.path.abspath(bpy.context.scene.input_tool.materialsFile)
+
+            # fail state variables, set to no fail due to resume_failed_batch() Operator in BMNFTS_PT_GenerateNFTs Panel
+            fail_state = False
+            failed_batch = None
+            failed_dna = None
+            failed_dna_index = None
+
+        # Handling Custom Fields UIList input:
+        if input.enableCustomFields:
+            scn = context.scene
+            if self.reverse_order:
+                for i in range(scn.custom_metadata_fields_index, -1, -1):
+                    item = scn.custom_metadata_fields[i]
+                    if item.field_name in list(input.custom_Fields.keys()):
+                        raise ValueError(f"A duplicate of '{item.field_name}' was found. Please ensure all Custom Metadata field Names are unique.")
+                    else:
+                        input.custom_Fields[item.field_name] = item.field_value
+            else:
+                for item in scn.custom_metadata_fields:
+                    if item.field_name in list(input.custom_Fields.keys()):
+                        raise ValueError(f"A duplicate of '{item.field_name}' was found. Please ensure all Custom Metadata field Names are unique.")
+                    else:
+                        input.custom_Fields[item.field_name] = item.field_value
+
+        Exporter.render_and_save_NFTs(input)
+
+        self.report({'INFO'}, f"All NFTs generated for batch {input.batchToGenerate}!")
 
         return {"FINISHED"}
 
@@ -514,31 +539,44 @@ class resume_failed_batch(bpy.types.Operator):
     bl_options = {"REGISTER", "UNDO"}
 
     def execute(self, context):
-        nftName = bpy.context.scene.input_tool.nftName
-        save_path = bpy.path.abspath(bpy.context.scene.input_tool.save_path)
-        batchToGenerate = bpy.context.scene.input_tool.batchToGenerate
-        collectionSize = bpy.context.scene.input_tool.collectionSize
+        class input:
+            save_path = bpy.path.abspath(bpy.context.scene.input_tool.save_path)
+            batchToGenerate = bpy.context.scene.input_tool.batchToGenerate
 
-        Blend_My_NFTs_Output, batch_json_save_path, nftBatch_save_path = make_directories(save_path)
-        fail_state, failed_batch, failed_dna, failed_dna_index = Checks.check_FailedBatches(batch_json_save_path)
+            Blend_My_NFTs_Output, batch_json_save_path, nftBatch_save_path = make_directories(save_path)
+            file_name = os.path.join(batch_json_save_path, "Batch{}.json".format(batchToGenerate))
+            batch = json.load(open(file_name))
 
-        file_name = os.path.join(batch_json_save_path, "Batch{}.json".format(batchToGenerate))
-        batch = json.load(open(file_name))
+            nftName = batch["Generation Save"][-1]["Render_Settings"]["nftName"]
+            collectionSize = batch["Generation Save"][-1]["Render_Settings"]["collectionSize"]
+            nftBatch_save_path = batch["Generation Save"][-1]["Render_Settings"]["nftBatch_save_path"]
 
-        nftBatch_save_path = batch["Generation Save"][-1]["Render_Settings"]["nftBatch_save_path"]
-        enableImages = batch["Generation Save"][-1]["Render_Settings"]["enableImages"]
-        imageFileFormat = batch["Generation Save"][-1]["Render_Settings"]["imageFileFormat"]
-        enableAnimations = batch["Generation Save"][-1]["Render_Settings"]["enableAnimations"]
-        animationFileFormat = batch["Generation Save"][-1]["Render_Settings"]["animationFileFormat"]
-        enableModelsBlender = batch["Generation Save"][-1]["Render_Settings"]["enableModelsBlender"]
-        modelFileFormat = batch["Generation Save"][-1]["Render_Settings"]["modelFileFormat"]
-        enableMaterials = batch["Generation Save"][-1]["Render_Settings"]["enableMaterials"]
-        materialsFile = batch["Generation Save"][-1]["Render_Settings"]["materialsFile"]
+            enableImages = batch["Generation Save"][-1]["Render_Settings"]["enableImages"]
+            imageFileFormat = batch["Generation Save"][-1]["Render_Settings"]["imageFileFormat"]
 
-        Exporter.render_and_save_NFTs(nftName, collectionSize, batchToGenerate, batch_json_save_path, nftBatch_save_path,
-                         enableImages, imageFileFormat, enableAnimations, animationFileFormat, enableModelsBlender,
-                         modelFileFormat, fail_state, failed_batch, failed_dna, failed_dna_index, enableMaterials,
-                         materialsFile)
+            enableAnimations = batch["Generation Save"][-1]["Render_Settings"]["enableAnimations"]
+            animationFileFormat = batch["Generation Save"][-1]["Render_Settings"]["animationFileFormat"]
+
+            enableModelsBlender = batch["Generation Save"][-1]["Render_Settings"]["enableModelsBlender"]
+            modelFileFormat = batch["Generation Save"][-1]["Render_Settings"]["modelFileFormat"]
+
+            enableCustomFields = batch["Generation Save"][-1]["Render_Settings"]["enableCustomFields"]
+            custom_Fields = batch["Generation Save"][-1]["Render_Settings"]["custom_Fields"]
+
+            cardanoMetaDataBool = batch["Generation Save"][-1]["Render_Settings"]["cardanoMetaDataBool"]
+            solanaMetaDataBool = batch["Generation Save"][-1]["Render_Settings"]["solanaMetaDataBool"]
+            erc721MetaData = batch["Generation Save"][-1]["Render_Settings"]["erc721MetaData"]
+
+            cardano_description = batch["Generation Save"][-1]["Render_Settings"]["cardano_description"]
+            solana_description = batch["Generation Save"][-1]["Render_Settings"]["solana_description"]
+            erc721_description = batch["Generation Save"][-1]["Render_Settings"]["erc721_description"]
+
+            enableMaterials = batch["Generation Save"][-1]["Render_Settings"]["enableMaterials"]
+            materialsFile = batch["Generation Save"][-1]["Render_Settings"]["materialsFile"]
+
+            fail_state, failed_batch, failed_dna, failed_dna_index = Checks.check_FailedBatches(batch_json_save_path)
+
+        Exporter.render_and_save_NFTs(input)
 
         self.report({'INFO'}, f"Resuming Failed Batch Generation!")
 
@@ -557,7 +595,7 @@ class refactor_Batches(bpy.types.Operator):
         name="Reverse Order")
 
     def execute(self, context):
-        class refactor_panel_input:
+        class input:
 
             save_path = bpy.path.abspath(bpy.context.scene.input_tool.save_path)
 
@@ -574,26 +612,12 @@ class refactor_Batches(bpy.types.Operator):
 
             Blend_My_NFTs_Output, batch_json_save_path, nftBatch_save_path = make_directories(save_path)
 
-        # Handling Custom Fields UIList input:
-        if refactor_panel_input.enableCustomFields:
-            scn = context.scene
-            if self.reverse_order:
-                for i in range(scn.custom_metadata_fields_index, -1, -1):
-                    item = scn.custom_metadata_fields[i]
-                    if item.field_name in list(refactor_panel_input.custom_Fields.keys()):
-                        raise ValueError(f"A duplicate of '{item.field_name}' was found. Please ensure all Custom Metadata field Names are unique.")
-                    else:
-                        refactor_panel_input.custom_Fields[item.field_name] = item.field_value
-            else:
-                for item in scn.custom_metadata_fields:
-                    if item.field_name in list(refactor_panel_input.custom_Fields.keys()):
-                        raise ValueError(f"A duplicate of '{item.field_name}' was found. Please ensure all Custom Metadata field Names are unique.")
-                    else:
-                        refactor_panel_input.custom_Fields[item.field_name] = item.field_value
-
         # Passing info to main functions for refactoring:
-        Refactorer.reformatNFTCollection(refactor_panel_input)
-        self.report({'INFO'}, "Batches Refactored, MetaData created!")
+        try:
+            Refactorer.reformatNFTCollection(input)
+            self.report({'INFO'}, "Batches successfully refactored!")
+        except Exception:
+            raise """Something went wrong while refactoring."""
         return {"FINISHED"}
 
     def invoke(self, context, event):
@@ -779,41 +803,6 @@ class BMNFTS_PT_GenerateNFTs(bpy.types.Panel):
             row.prop(input_tool_scene, "modelEnum")
 
         row = layout.row()
-        row.prop(input_tool_scene, "batchToGenerate")
-
-        save_path = bpy.path.abspath(bpy.context.scene.input_tool.save_path)
-        Blend_My_NFTs_Output = os.path.join(save_path, "Blend_My_NFTs Output", "NFT_Data")
-        batch_json_save_path = os.path.join(Blend_My_NFTs_Output, "Batch_Data")
-        nftBatch_save_path = os.path.join(save_path, "Blend_My_NFTs Output", "Generated NFT Batches")
-
-        fail_state, failed_batch, failed_dna, failed_dna_index = Checks.check_FailedBatches(batch_json_save_path)
-
-        if fail_state:
-            row = layout.row()
-            self.layout.operator("exporter.nfts", icon='RENDER_RESULT', text="Generate NFTs")
-
-            row = layout.row()
-            row.alert = True
-            row.operator("exporter.resume_nfts", icon='ERROR', text="Resume Failed Batch")
-
-        if not fail_state:
-            row = layout.row()
-            self.layout.operator("exporter.nfts", icon='RENDER_RESULT', text="Generate NFTs")
-
-
-class BMNFTS_PT_Refactor(bpy.types.Panel):
-    bl_label = "Refactor Batches & Create Metadata"
-    bl_idname = "BMNFTS_PT_Refactor"
-    bl_space_type = 'VIEW_3D'
-    bl_region_type = 'UI'
-    bl_category = 'Blend_My_NFTs'
-
-    def draw(self, context):
-        layout = self.layout
-        scene = context.scene
-        input_tool_scene = scene.input_tool
-
-        row = layout.row()
         layout.label(text="Meta Data format:")
 
         row = layout.row()
@@ -871,6 +860,46 @@ class BMNFTS_PT_Refactor(bpy.types.Panel):
             row.label(text=f"*Field Names must be unique.")
             row = col.row(align=True)
             row.operator("custom_metadata_fields_uilist.clear_list", icon="X")
+
+        row = layout.row()
+        row.prop(input_tool_scene, "batchToGenerate")
+
+        save_path = bpy.path.abspath(bpy.context.scene.input_tool.save_path)
+        Blend_My_NFTs_Output = os.path.join(save_path, "Blend_My_NFTs Output", "NFT_Data")
+        batch_json_save_path = os.path.join(Blend_My_NFTs_Output, "Batch_Data")
+        nftBatch_save_path = os.path.join(save_path, "Blend_My_NFTs Output", "Generated NFT Batches")
+
+        fail_state, failed_batch, failed_dna, failed_dna_index = Checks.check_FailedBatches(batch_json_save_path)
+
+        if fail_state:
+            row = layout.row()
+            self.layout.operator("exporter.nfts", icon='RENDER_RESULT', text="Generate NFTs")
+
+            row = layout.row()
+            row.alert = True
+            row.operator("exporter.resume_nfts", icon='ERROR', text="Resume Failed Batch")
+
+        if not fail_state:
+            row = layout.row()
+            self.layout.operator("exporter.nfts", icon='RENDER_RESULT', text="Generate NFTs")
+
+
+class BMNFTS_PT_Refactor(bpy.types.Panel):
+    bl_label = "Refactor Batches & Create Metadata"
+    bl_idname = "BMNFTS_PT_Refactor"
+    bl_space_type = 'VIEW_3D'
+    bl_region_type = 'UI'
+    bl_category = 'Blend_My_NFTs'
+
+    def draw(self, context):
+        layout = self.layout
+        scene = context.scene
+        input_tool_scene = scene.input_tool
+
+        row = layout.row()
+        layout.label(text="Ensure all batches have been created before refactoring.")
+        layout.label(text="Refactoring combines all batches into one easy to manage folder.")
+
 
         row = layout.row()
         self.layout.operator("refactor.batches", icon='FOLDER_REDIRECT', text="Refactor Batches & Create Metadata")

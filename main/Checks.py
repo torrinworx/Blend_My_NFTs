@@ -47,8 +47,14 @@ def check_Scene():  # Not complete
 
     # attribute_naming_conventions
 
-def check_Rarity(hierarchy, DNAList, save_path):
+def check_Rarity(hierarchy, DNAListFormatted, save_path):
     """Checks rarity percentage of each Variant, then sends it to RarityData.json in NFT_Data folder."""
+
+    DNAList = []
+    for i in DNAListFormatted:
+        DNAList.append(list(i.keys())[0])
+
+
     numNFTsGenerated = len(DNAList)
 
     numDict = defaultdict(list)
@@ -109,8 +115,12 @@ def check_Rarity(hierarchy, DNAList, save_path):
     path = os.path.join(save_path, "RarityData.json")
     print(bcolors.OK + f"Rarity Data has been saved to {path}." + bcolors.RESET)
 
-def check_Duplicates(DNAList):
+def check_Duplicates(DNAListFormatted):
     """Checks if there are duplicates in DNAList before NFTRecord.json is sent to JSON file."""
+    DNAList = []
+    for i in DNAListFormatted:
+        DNAList.append(list(i.keys())[0])
+
 
     duplicates = 0
     seen = set()
@@ -121,7 +131,7 @@ def check_Duplicates(DNAList):
             duplicates += 1
         seen.add(x)
 
-    print(f"NFTRecord.json contains {duplicates} duplicate NFT DNA.")
+    print(f"\nNFTRecord.json contains {duplicates} duplicate NFT DNA.")
 
 def check_FailedBatches(batch_json_save_path):
     fail_state = False

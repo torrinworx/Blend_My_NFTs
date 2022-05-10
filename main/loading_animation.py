@@ -19,7 +19,18 @@ class Loader:
         self.timeout = timeout
 
         self._thread = Thread(target=self._animate, daemon=True)
-        self.steps = ["⢿", "⣻", "⣽", "⣾", "⣷", "⣯", "⣟", "⡿"]
+        self.steps = [
+            " [==     ]",
+            " [ ==    ]",
+            " [  ==   ]",
+            " [   ==  ]",
+            " [    == ]",
+            " [     ==]",
+            " [    == ]",
+            " [   ==  ]",
+            " [  ==   ]",
+            " [ ==    ]",
+        ]
         self.done = False
 
     def start(self):
