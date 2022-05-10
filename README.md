@@ -444,13 +444,13 @@ It's reccomended if you have a large NFT collection to create a Logic.json file 
 ## Rule Types
 
 There are two rule types:
-- ``Never with`` --> If selected, ``Items List 1`` will never appear if ``Items List 2`` are selected. For each NFT DNA that is generated, either ``Items List 1`` or ``Items List 2`` are randomly selected. That selected ``Items List`` is then acted upon depending on if the items in the list are Attributes or Variants: 
+- ``Never With`` --> If selected, ``Items List 1`` will never appear if ``Items List 2`` are selected. For each NFT DNA that is generated, either ``Items List 1`` or ``Items List 2`` are randomly selected. That selected ``Items List`` is then acted upon depending on if the items in the list are Attributes or Variants: 
   - If ``Items List`` contains complete Attribute(s), those Attribute(s) will be set to Empty automatically.
   - If ``Items List`` contains Variant(s), the other Variants in that Variants Attribute will be randomly or weightedly selected depending on if you have ``Enable Rarity`` selected when you create NFT data.
  
-- ``Only with`` --> If selected, ``Items List 1`` will only appear if ``Items List 2`` are selected. If ``Items List 1`` contains complete Attribute(s), those Attribute(s) will be set to Empty automatically. Meaning they will not appear if you export images, animations, or 3D models.
+- ``Only With`` --> If selected, ``Items List 1`` will only appear if ``Items List 2`` are selected. If ``Items List 1`` contains complete Attribute(s), those Attribute(s) will be set to Empty automatically. Meaning they will not appear if you export images, animations, or 3D models.
 
-- ``Always with`` --> If selected, ``Items List 1`` will always appear if ``Items List 2`` are selected.``Items List 1`` CANNOT contain complete Attribute(s) and is limited to single Variants. The list can contain multiple Variants, however they must be from seperate Attributes.
+- ``Always With`` --> If selected, ``Items List 1`` will always appear if ``Items List 2`` are selected.``Items List 1`` CANNOT contain complete Attribute(s) and is limited to single Variants. The list can contain multiple Variants, however they must be from seperate Attributes.
 
 **Important:** The more rules you add the higher the chance a rule conflict may arise, and you may see Attribute and Variant behaviour that you do not desire.
 
@@ -506,7 +506,7 @@ Note that we have two Attributes, ``Cube`` and ``Sphere``, and that they have 4 
         "Items-1": [
             "Red Cube_1_25"
         ],
-        "Rule-Type": "Never with", 
+        "Rule-Type": "Never With", 
         "Items-2":[
             "Red Sphere_1_25"
         ]
@@ -523,7 +523,7 @@ Note that we have two Attributes, ``Cube`` and ``Sphere``, and that they have 4 
         "Items-1": [
             "Cube"
         ],
-        "Rule-Type": "Never with", 
+        "Rule-Type": "Never With", 
         "Items-2":[
             "Red Sphere_1_25"
         ]
@@ -540,7 +540,7 @@ Note that we have two Attributes, ``Cube`` and ``Sphere``, and that they have 4 
         "Items-1": [
             "Red Cube_1_25"
         ],
-        "Rule-Type": "Only with", 
+        "Rule-Type": "Only With", 
         "Items-2":[
             "Red Sphere_1_25"
         ]
@@ -556,7 +556,7 @@ Note that we have two Attributes, ``Cube`` and ``Sphere``, and that they have 4 
         "Items-1": [
             "Cube"
         ],
-        "Rule-Type": "Never with", 
+        "Rule-Type": "Never With", 
         "Items-2":[
             "Red Sphere_1_25"
         ]
