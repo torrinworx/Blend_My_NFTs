@@ -169,7 +169,7 @@ def logicafyDNAsingle(hierarchy, singleDNA, logicFile):
             num_List1 = items_to_num(items_List1)
             num_List2 = items_to_num(items_List2)
 
-            if logicFile[rule]["Rule-Type"] == "Never with":
+            if logicFile[rule]["Rule-Type"] == "Never With":
                 if never_with_Rule_Check(hierarchy, deconstructed_DNA, num_List1, num_List2):
 
                     rand_bool = bool(random.getrandbits(1))
@@ -186,7 +186,7 @@ def logicafyDNAsingle(hierarchy, singleDNA, logicFile):
                         didReconstruct = True
                         break
 
-            if logicFile[rule]["Rule-Type"] == "Only with":
+            if logicFile[rule]["Rule-Type"] == "Only With":
                 if only_with_Rule_Check(hierarchy, deconstructed_DNA, num_List1, num_List2):
                     for b in num_List1:
                         if "0" in num_List1[b]:  # If complete attribute
@@ -201,7 +201,7 @@ def logicafyDNAsingle(hierarchy, singleDNA, logicFile):
                         didReconstruct = True
                         break
 
-            if logicFile[rule]["Rule-Type"] == "Always with":
+            if logicFile[rule]["Rule-Type"] == "Always With":
                 if always_with_Rule_Check(hierarchy, deconstructed_DNA, num_List1, num_List2):
                     deconstructed_DNA = rar_selectVar(hierarchy, items_List1, deconstructed_DNA)
 
