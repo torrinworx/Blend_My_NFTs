@@ -495,13 +495,13 @@ If you'd like, copy and paste this template into the JSON file you created above
 
 ### Rule Types
 There are two rule types:
-- ``Never with`` --> If selected, ``Items-1`` will never appear if ``Items-2`` are selected. For each NFT DNA that is generated, either ``Items-1`` or ``Items-2`` are randomly selected. That selected ``Items List`` is then acted upon depending on if the items in the list are Attributes or Variants: 
+- ``Never With`` --> If selected, ``Items-1`` will never appear if ``Items-2`` are selected. For each NFT DNA that is generated, either ``Items-1`` or ``Items-2`` are randomly selected. That selected ``Items List`` is then acted upon depending on if the items in the list are Attributes or Variants: 
   - If ``Items List`` contains complete Attribute(s), those Attribute(s) will be set to Empty automatically.
   - If ``Items List`` contains Variant(s), the other Variants in that Variants Attribute will be randomly or weightedly selected depending on if you have ``Enable Rarity`` selected when you create NFT data.
  
-- ``Only with`` --> If selected, ``Items-1`` will only appear if ``Items-2`` are selected. If ``Items-1`` contains complete Attribute(s), those Attribute(s) will be set to Empty automatically. Meaning they will not appear if you export images, animations, or 3D models.
+- ``Only With`` --> If selected, ``Items-1`` will only appear if ``Items-2`` are selected. If ``Items-1`` contains complete Attribute(s), those Attribute(s) will be set to Empty automatically. Meaning they will not appear if you export images, animations, or 3D models. Items in ``Items-2`` can only be a single Variant, no attributes, and no list of variants.
 
-- ``Always with`` --> If selected, ``Items-1`` will always appear if ``Items-2`` are selected.``Items-1`` CANNOT contain complete Attribute(s) and is limited to single Variants. The list can contain multiple Variants, however they must be from seperate Attributes.
+- ``Always With`` --> If selected, ``Items-1`` will always appear if ``Items-2`` are selected.``Items-1`` CANNOT contain complete Attribute(s) and is limited to single Variants. The list can contain multiple Variants, however they must be from seperate Attributes.
 
 The best way to understand how Logic works is to think of it as a sentence, example: ``"Items-1 Never goes with Items-2"`` or ``"Items-1 Only goes with Items-2"``.
 
@@ -512,8 +512,8 @@ Say we have the following scene in a .blend file:
 <img width="420" alt="Screen Shot 2022-03-13 at 4 21 52 PM" src="https://user-images.githubusercontent.com/82110564/158077693-86f961cf-c121-4d0e-8a84-1d6a39e7cafc.png">
 Note that we have two Attributes, ``Cube`` and ``Sphere``, and that they have 4 Variants. If you'd like to follow along with this example I'd recommend downloading the [Logic_Example.blend](https://github.com/torrinworx/BMNFTs_Examples/blob/main/Logic_Example.blend).
 
-### Never with, Logic Rule Examples
-- **Never with, Variants example:**
+### Never With, Logic Rule Examples
+- **Never With, Variants example:**
   In this example, the Variant ``Red Cube_1_25`` never appears with ``Red Sphere_1_25``:
   ```
   {
@@ -521,7 +521,7 @@ Note that we have two Attributes, ``Cube`` and ``Sphere``, and that they have 4 
         "Items-1": [
             "Red Cube_1_25"
         ],
-        "Rule-Type": "Never with", 
+        "Rule-Type": "Never With", 
         "Items-2":[
             "Red Sphere_1_25"
         ]
@@ -530,7 +530,7 @@ Note that we have two Attributes, ``Cube`` and ``Sphere``, and that they have 4 
   ```
   
 
-- **Never with, Attributes example:**
+- **Never With, Attributes example:**
   In this example, the Attribute ``Cube`` never appears with ``Red Sphere_1_25``. When ``Red Sphere_1_25`` is selected, no Variants in the Cube Attribute are selected, and hence the Attribute is set to "Empty": 
   ```
   {
@@ -546,8 +546,8 @@ Note that we have two Attributes, ``Cube`` and ``Sphere``, and that they have 4 
    }
   ```
 
-### Only with, Logic Rule Examples
-- **Only with, Variants example:**
+### Only With, Logic Rule Examples
+- **Only With, Variants example:**
   In this example, the Variant ``Red Cube_1_25`` only appears with ``Red Sphere_1_25``:
   ```
   {
@@ -555,7 +555,7 @@ Note that we have two Attributes, ``Cube`` and ``Sphere``, and that they have 4 
         "Items-1": [
             "Red Cube_1_25"
         ],
-        "Rule-Type": "Only with", 
+        "Rule-Type": "Only With", 
         "Items-2":[
             "Red Sphere_1_25"
         ]
@@ -563,7 +563,7 @@ Note that we have two Attributes, ``Cube`` and ``Sphere``, and that they have 4 
    }
   ```
 
-- **Only with, Attributes example:**
+- **Only With, Attributes example:**
   In this example, the Attribute ``Cube`` only appears with ``Red Sphere_1_25``:
   ```
   {
@@ -571,7 +571,7 @@ Note that we have two Attributes, ``Cube`` and ``Sphere``, and that they have 4 
         "Items-1": [
             "Cube"
         ],
-        "Rule-Type": "Never with", 
+        "Rule-Type": "Never With", 
         "Items-2":[
             "Red Sphere_1_25"
         ]
