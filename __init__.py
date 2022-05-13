@@ -116,6 +116,8 @@ def runAsHeadless():
             f"cardano_description={settings.cardano_description}\n"
             f"erc721MetaData={str(settings.erc721MetaData)}\n"
             f"erc721_description={settings.erc721_description}\n"
+            f"metadata_baseuri={settings.metadata_baseuri}\n"
+            f"media_format={settings.media_format}\n"
             f"solanaMetaDataBool={str(settings.solanaMetaDataBool)}\n"
             f"solana_description={settings.solana_description}\n"
             f"enableCustomFields={str(settings.enableCustomFields)}\n"
@@ -153,6 +155,8 @@ def runAsHeadless():
         settings.cardano_description = pairs[14][1]
         settings.erc721MetaData = pairs[15][1] == 'True'
         settings.erc721_description = pairs[16][1]
+        settings.metadata_baseuri = pairs[16][1]
+        settings.media_format = pairs[16][1]
         settings.solanaMetaDataBool = pairs[17][1] == 'True'
         settings.solanaDescription = pairs[18][1]
         settings.enableCustomFields = pairs[19][1] == 'True'
@@ -228,6 +232,8 @@ def runAsHeadless():
             cardano_description = settings.cardano_description
             solana_description = settings.solana_description
             erc721_description = settings.erc721_description
+            metadata_baseuri = settings.metadata_baseuri
+            media_format = settings.media_format
 
             Blend_My_NFTs_Output, batch_json_save_path, nftBatch_save_path = make_directories(save_path)
 
@@ -313,6 +319,9 @@ class BMNFTS_PGT_Input_Properties(bpy.types.PropertyGroup):
 
     erc721MetaData: bpy.props.BoolProperty(name="ERC721")
     erc721_description: bpy.props.StringProperty(name="ERC721 description")
+
+    metadata_baseuri: bpy.props.StringProperty(name="metadata base uri")
+    media_format: bpy.props.StringProperty(name="NFT media format")
 
     enableCustomFields: bpy.props.BoolProperty(name="Enable Custom Metadata Fields")
     customfieldsFile: bpy.props.StringProperty(
@@ -456,6 +465,9 @@ class refactor_Batches(bpy.types.Operator):
             solana_description = bpy.context.scene.input_tool.solana_description
             erc721_description = bpy.context.scene.input_tool.erc721_description
 
+            metadata_baseuri = bpy.context.scene.input_tool.metadata_baseuri
+            media_format = bpy.context.scene.input_tool.media_format
+
             Blend_My_NFTs_Output, batch_json_save_path, nftBatch_save_path = make_directories(save_path)
 
         Refactorer.reformatNFTCollection(refactor_panel_input)
@@ -518,6 +530,8 @@ class export_settings(bpy.types.Operator):
                 f"cardano_description={settings.cardano_description}\n"
                 f"erc721MetaData={str(settings.erc721MetaData)}\n"
                 f"erc721_description={settings.erc721_description}\n"
+                f"metadata_baseuri={settings.metadata_baseuri}\n"
+                f"media_format={settings.media_format}\n"
                 f"solanaMetaDataBool={str(settings.solanaMetaDataBool)}\n"
                 f"solana_description={settings.solana_description}\n"
                 "\n"
@@ -667,11 +681,13 @@ class BMNFTS_PT_Refactor(bpy.types.Panel):
         if bpy.context.scene.input_tool.erc721MetaData:
             row = layout.row()
             row.prop(input_tool_scene, "erc721_description")
-
             row = layout.row()
             row.operator("wm.url_open", text="ERC721 Metadata Documentation",
                          icon='URL').url = "https://docs.opensea.io/docs/metadata-standards"
-
+            row = layout.row()
+        row.prop(input_tool_scene, "metadata_baseuri")
+        row = layout.row()
+        row.prop(input_tool_scene, "media_format")
         row = layout.row()
         row.prop(input_tool_scene, "enableCustomFields")
         if bpy.context.scene.input_tool.enableCustomFields:
