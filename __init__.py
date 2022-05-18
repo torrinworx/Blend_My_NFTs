@@ -282,7 +282,9 @@ class BMNFTS_PGT_Input_Properties(bpy.types.PropertyGroup):
             ('AVI_JPEG', '.avi (AVI_JPEG)', 'Export NFT as AVI_JPEG'),
             ('AVI_RAW', '.avi (AVI_RAW)', 'Export NFT as AVI_RAW'),
             ('FFMPEG', '.mkv (FFMPEG)', 'Export NFT as FFMPEG'),
-            ('MP4', '.mp4', 'Export NFT as .mp4')
+            ('MP4', '.mp4', 'Export NFT as .mp4'),
+            ('PNG', ".PNG", "Export NFT as PNG"),
+            ('TIFF', ".TIFF", "Export NFT as TIFF")
         ]
     )
 
