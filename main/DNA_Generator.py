@@ -101,8 +101,18 @@ def get_hierarchy():
          name = getName(i)
          orderRarity = getOrder_rarity(i)
 
-         number = orderRarity[0]
-         rarity = orderRarity[1]
+         try:
+            number = orderRarity[0]
+         except:
+            print("Naming problem with the attribute variant " + i)
+            print("Please check the naming convention of the attribute variants from https://github.com/torrinworx/Blend_My_NFTs#blender-file-organization-and-structure")
+         
+         try:
+            rarity = orderRarity[1]
+         except:
+            print("Naming problem with the attribute variant " + i )
+            print("Please check the naming convention of the attribute variants from https://github.com/torrinworx/Blend_My_NFTs#blender-file-organization-and-structure")
+         
 
          eachObject = {"name": name, "number": number, "rarity": rarity}
          allAttDataList[i] = eachObject
