@@ -81,12 +81,22 @@ def get_hierarchy():
       """
       allAttDataList = {}
       for i in attributeVariants:
+         # Check if name follows naming conventions:
+         if i.count("_") > 2:
+            raise Exception(
+               f"\n{bcolors.ERROR}Blend_My_NFTs Error:\n"
+               f"There is a naming issue with the following Attribute/Variant: '{i}'\n"
+               f"Review the naming convention of Attribute and Variant collections here:\n{bcolors.RESET}"
+               f"https://github.com/torrinworx/Blend_My_NFTs#blender-file-organization-and-structure\n"
+            )
 
          def getName(i):
             """
             Returns the name of "i" attribute variant
             """
+
             name = i.split("_")[0]
+
             return name
 
          def getOrder_rarity(i):
@@ -104,15 +114,22 @@ def get_hierarchy():
          try:
             number = orderRarity[0]
          except:
-            print("Naming problem with the attribute variant " + i)
-            print("Please check the naming convention of the attribute variants from https://github.com/torrinworx/Blend_My_NFTs#blender-file-organization-and-structure")
-         
+            raise Exception(
+               f"\n{bcolors.ERROR}Blend_My_NFTs Error:\n"
+               f"There is a naming issue with the following Attribute/Variant: '{i}'\n"
+               f"Review the naming convention of Attribute and Variant collections here:\n{bcolors.RESET}"
+               f"https://github.com/torrinworx/Blend_My_NFTs#blender-file-organization-and-structure\n"
+            )
+
          try:
             rarity = orderRarity[1]
          except:
-            print("Naming problem with the attribute variant " + i )
-            print("Please check the naming convention of the attribute variants from https://github.com/torrinworx/Blend_My_NFTs#blender-file-organization-and-structure")
-         
+            raise Exception(
+               f"\n{bcolors.ERROR}Blend_My_NFTs Error:\n"
+               f"There is a naming issue with the following Attribute/Variant: '{i}'\n"
+               f"Review the naming convention of Attribute and Variant collections here:\n{bcolors.RESET}"
+               f"https://github.com/torrinworx/Blend_My_NFTs#blender-file-organization-and-structure\n"
+            )
 
          eachObject = {"name": name, "number": number, "rarity": rarity}
          allAttDataList[i] = eachObject
@@ -173,6 +190,7 @@ def generateNFT_DNA(collectionSize, enableRarity, enableLogic, logicFile, enable
    def singleCompleteDNA():
       """This function applies Rarity and Logic to a single DNA created by createDNASingle() if Rarity or Logic specified"""
       singleDNA = ""
+      # Comments for debugging random, rarity, logic, and materials.
       if not enableRarity:
          singleDNA = createDNArandom()
       # print("============")
