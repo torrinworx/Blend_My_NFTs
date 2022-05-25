@@ -8,6 +8,9 @@ bl_info = {
     "category": "Development",
 }
 
+BMNFTS_VERSION = "v4.0.0 - Alpha"
+LAST_UPDATED = "7:55PM, May 25, 2022"
+
 # ======== Import handling ======== #
 
 import bpy
@@ -770,6 +773,8 @@ class BMNFTS_PT_CreateData(bpy.types.Panel):
 
         row = layout.row()
         self.layout.operator("create.data", icon='DISCLOSURE_TRI_RIGHT', text="Create Data")
+        row = layout.row()
+        layout.label(text=f"{BMNFTS_VERSION}")
 
 
 class BMNFTS_PT_GenerateNFTs(bpy.types.Panel):
@@ -948,6 +953,9 @@ class BMNFTS_PT_Other(bpy.types.Panel):
         row = layout.row()
         row.operator("wm.url_open", text="Join Our Discord Community!",
                      icon='URL').url = "https://discord.gg/UpZt5Un57t"
+
+        row = layout.row()
+        layout.label(text=f"{BMNFTS_VERSION}, {LAST_UPDATED}")
 
 
 # ======== Blender add-on register/unregister handling ======== #
