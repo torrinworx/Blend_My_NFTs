@@ -26,8 +26,8 @@ def createCardanoMetadata(name, Order_Num, NFT_DNA, NFT_Variants, Material_Attri
         "<policy_id>": {
             name: {
                 "name": name,
-                "image": "",
-                "mediaType": "",
+                "image": "<ipfs_link>",
+                "mediaType": "<mime_type>",
                 "description": cardano_description,
             }
         },
