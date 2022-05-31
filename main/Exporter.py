@@ -135,10 +135,6 @@ def render_and_save_NFTs(input):
         full_single_dna = list(a.keys())[0]
         Order_Num = a[full_single_dna]['Order_Num']
 
-        # Change Text Object in Scene to match DNA string:
-        # ob = bpy.data.objects['Text']  # Object name
-        # ob.data.body = str(f"DNA: {full_single_dna}")  # Set text of Text Object ob
-
         # Material handling:
         if input.enableMaterials:
             single_dna, material_dna = full_single_dna.split(':')
@@ -222,11 +218,25 @@ def render_and_save_NFTs(input):
         # Turn off render camera and viewport camera for all collections in hierarchy
         for i in hierarchy:
             for j in hierarchy[i]:
-                bpy.data.collections[j].hide_render = True
-                bpy.data.collections[j].hide_viewport = True
+                try:
+                    bpy.data.collections[j].hide_render = True
+                    bpy.data.collections[j].hide_viewport = True
+                except KeyError:
+                    raise TypeError(
+                        f"\n{bcolors.ERROR}Blend_My_NFTs Error:\n"
+                        f"The Collection '{j}' appears to be missing or has been renamed. If you made any changes to "
+                        f"your .blned file scene, ensure you re-create your NFT Data so Blend_My_NFTs can read your scene."
+                        f"For more information see:{bcolors.RESET}"
+                        f"\nhttps://github.com/torrinworx/Blend_My_NFTs#blender-file-organization-and-structure\n"
+                    )
 
         dnaDictionary = match_DNA_to_Variant(single_dna)
         name = input.nftName + "_" + str(Order_Num)
+
+        # Change Text Object in Scene to match DNA string:
+        # Variables that can be used: full_single_dna, name, Order_Num
+        # ob = bpy.data.objects['Text']  # Object name
+        # ob.data.body = str(f"DNA: {full_single_dna}")  # Set text of Text Object ob
 
         print(f"\n{bcolors.OK}|--- Generating NFT {x}/{NFTs_in_Batch}: {name} ---|{bcolors.RESET}")
         print(f"DNA attribute list:\n{dnaDictionary}\nDNA Code:{single_dna}")

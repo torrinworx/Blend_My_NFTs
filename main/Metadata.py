@@ -14,6 +14,9 @@ def sendMetaDataToJson(metaDataDict, save_path, file_name):
     with open(os.path.join(save_path, f"{file_name}.json"), 'w') as outfile:
         outfile.write(jsonMetaData + '\n')
 
+def stripNums(variant):
+    variant = str(variant).split('_')[0]
+    return variant
 
 # Cardano Template
 def createCardanoMetadata(name, Order_Num, NFT_DNA, NFT_Variants, Material_Attributes,
@@ -33,7 +36,7 @@ def createCardanoMetadata(name, Order_Num, NFT_DNA, NFT_Variants, Material_Attri
 
     # Variants and Attributes:
     for i in NFT_Variants:
-        metaDataDictCardano["721"]["<policy_id>"][name][i] = NFT_Variants[i]
+        metaDataDictCardano["721"]["<policy_id>"][name][i] = stripNums(NFT_Variants[i])
 
     # Material Variants and Attributes:
     for i in Material_Attributes:
@@ -59,7 +62,7 @@ def createSolanaMetaData(name, Order_Num, NFT_DNA, NFT_Variants, Material_Attrib
     for i in NFT_Variants:
         dictionary = {
             "trait_type": i,
-            "value": NFT_Variants[i]
+            "value": stripNums(NFT_Variants[i])
         }
         attributes.append(dictionary)
 
@@ -111,7 +114,7 @@ def createErc721MetaData(name, Order_Num, NFT_DNA, NFT_Variants, Material_Attrib
     for i in NFT_Variants:
         dictionary = {
             "trait_type": i,
-            "value": NFT_Variants[i]
+            "value": stripNums(NFT_Variants[i])
         }
 
         attributes.append(dictionary)

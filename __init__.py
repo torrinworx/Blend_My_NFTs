@@ -1,15 +1,15 @@
 bl_info = {
     "name": "Blend_My_NFTs V4 Alpha",
     "author": "Torrin Leonard, This Cozy Studio Inc",
-    "version": (4, 0, 0),
+    "version": (4, 0, 1),
     "blender": (3, 2, 0),
     "location": "View3D",
     "description": "An open source, free to use Blender add-on that enables you to create thousands of unique images, animations, and 3D models.",
     "category": "Development",
 }
 
-BMNFTS_VERSION = "v4.0.0 - Alpha"
-LAST_UPDATED = "7:55PM, May 25, 2022"
+BMNFTS_VERSION = "v4.0.1 - Alpha"
+LAST_UPDATED = "10:43PM, May 30th, 2022"
 
 # ======== Import handling ======== #
 
@@ -87,7 +87,6 @@ def Refresh_UI(dummy1, dummy2):
     # Add panel classes that require refresh to this refresh_panels tuple:
     refresh_panel_classes = (
         BMNFTS_PT_CreateData,
-        BMNFTS_PT_GenerateNFTs,
     )
 
     def redraw_panel(refresh_panel_classes):
@@ -778,7 +777,7 @@ class BMNFTS_PT_CreateData(bpy.types.Panel):
 
 
 class BMNFTS_PT_GenerateNFTs(bpy.types.Panel):
-    bl_label = "Generate NFTs"
+    bl_label = "Generate NFTs & Create Metadata"
     bl_idname = "BMNFTS_PT_GenerateNFTs"
     bl_space_type = 'VIEW_3D'
     bl_region_type = 'UI'
@@ -878,7 +877,7 @@ class BMNFTS_PT_GenerateNFTs(bpy.types.Panel):
 
         if fail_state:
             row = layout.row()
-            self.layout.operator("exporter.nfts", icon='RENDER_RESULT', text="Generate NFTs")
+            self.layout.operator("exporter.nfts", icon='RENDER_RESULT', text="Generate NFTs & Create Metadata")
 
             row = layout.row()
             row.alert = True
@@ -886,11 +885,11 @@ class BMNFTS_PT_GenerateNFTs(bpy.types.Panel):
 
         if not fail_state:
             row = layout.row()
-            self.layout.operator("exporter.nfts", icon='RENDER_RESULT', text="Generate NFTs")
+            self.layout.operator("exporter.nfts", icon='RENDER_RESULT', text="Generate NFTs & Create Metadata")
 
 
 class BMNFTS_PT_Refactor(bpy.types.Panel):
-    bl_label = "Refactor Batches & Create Metadata"
+    bl_label = "Refactor Batches"
     bl_idname = "BMNFTS_PT_Refactor"
     bl_space_type = 'VIEW_3D'
     bl_region_type = 'UI'
@@ -907,7 +906,7 @@ class BMNFTS_PT_Refactor(bpy.types.Panel):
 
 
         row = layout.row()
-        self.layout.operator("refactor.batches", icon='FOLDER_REDIRECT', text="Refactor Batches & Create Metadata")
+        self.layout.operator("refactor.batches", icon='FOLDER_REDIRECT', text="Refactor Batches")
 
 
 class BMNFTS_PT_Other(bpy.types.Panel):
