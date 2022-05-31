@@ -443,7 +443,7 @@ It's reccomended if you have a large NFT collection to create a Logic.json file 
 
 ## Rule Types
 
-There are two rule types:
+There are three rule types:
 - ``Never With`` --> If selected, ``Items List 1`` will never appear if ``Items List 2`` are selected. For each NFT DNA that is generated, either ``Items List 1`` or ``Items List 2`` are randomly selected. That selected ``Items List`` is then acted upon depending on if the items in the list are Attributes or Variants: 
   - If ``Items List`` contains complete Attribute(s), those Attribute(s) will be set to Empty automatically.
   - If ``Items List`` contains Variant(s), the other Variants in that Variants Attribute will be randomly or weightedly selected depending on if you have ``Enable Rarity`` selected when you create NFT data.
@@ -497,8 +497,8 @@ Say we have the following scene in a .blend file:
 <img width="420" alt="Screen Shot 2022-03-13 at 4 21 52 PM" src="https://user-images.githubusercontent.com/82110564/158077693-86f961cf-c121-4d0e-8a84-1d6a39e7cafc.png">
 Note that we have two Attributes, ``Cube`` and ``Sphere``, and that they have 4 Variants. If you'd like to follow along with this example I'd recommend downloading the [Logic_Example.blend](https://github.com/torrinworx/BMNFTs_Examples/blob/main/Logic_Example.blend).
 
-### Never with, Logic Rule Examples
-- **Never with, Variants example:**
+### Never With, Logic Rule Examples
+- **Never With, Variants example:**
   In this example, the Variant ``Red Cube_1_25`` never appears with ``Red Sphere_1_25``:
   ```
   {
@@ -515,7 +515,7 @@ Note that we have two Attributes, ``Cube`` and ``Sphere``, and that they have 4 
   ```
   
 
-- **Never with, Attributes example:**
+- **Never With, Attributes example:**
   In this example, the Attribute ``Cube`` never appears with ``Red Sphere_1_25``. When ``Red Sphere_1_25`` is selected, no Variants in the Cube Attribute are selected, and hence the Attribute is set to "Empty": 
   ```
   {
@@ -531,8 +531,8 @@ Note that we have two Attributes, ``Cube`` and ``Sphere``, and that they have 4 
    }
   ```
 
-### Only with, Logic Rule Examples
-- **Only with, Variants example:**
+### Only With, Logic Rule Examples
+- **Only With, Variants example:**
   In this example, the Variant ``Red Cube_1_25`` only appears with ``Red Sphere_1_25``:
   ```
   {
@@ -548,7 +548,7 @@ Note that we have two Attributes, ``Cube`` and ``Sphere``, and that they have 4 
    }
   ```
 
-- **Only with, Attributes example:**
+- **Only With, Attributes example:**
   In this example, the Attribute ``Cube`` only appears with ``Red Sphere_1_25``:
   ```
   {
@@ -737,7 +737,7 @@ There are two mandatory arguments that you need to run this script from the term
     
     This argument tells Blend_My_NFTs which operation you want to perform.
     
-    `--operation` or `-o` with one of the following three options afterwards:
+    `--operation` with one of the following three options afterwards:
     ```
     create-dna
     generate-nfts
@@ -745,11 +745,23 @@ There are two mandatory arguments that you need to run this script from the term
     ```
 
 There are also additional optional arguments that you can use:
-  - Change save location
+  - Change Save Location
     
     This argument takes priority over the save path indicated in `config.cfg`.
     
-    `--save-path` or `-s`
+    `--save-path`
+   
+  - Change Batch Number
+    
+    This argument takes priority over the batch number specified in `config.cfg`.
+    
+    `--batch-number`
+    
+  - Use Batch Data in a non standard location
+  
+    Use batch data from a separate folder rather than the folder Blend My NFTs uses by default.
+    
+    `--batch-data`
 
 You can also view this information from your terminal/command line by running:
 
