@@ -299,7 +299,7 @@ def render_and_save_NFTs(input):
                 if not os.path.exists(animationFolder):
                     os.makedirs(animationFolder)
 
-                if input.animationFileFormat == 'MP4':
+                if input.animationFileFormat == "MP4":
                     bpy.context.scene.render.filepath = animationPath
                     bpy.context.scene.render.image_settings.file_format = "FFMPEG"
 
@@ -307,7 +307,7 @@ def render_and_save_NFTs(input):
                     bpy.context.scene.render.ffmpeg.codec = 'H264'
                     bpy.ops.render.render(animation=True)
 
-                if input.animationFileFormat == 'PNG':
+                elif input.animationFileFormat == 'PNG':
                     if not os.path.exists(animationPath):
                         os.makedirs(animationPath)
 
@@ -315,7 +315,7 @@ def render_and_save_NFTs(input):
                     bpy.context.scene.render.image_settings.file_format = input.animationFileFormat
                     bpy.ops.render.render(animation=True)
 
-                if input.animationFileFormat == 'TIFF':
+                elif input.animationFileFormat == 'TIFF':
                     if not os.path.exists(animationPath):
                         os.makedirs(animationPath)
 
