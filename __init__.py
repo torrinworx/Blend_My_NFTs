@@ -1,5 +1,5 @@
 bl_info = {
-    "name": "Blend_My_NFTs V4 Alpha",
+    "name": "Blend_My_NFTs",
     "author": "Torrin Leonard, This Cozy Studio Inc",
     "version": (4, 0, 2),
     "blender": (3, 2, 0),
@@ -8,8 +8,8 @@ bl_info = {
     "category": "Development",
 }
 
-BMNFTS_VERSION = "v4.0.2 - Alpha"
-LAST_UPDATED = "8:05AM, May 31st, 2022"
+BMNFTS_VERSION = "v4.0.2"
+LAST_UPDATED = "8:19AM, May 31st, 2022"
 
 # ======== Import handling ======== #
 
