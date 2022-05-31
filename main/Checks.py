@@ -27,28 +27,31 @@ def check_Scene():  # Not complete
     variant_naming_conventions = None  # True if all variants in Blender scene follow BMNFTs naming conventions
     object_placing_conventions = None  # True if all objects are within either Script_Ignore or a variant collection
 
-    hierarchy = DNA_Generator.get_hierarchy()
-
     # script_ignore_exists:
     try:
         scriptIgnoreCollection = bpy.data.collections["Script_Ignore"]
+        script_ignore_exists = True
     except KeyError:
         raise TypeError(
             f"\n{bcolors.ERROR}Blend_My_NFTs Error:\n"
-            f"collection to your Blender scene and ensure the name is exactly 'Script_Ignore'. For more information, "
+            f"Add a Script_Ignore collection to your Blender scene and ensure the name is exactly 'Script_Ignore'. For more information, "
             f"see:"
             f"\nhttps://github.com/torrinworx/Blend_My_NFTs#blender-file-organization-and-structure\n{bcolors.RESET}"
         )
-    else:
-        script_ignore_exists = True
 
+    hierarchy = DNA_Generator.get_hierarchy()
     collections = bpy.context.scene.collection
-    print(collections)
 
     # attribute_naming_conventions
 
-def check_Rarity(hierarchy, DNAList, save_path):
+def check_Rarity(hierarchy, DNAListFormatted, save_path):
     """Checks rarity percentage of each Variant, then sends it to RarityData.json in NFT_Data folder."""
+
+    DNAList = []
+    for i in DNAListFormatted:
+        DNAList.append(list(i.keys())[0])
+
+
     numNFTsGenerated = len(DNAList)
 
     numDict = defaultdict(list)
@@ -109,8 +112,12 @@ def check_Rarity(hierarchy, DNAList, save_path):
     path = os.path.join(save_path, "RarityData.json")
     print(bcolors.OK + f"Rarity Data has been saved to {path}." + bcolors.RESET)
 
-def check_Duplicates(DNAList):
+def check_Duplicates(DNAListFormatted):
     """Checks if there are duplicates in DNAList before NFTRecord.json is sent to JSON file."""
+    DNAList = []
+    for i in DNAListFormatted:
+        DNAList.append(list(i.keys())[0])
+
 
     duplicates = 0
     seen = set()
@@ -121,7 +128,7 @@ def check_Duplicates(DNAList):
             duplicates += 1
         seen.add(x)
 
-    print(f"NFTRecord.json contains {duplicates} duplicate NFT DNA.")
+    print(f"\nNFTRecord.json contains {duplicates} duplicate NFT DNA.")
 
 def check_FailedBatches(batch_json_save_path):
     fail_state = False
@@ -137,7 +144,7 @@ def check_FailedBatches(batch_json_save_path):
             NFTs_in_Batch = batch["NFTs_in_Batch"]
             if "Generation Save" in batch:
                 dna_generated = batch["Generation Save"][-1]["DNA Generated"]
-                if dna_generated < NFTs_in_Batch:
+                if dna_generated is not None and dna_generated < NFTs_in_Batch:
                     fail_state = True
                     failed_batch = int(i.removeprefix("Batch").removesuffix(".json"))
                     failed_dna = dna_generated

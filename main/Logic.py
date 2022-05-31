@@ -155,7 +155,6 @@ def always_with_Rule_Check(hierarchy, deconstructed_DNA, num_List1, num_List2):
 # Main Function
 def logicafyDNAsingle(hierarchy, singleDNA, logicFile):
 
-    logicFile = json.load(open(logicFile))
     deconstructed_DNA = singleDNA.split("-")
 
     didReconstruct = True

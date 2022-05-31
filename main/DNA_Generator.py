@@ -10,7 +10,7 @@ import json
 import random
 from functools import partial
 from .loading_animation import Loader
-from . import Rarity, Logic, Checks
+from . import Rarity, Logic, Checks, Material_Generator
 from .Constants import bcolors, removeList, remove_file_by_extension
 
 
@@ -81,12 +81,22 @@ def get_hierarchy():
       """
       allAttDataList = {}
       for i in attributeVariants:
+         # Check if name follows naming conventions:
+         if i.count("_") > 2:
+            raise Exception(
+               f"\n{bcolors.ERROR}Blend_My_NFTs Error:\n"
+               f"There is a naming issue with the following Attribute/Variant: '{i}'\n"
+               f"Review the naming convention of Attribute and Variant collections here:\n{bcolors.RESET}"
+               f"https://github.com/torrinworx/Blend_My_NFTs#blender-file-organization-and-structure\n"
+            )
 
          def getName(i):
             """
             Returns the name of "i" attribute variant
             """
+
             name = i.split("_")[0]
+
             return name
 
          def getOrder_rarity(i):
@@ -101,8 +111,25 @@ def get_hierarchy():
          name = getName(i)
          orderRarity = getOrder_rarity(i)
 
-         number = orderRarity[0]
-         rarity = orderRarity[1]
+         try:
+            number = orderRarity[0]
+         except:
+            raise Exception(
+               f"\n{bcolors.ERROR}Blend_My_NFTs Error:\n"
+               f"There is a naming issue with the following Attribute/Variant: '{i}'\n"
+               f"Review the naming convention of Attribute and Variant collections here:\n{bcolors.RESET}"
+               f"https://github.com/torrinworx/Blend_My_NFTs#blender-file-organization-and-structure\n"
+            )
+
+         try:
+            rarity = orderRarity[1]
+         except:
+            raise Exception(
+               f"\n{bcolors.ERROR}Blend_My_NFTs Error:\n"
+               f"There is a naming issue with the following Attribute/Variant: '{i}'\n"
+               f"Review the naming convention of Attribute and Variant collections here:\n{bcolors.RESET}"
+               f"https://github.com/torrinworx/Blend_My_NFTs#blender-file-organization-and-structure\n"
+            )
 
          eachObject = {"name": name, "number": number, "rarity": rarity}
          allAttDataList[i] = eachObject
@@ -126,7 +153,7 @@ def get_hierarchy():
 
    return hierarchy
 
-def generateNFT_DNA(collectionSize, logicFile, enableRarity, enableLogic):
+def generateNFT_DNA(collectionSize, enableRarity, enableLogic, logicFile, enableMaterials, materialsFile):
    """
    Returns batchDataDictionary containing the number of NFT combinations, hierarchy, and the DNAList.
    """
@@ -163,6 +190,7 @@ def generateNFT_DNA(collectionSize, logicFile, enableRarity, enableLogic):
    def singleCompleteDNA():
       """This function applies Rarity and Logic to a single DNA created by createDNASingle() if Rarity or Logic specified"""
       singleDNA = ""
+      # Comments for debugging random, rarity, logic, and materials.
       if not enableRarity:
          singleDNA = createDNArandom()
       # print("============")
@@ -172,8 +200,14 @@ def generateNFT_DNA(collectionSize, logicFile, enableRarity, enableLogic):
 
       if enableLogic:
          singleDNA = Logic.logicafyDNAsingle(hierarchy, singleDNA, logicFile)
-      # print(f"Logic DNA: {singleDNA}")
+      # print(f"Original DNA: {singleDNA}")
       # print("============\n")
+
+      if enableMaterials:
+         singleDNA = Material_Generator.apply_materials(hierarchy, singleDNA, materialsFile)
+      # print(f"Materials DNA: {singleDNA}")
+      # print("============\n")
+
       return singleDNA
 
    def create_DNAList():
@@ -185,9 +219,21 @@ def generateNFT_DNA(collectionSize, logicFile, enableRarity, enableLogic):
 
          DNASetReturn |= {''.join([dnaPushToList()]) for _ in range(collectionSize - len(DNASetReturn))}
 
-      DNAListReturn = list(DNASetReturn)
+      DNAListUnformatted = list(DNASetReturn)
 
-      return DNAListReturn
+      DNAListFormatted = []
+      DNA_Counter = 1
+      for i in DNAListUnformatted:
+         DNAListFormatted.append({
+            i: {
+               "Complete": False,
+               "Order_Num": DNA_Counter
+            }
+         })
+
+         DNA_Counter += 1
+
+      return DNAListFormatted
 
    DNAList = create_DNAList()
 
@@ -202,7 +248,63 @@ def generateNFT_DNA(collectionSize, logicFile, enableRarity, enableLogic):
 
    return DataDictionary
 
-def send_To_Record_JSON(collectionSize, nftsPerBatch, save_path, enableRarity, enableLogic, logicFile, Blend_My_NFTs_Output):
+def makeBatches(collectionSize, nftsPerBatch, save_path, batch_json_save_path):
+   """
+   Sorts through all the batches and outputs a given number of batches depending on collectionSize and nftsPerBatch.
+   These files are then saved as Batch#.json files to batch_json_save_path
+   """
+
+   # Clears the Batch Data folder of Batches:
+   batchList = os.listdir(batch_json_save_path)
+   if batchList:
+      for i in batchList:
+         batch = os.path.join(batch_json_save_path, i)
+         if os.path.exists(batch):
+            os.remove(
+               os.path.join(batch_json_save_path, i)
+            )
+
+   Blend_My_NFTs_Output = os.path.join(save_path, "Blend_My_NFTs Output", "NFT_Data")
+   NFTRecord_save_path = os.path.join(Blend_My_NFTs_Output, "NFTRecord.json")
+   DataDictionary = json.load(open(NFTRecord_save_path))
+
+   numNFTsGenerated = DataDictionary["numNFTsGenerated"]
+   hierarchy = DataDictionary["hierarchy"]
+   DNAList = DataDictionary["DNAList"]
+
+   numBatches = collectionSize // nftsPerBatch
+   remainder_dna = collectionSize % nftsPerBatch
+   if remainder_dna > 0:
+      numBatches += 1
+
+   print(f"To generate batches of {nftsPerBatch} DNA sequences per batch, with a total of {numNFTsGenerated}"
+         f" possible NFT DNA sequences, the number of batches generated will be {numBatches}")
+
+   batches_dna_list = []
+
+   for i in range(numBatches):
+      BatchDNAList = []
+      if i != range(numBatches)[-1]:
+         BatchDNAList = list(DNAList[0:nftsPerBatch])
+         batches_dna_list.append(BatchDNAList)
+
+         DNAList = [x for x in DNAList if x not in BatchDNAList]
+      else:
+         BatchDNAList = DNAList
+
+      batchDictionary = {
+         "NFTs_in_Batch": int(len(BatchDNAList)),
+         "hierarchy": hierarchy,
+         "BatchDNAList": BatchDNAList
+      }
+
+      batchDictionary = json.dumps(batchDictionary, indent=1, ensure_ascii=True)
+
+      with open(os.path.join(batch_json_save_path, f"Batch{i + 1}.json"), "w") as outfile:
+         outfile.write(batchDictionary)
+
+def send_To_Record_JSON(collectionSize, nftsPerBatch, save_path, enableRarity, enableLogic, logicFile, enableMaterials,
+                        materialsFile, Blend_My_NFTs_Output, batch_json_save_path):
    """
    Creates NFTRecord.json file and sends "batchDataDictionary" to it. NFTRecord.json is a permanent record of all DNA
    you've generated with all attribute variants. If you add new variants or attributes to your .blend file, other scripts
@@ -232,7 +334,8 @@ def send_To_Record_JSON(collectionSize, nftsPerBatch, save_path, enableRarity, e
 
    def create_nft_data():
       try:
-         DataDictionary = generateNFT_DNA(collectionSize, logicFile, enableRarity, enableLogic)
+         DataDictionary = generateNFT_DNA(collectionSize, enableRarity, enableLogic, logicFile, enableMaterials,
+                        materialsFile)
          NFTRecord_save_path = os.path.join(Blend_My_NFTs_Output, "NFTRecord.json")
 
          # Checks:
@@ -276,6 +379,7 @@ def send_To_Record_JSON(collectionSize, nftsPerBatch, save_path, enableRarity, e
    # Loading Animation:
    loading = Loader(f'Creating NFT DNA...', '').start()
    create_nft_data()
+   makeBatches(collectionSize, nftsPerBatch, save_path, batch_json_save_path)
    loading.stop()
 
    time_end = time.time()
