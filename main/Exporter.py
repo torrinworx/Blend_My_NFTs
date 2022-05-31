@@ -252,14 +252,14 @@ def render_and_save_NFTs(input):
         # Main paths for batch subfolders:
         batchFolder = os.path.join(input.nftBatch_save_path, "Batch" + str(input.batchToGenerate))
 
-        imagePath = os.path.join(batchFolder, "Images", name)
-        animationPath = os.path.join(batchFolder, "Animations", name)
-        modelPath = os.path.join(batchFolder, "Models", name)
-
         imageFolder = os.path.join(batchFolder, "Images")
         animationFolder = os.path.join(batchFolder, "Animations")
         modelFolder = os.path.join(batchFolder, "Models")
         BMNFT_metaData_Folder = os.path.join(batchFolder, "BMNFT_metadata")
+
+        imagePath = os.path.join(imageFolder, name)
+        animationPath = os.path.join(animationFolder, name)
+        modelPath = os.path.join(modelFolder, name)
 
         cardanoMetadataPath = os.path.join(batchFolder, "Cardano_metadata")
         solanaMetadataPath = os.path.join(batchFolder, "Solana_metadata")
@@ -299,16 +299,32 @@ def render_and_save_NFTs(input):
                 if not os.path.exists(animationFolder):
                     os.makedirs(animationFolder)
 
-                bpy.context.scene.render.filepath = animationPath
-
                 if input.animationFileFormat == 'MP4':
+                    bpy.context.scene.render.filepath = animationPath
                     bpy.context.scene.render.image_settings.file_format = "FFMPEG"
 
                     bpy.context.scene.render.ffmpeg.format = 'MPEG4'
                     bpy.context.scene.render.ffmpeg.codec = 'H264'
                     bpy.ops.render.render(animation=True)
 
+                if input.animationFileFormat == 'PNG':
+                    if not os.path.exists(animationPath):
+                        os.makedirs(animationPath)
+
+                    bpy.context.scene.render.filepath = os.path.join(animationPath, name)
+                    bpy.context.scene.render.image_settings.file_format = input.animationFileFormat
+                    bpy.ops.render.render(animation=True)
+
+                if input.animationFileFormat == 'TIFF':
+                    if not os.path.exists(animationPath):
+                        os.makedirs(animationPath)
+
+                    bpy.context.scene.render.filepath = os.path.join(animationPath, name)
+                    bpy.context.scene.render.image_settings.file_format = input.animationFileFormat
+                    bpy.ops.render.render(animation=True)
+
                 else:
+                    bpy.context.scene.render.filepath = animationPath
                     bpy.context.scene.render.image_settings.file_format = input.animationFileFormat
                     bpy.ops.render.render(animation=True)
 

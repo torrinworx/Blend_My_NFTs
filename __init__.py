@@ -326,7 +326,9 @@ class BMNFTS_PGT_Input_Properties(bpy.types.PropertyGroup):
             ('AVI_JPEG', '.avi (AVI_JPEG)', 'Export NFT as AVI_JPEG'),
             ('AVI_RAW', '.avi (AVI_RAW)', 'Export NFT as AVI_RAW'),
             ('FFMPEG', '.mkv (FFMPEG)', 'Export NFT as FFMPEG'),
-            ('MP4', '.mp4', 'Export NFT as .mp4')
+            ('MP4', '.mp4', 'Export NFT as .mp4'),
+            ('PNG', ".png", "Export NFT as PNG"),
+            ('TIFF', ".tiff", "Export NFT as TIFF")
         ]
     )
 
@@ -615,11 +617,7 @@ class refactor_Batches(bpy.types.Operator):
             Blend_My_NFTs_Output, batch_json_save_path, nftBatch_save_path = make_directories(save_path)
 
         # Passing info to main functions for refactoring:
-        try:
-            Refactorer.reformatNFTCollection(input)
-            self.report({'INFO'}, "Batches successfully refactored!")
-        except Exception:
-            raise """Something went wrong while refactoring."""
+        Refactorer.reformatNFTCollection(input)
         return {"FINISHED"}
 
     def invoke(self, context, event):
