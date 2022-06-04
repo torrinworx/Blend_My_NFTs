@@ -4,6 +4,9 @@
 import bpy
 import random
 
+from .Constants import bcolors, removeList, remove_file_by_extension
+
+
 def createDNArarity(hierarchy):
     """
     Sorts through DataDictionary and appropriately weights each variant based on their rarity percentage set in Blender
@@ -32,10 +35,18 @@ def createDNArarity(hierarchy):
             elif x != 0:
                 ifZeroBool = False
 
-        if ifZeroBool:
-            variantByNum = random.choices(number_List_Of_i, k=1)
-        elif not ifZeroBool:
-            variantByNum = random.choices(number_List_Of_i, weights=rarity_List_Of_i, k=1)
+        try:
+            if ifZeroBool:
+                variantByNum = random.choices(number_List_Of_i, k=1)
+            elif not ifZeroBool:
+                variantByNum = random.choices(number_List_Of_i, weights=rarity_List_Of_i, k=1)
+        except IndexError:
+            raise IndexError(
+                f"\n{bcolors.ERROR}Blend_My_NFTs Error:\n"
+                f"An issue was found within the Attribute collection '{i}'. For more information on Blend_My_NFTs compatible scenes, "
+                f"see:\n{bcolors.RESET}"
+                f"https://github.com/torrinworx/Blend_My_NFTs#blender-file-organization-and-structure\n"
+            )
 
         singleDNA += "-" + str(variantByNum[0])
     singleDNA = ''.join(singleDNA.split('-', 1))

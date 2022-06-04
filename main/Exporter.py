@@ -413,13 +413,13 @@ def render_and_save_NFTs(input):
             if not os.path.exists(solanaMetadataPath):
                 os.makedirs(solanaMetadataPath)
             createSolanaMetaData(name, Order_Num, full_single_dna, dnaDictionary, metadataMaterialDict, input.custom_Fields,
-                                 input.enableCustomFields, input.cardano_description, solanaMetadataPath)
+                                 input.enableCustomFields, input.solana_description, solanaMetadataPath)
 
         if input.erc721MetaData:
             if not os.path.exists(erc721MetadataPath):
                 os.makedirs(erc721MetadataPath)
             createErc721MetaData(name, Order_Num, full_single_dna, dnaDictionary, metadataMaterialDict, input.custom_Fields,
-                                 input.enableCustomFields, input.cardano_description, erc721MetadataPath)
+                                 input.enableCustomFields, input.erc721_description, erc721MetadataPath)
 
         if not os.path.exists(BMNFT_metaData_Folder):
             os.makedirs(BMNFT_metaData_Folder)

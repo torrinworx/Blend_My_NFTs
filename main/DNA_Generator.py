@@ -199,7 +199,7 @@ def generateNFT_DNA(collectionSize, enableRarity, enableLogic, logicFile, enable
       # print(f"Rarity DNA: {singleDNA}")
 
       if enableLogic:
-         singleDNA = Logic.logicafyDNAsingle(hierarchy, singleDNA, logicFile)
+         singleDNA = Logic.logicafyDNAsingle(hierarchy, singleDNA, logicFile, enableRarity)
       # print(f"Original DNA: {singleDNA}")
       # print("============\n")
 
@@ -328,7 +328,7 @@ def send_To_Record_JSON(collectionSize, nftsPerBatch, save_path, enableRarity, e
       print(f"{bcolors.OK}Rarity is ON. Weights listed in .blend scene will be taken into account.\n{bcolors.RESET}")
 
    if enableLogic:
-      print(f"{bcolors.OK}Logic is ON. Rules listed in {logicFile} will be taken into account.\n{bcolors.RESET}")
+      print(f"{bcolors.OK}Logic is ON. {len(list(logicFile.keys()))} rules from your Logic.json file will be applied.\n{bcolors.RESET}")
 
    time_start = time.time()
 
