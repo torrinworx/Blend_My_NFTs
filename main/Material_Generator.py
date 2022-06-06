@@ -9,34 +9,42 @@ import json
 import random
 
 
-def select_material(materialList):
+def select_material(materialList, enableRarity):
     """Selects a material from a passed material list. """
-
-    number_List_Of_i = []
+    material_List_Of_i = []  # List of Material names instead of order numbers
     rarity_List_Of_i = []
-    ifZeroBool = None
-
     for material in materialList:
+        # Material Order Number comes from index in the Material List in materials.json for a given Variant.
+        # material_order_num = list(materialList.keys()).index(material)
 
-        material_order_num = material.split("_")[1]
-        number_List_Of_i.append(material_order_num)
+        material_List_Of_i.append(material)
 
-        material_rarity_percent = material.split("_")[1]
+        material_rarity_percent = materialList[material]
         rarity_List_Of_i.append(float(material_rarity_percent))
 
-    for x in rarity_List_Of_i:
-        if x == 0:
-            ifZeroBool = True
-            break
-        elif x != 0:
-            ifZeroBool = False
+    print(f"MATERIAL_LIST_OF_I:{material_List_Of_i}")
+    print(f"RARITY_LIST_OF_I:{rarity_List_Of_i}")
 
-    if ifZeroBool:
-        selected_material = random.choices(number_List_Of_i, k=1)
-    elif not ifZeroBool:
-        selected_material = random.choices(number_List_Of_i, weights=rarity_List_Of_i, k=1)
+    if enableRarity:
+        ifZeroBool = None
 
-    return selected_material[0]
+        for x in rarity_List_Of_i:
+            if x == 0:
+                ifZeroBool = True
+                break
+            elif x != 0:
+                ifZeroBool = False
+
+        if ifZeroBool:
+            selected_material = random.choices(material_List_Of_i, k=1)
+        elif not ifZeroBool:
+
+            selected_material = random.choices(material_List_Of_i, weights=rarity_List_Of_i, k=1)
+
+    else:
+        selected_material = random.choices(material_List_Of_i, k=1)
+
+    return selected_material[0], materialList
 
 def get_variant_att_index(variant, hierarchy):
     variant_attribute = None
@@ -69,7 +77,7 @@ def match_DNA_to_Variant(hierarchy, singleDNA):
                 dnaDictionary.update({x: k})
     return dnaDictionary
 
-def apply_materials(hierarchy, singleDNA, materialsFile):
+def apply_materials(hierarchy, singleDNA, materialsFile, enableRarity):
     """
     DNA with applied material example: "1-1:1-1" <Normal DNA>:<Selected Material for each Variant>
 
@@ -85,8 +93,9 @@ def apply_materials(hierarchy, singleDNA, materialsFile):
         complete = False
         for b in materialsFile:
             if singleDNADict[a] == b:
-                mat = select_material(materialsFile[b]['Material List'])
-                deconstructed_MaterialDNA[a] = mat
+                material_name, materialList, = select_material(materialsFile[b]['Material List'], enableRarity)
+                material_order_num = list(materialList.keys()).index(material_name)  # Gets the Order Number of the Material
+                deconstructed_MaterialDNA[a] = str(material_order_num + 1)
                 complete = True
         if not complete:
             deconstructed_MaterialDNA[a] = "0"

@@ -177,12 +177,14 @@ def render_and_save_NFTs(input):
                     if hierarchy[attribute][var]['number'] == variant:
                         variant = var
 
-                if material != '0':
+                if material != '0':  # If material is not empty
                     for variant_m in materialsFile:
                         if variant == variant_m:
-                            for mat in materialsFile[variant_m]["Material List"]:
-                                if mat.split('_')[1] == material:
-                                    material = mat
+                            # Getting Materials name from Materials index in the Materials List
+                            materials_list = list(materialsFile[variant_m]["Material List"].keys())
+
+                            material = materials_list[int(material) - 1]  # Subtract 1 because '0' means empty mat
+                            break
 
                 full_dna_dict[variant] = material
 

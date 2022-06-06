@@ -376,6 +376,8 @@ class BMNFTS_PGT_Input_Properties(bpy.types.PropertyGroup):
     )
 
     # Other Panel:
+    enableAutoSave: bpy.props.BoolProperty(name="Auto Save Before Generation")
+
 
     # API Panel properties:
     apiKey: bpy.props.StringProperty(name="API Key", subtype='PASSWORD')
@@ -478,6 +480,11 @@ class exportNFTs(bpy.types.Operator):
         name="Reverse Order")
 
     def execute(self, context):
+
+        enableAutoSave = bpy.context.scene.input_tool.enableAutoSave
+        if enableAutoSave:
+            bpy.ops.wm.save_mainfile()
+
         class input:
             nftName = bpy.context.scene.input_tool.nftName
             save_path = bpy.path.abspath(bpy.context.scene.input_tool.save_path)
@@ -923,10 +930,17 @@ class BMNFTS_PT_Other(bpy.types.Panel):
         input_tool_scene = scene.input_tool
 
         """
+        Other:
+        A place to store miscellaneous settings, features, and external links that the user may find useful but doesn't 
+        want to get in the way of their work flow.
         Export Settings:
         This panel gives the user the option to export all settings from the Blend_My_NFTs addon into a config file. Settings 
         will be read from the config file when running heedlessly.
         """
+
+        row = layout.row()
+        row.prop(input_tool_scene, "enableAutoSave")
+
         layout.label(text=f"Running Blend_My_NFTs Headless:")
 
         save_path = bpy.path.abspath(bpy.context.scene.input_tool.save_path)

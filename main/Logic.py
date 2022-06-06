@@ -15,7 +15,7 @@ def reconstructDNA(deconstructedDNA):
     return ''.join(reconstructed_DNA.split('-', 1))
 
 
-def apply_rules_to_dna(hierarchy, deconstructed_DNA, if_dict, then_dict, enableRarity, excluded_var_dict):
+def apply_rules_to_dna(hierarchy, deconstructed_DNA, if_dict, then_dict, enableRarity):
 
     # Check if Variants in if_dict are in deconstructed_DNA, if so return if_list_selected = True:
     if_list_selected = False
@@ -221,7 +221,7 @@ def create_dicts(hierarchy, rule_list_items):
     return dict(items_returned)
 
 
-def logicafyDNAsingle(hierarchy, singleDNA, logicFile, enableRarity, excluded_var_dict):
+def logicafyDNAsingle(hierarchy, singleDNA, logicFile, enableRarity, enableMaterials):
 
     deconstructed_DNA = singleDNA.split("-")
     didReconstruct = True
@@ -236,7 +236,6 @@ def logicafyDNAsingle(hierarchy, singleDNA, logicFile, enableRarity, excluded_va
             # Items from 'THEN' key for a given rule
             then_dict = create_dicts(hierarchy, logicFile[rule]["THEN"])
 
-            # save_result(then_dict)
             violates_rule, if_bool, then_bool, full_att_bool = get_rule_break_type(hierarchy, deconstructed_DNA,
                                                                                    if_dict, then_dict)
             if deconstructed_DNA[3] != "1":
@@ -249,7 +248,7 @@ def logicafyDNAsingle(hierarchy, singleDNA, logicFile, enableRarity, excluded_va
                 print(f"======={deconstructed_DNA} VIOLATES RULE======")
 
                 deconstructed_DNA = apply_rules_to_dna(
-                    hierarchy, deconstructed_DNA, if_dict, then_dict, enableRarity, excluded_var_dict
+                    hierarchy, deconstructed_DNA, if_dict, then_dict, enableRarity
                 )
 
                 newDNA = reconstructDNA(deconstructed_DNA)

@@ -123,47 +123,18 @@ def get_hierarchy():
 
     return hierarchy
 
-def strip_empty_exclude(hierarchy):
-    """
-    Strips Empty Exclude variants from the hierarchy.
-    """
-    excluded_var_dict = {}
-
-    for a in hierarchy:
-        empty_variant = ""
-        empty_var_count = 0
-        variant_list = list(hierarchy[a].keys())
-        # empty_var_count and raise() prevents this for from causing breaking stuff:
-
-        for b in variant_list:
-            if b.split("_")[1] == "0":
-                empty_variant = b
-                empty_var_count += 1
-            if empty_var_count > 1:
-                raise Exception(
-                    f"\n{bcolors.ERROR}Blend_My_NFTs Error:\n"
-                    f"The Attribute collection '{a}' has more than one Empty variant.\n"
-                    f"Attributes can only have a maximum of 1 Empty variant, please review the documentation here:\n{bcolors.RESET}"
-                    f"https://github.com/torrinworx/Blend_My_NFTs#blender-file-organization-and-structure\n"
-                )
-
-        if len(empty_variant.split("_")) == 4 and empty_variant.split("_")[3] == "Exclude":
-            excluded_var_dict[a] = empty_variant
-            del hierarchy[a][empty_variant]
-
-    return hierarchy, excluded_var_dict
 
 def generateNFT_DNA(collectionSize, enableRarity, enableLogic, logicFile, enableMaterials, materialsFile):
     """
    Returns batchDataDictionary containing the number of NFT combinations, hierarchy, and the DNAList.
    """
 
-    hierarchy, excluded_var_dict = strip_empty_exclude(get_hierarchy())
+    hierarchy = get_hierarchy()
 
     # DNA random, Rarity and Logic methods:
     DataDictionary = {}
 
-    def createDNArandom():
+    def createDNArandom(hierarchy):
         """Creates a single DNA randomly without Rarity or Logic."""
         dnaStr = ""
         dnaStrList = []
@@ -195,20 +166,22 @@ def generateNFT_DNA(collectionSize, enableRarity, enableLogic, logicFile, enable
         singleDNA = ""
         # Comments for debugging random, rarity, logic, and materials.
         if not enableRarity:
-            singleDNA = createDNArandom()
+            singleDNA = createDNArandom(hierarchy)
         # print("============")
         # print(f"Original DNA: {singleDNA}")
         if enableRarity:
             singleDNA = Rarity.createDNArarity(hierarchy)
         # print(f"Rarity DNA: {singleDNA}")
 
+        if enableMaterials:
+            singleDNA = Material_Generator.apply_materials(hierarchy, singleDNA, materialsFile, enableRarity)
+        # print(f"Materials DNA: {singleDNA}")
+
         if enableLogic:
-            singleDNA = Logic.logicafyDNAsingle(hierarchy, singleDNA, logicFile, enableRarity, excluded_var_dict)
+            singleDNA = Logic.logicafyDNAsingle(hierarchy, singleDNA, logicFile, enableRarity, enableMaterials)
         # print(f"Logic DNA: {singleDNA}")
 
-        if enableMaterials:
-            singleDNA = Material_Generator.apply_materials(hierarchy, singleDNA, materialsFile)
-        # print(f"Materials DNA: {singleDNA}")
+
         # print("============\n")
 
         return singleDNA
@@ -246,7 +219,6 @@ def generateNFT_DNA(collectionSize, enableRarity, enableLogic, logicFile, enable
 
     # Data stored in batchDataDictionary:
     DataDictionary["numNFTsGenerated"] = len(DNAList)
-    DataDictionary["excludedVariants"] = excluded_var_dict
     DataDictionary["hierarchy"] = hierarchy
     DataDictionary["DNAList"] = DNAList
 
