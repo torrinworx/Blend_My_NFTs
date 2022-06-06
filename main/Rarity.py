@@ -17,7 +17,6 @@ def createDNArarity(hierarchy):
     for i in hierarchy:
         number_List_Of_i = []
         rarity_List_Of_i = []
-        count = 0
         ifZeroBool = None
 
         for k in hierarchy[i]:
@@ -26,8 +25,6 @@ def createDNArarity(hierarchy):
 
             rarity = hierarchy[i][k]["rarity"]
             rarity_List_Of_i.append(float(rarity))
-
-            count += 1
 
         for x in rarity_List_Of_i:
             if x == 0:
