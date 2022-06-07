@@ -7,12 +7,15 @@ import bpy
 
 import json
 import random
+from .Constants import bcolors, removeList, remove_file_by_extension, save_result
 
 
-def select_material(materialList, enableRarity):
+def select_material(materialList, variant, enableRarity):
     """Selects a material from a passed material list. """
     material_List_Of_i = []  # List of Material names instead of order numbers
     rarity_List_Of_i = []
+    ifZeroBool = None
+
     for material in materialList:
         # Material Order Number comes from index in the Material List in materials.json for a given Variant.
         # material_order_num = list(materialList.keys()).index(material)
@@ -25,24 +28,35 @@ def select_material(materialList, enableRarity):
     print(f"MATERIAL_LIST_OF_I:{material_List_Of_i}")
     print(f"RARITY_LIST_OF_I:{rarity_List_Of_i}")
 
+    for b in rarity_List_Of_i:
+        if b == 0:
+            ifZeroBool = True
+        elif b != 0:
+            ifZeroBool = False
+
     if enableRarity:
-        ifZeroBool = None
-
-        for x in rarity_List_Of_i:
-            if x == 0:
-                ifZeroBool = True
-                break
-            elif x != 0:
-                ifZeroBool = False
-
-        if ifZeroBool:
-            selected_material = random.choices(material_List_Of_i, k=1)
-        elif not ifZeroBool:
-
-            selected_material = random.choices(material_List_Of_i, weights=rarity_List_Of_i, k=1)
-
+        try:
+            if ifZeroBool:
+                selected_material = random.choices(material_List_Of_i, k=1)
+            elif not ifZeroBool:
+                selected_material = random.choices(material_List_Of_i, weights=rarity_List_Of_i, k=1)
+        except IndexError:
+            raise IndexError(
+                f"\n{bcolors.ERROR}Blend_My_NFTs Error:\n"
+                f"An issue was found within the Material List of the Variant collection '{variant}'. For more information on Blend_My_NFTs compatible scenes, "
+                f"see:\n{bcolors.RESET}"
+                f"https://github.com/torrinworx/Blend_My_NFTs#blender-file-organization-and-structure\n"
+            )
     else:
-        selected_material = random.choices(material_List_Of_i, k=1)
+        try:
+            selected_material = random.choices(material_List_Of_i, k=1)
+        except IndexError:
+            raise IndexError(
+                f"\n{bcolors.ERROR}Blend_My_NFTs Error:\n"
+                f"An issue was found within the Material List of the Variant collection '{variant}'. For more information on Blend_My_NFTs compatible scenes, "
+                f"see:\n{bcolors.RESET}"
+                f"https://github.com/torrinworx/Blend_My_NFTs#blender-file-organization-and-structure\n"
+            )
 
     return selected_material[0], materialList
 
@@ -93,7 +107,7 @@ def apply_materials(hierarchy, singleDNA, materialsFile, enableRarity):
         complete = False
         for b in materialsFile:
             if singleDNADict[a] == b:
-                material_name, materialList, = select_material(materialsFile[b]['Material List'], enableRarity)
+                material_name, materialList, = select_material(materialsFile[b]['Material List'], b, enableRarity)
                 material_order_num = list(materialList.keys()).index(material_name)  # Gets the Order Number of the Material
                 deconstructed_MaterialDNA[a] = str(material_order_num + 1)
                 complete = True
