@@ -238,12 +238,6 @@ def logicafyDNAsingle(hierarchy, singleDNA, logicFile, enableRarity, enableMater
 
             violates_rule, if_bool, then_bool, full_att_bool = get_rule_break_type(hierarchy, deconstructed_DNA,
                                                                                    if_dict, then_dict)
-            if deconstructed_DNA[3] != "1":
-                print(f"\nVIOLATES_RULE:{violates_rule}")
-                print(f"IF_BOOL:{if_bool}")
-                print(f"THEN_BOOL:{then_bool}")
-                print(f"FULL_ATT_BOOL:{full_att_bool}\n")
-
             if violates_rule:
                 print(f"======={deconstructed_DNA} VIOLATES RULE======")
 
