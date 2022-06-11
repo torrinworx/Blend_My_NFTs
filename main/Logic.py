@@ -46,7 +46,7 @@ def apply_rules_to_dna(hierarchy, deconstructed_DNA, if_dict, then_dict, enableR
     # 'then_dict[attribute]' variant_list:
     if if_list_selected:
         for a in then_dict:
-            attribute_index = deconstructed_DNA.index(a)
+            attribute_index = list(hierarchy.keys()).index(a)
             attribute = list(hierarchy.keys())[attribute_index]
 
             variant_list = list(then_dict[a].keys())
