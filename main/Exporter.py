@@ -7,6 +7,7 @@ import os
 import time
 import json
 import datetime
+import platform
 from .loading_animation import Loader
 from .Constants import bcolors, removeList, remove_file_by_extension
 from .Metadata import createCardanoMetadata, createSolanaMetaData, createErc721MetaData
@@ -112,18 +113,20 @@ def render_and_save_NFTs(input):
     Renders the NFT DNA in a Batch#.json, where # is renderBatch in config.py. Turns off the viewport camera and
     the render camera for all items in hierarchy.
     """
-    print(f"\nFAILED BATCH = {input.failed_batch}\n")
-    print(f"\nBATCH TO GENERATE = {input.batchToGenerate}\n")
 
     time_start_1 = time.time()
 
+    # If failed Batch is detected and user is resuming its generation:
     if input.fail_state:
+        print(f"{bcolors.ERROR}\nResuming Failed Batch {input.failed_batch}\n{bcolors.RESET}")
         NFTs_in_Batch, hierarchy, BatchDNAList = getBatchData(input.failed_batch, input.batch_json_save_path)
         for a in range(input.failed_dna):
             del BatchDNAList[0]
         x = input.failed_dna + 1
 
+    # If user is generating the normal way:
     else:
+        print(f"\nGenerating Batch {input.batchToGenerate}\n")
         NFTs_in_Batch, hierarchy, BatchDNAList = getBatchData(input.batchToGenerate, input.batch_json_save_path)
         save_generation_state(input)
         x = 1
@@ -459,3 +462,28 @@ def render_and_save_NFTs(input):
 
     batch_infoFolder = os.path.join(input.nftBatch_save_path, "Batch" + str(input.batchToGenerate), "batch_info.json")
     save_batch(batch_info, batch_infoFolder)
+
+    # Automatic Shutdown:
+    # If user selects automatic shutdown but did not specify time after Batch completion
+
+    def shutdown(time):
+        plateform = platform.system()
+
+        if plateform == "Windows":
+            os.system(f"shutdown /s /t {time}")
+        if plateform == "Darwin":
+            os.system(f"shutdown /s /t {time}")
+
+    if input.enableAutoShutdown and not input.specify_timeBool:
+        shutdown(0)
+
+    # If user selects automatic shutdown and specify time after Batch completion
+    if input.enableAutoShutdown and input.specify_timeBool:
+
+        hours = (int(input.hours)/60)/60
+        minutes = int(input.minutes)/60
+        total_sleep_time = hours + minutes
+
+        # time.sleep(total_sleep_time)
+
+        shutdown(total_sleep_time)

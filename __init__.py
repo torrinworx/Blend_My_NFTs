@@ -23,6 +23,7 @@ import os
 import sys
 import json
 import importlib
+from datetime import datetime, timezone
 
 # "a little hacky bs" - Matthew TheBrochacho ;)
 sys.path.append(os.path.dirname(os.path.realpath(__file__)))
@@ -70,6 +71,7 @@ if "bpy" in locals():
 # Used for updating text and buttons in UI panels
 combinations: int = 0
 recommended_limit: int = 0
+dt = datetime.now(timezone.utc).astimezone()  # Date Time in UTC local
 
 
 @persistent
@@ -376,7 +378,15 @@ class BMNFTS_PGT_Input_Properties(bpy.types.PropertyGroup):
     )
 
     # Other Panel:
-    enableAutoSave: bpy.props.BoolProperty(name="Auto Save Before Generation")
+    enableAutoSave: bpy.props.BoolProperty(name="Auto Save Before Generation", description="Automatically saves your Blender file when 'Generate NFTs & Create Metadata' button is clicked")
+
+    # Auto Shutodwn:
+    enableAutoShutdown: bpy.props.BoolProperty(name="Auto Shutdown", description="Automatically shuts down your computer after a Batch is finished Generating")
+
+    specify_timeBool: bpy.props.BoolProperty(name="Shutdown in a Given Amount of Time", description="Wait a given amount of time after a Batch is generated before Automatic Shutdown")
+    hours: bpy.props.IntProperty(default=0, min=0)
+    minutes: bpy.props.IntProperty(default=0, min=0)
+
 
 
     # API Panel properties:
@@ -515,6 +525,12 @@ class exportNFTs(bpy.types.Operator):
 
             enableMaterials = bpy.context.scene.input_tool.enableMaterials
             materialsFile = bpy.path.abspath(bpy.context.scene.input_tool.materialsFile)
+
+            enableAutoShutdown = bpy.context.scene.input_tool.enableAutoShutdown
+
+            specify_timeBool = bpy.context.scene.input_tool.specify_timeBool
+            hours = bpy.context.scene.input_tool.hours
+            minutes = bpy.context.scene.input_tool.minutes
 
             # fail state variables, set to no fail due to resume_failed_batch() Operator in BMNFTS_PT_GenerateNFTs Panel
             fail_state = False
@@ -940,6 +956,30 @@ class BMNFTS_PT_Other(bpy.types.Panel):
 
         row = layout.row()
         row.prop(input_tool_scene, "enableAutoSave")
+
+        # Auto Shutdown:
+        row = layout.row()
+        row.prop(input_tool_scene, "enableAutoShutdown")
+        row.label(text="*Must Run Blender as Admin")
+
+        if bpy.context.scene.input_tool.enableAutoShutdown:
+            row = layout.row()
+            row.prop(input_tool_scene, "specify_timeBool")
+
+            time_row1 = layout.row()
+            time_row1.label(text=f"Hours")
+            time_row1.prop(input_tool_scene, "hours", text="")
+
+            time_row2 = layout.row()
+            time_row2.label(text=f"Minutes")
+            time_row2.prop(input_tool_scene, "minutes", text="")
+
+            if not bpy.context.scene.input_tool.specify_timeBool:
+                time_row1.enabled = False
+                time_row2.enabled = False
+            else:
+                time_row1.enabled = True
+                time_row2.enabled = True
 
         layout.label(text=f"Running Blend_My_NFTs Headless:")
 
