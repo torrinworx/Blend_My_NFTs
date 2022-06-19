@@ -485,7 +485,7 @@ def render_and_save_NFTs(input):
     generation_time = str(datetime.timedelta(seconds=batch_complete_time))
 
     message = f"""\
-    Subject: Blend_My_NFTs: Batch {batch} completed {x - 1} NFTs in {generation_time} (h:m:s)
+    Subject: Batch {batch} completed {x - 1} NFTs in {generation_time} (h:m:s)
     
     Generation Time:
     {generation_time.split(':')[0]} Hours, {generation_time.split(':')[1]} Minutes, {generation_time.split(':')[2]} Seconds
