@@ -173,14 +173,13 @@ def generateNFT_DNA(collectionSize, enableRarity, enableLogic, logicFile, enable
             singleDNA = Rarity.createDNArarity(hierarchy)
         # print(f"Rarity DNA: {singleDNA}")
 
-        if enableMaterials:
-            singleDNA = Material_Generator.apply_materials(hierarchy, singleDNA, materialsFile, enableRarity)
-        # print(f"Materials DNA: {singleDNA}")
-
         if enableLogic:
             singleDNA = Logic.logicafyDNAsingle(hierarchy, singleDNA, logicFile, enableRarity, enableMaterials)
         # print(f"Logic DNA: {singleDNA}")
 
+        if enableMaterials:
+            singleDNA = Material_Generator.apply_materials(hierarchy, singleDNA, materialsFile, enableRarity)
+        # print(f"Materials DNA: {singleDNA}")
 
         # print("============\n")
 

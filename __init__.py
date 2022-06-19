@@ -387,6 +387,11 @@ class BMNFTS_PGT_Input_Properties(bpy.types.PropertyGroup):
     hours: bpy.props.IntProperty(default=0, min=0)
     minutes: bpy.props.IntProperty(default=0, min=0)
 
+    # Send Batch Complete Email:
+    emailNotificationBool: bpy.props.BoolProperty(name="Email Notifications", description="Receive Email Notifications from Blender once a batch is finished generating")
+    sender_from: bpy.props.StringProperty(name="From", default="from@example.com")
+    email_password: bpy.props.StringProperty(name="Password", subtype='PASSWORD')
+    receiver_to: bpy.props.StringProperty(name="To", default="to@example.com")
 
 
     # API Panel properties:
@@ -531,6 +536,11 @@ class exportNFTs(bpy.types.Operator):
             specify_timeBool = bpy.context.scene.input_tool.specify_timeBool
             hours = bpy.context.scene.input_tool.hours
             minutes = bpy.context.scene.input_tool.minutes
+
+            emailNotificationBool = bpy.context.scene.input_tool.emailNotificationBool
+            sender_from = bpy.context.scene.input_tool.sender_from
+            email_password = bpy.context.scene.input_tool.email_password
+            receiver_to = bpy.context.scene.input_tool.receiver_to
 
             # fail state variables, set to no fail due to resume_failed_batch() Operator in BMNFTS_PT_GenerateNFTs Panel
             fail_state = False
@@ -980,7 +990,22 @@ class BMNFTS_PT_Other(bpy.types.Panel):
             else:
                 time_row1.enabled = True
                 time_row2.enabled = True
+            layout.separator()
 
+        row = layout.row()
+        row.prop(input_tool_scene, "emailNotificationBool")
+
+        if bpy.context.scene.input_tool.emailNotificationBool:
+            row = layout.row()
+            row.prop(input_tool_scene, "sender_from")
+            row = layout.row()
+            row.prop(input_tool_scene, "email_password")
+
+            layout.separator()
+            row = layout.row()
+            row.prop(input_tool_scene, "receiver_to")
+
+        layout.separator()
         layout.label(text=f"Running Blend_My_NFTs Headless:")
 
         save_path = bpy.path.abspath(bpy.context.scene.input_tool.save_path)

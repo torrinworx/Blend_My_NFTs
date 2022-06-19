@@ -4,8 +4,10 @@
 
 import bpy
 import os
+import ssl
 import time
 import json
+import smtplib
 import datetime
 import platform
 from .loading_animation import Loader
@@ -463,9 +465,44 @@ def render_and_save_NFTs(input):
     batch_infoFolder = os.path.join(input.nftBatch_save_path, "Batch" + str(input.batchToGenerate), "batch_info.json")
     save_batch(batch_info, batch_infoFolder)
 
+    # Send Email that Batch is complete:
+    port = 465  # For SSL
+    smtp_server = "smtp.gmail.com"
+    sender_email = input.sender_from  # Enter your address
+    receiver_email = input.receiver_to  # Enter receiver address
+    password = input.email_password
+
+    # Get batch info for message:
+    if input.fail_state:
+        batch = input.fail_state
+        batchData = getBatchData(input.failed_batch, input.batch_json_save_path)
+
+    else:
+        batchData = getBatchData(input.batchToGenerate, input.batch_json_save_path)
+
+        batch = input.batchToGenerate
+
+    generation_time = str(datetime.timedelta(seconds=batch_complete_time))
+
+    message = f"""\
+    Subject: Blend_My_NFTs: Batch {batch} completed {x - 1} NFTs in {generation_time} (h:m:s)
+    
+    Generation Time:
+    {generation_time.split(':')[0]} Hours, {generation_time.split(':')[1]} Minutes, {generation_time.split(':')[2]} Seconds
+    Batch Data:
+    
+        {batchData}
+    
+    This message was sent from an instance of the Blend_My_NFTs Blender add-on.
+    """
+
+    context = ssl.create_default_context()
+    with smtplib.SMTP_SSL(smtp_server, port, context=context) as server:
+        server.login(sender_email, password)
+        server.sendmail(sender_email, receiver_email, message)
+
     # Automatic Shutdown:
     # If user selects automatic shutdown but did not specify time after Batch completion
-
     def shutdown(time):
         plateform = platform.system()
 
