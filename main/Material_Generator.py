@@ -114,6 +114,15 @@ def apply_materials(hierarchy, singleDNA, materialsFile, enableRarity):
         if not complete:
             deconstructed_MaterialDNA[a] = "0"
 
+    # Make Attributes have the same materials:
+    # Order your Attributes alphabetically, then assign each Attribute a number, starting with 0. So Attribute 'A' = 0,
+    # Attribute 'B' = 1, 'C' = 2, 'D' = 3, etc. For each pair you want to equal another, add its number it to this list:
+    # synced_material_attributes = [1, 2]
+    #
+    # first_mat = deconstructed_MaterialDNA[synced_material_attributes[0]]
+    # for i in synced_material_attributes:
+    #     deconstructed_MaterialDNA[i] = first_mat
+
     material_DNA = ""
     for a in deconstructed_MaterialDNA:
         num = "-" + str(deconstructed_MaterialDNA[a])

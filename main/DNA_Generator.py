@@ -16,8 +16,8 @@ from .Constants import bcolors, removeList, remove_file_by_extension
 
 def get_hierarchy():
     """
-   Returns the hierarchy of a given Blender scene.
-   """
+    Returns the hierarchy of a given Blender scene.
+    """
 
     coll = bpy.context.scene.collection
 

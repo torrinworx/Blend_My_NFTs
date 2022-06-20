@@ -994,6 +994,7 @@ class BMNFTS_PT_Other(bpy.types.Panel):
 
         row = layout.row()
         row.prop(input_tool_scene, "emailNotificationBool")
+        row.label(text="*Windows 10+ only")
 
         if bpy.context.scene.input_tool.emailNotificationBool:
             row = layout.row()
