@@ -18,7 +18,7 @@ from bpy.app.handlers import persistent
 from bpy.props import (IntProperty,
                        BoolProperty,
                        CollectionProperty)
-
+                       
 import os
 import sys
 import json
@@ -263,55 +263,47 @@ def runAsHeadless():
                         materialsFile, Blend_My_NFTs_Output, batch_json_save_path)
 
     elif args.operation == 'generate-nfts':
-        nftName = settings.nftName
-        batchToGenerate = settings.batchToGenerate
-        collectionSize = settings.collectionSize
-        Blend_My_NFTs_Output, batch_json_save_path, nftBatch_save_path = make_directories(save_path)
-
         _save_path = bpy.path.abspath(settings.save_path)
+        _Blend_My_NFTs_Output, _batch_json_save_path, _nftBatch_save_path = make_directories(_save_path)
+        
         if args.batch_data_path:
-            batch_json_save_path = args.batch_data_path;
-
-        enableImages = settings.imageBool
-        imageFileFormat = settings.imageEnum
-        enableAnimations = settings.animationBool
-        animationFileFormat = settings.animationEnum
-
-        enableModelsBlender = settings.modelBool
-        modelFileFormat = settings.modelEnum
             batch_json_save_path = args.batch_data_path
+        
+        input = RenderData (
+            nftName                 = bpy.context.scene.input_tool.nftName,
             save_path               = _save_path,
             batchToGenerate         = bpy.context.scene.input_tool.batchToGenerate,
             collectionSize          = bpy.context.scene.input_tool.collectionSize,
+
             Blend_My_NFTs_Output    = _Blend_My_NFTs_Output,
             batch_json_save_path    = _batch_json_save_path,
             nftBatch_save_path      = _nftBatch_save_path,
 
             enableImages            = bpy.context.scene.input_tool.imageBool,
+            imageFileFormat         = bpy.context.scene.input_tool.imageEnum,
 
             enableAnimations        = bpy.context.scene.input_tool.animationBool,
             animationFileFormat     = bpy.context.scene.input_tool.animationEnum,
 
             enableModelsBlender     = bpy.context.scene.input_tool.modelBool,
+            modelFileFormat         = bpy.context.scene.input_tool.modelEnum,
             
             enableCustomFields      = bpy.context.scene.input_tool.enableCustomFields,
   
+            cardanoMetaDataBool     = bpy.context.scene.input_tool.cardanoMetaDataBool,
+            solanaMetaDataBool      = bpy.context.scene.input_tool.solanaMetaDataBool,
+            erc721MetaData          = bpy.context.scene.input_tool.erc721MetaData,
 
-        enableMaterials = settings.enableMaterials
-        materialsFile = settings.materialsFile
+            cardano_description     = bpy.context.scene.input_tool.cardano_description,
+            solana_description      = bpy.context.scene.input_tool.solana_description,
+            erc721_description      = bpy.context.scene.input_tool.erc721_description,
 
-        # fail state variables, set to no fail due to resume_failed_batch() Operator in BMNFTS_PT_GenerateNFTs Panel
-        fail_state = False
-        failed_batch = None
-        failed_dna = None
-        failed_dna_index = None
+            enableMaterials         = bpy.context.scene.input_tool.enableMaterials,
+            materialsFile           = bpy.path.abspath(bpy.context.scene.input_tool.materialsFile)
+        )
 
-        Exporter.render_and_save_NFTs(nftName, collectionSize, batchToGenerate, batch_json_save_path,
-                                      nftBatch_save_path, enableImages,
-                                      imageFileFormat, enableAnimations, animationFileFormat, enableModelsBlender,
-                                      modelFileFormat, fail_state, failed_batch, failed_dna, failed_dna_index,
-                                      enableMaterials, materialsFile
-                                      )
+        Exporter.render_and_save_NFTs(input)
+
     elif args.operation == 'refactor-batches':
         class refactorData:
             save_path = bpy.path.abspath(settings.save_path)
@@ -538,42 +530,41 @@ class exportNFTs(bpy.types.Operator):
         name="Reverse Order")
 
     def execute(self, context):
-        class input:
-            nftName = bpy.context.scene.input_tool.nftName
-            save_path = bpy.path.abspath(bpy.context.scene.input_tool.save_path)
-            batchToGenerate = bpy.context.scene.input_tool.batchToGenerate
-            collectionSize = bpy.context.scene.input_tool.collectionSize
+        _save_path = bpy.path.abspath(bpy.context.scene.input_tool.save_path)
+        _Blend_My_NFTs_Output, _batch_json_save_path, _nftBatch_save_path = make_directories(_save_path)
 
-            Blend_My_NFTs_Output, batch_json_save_path, nftBatch_save_path = make_directories(save_path)
+        input = RenderData ( 
+            nftName                 = bpy.context.scene.input_tool.nftName,
+            save_path               = _save_path,
+            batchToGenerate         = bpy.context.scene.input_tool.batchToGenerate,
+            collectionSize          = bpy.context.scene.input_tool.collectionSize,
 
-            enableImages = bpy.context.scene.input_tool.imageBool
-            imageFileFormat = bpy.context.scene.input_tool.imageEnum
+            Blend_My_NFTs_Output    = _Blend_My_NFTs_Output,
+            batch_json_save_path    = _batch_json_save_path,
+            nftBatch_save_path      = _nftBatch_save_path,
 
-            enableAnimations = bpy.context.scene.input_tool.animationBool
-            animationFileFormat = bpy.context.scene.input_tool.animationEnum
+            enableImages            = bpy.context.scene.input_tool.imageBool,
+            imageFileFormat         = bpy.context.scene.input_tool.imageEnum,
 
-            enableModelsBlender = bpy.context.scene.input_tool.modelBool
-            modelFileFormat = bpy.context.scene.input_tool.modelEnum
+            enableAnimations        = bpy.context.scene.input_tool.animationBool,
+            animationFileFormat     = bpy.context.scene.input_tool.animationEnum,
 
-            enableCustomFields = bpy.context.scene.input_tool.enableCustomFields
-            custom_Fields = {}
+            enableModelsBlender     = bpy.context.scene.input_tool.modelBool,
+            modelFileFormat         = bpy.context.scene.input_tool.modelEnum,
+            
+            enableCustomFields      = bpy.context.scene.input_tool.enableCustomFields,
+  
+            cardanoMetaDataBool     = bpy.context.scene.input_tool.cardanoMetaDataBool,
+            solanaMetaDataBool      = bpy.context.scene.input_tool.solanaMetaDataBool,
+            erc721MetaData          = bpy.context.scene.input_tool.erc721MetaData,
 
-            cardanoMetaDataBool = bpy.context.scene.input_tool.cardanoMetaDataBool
-            solanaMetaDataBool = bpy.context.scene.input_tool.solanaMetaDataBool
-            erc721MetaData = bpy.context.scene.input_tool.erc721MetaData
+            cardano_description     = bpy.context.scene.input_tool.cardano_description,
+            solana_description      = bpy.context.scene.input_tool.solana_description,
+            erc721_description      = bpy.context.scene.input_tool.erc721_description,
 
-            cardano_description = bpy.context.scene.input_tool.cardano_description
-            solana_description = bpy.context.scene.input_tool.solana_description
-            erc721_description = bpy.context.scene.input_tool.erc721_description
-
-            enableMaterials = bpy.context.scene.input_tool.enableMaterials
-            materialsFile = bpy.path.abspath(bpy.context.scene.input_tool.materialsFile)
-
-            # fail state variables, set to no fail due to resume_failed_batch() Operator in BMNFTS_PT_GenerateNFTs Panel
-            fail_state = False
-            failed_batch = None
-            failed_dna = None
-            failed_dna_index = None
+            enableMaterials         = bpy.context.scene.input_tool.enableMaterials,
+            materialsFile           = bpy.path.abspath(bpy.context.scene.input_tool.materialsFile)
+        )
 
         # Handling Custom Fields UIList input:
         if input.enableCustomFields:
@@ -606,42 +597,53 @@ class resume_failed_batch(bpy.types.Operator):
     bl_options = {"REGISTER", "UNDO"}
 
     def execute(self, context):
-        class input:
-            save_path = bpy.path.abspath(bpy.context.scene.input_tool.save_path)
-            batchToGenerate = bpy.context.scene.input_tool.batchToGenerate
+        _save_path = bpy.path.abspath(bpy.context.scene.input_tool.save_path)
+        _Blend_My_NFTs_Output, _batch_json_save_path, _nftBatch_save_path = make_directories(_save_path)
 
-            Blend_My_NFTs_Output, batch_json_save_path, nftBatch_save_path = make_directories(save_path)
-            file_name = os.path.join(batch_json_save_path, "Batch{}.json".format(batchToGenerate))
-            batch = json.load(open(file_name))
+        _batchToGenerate = bpy.context.scene.input_tool.batchToGenerate
 
-            nftName = batch["Generation Save"][-1]["Render_Settings"]["nftName"]
-            collectionSize = batch["Generation Save"][-1]["Render_Settings"]["collectionSize"]
-            nftBatch_save_path = batch["Generation Save"][-1]["Render_Settings"]["nftBatch_save_path"]
+        file_name = os.path.join(_batch_json_save_path, "Batch{}.json".format(_batchToGenerate))
+        batchData = json.load(open(file_name))
 
-            enableImages = batch["Generation Save"][-1]["Render_Settings"]["enableImages"]
-            imageFileFormat = batch["Generation Save"][-1]["Render_Settings"]["imageFileFormat"]
+        _fail_state, _failed_batch, _failed_dna, _failed_dna_index = Checks.check_FailedBatches(_batch_json_save_path)
 
-            enableAnimations = batch["Generation Save"][-1]["Render_Settings"]["enableAnimations"]
-            animationFileFormat = batch["Generation Save"][-1]["Render_Settings"]["animationFileFormat"]
+        input = RenderData (
+            nftName                 = batchData["Generation Save"][-1]["Render_Settings"]["nftName"],
+            save_path               = _save_path,
+            collectionSize          = batchData["Generation Save"][-1]["Render_Settings"]["collectionSize"],
 
-            enableModelsBlender = batch["Generation Save"][-1]["Render_Settings"]["enableModelsBlender"]
-            modelFileFormat = batch["Generation Save"][-1]["Render_Settings"]["modelFileFormat"]
+            Blend_My_NFTs_Output    = _Blend_My_NFTs_Output,
+            batch_json_save_path    = _batch_json_save_path,
+            nftBatch_save_path      = batchData["Generation Save"][-1]["Render_Settings"]["nftBatch_save_path"],
 
-            enableCustomFields = batch["Generation Save"][-1]["Render_Settings"]["enableCustomFields"]
-            custom_Fields = batch["Generation Save"][-1]["Render_Settings"]["custom_Fields"]
+            enableImages            = batchData["Generation Save"][-1]["Render_Settings"]["enableImages"],
+            imageFileFormat         = batchData["Generation Save"][-1]["Render_Settings"]["imageFileFormat"],
 
-            cardanoMetaDataBool = batch["Generation Save"][-1]["Render_Settings"]["cardanoMetaDataBool"]
-            solanaMetaDataBool = batch["Generation Save"][-1]["Render_Settings"]["solanaMetaDataBool"]
-            erc721MetaData = batch["Generation Save"][-1]["Render_Settings"]["erc721MetaData"]
+            enableAnimations        = batchData["Generation Save"][-1]["Render_Settings"]["enableAnimations"],
+            animationFileFormat     = batchData["Generation Save"][-1]["Render_Settings"]["animationFileFormat"],
 
-            cardano_description = batch["Generation Save"][-1]["Render_Settings"]["cardano_description"]
-            solana_description = batch["Generation Save"][-1]["Render_Settings"]["solana_description"]
-            erc721_description = batch["Generation Save"][-1]["Render_Settings"]["erc721_description"]
+            enableModelsBlender     = batchData["Generation Save"][-1]["Render_Settings"]["enableModelsBlender"],
+            modelFileFormat         = batchData["Generation Save"][-1]["Render_Settings"]["modelFileFormat"],
 
-            enableMaterials = batch["Generation Save"][-1]["Render_Settings"]["enableMaterials"]
-            materialsFile = batch["Generation Save"][-1]["Render_Settings"]["materialsFile"]
+            enableCustomFields      = batchData["Generation Save"][-1]["Render_Settings"]["enableCustomFields"],
+            custom_Fields           = batchData["Generation Save"][-1]["Render_Settings"]["custom_Fields"],
 
-            fail_state, failed_batch, failed_dna, failed_dna_index = Checks.check_FailedBatches(batch_json_save_path)
+            cardanoMetaDataBool     = batchData["Generation Save"][-1]["Render_Settings"]["cardanoMetaDataBool"],
+            solanaMetaDataBool      = batchData["Generation Save"][-1]["Render_Settings"]["solanaMetaDataBool"],
+            erc721MetaData          = batchData["Generation Save"][-1]["Render_Settings"]["erc721MetaData"],
+
+            cardano_description     = batchData["Generation Save"][-1]["Render_Settings"]["cardano_description"],
+            solana_description      = batchData["Generation Save"][-1]["Render_Settings"]["solana_description"],
+            erc721_description      = batchData["Generation Save"][-1]["Render_Settings"]["erc721_description"],
+
+            enableMaterials         = batchData["Generation Save"][-1]["Render_Settings"]["enableMaterials"],
+            materialsFile           = batchData["Generation Save"][-1]["Render_Settings"]["materialsFile"],
+
+            fail_state              = _fail_state,
+            failed_batch            = _failed_batch,
+            failed_dna              = _failed_dna,
+            failed_dna_index        = _failed_dna_index
+        )
 
         Exporter.render_and_save_NFTs(input)
 
