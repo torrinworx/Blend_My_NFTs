@@ -23,6 +23,8 @@ import os
 import sys
 import json
 import importlib
+from dataclasses import dataclass
+from typing import Any
 
 # "a little hacky bs" - matt159 ;)
 sys.path.append(os.path.dirname(os.path.realpath(__file__)))
@@ -70,6 +72,49 @@ if "bpy" in locals():
 # Used for updating text and buttons in UI panels
 combinations: int = 0
 recommended_limit: int = 0
+
+
+@dataclass
+class RenderData:
+    nftName: str
+    save_path: str
+    batchToGenerate: int
+    collectionSize: int
+
+    Blend_My_NFTs_Output: str
+    batch_json_save_path: str
+    nftBatch_save_path: str
+
+    enableImages: bool
+    imageFileFormat: str
+
+    enableAnimations: bool
+    animationFileFormat: str
+
+    enableModelsBlender: bool
+    modelFileFormat: str
+
+    enableCustomFields: bool
+
+    cardanoMetaDataBool: bool
+    solanaMetaDataBool: bool
+    erc721MetaData: bool
+
+    cardano_description: str
+    solana_description: str
+    erc721_description: str
+
+    enableMaterials: bool
+    materialsFile: str
+
+    custom_Fields: dict = None
+    fail_state: Any = False
+    failed_batch: Any = None
+    failed_dna: Any = None
+    failed_dna_index: Any = None
+
+    def __post_init__(self):
+        self.custom_Fields = {}
 
 
 @persistent
