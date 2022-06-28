@@ -24,7 +24,7 @@ import sys
 import json
 import importlib
 
-# "a little hacky bs" - Matthew TheBrochacho ;)
+# "a little hacky bs" - matt159 ;)
 sys.path.append(os.path.dirname(os.path.realpath(__file__)))
 
 from main import \
@@ -219,23 +219,38 @@ def runAsHeadless():
 
     elif args.operation == 'generate-nfts':
         nftName = settings.nftName
-        save_path = bpy.path.abspath(settings.save_path)
         batchToGenerate = settings.batchToGenerate
         collectionSize = settings.collectionSize
-
         Blend_My_NFTs_Output, batch_json_save_path, nftBatch_save_path = make_directories(save_path)
 
+        _save_path = bpy.path.abspath(settings.save_path)
         if args.batch_data_path:
             batch_json_save_path = args.batch_data_path;
 
         enableImages = settings.imageBool
         imageFileFormat = settings.imageEnum
-
         enableAnimations = settings.animationBool
         animationFileFormat = settings.animationEnum
 
         enableModelsBlender = settings.modelBool
         modelFileFormat = settings.modelEnum
+            batch_json_save_path = args.batch_data_path
+            save_path               = _save_path,
+            batchToGenerate         = bpy.context.scene.input_tool.batchToGenerate,
+            collectionSize          = bpy.context.scene.input_tool.collectionSize,
+            Blend_My_NFTs_Output    = _Blend_My_NFTs_Output,
+            batch_json_save_path    = _batch_json_save_path,
+            nftBatch_save_path      = _nftBatch_save_path,
+
+            enableImages            = bpy.context.scene.input_tool.imageBool,
+
+            enableAnimations        = bpy.context.scene.input_tool.animationBool,
+            animationFileFormat     = bpy.context.scene.input_tool.animationEnum,
+
+            enableModelsBlender     = bpy.context.scene.input_tool.modelBool,
+            
+            enableCustomFields      = bpy.context.scene.input_tool.enableCustomFields,
+  
 
         enableMaterials = settings.enableMaterials
         materialsFile = settings.materialsFile
