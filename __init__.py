@@ -169,6 +169,17 @@ def runAsHeadless():
     """
     For use when running from the command line.
     """
+    
+    # force CUDA device usage with cycles renderer
+    cprefs = bpy.context.preferences.addons['cycles'].preferences
+    cprefs.compute_device_type = 'CUDA'
+    cprefs.get_devices()
+    print(cprefs.devices.keys())
+
+    for key in cprefs.devices.keys():
+            cprefs.devices[key].use = True
+
+    print('Using {} devices for rendering!'.format(cprefs.get_num_gpu_devices()))
 
     def dumpSettings(settings):
         output = (
