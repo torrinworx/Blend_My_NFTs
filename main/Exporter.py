@@ -41,37 +41,37 @@ def save_generation_state(input):
         "Generation Start Date and Time": [CURRENT_TIME, CURRENT_DATE, LOCAL_TIMEZONE],
         "Render_Settings": {
 
-            "nftName": input.nftName,
-            "save_path": input.save_path,
-            "batchToGenerate": input.batchToGenerate,
-            "collectionSize": input.collectionSize,
+            "nftName":              input.nftName,
+            "save_path":            input.save_path,
+            "batchToGenerate":      input.batchToGenerate,
+            "collectionSize":       input.collectionSize,
 
             "Blend_My_NFTs_Output": input.Blend_My_NFTs_Output,
             "batch_json_save_path": input.batch_json_save_path,
-            "nftBatch_save_path": input.nftBatch_save_path,
+            "nftBatch_save_path":   input.nftBatch_save_path,
 
-            "enableImages": input.enableImages,
-            "imageFileFormat": input.imageFileFormat,
+            "enableImages":         input.enableImages,
+            "imageFileFormat":      input.imageFileFormat,
 
-            "enableAnimations": input.enableAnimations,
-            "animationFileFormat": input.animationFileFormat,
+            "enableAnimations":     input.enableAnimations,
+            "animationFileFormat":  input.animationFileFormat,
 
-            "enableModelsBlender": input.enableModelsBlender,
-            "modelFileFormat": input.modelFileFormat,
+            "enableModelsBlender":  input.enableModelsBlender,
+            "modelFileFormat":      input.modelFileFormat,
 
-            "enableCustomFields": input.enableCustomFields,
-            "custom_Fields": input.custom_Fields,
+            "enableCustomFields":   input.enableCustomFields,
+            "custom_Fields":        input.custom_Fields,
 
-            "cardanoMetaDataBool": input.cardanoMetaDataBool,
-            "solanaMetaDataBool": input.solanaMetaDataBool,
-            "erc721MetaData": input.erc721MetaData,
+            "cardanoMetaDataBool":  input.cardanoMetaDataBool,
+            "solanaMetaDataBool":   input.solanaMetaDataBool,
+            "erc721MetaData":       input.erc721MetaData,
 
-            "cardano_description": input.cardano_description,
-            "solana_description": input.solana_description,
-            "erc721_description": input.erc721_description,
+            "cardano_description":  input.cardano_description,
+            "solana_description":   input.solana_description,
+            "erc721_description":   input.erc721_description,
 
-            "enableMaterials": input.enableMaterials,
-            "materialsFile": input.materialsFile,
+            "enableMaterials":      input.enableMaterials,
+            "materialsFile":        input.materialsFile,
 
         },
     })
@@ -250,20 +250,20 @@ def render_and_save_NFTs(input):
         time_start_2 = time.time()
 
         # Main paths for batch subfolders:
-        batchFolder = os.path.join(input.nftBatch_save_path, "Batch" + str(input.batchToGenerate))
+        batchFolder             = os.path.join(input.nftBatch_save_path, "Batch" + str(input.batchToGenerate))
 
-        imageFolder = os.path.join(batchFolder, "Images")
-        animationFolder = os.path.join(batchFolder, "Animations")
-        modelFolder = os.path.join(batchFolder, "Models")
-        BMNFT_metaData_Folder = os.path.join(batchFolder, "BMNFT_metadata")
+        imageFolder             = os.path.join(batchFolder, "Images")
+        animationFolder         = os.path.join(batchFolder, "Animations")
+        modelFolder             = os.path.join(batchFolder, "Models")
+        BMNFT_metaData_Folder   = os.path.join(batchFolder, "BMNFT_metadata")
 
-        imagePath = os.path.join(imageFolder, name)
-        animationPath = os.path.join(animationFolder, name)
-        modelPath = os.path.join(modelFolder, name)
+        imagePath               = os.path.join(imageFolder, name)
+        animationPath           = os.path.join(animationFolder, name)
+        modelPath               = os.path.join(modelFolder, name)
 
-        cardanoMetadataPath = os.path.join(batchFolder, "Cardano_metadata")
-        solanaMetadataPath = os.path.join(batchFolder, "Solana_metadata")
-        erc721MetadataPath = os.path.join(batchFolder, "Erc721_metadata")
+        cardanoMetadataPath     = os.path.join(batchFolder, "Cardano_metadata")
+        solanaMetadataPath      = os.path.join(batchFolder, "Solana_metadata")
+        erc721MetadataPath      = os.path.join(batchFolder, "Erc721_metadata")
 
         # Generation/Rendering:
         if input.enableImages:
