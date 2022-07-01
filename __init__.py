@@ -474,14 +474,12 @@ class createData(bpy.types.Operator):
         enableMaterials             = bpy.context.scene.input_tool.enableMaterials
         materialsFile               = bpy.path.abspath(bpy.context.scene.input_tool.materialsFile)
 
+        Blend_My_NFTs_Output, batch_json_save_path, nftBatch_save_path = make_directories(save_path)
+
         # Handling Custom Fields UIList input:
         if enableLogic:
             if enable_Logic_Json and logicFile:
                 logicFile = json.load(open(logicFile))
-
-                Blend_My_NFTs_Output, batch_json_save_path, nftBatch_save_path = make_directories(save_path)
-                DNA_Generator.send_To_Record_JSON(collectionSize, nftsPerBatch, save_path, enableRarity, enableLogic, logicFile, enableMaterials,
-                        materialsFile, Blend_My_NFTs_Output, batch_json_save_path)
 
             if enable_Logic_Json and not logicFile:
                 self.report({'ERROR'}, f"No Logic.json file path set. Please set the file path to your Logic.json file.")
@@ -503,9 +501,6 @@ class createData(bpy.types.Operator):
                                 "Items-2": item_list2.split(',')
                         }
                         num += 1
-                    Blend_My_NFTs_Output, batch_json_save_path, nftBatch_save_path = make_directories(save_path)
-                    DNA_Generator.send_To_Record_JSON(collectionSize, nftsPerBatch, save_path, enableRarity, enableLogic, logicFile, enableMaterials,
-                        materialsFile, Blend_My_NFTs_Output, batch_json_save_path)
                 else:
                     logicFile = {}
                     num = 1
@@ -519,14 +514,10 @@ class createData(bpy.types.Operator):
                             "Items-2": item_list2.split(',')
                         }
                         num += 1
-                    Blend_My_NFTs_Output, batch_json_save_path, nftBatch_save_path = make_directories(save_path)
-                    DNA_Generator.send_To_Record_JSON(collectionSize, nftsPerBatch, save_path, enableRarity, enableLogic, logicFile, enableMaterials,
-                        materialsFile, Blend_My_NFTs_Output, batch_json_save_path)
 
-        if not enableLogic:
-          Blend_My_NFTs_Output, batch_json_save_path, nftBatch_save_path = make_directories(save_path)
-          DNA_Generator.send_To_Record_JSON(collectionSize, nftsPerBatch, save_path, enableRarity, enableLogic, logicFile, enableMaterials,
+        DNA_Generator.send_To_Record_JSON(collectionSize, nftsPerBatch, save_path, enableRarity, enableLogic, logicFile, enableMaterials,
                         materialsFile, Blend_My_NFTs_Output, batch_json_save_path)
+                        
         self.report({'INFO'}, f"NFT Data created!")
         return {"FINISHED"}
 
