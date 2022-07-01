@@ -75,7 +75,7 @@ recommended_limit: int = 0
 
 
 @dataclass
-class RenderData:
+class BMNFTData:
     nftName: str
     save_path: str
     batchToGenerate: int
@@ -284,7 +284,7 @@ def runAsHeadless():
         if args.batch_data_path:
             batch_json_save_path = args.batch_data_path
         
-        input = RenderData (
+        input = BMNFTData (
             nftName                 = bpy.context.scene.input_tool.nftName,
             save_path               = _save_path,
             batchToGenerate         = bpy.context.scene.input_tool.batchToGenerate,
@@ -539,7 +539,7 @@ class exportNFTs(bpy.types.Operator):
         _save_path = bpy.path.abspath(bpy.context.scene.input_tool.save_path)
         _Blend_My_NFTs_Output, _batch_json_save_path, _nftBatch_save_path = make_directories(_save_path)
 
-        input = RenderData ( 
+        input = BMNFTData ( 
             nftName                 = bpy.context.scene.input_tool.nftName,
             save_path               = _save_path,
             batchToGenerate         = bpy.context.scene.input_tool.batchToGenerate,
@@ -613,7 +613,7 @@ class resume_failed_batch(bpy.types.Operator):
 
         _fail_state, _failed_batch, _failed_dna, _failed_dna_index = Checks.check_FailedBatches(_batch_json_save_path)
 
-        input = RenderData (
+        input = BMNFTData (
             nftName                 = batchData["Generation Save"][-1]["Render_Settings"]["nftName"],
             save_path               = _save_path,
             collectionSize          = batchData["Generation Save"][-1]["Render_Settings"]["collectionSize"],
