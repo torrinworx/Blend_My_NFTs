@@ -107,6 +107,10 @@ class RenderData:
     enableMaterials: bool
     materialsFile: str
 
+    enableLogic: bool
+    enableLogicJson: bool
+    logicFilePath: str
+
     custom_Fields: dict = None
     fail_state: Any = False
     failed_batch: Any = None
