@@ -79,6 +79,7 @@ recommended_limit: int = 0
 class BMNFTData:
     nftName: str
     save_path: str
+    nftsPerBatch: int
     batchToGenerate: int
     collectionSize: int
 
@@ -110,7 +111,9 @@ class BMNFTData:
 
     enableLogic: bool
     enableLogicJson: bool
-    logicFilePath: str
+    logicFile: str
+
+    enableRarity: bool
 
     custom_Fields: dict = None
     fail_state: Any = False
@@ -269,12 +272,19 @@ def runAsHeadless():
     input = BMNFTData (
         nftName                 = bpy.context.scene.input_tool.nftName,
         save_path               = _save_path,
+        nftsPerBatch            = bpy.context.scene.input_tool.nftsPerBatch,
         batchToGenerate         = bpy.context.scene.input_tool.batchToGenerate,
         collectionSize          = bpy.context.scene.input_tool.collectionSize,
+
+        enableRarity            = bpy.context.scene.input_tool.enableRarity,
 
         Blend_My_NFTs_Output    = _Blend_My_NFTs_Output,
         batch_json_save_path    = _batch_json_save_path,
         nftBatch_save_path      = _nftBatch_save_path,
+
+        enableLogic             = bpy.context.scene.input_tool.enableLogic,
+        enableLogicJson         = bpy.context.scene.input_tool.enable_Logic_Json,
+        logicFile               = bpy.context.scene.input_tool.logicFile,
 
         enableImages            = bpy.context.scene.input_tool.imageBool,
         imageFileFormat         = bpy.context.scene.input_tool.imageEnum,
@@ -284,7 +294,7 @@ def runAsHeadless():
 
         enableModelsBlender     = bpy.context.scene.input_tool.modelBool,
         modelFileFormat         = bpy.context.scene.input_tool.modelEnum,
-        
+
         enableCustomFields      = bpy.context.scene.input_tool.enableCustomFields,
 
         cardanoMetaDataBool     = bpy.context.scene.input_tool.cardanoMetaDataBool,
@@ -298,6 +308,7 @@ def runAsHeadless():
         enableMaterials         = bpy.context.scene.input_tool.enableMaterials,
         materialsFile           = bpy.path.abspath(bpy.context.scene.input_tool.materialsFile)
     )
+
 
     # don't mind me, just copy-pasting code around...
     if args.operation == 'create-dna':
@@ -510,15 +521,22 @@ class exportNFTs(bpy.types.Operator):
         _save_path = bpy.path.abspath(bpy.context.scene.input_tool.save_path)
         _Blend_My_NFTs_Output, _batch_json_save_path, _nftBatch_save_path = make_directories(_save_path)
 
-        input = BMNFTData ( 
+        input = BMNFTData (
             nftName                 = bpy.context.scene.input_tool.nftName,
             save_path               = _save_path,
+            nftsPerBatch            = bpy.context.scene.input_tool.nftsPerBatch,
             batchToGenerate         = bpy.context.scene.input_tool.batchToGenerate,
             collectionSize          = bpy.context.scene.input_tool.collectionSize,
+
+            enableRarity            = bpy.context.scene.input_tool.enableRarity,
 
             Blend_My_NFTs_Output    = _Blend_My_NFTs_Output,
             batch_json_save_path    = _batch_json_save_path,
             nftBatch_save_path      = _nftBatch_save_path,
+
+            enableLogic             = bpy.context.scene.input_tool.enableLogic,
+            enableLogicJson         = bpy.context.scene.input_tool.enable_Logic_Json,
+            logicFile               = bpy.context.scene.input_tool.logicFile,
 
             enableImages            = bpy.context.scene.input_tool.imageBool,
             imageFileFormat         = bpy.context.scene.input_tool.imageEnum,
@@ -528,9 +546,9 @@ class exportNFTs(bpy.types.Operator):
 
             enableModelsBlender     = bpy.context.scene.input_tool.modelBool,
             modelFileFormat         = bpy.context.scene.input_tool.modelEnum,
-            
+
             enableCustomFields      = bpy.context.scene.input_tool.enableCustomFields,
-  
+
             cardanoMetaDataBool     = bpy.context.scene.input_tool.cardanoMetaDataBool,
             solanaMetaDataBool      = bpy.context.scene.input_tool.solanaMetaDataBool,
             erc721MetaData          = bpy.context.scene.input_tool.erc721MetaData,
