@@ -56,5 +56,12 @@ def getPythonArgs():
                         required=False,
                         help="Use pre-existing batch data for rendering"
                         )
+    
+    parser.add_argument("--logic-file",
+                        dest="logic_file",
+                        metavar='FILE',
+                        required=False,
+                        help="Overwrite the logic file path in the config file"
+                        )
 
     return (parser.parse_args(argv), parser)
