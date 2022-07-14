@@ -316,7 +316,7 @@ def runAsHeadless():
         Intermediate.send_To_Record_JSON(input)
 
     elif args.operation == 'generate-nfts':
-        Exporter.render_and_save_NFTs(input)
+        Intermediate.render_and_save_NFTs(input)
 
     elif args.operation == 'refactor-batches':
         Refactorer.reformatNFTCollection(input)
