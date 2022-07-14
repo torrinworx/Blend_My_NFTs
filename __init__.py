@@ -110,7 +110,7 @@ class BMNFTData:
     materialsFile: str
 
     enableLogic: bool
-    enableLogicJson: bool
+    enable_Logic_Json: bool
     logicFile: str
 
     enableRarity: bool
