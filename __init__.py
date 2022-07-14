@@ -55,6 +55,7 @@ if "bpy" in locals():
         "get_combinations": get_combinations,
         "HeadlessUtil": HeadlessUtil,
         "loading_animation": loading_animation,
+        "Intermediate": Intermediate,
         "Logic": Logic,
         "Material_Generator": Material_Generator,
         "Metadata": Metadata,
@@ -73,7 +74,6 @@ if "bpy" in locals():
 # Used for updating text and buttons in UI panels
 combinations: int = 0
 recommended_limit: int = 0
-
 
 @dataclass
 class BMNFTData:
@@ -310,7 +310,6 @@ def runAsHeadless():
     )
 
 
-    # don't mind me, just copy-pasting code around...
     if args.operation == 'create-dna':
         Intermediate.send_To_Record_JSON(input)
 
