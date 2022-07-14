@@ -719,7 +719,7 @@ class export_settings(bpy.types.Operator):
                 "\n"
                 "#Enable Logic\n"
                 f"enableLogic={             str(settings.enableLogic)           }\n"
-                f"enableLogicJson={         str(settings.enableLogicJson)       }\n"
+                f"enableLogicJson={         str(settings.enable_Logic_Json)     }\n"
                 f"logicFilePath={           settings.logicFile                  }\n"
                 "\n"
                 "#NFT Media output type(s):\n"
