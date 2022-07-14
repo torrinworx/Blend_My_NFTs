@@ -124,6 +124,51 @@ class BMNFTData:
     def __post_init__(self):
         self.custom_Fields = {}
 
+def getBMNFTData():
+    _save_path = bpy.path.abspath(bpy.context.scene.input_tool.save_path)
+    _Blend_My_NFTs_Output, _batch_json_save_path, _nftBatch_save_path = make_directories(_save_path)
+    
+    data = BMNFTData (
+        nftName                 = bpy.context.scene.input_tool.nftName,
+        save_path               = _save_path,
+        nftsPerBatch            = bpy.context.scene.input_tool.nftsPerBatch,
+        batchToGenerate         = bpy.context.scene.input_tool.batchToGenerate,
+        collectionSize          = bpy.context.scene.input_tool.collectionSize,
+
+        enableRarity            = bpy.context.scene.input_tool.enableRarity,
+
+        Blend_My_NFTs_Output    = _Blend_My_NFTs_Output,
+        batch_json_save_path    = _batch_json_save_path,
+        nftBatch_save_path      = _nftBatch_save_path,
+
+        enableLogic             = bpy.context.scene.input_tool.enableLogic,
+        enable_Logic_Json       = bpy.context.scene.input_tool.enable_Logic_Json,
+        logicFile               = bpy.context.scene.input_tool.logicFile,
+
+        enableImages            = bpy.context.scene.input_tool.imageBool,
+        imageFileFormat         = bpy.context.scene.input_tool.imageEnum,
+
+        enableAnimations        = bpy.context.scene.input_tool.animationBool,
+        animationFileFormat     = bpy.context.scene.input_tool.animationEnum,
+
+        enableModelsBlender     = bpy.context.scene.input_tool.modelBool,
+        modelFileFormat         = bpy.context.scene.input_tool.modelEnum,
+
+        enableCustomFields      = bpy.context.scene.input_tool.enableCustomFields,
+
+        cardanoMetaDataBool     = bpy.context.scene.input_tool.cardanoMetaDataBool,
+        solanaMetaDataBool      = bpy.context.scene.input_tool.solanaMetaDataBool,
+        erc721MetaData          = bpy.context.scene.input_tool.erc721MetaData,
+
+        cardano_description     = bpy.context.scene.input_tool.cardano_description,
+        solana_description      = bpy.context.scene.input_tool.solana_description,
+        erc721_description      = bpy.context.scene.input_tool.erc721_description,
+
+        enableMaterials         = bpy.context.scene.input_tool.enableMaterials,
+        materialsFile           = bpy.path.abspath(bpy.context.scene.input_tool.materialsFile)
+    )
+
+    return data
 
 @persistent
 def Refresh_UI(dummy1, dummy2):
@@ -259,56 +304,13 @@ def runAsHeadless():
     if args.save_path:
         settings.save_path = args.save_path
 
-    _save_path = bpy.path.abspath(settings.save_path)
-    _Blend_My_NFTs_Output, _batch_json_save_path, _nftBatch_save_path = make_directories(_save_path)
-    
     if args.batch_number:
         settings.batchToGenerate = args.batch_number
 
+    input = getBMNFTData()
+
     if args.batch_data_path:
-        _batch_json_save_path = args.batch_data_path
-    
-    
-    input = BMNFTData (
-        nftName                 = bpy.context.scene.input_tool.nftName,
-        save_path               = _save_path,
-        nftsPerBatch            = bpy.context.scene.input_tool.nftsPerBatch,
-        batchToGenerate         = bpy.context.scene.input_tool.batchToGenerate,
-        collectionSize          = bpy.context.scene.input_tool.collectionSize,
-
-        enableRarity            = bpy.context.scene.input_tool.enableRarity,
-
-        Blend_My_NFTs_Output    = _Blend_My_NFTs_Output,
-        batch_json_save_path    = _batch_json_save_path,
-        nftBatch_save_path      = _nftBatch_save_path,
-
-        enableLogic             = bpy.context.scene.input_tool.enableLogic,
-        enableLogicJson         = bpy.context.scene.input_tool.enable_Logic_Json,
-        logicFile               = bpy.context.scene.input_tool.logicFile,
-
-        enableImages            = bpy.context.scene.input_tool.imageBool,
-        imageFileFormat         = bpy.context.scene.input_tool.imageEnum,
-
-        enableAnimations        = bpy.context.scene.input_tool.animationBool,
-        animationFileFormat     = bpy.context.scene.input_tool.animationEnum,
-
-        enableModelsBlender     = bpy.context.scene.input_tool.modelBool,
-        modelFileFormat         = bpy.context.scene.input_tool.modelEnum,
-
-        enableCustomFields      = bpy.context.scene.input_tool.enableCustomFields,
-
-        cardanoMetaDataBool     = bpy.context.scene.input_tool.cardanoMetaDataBool,
-        solanaMetaDataBool      = bpy.context.scene.input_tool.solanaMetaDataBool,
-        erc721MetaData          = bpy.context.scene.input_tool.erc721MetaData,
-
-        cardano_description     = bpy.context.scene.input_tool.cardano_description,
-        solana_description      = bpy.context.scene.input_tool.solana_description,
-        erc721_description      = bpy.context.scene.input_tool.erc721_description,
-
-        enableMaterials         = bpy.context.scene.input_tool.enableMaterials,
-        materialsFile           = bpy.path.abspath(bpy.context.scene.input_tool.materialsFile)
-    )
-
+        input.batch_json_save_path = args.batch_data_path
 
     if args.operation == 'create-dna':
         Intermediate.send_To_Record_JSON(input)
@@ -441,28 +443,11 @@ class createData(bpy.types.Operator):
         name="Reverse Order")
 
     def execute(self, context):
-        nftName                     = bpy.context.scene.input_tool.nftName
-        collectionSize              = bpy.context.scene.input_tool.collectionSize
-        nftsPerBatch                = bpy.context.scene.input_tool.nftsPerBatch
-        save_path                   = bpy.path.abspath(bpy.context.scene.input_tool.save_path)
-
-        enableRarity                = bpy.context.scene.input_tool.enableRarity
-
-        enableLogic                 = bpy.context.scene.input_tool.enableLogic
-        enable_Logic_Json           = bpy.context.scene.input_tool.enable_Logic_Json
-        logicFile                   = bpy.path.abspath(bpy.context.scene.input_tool.logicFile)
-
-        enableMaterials             = bpy.context.scene.input_tool.enableMaterials
-        materialsFile               = bpy.path.abspath(bpy.context.scene.input_tool.materialsFile)
-
-        Blend_My_NFTs_Output, batch_json_save_path, nftBatch_save_path = make_directories(save_path)
-
         # Handling Custom Fields UIList input:
-        if enableLogic:
-            if enable_Logic_Json and logicFile:
-                logicFile = json.load(open(logicFile))
+        input = getBMNFTData()
 
-            if enable_Logic_Json and not logicFile:
+        if input.enableLogic:
+            if input.enable_Logic_Json and not input.logicFile:
                 self.report({'ERROR'}, f"No Logic.json file path set. Please set the file path to your Logic.json file.")
 
             if not enable_Logic_Json:
@@ -498,6 +483,7 @@ class createData(bpy.types.Operator):
 
         DNA_Generator.send_To_Record_JSON(collectionSize, nftsPerBatch, save_path, enableRarity, enableLogic, logicFile, enableMaterials,
                         materialsFile, Blend_My_NFTs_Output, batch_json_save_path)
+        Intermediate.send_To_Record_JSON(input)
                         
         self.report({'INFO'}, f"NFT Data created!")
         return {"FINISHED"}
@@ -517,49 +503,8 @@ class exportNFTs(bpy.types.Operator):
         name="Reverse Order")
 
     def execute(self, context):
-        _save_path = bpy.path.abspath(bpy.context.scene.input_tool.save_path)
-        _Blend_My_NFTs_Output, _batch_json_save_path, _nftBatch_save_path = make_directories(_save_path)
 
-        input = BMNFTData (
-            nftName                 = bpy.context.scene.input_tool.nftName,
-            save_path               = _save_path,
-            nftsPerBatch            = bpy.context.scene.input_tool.nftsPerBatch,
-            batchToGenerate         = bpy.context.scene.input_tool.batchToGenerate,
-            collectionSize          = bpy.context.scene.input_tool.collectionSize,
-
-            enableRarity            = bpy.context.scene.input_tool.enableRarity,
-
-            Blend_My_NFTs_Output    = _Blend_My_NFTs_Output,
-            batch_json_save_path    = _batch_json_save_path,
-            nftBatch_save_path      = _nftBatch_save_path,
-
-            enableLogic             = bpy.context.scene.input_tool.enableLogic,
-            enableLogicJson         = bpy.context.scene.input_tool.enable_Logic_Json,
-            logicFile               = bpy.context.scene.input_tool.logicFile,
-
-            enableImages            = bpy.context.scene.input_tool.imageBool,
-            imageFileFormat         = bpy.context.scene.input_tool.imageEnum,
-
-            enableAnimations        = bpy.context.scene.input_tool.animationBool,
-            animationFileFormat     = bpy.context.scene.input_tool.animationEnum,
-
-            enableModelsBlender     = bpy.context.scene.input_tool.modelBool,
-            modelFileFormat         = bpy.context.scene.input_tool.modelEnum,
-
-            enableCustomFields      = bpy.context.scene.input_tool.enableCustomFields,
-
-            cardanoMetaDataBool     = bpy.context.scene.input_tool.cardanoMetaDataBool,
-            solanaMetaDataBool      = bpy.context.scene.input_tool.solanaMetaDataBool,
-            erc721MetaData          = bpy.context.scene.input_tool.erc721MetaData,
-
-            cardano_description     = bpy.context.scene.input_tool.cardano_description,
-            solana_description      = bpy.context.scene.input_tool.solana_description,
-            erc721_description      = bpy.context.scene.input_tool.erc721_description,
-
-            enableMaterials         = bpy.context.scene.input_tool.enableMaterials,
-            materialsFile           = bpy.path.abspath(bpy.context.scene.input_tool.materialsFile)
-        )
-
+        input = getBMNFTData()
         # Handling Custom Fields UIList input:
         if input.enableCustomFields:
             scn = context.scene
@@ -577,7 +522,8 @@ class exportNFTs(bpy.types.Operator):
                     else:
                         input.custom_Fields[item.field_name] = item.field_value
 
-        Exporter.render_and_save_NFTs(input)
+        
+        Intermediate.render_and_save_NFTs(input)
 
         self.report({'INFO'}, f"All NFTs generated for batch {input.batchToGenerate}!")
 
@@ -658,25 +604,8 @@ class refactor_Batches(bpy.types.Operator):
         name="Reverse Order")
 
     def execute(self, context):
-        class input:
-
-            save_path               = bpy.path.abspath(bpy.context.scene.input_tool.save_path)
-
-            enableCustomFields      = bpy.context.scene.input_tool.enableCustomFields
-            custom_Fields           = {}
-
-            cardanoMetaDataBool     = bpy.context.scene.input_tool.cardanoMetaDataBool
-            solanaMetaDataBool      = bpy.context.scene.input_tool.solanaMetaDataBool
-            erc721MetaData          = bpy.context.scene.input_tool.erc721MetaData
-
-            cardano_description     = bpy.context.scene.input_tool.cardano_description
-            solana_description      = bpy.context.scene.input_tool.solana_description
-            erc721_description      = bpy.context.scene.input_tool.erc721_description
-
-            Blend_My_NFTs_Output, batch_json_save_path, nftBatch_save_path = make_directories(save_path)
-
         # Passing info to main functions for refactoring:
-        Refactorer.reformatNFTCollection(input)
+        Refactorer.reformatNFTCollection(getBMNFTData())
         return {"FINISHED"}
 
     def invoke(self, context, event):
