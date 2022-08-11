@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://user-images.githubusercontent.com/82110564/152652811-e7f7ea86-d7a8-4148-8f61-add6a5491e65.png" align="center" />
+  <img src="https://user-images.githubusercontent.com/82110564/184055444-481a472e-b8c0-4866-8a82-a038110aec8f.svg" align="center" />
   <h1 align="center">Blend_My_NFTs</h1>
 </p>
 <p align="center">
@@ -11,18 +11,19 @@
 </p>
 
 ## Description
-Blend_My_NFTs is an open source, free to use Blender add on that enables you to automatically generate thousands of 3D Models, Animations, and Images. This add on's primary purpose is to aid in the creation of large generative 3D NFT collections. 
+Blend_My_NFTs is an open source, free to use Blender add-on that enables you to easily generate thousands of 3D Models, Animations, and Images. This add on's primary purpose is to aid in the creation of large generative 3D NFT collections. It is the first and easiest 3D NFT generator.
 
-For support, help, and questions, please join our wonderful Discord community: https://discord.gg/UpZt5Un57t 
+For support, help, and questions, please join our wonderful [Discord community!](https://discord.gg/UpZt5Un57t)
 
-Checkout the newest tutorial on YouTube that goes along with this documentation: https://www.youtube.com/watch?v=ygKJYz4BjRs
+[Checkout the newest YouTube tutorial!](https://youtu.be/ygKJYz4BjRs)
 
-This add on was developed to create the This Cozy Place NFT project which is now availabe to mint on [ThisCozyStudio.com](https://www.thiscozystudio.com/cozy-mint/)
+Blend_My_NFTs was initially developed to create Cozy Place, an NFT collection by This Cozy Studio Inc.
 
 
 https://user-images.githubusercontent.com/82110564/147833465-965be08b-ca5f-47ba-a159-b92ff775ee14.mov
 
-The video above illustrates the first 10 Cozy Place NFTs generated with Blend_My_NFts.
+
+The video above illustrates the first 10 Cozy Place NFTs generated with a very early prototype version of Blend_My_NFTs.
 
 
 ## Official Links: 
@@ -41,7 +42,7 @@ Reddit: https://www.reddit.com/r/ThisCozyPlace/
 
 
 ## Quick Disclaimer
-Blend_My_NFTs works with Blender 3.1.0+ on Windows 10 or macOS Big Sur 11.6. Linux is supported, however we haven't had the chance to test and guarantee this functionality. Any rendering engine works; Cycles, Eevee, and Octane have all been used by the community. This add-on only works in Blender, a Cinima 4D port is being investigated.
+Blend_My_NFTs works with Blender 3.2.2 on Windows 10 or macOS Big Sur 11.6. Linux is supported, however we haven't had the chance to test and guarantee this functionality. Windows 11 has not been tested as of yet. Any rendering engine works; Cycles, Eevee, and Octane have all been used by the community. This add-on only works in Blender, a Cinima 4D port is being investigated.
 
 ## Example Files
 The YouTube tutorials use three different .blend example files. This repository has all three and includes a readme.md file that outlines which videos use which files and by what date: https://github.com/torrinworx/BMNFTs_Examples
@@ -51,8 +52,6 @@ The YouTube tutorials use three different .blend example files. This repository 
 - [Blend_My_NFTs](#blend_my_nfts)
   - [Description](#description)
   - [Official Links](#official-links)
-  - [Case Studies](#case-studies)
-  - [Donations](#donations)
   - [Quick Disclaimer](#quick-disclaimer)
   - [Example Files](#example-files)
   - [Table of Contents](#table-of-contents)
@@ -68,11 +67,7 @@ The YouTube tutorials use three different .blend example files. This repository 
   - [Custom Fields Schema](#custom-fields-schema)
 - [Logic](#logic)
   - [Logic JSON File Schema](#logic-json-schema)
-    - [Schema Definition](#schema-definition)
-    - [Rule Types](#rule-types)
   - [Example Logic.json File](#example-logicjson-file)
-    - [Never with, Logic Rule Examples](#never-with-logic-rule-examples)
-    - [Only with, Logic Rule Examples](#only-with-logic-rule-examples)
 - [Notes on Rarity and Weighted Variants](#notes-on-rarity-and-weighted-variants)
   - [.Blend File Rarity Example](#blend-file-rarity-examples)
   - [More complex Rarity Example](#more-complex-rarity-example)
@@ -388,25 +383,30 @@ If you need help creating a JSON file, checkout this tutorial: [How to Create JS
 
 To learn more about JSON files and how to structure data read this article: [Working with JSON](https://developer.mozilla.org/en-US/docs/Learn/JavaScript/Objects/JSON)
 
-Material Randomizer compatable materials must follow this naming convention: `<Material Name>_<Material Order Number>_<Material Rarity>`
-
 ## Material Randomizer JSON Schema
 
 If you'd like, copy and paste this template into the JSON file you created above:
 
 ```
 {
-    "<Variant Name>": {
-        "Variant Objects":["<Object in Variant Collection 1>", "<Object in Variant Collection 1>"],
-        "Material List": ["<Material Name>_<Material Order Number>_<Material Rarity>", "<Material Name>_<Material Order Number>_<Material Rarity>"]
-    },
-    "Red Cone_1_0": {
-        "Variant Objects":["<Object in Variant Collection 1>", "<Object in Variant Collection 1>"],
-        "Material List": ["<Material Name>_<Material Order Number>_<Material Rarity>", "<Material Name>_<Material Order Number>_<Material Rarity>"]
+    "<Variant collection name>": {
+        "Material List": {
+            "<material name 1>": <material raraity percentage integer>,
+            "<material naem 2>": <material raraity percentage integer>,
+            "<material name 3>": <material raraity percentage integer>,
+            "<material name 4>": <material raraity percentage integer>
+        },
+        "Variant Objects": [
+            "<name of object within Variant collection 1>",
+            "<name of object within Variant collection 2>",
+            "<name of object within Variant collection 3>",
+            "<name of object within Variant collection 4>"
+        ]
     }
 }
 
 ```
+TODO: Add more detail to this section regarding the new material system, for now reference this commit: https://github.com/torrinworx/Blend_My_NFTs/commit/3cb2a69c81932e5b882b69c4c4bfbdd153a2dfee
 
 
 # Custom Metadata Fields
@@ -466,103 +466,68 @@ If you'd like, copy and paste this template into the JSON file you created above
 ```
 {
     "Rule-1":{
-        "Items-1": [
-            "<collection name>"
+        "IF": [
+            "<Variant collection name>"
         ],
-        "Rule-Type": "<rule type>", 
-        "Items-2":[
-            "<collection name>"
-        ]
-    },
-    "Rule-2":{
-        "Items-1": [
-            "<collection name>"
-        ],
-        "Rule-Type": "<rule type>", 
-        "Items-2":[
-            "<collection name>"
+        "THEN":[
+            "<Attribute or Variant collection name>", "<Attribute or Variant collection name 2>"
         ]
     }
+    "Rule-2":{
+            "IF": [
+                "<Variant collection name>"
+            ],
+            "NOT":[
+                "<Attribute or Variant collection name>", "<Attribute or Variant collection name 2>"
+            ]
+        }
 }
 ```
 
 ### Schema Definition
 - ``Rule-#`` A dictionary representing the information of a single defined Rule of an NFT collection. There can be as many as you choose. Increment the ``#`` when you create a new rule.
-- ``Items-1`` A list of strings representing the names of Attribute(s) or Variant(s).
-- ``Rule-Type`` The rule that governs the relation between ``Items-1`` and ``Items-2``. Has two possible values: ``Never with`` and ``Only with``.
-- ``Items-2`` A list of strings representing the names of Attribute(s) or Variant(s).
+- ``IF`` A single String in a list representing the Variant the rule is based off of.
+- ``THEN`` A list of Attributes or Variants that always appear IF the ``IF`` Variant is selected.
+- ``NOT`` A list of Attributes or Variants that never appear IF the ``IF`` Variant is selected.
+
+* Note: ``NOT`` is not currently stable, it's recommended to only use a Single variant per NOT rule to see consistant results.
+
 
 ## Example Logic.json File
 Say we have the following scene in a .blend file: 
 <img width="420" alt="Screen Shot 2022-03-13 at 4 21 52 PM" src="https://user-images.githubusercontent.com/82110564/158077693-86f961cf-c121-4d0e-8a84-1d6a39e7cafc.png">
 Note that we have two Attributes, ``Cube`` and ``Sphere``, and that they have 4 Variants. If you'd like to follow along with this example I'd recommend downloading the [Logic_Example.blend](https://github.com/torrinworx/BMNFTs_Examples/blob/main/Logic_Example.blend).
 
-### Never With, Logic Rule Examples
-- **Never With, Variants example:**
-  In this example, the Variant ``Red Cube_1_25`` never appears with ``Red Sphere_1_25``:
+### Logic Examples
+- **IF/THEN Rule setup**
+  In this example, the Variant ``Red Cube_1_25`` will always appear with ``Red Sphere_1_25``:
   ```
   {
     "Rule-1":{
-        "Items-1": [
+        "IF": [
             "Red Cube_1_25"
         ],
-        "Rule-Type": "Never With", 
-        "Items-2":[
+        "THEN":[
             "Red Sphere_1_25"
         ]
     }
    }
   ```
-  
-
-- **Never With, Attributes example:**
-  In this example, the Attribute ``Cube`` never appears with ``Red Sphere_1_25``. When ``Red Sphere_1_25`` is selected, no Variants in the Cube Attribute are selected, and hence the Attribute is set to "Empty": 
+- **IF/NOT Rule setup**
+  In this example, the Variant ``Red Cube_1_25`` will never appear with ``Red Sphere_1_25``:
   ```
   {
     "Rule-1":{
-        "Items-1": [
-            "Cube"
-        ],
-        "Rule-Type": "Never With", 
-        "Items-2":[
-            "Red Sphere_1_25"
-        ]
-    }
-   }
-  ```
-
-### Only With, Logic Rule Examples
-- **Only With, Variants example:**
-  In this example, the Variant ``Red Cube_1_25`` only appears with ``Red Sphere_1_25``:
-  ```
-  {
-    "Rule-1":{
-        "Items-1": [
+        "IF": [
             "Red Cube_1_25"
         ],
-        "Rule-Type": "Only With", 
-        "Items-2":[
+        "NOT":[
             "Red Sphere_1_25"
         ]
     }
    }
   ```
 
-- **Only With, Attributes example:**
-  In this example, the Attribute ``Cube`` only appears with ``Red Sphere_1_25``:
-  ```
-  {
-    "Rule-1":{
-        "Items-1": [
-            "Cube"
-        ],
-        "Rule-Type": "Never With", 
-        "Items-2":[
-            "Red Sphere_1_25"
-        ]
-    }
-   }
-  ```
 
 Now that you have a completed Logic.json file, you can now go back and complete [Step 1. Create Data](#step-1---create-nft-data)!
 

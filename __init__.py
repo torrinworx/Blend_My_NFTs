@@ -1,15 +1,18 @@
 bl_info = {
     "name": "Blend_My_NFTs",
     "author": "Torrin Leonard, This Cozy Studio Inc",
-    "version": (4, 0, 2),
-    "blender": (3, 2, 0),
+    "version": (4, 5, 0),
+    "blender": (3, 2, 2),
     "location": "View3D",
-    "description": "An open source, free to use Blender add-on that enables you to create thousands of unique images, animations, and 3D models.",
+    "description": "A free and opensource Blender add-on that enables you to create thousands of unique images, animations, and 3D models.",
+    "support": "COMMUNITY",
+    "doc_url": "https://github.com/torrinworx/Blend_My_NFTs",
+    "tracker_url": "https://github.com/torrinworx/Blend_My_NFTs/issues/new",
     "category": "Development",
 }
 
-BMNFTS_VERSION = "v4.0.2"
-LAST_UPDATED = "8:19AM, May 31st, 2022"
+BMNFTS_VERSION = "v4.5.0"
+LAST_UPDATED = "8:19AM, Aug 11th, 2022"
 
 # ======== Import handling ======== #
 
@@ -18,17 +21,20 @@ from bpy.app.handlers import persistent
 from bpy.props import (IntProperty,
                        BoolProperty,
                        CollectionProperty)
-
+# Python modules:
 import os
 import sys
 import json
 import importlib
-from dataclasses import dataclass
+import traceback
 from typing import Any
+from dataclasses import dataclass
+from datetime import datetime, timezone
 
 # "a little hacky bs" - matt159 ;)
 sys.path.append(os.path.dirname(os.path.realpath(__file__)))
 
+# Local file imports:
 from main import \
     Checks, \
     DNA_Generator, \
@@ -74,7 +80,41 @@ if "bpy" in locals():
 # Used for updating text and buttons in UI panels
 combinations: int = 0
 recommended_limit: int = 0
+dt = datetime.now(timezone.utc).astimezone()  # Date Time in UTC local
 
+
+@persistent
+def Refresh_UI(dummy1, dummy2):
+    """
+    Refreshes the UI upon user interacting with Blender (using depsgraph_update_post handler). Might be a better handler
+    to use.
+    """
+    global combinations
+    global recommended_limit
+
+    combinations = (get_combinations.get_combinations())
+    recommended_limit = int(round(combinations / 2))
+
+    # Add panel classes that require refresh to this refresh_panels tuple:
+    refresh_panel_classes = (
+        BMNFTS_PT_CreateData,
+    )
+
+    def redraw_panel(panels):
+        for i in panels:
+            try:
+                bpy.utils.unregister_class(i)
+            except Exception:
+                print(traceback.format_exc())
+            bpy.utils.register_class(i)
+
+    redraw_panel(refresh_panel_classes)
+
+
+bpy.app.handlers.depsgraph_update_post.append(Refresh_UI)
+
+
+# ======== Defining BMNFTs Data ======== #
 @dataclass
 class BMNFTData:
     nftName: str
@@ -115,6 +155,17 @@ class BMNFTData:
 
     enableRarity: bool
 
+    enableAutoShutdown: bool
+
+    specify_timeBool: bool
+    hours: int
+    minutes: int
+
+    emailNotificationBool: bool
+    sender_from: str
+    email_password: str
+    receiver_to: str
+
     custom_Fields: dict = None
     fail_state: Any = False
     failed_batch: Any = None
@@ -124,81 +175,63 @@ class BMNFTData:
     def __post_init__(self):
         self.custom_Fields = {}
 
+
 def getBMNFTData():
     _save_path = bpy.path.abspath(bpy.context.scene.input_tool.save_path)
     _Blend_My_NFTs_Output, _batch_json_save_path, _nftBatch_save_path = make_directories(_save_path)
-    
-    data = BMNFTData (
-        nftName                 = bpy.context.scene.input_tool.nftName,
-        save_path               = _save_path,
-        nftsPerBatch            = bpy.context.scene.input_tool.nftsPerBatch,
-        batchToGenerate         = bpy.context.scene.input_tool.batchToGenerate,
-        collectionSize          = bpy.context.scene.input_tool.collectionSize,
 
-        enableRarity            = bpy.context.scene.input_tool.enableRarity,
+    data = BMNFTData(
+        nftName=bpy.context.scene.input_tool.nftName,
+        save_path=_save_path,
+        nftsPerBatch=bpy.context.scene.input_tool.nftsPerBatch,
+        batchToGenerate=bpy.context.scene.input_tool.batchToGenerate,
+        collectionSize=bpy.context.scene.input_tool.collectionSize,
 
-        Blend_My_NFTs_Output    = _Blend_My_NFTs_Output,
-        batch_json_save_path    = _batch_json_save_path,
-        nftBatch_save_path      = _nftBatch_save_path,
+        enableRarity=bpy.context.scene.input_tool.enableRarity,
 
-        enableLogic             = bpy.context.scene.input_tool.enableLogic,
-        enable_Logic_Json       = bpy.context.scene.input_tool.enable_Logic_Json,
-        logicFile               = bpy.context.scene.input_tool.logicFile,
+        Blend_My_NFTs_Output=_Blend_My_NFTs_Output,
+        batch_json_save_path=_batch_json_save_path,
+        nftBatch_save_path=_nftBatch_save_path,
 
-        enableImages            = bpy.context.scene.input_tool.imageBool,
-        imageFileFormat         = bpy.context.scene.input_tool.imageEnum,
+        enableLogic=bpy.context.scene.input_tool.enableLogic,
+        enable_Logic_Json=bpy.context.scene.input_tool.enable_Logic_Json,
+        logicFile=bpy.context.scene.input_tool.logicFile,
 
-        enableAnimations        = bpy.context.scene.input_tool.animationBool,
-        animationFileFormat     = bpy.context.scene.input_tool.animationEnum,
+        enableImages=bpy.context.scene.input_tool.imageBool,
+        imageFileFormat=bpy.context.scene.input_tool.imageEnum,
 
-        enableModelsBlender     = bpy.context.scene.input_tool.modelBool,
-        modelFileFormat         = bpy.context.scene.input_tool.modelEnum,
+        enableAnimations=bpy.context.scene.input_tool.animationBool,
+        animationFileFormat=bpy.context.scene.input_tool.animationEnum,
 
-        enableCustomFields      = bpy.context.scene.input_tool.enableCustomFields,
+        enableModelsBlender=bpy.context.scene.input_tool.modelBool,
+        modelFileFormat=bpy.context.scene.input_tool.modelEnum,
 
-        cardanoMetaDataBool     = bpy.context.scene.input_tool.cardanoMetaDataBool,
-        solanaMetaDataBool      = bpy.context.scene.input_tool.solanaMetaDataBool,
-        erc721MetaData          = bpy.context.scene.input_tool.erc721MetaData,
+        enableCustomFields=bpy.context.scene.input_tool.enableCustomFields,
 
-        cardano_description     = bpy.context.scene.input_tool.cardano_description,
-        solana_description      = bpy.context.scene.input_tool.solana_description,
-        erc721_description      = bpy.context.scene.input_tool.erc721_description,
+        cardanoMetaDataBool=bpy.context.scene.input_tool.cardanoMetaDataBool,
+        solanaMetaDataBool=bpy.context.scene.input_tool.solanaMetaDataBool,
+        erc721MetaData=bpy.context.scene.input_tool.erc721MetaData,
 
-        enableMaterials         = bpy.context.scene.input_tool.enableMaterials,
-        materialsFile           = bpy.path.abspath(bpy.context.scene.input_tool.materialsFile)
+        cardano_description=bpy.context.scene.input_tool.cardano_description,
+        solana_description=bpy.context.scene.input_tool.solana_description,
+        erc721_description=bpy.context.scene.input_tool.erc721_description,
+
+        enableMaterials=bpy.context.scene.input_tool.enableMaterials,
+        materialsFile=bpy.path.abspath(bpy.context.scene.input_tool.materialsFile),
+
+        enableAutoShutdown=bpy.context.scene.input_tool.enableAutoShutdown,
+
+        specify_timeBool=bpy.context.scene.input_tool.specify_timeBool,
+        hours=bpy.context.scene.input_tool.hours,
+        minutes=bpy.context.scene.input_tool.minutes,
+
+        emailNotificationBool=bpy.context.scene.input_tool.emailNotificationBool,
+        sender_from=bpy.context.scene.input_tool.sender_from,
+        email_password=bpy.context.scene.input_tool.email_password,
+        receiver_to=bpy.context.scene.input_tool.receiver_to,
     )
 
     return data
-
-@persistent
-def Refresh_UI(dummy1, dummy2):
-    """
-    Refreshes the UI upon user interacting with Blender (using depsgraph_update_post handler). Might be a better handler
-    to use.
-    """
-    global combinations
-    global recommended_limit
-
-    combinations = (get_combinations.get_combinations())
-    recommended_limit = int(round(combinations / 2))
-
-    # Add panel classes that require refresh to this refresh_panels tuple:
-    refresh_panel_classes = (
-        BMNFTS_PT_CreateData,
-    )
-
-    def redraw_panel(refresh_panel_classes):
-        for i in refresh_panel_classes:
-            try:
-                bpy.utils.unregister_class(i)
-            except:
-                pass
-            bpy.utils.register_class(i)
-
-    redraw_panel(refresh_panel_classes)
-
-
-bpy.app.handlers.depsgraph_update_post.append(Refresh_UI)
 
 
 # ======== Helper functions ======== #
@@ -222,7 +255,7 @@ def runAsHeadless():
     """
     For use when running from the command line.
     """
-    
+
     # force CUDA device usage with cycles renderer
     cprefs = bpy.context.preferences.addons['cycles'].preferences
     cprefs.compute_device_type = 'CUDA'
@@ -230,35 +263,35 @@ def runAsHeadless():
     print(cprefs.devices.keys())
 
     for key in cprefs.devices.keys():
-            cprefs.devices[key].use = True
+        cprefs.devices[key].use = True
 
     print('Using {} devices for rendering!'.format(cprefs.get_num_gpu_devices()))
 
     def dumpSettings(settings):
         output = (
-            f"nftName={             settings.nftName                    }\n"
-            f"collectionSize={      str(settings.collectionSize)        }\n"
-            f"nftsPerBatch={        str(settings.nftsPerBatch)          }\n"
-            f"save_path={           settings.save_path                  }\n"
-            f"enableRarity={        (settings.enableRarity)             }\n"
-            f"enableLogic={         str(settings.enableLogic)           }\n"
-            f"imageBool={           str(settings.imageBool)             }\n"
-            f"imageEnum={           settings.imageEnum                  }\n"
-            f"animationBool={       str(settings.animationBool)         }\n"
-            f"animationEnum={       settings.animationEnum              }\n"
-            f"modelBool={           str(settings.modelBool)             }\n"
-            f"modelEnum={           settings.modelEnum                  }\n"
-            f"batchToGenerate={     str(settings.batchToGenerate)       }\n"
-            f"cardanoMetaDataBool={ str(settings.cardanoMetaDataBool)   }\n"
-            f"cardano_description={ settings.cardano_description        }\n"
-            f"erc721MetaData={      str(settings.erc721MetaData)        }\n"
-            f"erc721_description={  settings.erc721_description         }\n"
-            f"solanaMetaDataBool={  str(settings.solanaMetaDataBool)    }\n"
-            f"solana_description={  settings.solana_description         }\n"
-            f"enableCustomFields={  str(settings.enableCustomFields)    }\n"
-            f"customfieldsFile={    settings.customfieldsFile           }\n"
-            f"enableMaterials={     str(settings.customfieldsFile)      }\n"
-            f"materialsFile={       settings.materialsFile              }\n"
+            f"nftName={settings.nftName}\n"
+            f"collectionSize={str(settings.collectionSize)}\n"
+            f"nftsPerBatch={str(settings.nftsPerBatch)}\n"
+            f"save_path={settings.save_path}\n"
+            f"enableRarity={(settings.enableRarity)}\n"
+            f"enableLogic={str(settings.enableLogic)}\n"
+            f"imageBool={str(settings.imageBool)}\n"
+            f"imageEnum={settings.imageEnum}\n"
+            f"animationBool={str(settings.animationBool)}\n"
+            f"animationEnum={settings.animationEnum}\n"
+            f"modelBool={str(settings.modelBool)}\n"
+            f"modelEnum={settings.modelEnum}\n"
+            f"batchToGenerate={str(settings.batchToGenerate)}\n"
+            f"cardanoMetaDataBool={str(settings.cardanoMetaDataBool)}\n"
+            f"cardano_description={settings.cardano_description}\n"
+            f"erc721MetaData={str(settings.erc721MetaData)}\n"
+            f"erc721_description={settings.erc721_description}\n"
+            f"solanaMetaDataBool={str(settings.solanaMetaDataBool)}\n"
+            f"solana_description={settings.solana_description}\n"
+            f"enableCustomFields={str(settings.enableCustomFields)}\n"
+            f"customfieldsFile={settings.customfieldsFile}\n"
+            f"enableMaterials={str(settings.customfieldsFile)}\n"
+            f"materialsFile={settings.materialsFile}\n"
         )
         print(output)
 
@@ -275,31 +308,31 @@ def runAsHeadless():
 
         # print(pairs)
 
-        settings.nftName                = pairs[0][1]
-        settings.collectionSize         = int(pairs[1][1])
-        settings.nftsPerBatch           = int(pairs[2][1])
-        settings.save_path              = pairs[3][1]
-        settings.enableRarity           = pairs[4][1] == 'True'
-        settings.enableLogic            = pairs[5][1] == 'True'
-        settings.enableLogicJson        = pairs[6][1] == 'True'
-        settings.logicFile              = pairs[7][1]
-        settings.imageBool              = pairs[8][1] == 'True'
-        settings.imageEnum              = pairs[9][1]
-        settings.animationBool          = pairs[10][1] == 'True'
-        settings.animationEnum          = pairs[11][1]
-        settings.modelBool              = pairs[12][1] == 'True'
-        settings.modelEnum              = pairs[13][1]
-        settings.batchToGenerate        = int(pairs[14][1])
-        settings.cardanoMetaDataBool    = pairs[15][1] == 'True'
-        settings.cardano_description    = pairs[16][1]
-        settings.erc721MetaData         = pairs[17][1] == 'True'
-        settings.erc721_description     = pairs[18][1]
-        settings.solanaMetaDataBool     = pairs[19][1] == 'True'
-        settings.solanaDescription      = pairs[20][1]
-        settings.enableCustomFields     = pairs[21][1] == 'True'
-        settings.customfieldsFile       = pairs[22][1]
-        settings.enableMaterials        = pairs[23][1] == 'True'
-        settings.materialsFile          = pairs[24][1]
+        settings.nftName = pairs[0][1]
+        settings.collectionSize = int(pairs[1][1])
+        settings.nftsPerBatch = int(pairs[2][1])
+        settings.save_path = pairs[3][1]
+        settings.enableRarity = pairs[4][1] == 'True'
+        settings.enableLogic = pairs[5][1] == 'True'
+        settings.enableLogicJson = pairs[6][1] == 'True'
+        settings.logicFile = pairs[7][1]
+        settings.imageBool = pairs[8][1] == 'True'
+        settings.imageEnum = pairs[9][1]
+        settings.animationBool = pairs[10][1] == 'True'
+        settings.animationEnum = pairs[11][1]
+        settings.modelBool = pairs[12][1] == 'True'
+        settings.modelEnum = pairs[13][1]
+        settings.batchToGenerate = int(pairs[14][1])
+        settings.cardanoMetaDataBool = pairs[15][1] == 'True'
+        settings.cardano_description = pairs[16][1]
+        settings.erc721MetaData = pairs[17][1] == 'True'
+        settings.erc721_description = pairs[18][1]
+        settings.solanaMetaDataBool = pairs[19][1] == 'True'
+        settings.solanaDescription = pairs[20][1]
+        settings.enableCustomFields = pairs[21][1] == 'True'
+        settings.customfieldsFile = pairs[22][1]
+        settings.enableMaterials = pairs[23][1] == 'True'
+        settings.materialsFile = pairs[24][1]
 
     if args.save_path:
         settings.save_path = args.save_path
@@ -425,10 +458,30 @@ class BMNFTS_PGT_Input_Properties(bpy.types.PropertyGroup):
         subtype="FILE_PATH"
     )
 
+    # TODO: Add 'Other' panel inputs to Headless functionality.
+
     # Other Panel:
+    enableAutoSave: bpy.props.BoolProperty(name="Auto Save Before Generation",
+                                           description="Automatically saves your Blender file when 'Generate NFTs & Create Metadata' button is clicked")
+
+    # Auto Shutdown:
+    enableAutoShutdown: bpy.props.BoolProperty(name="Auto Shutdown",
+                                               description="Automatically shuts down your computer after a Batch is finished Generating")
+
+    specify_timeBool: bpy.props.BoolProperty(name="Shutdown in a Given Amount of Time",
+                                             description="Wait a given amount of time after a Batch is generated before Automatic Shutdown")
+    hours: bpy.props.IntProperty(default=0, min=0)
+    minutes: bpy.props.IntProperty(default=0, min=0)
+
+    # Send Batch Complete Email:
+    emailNotificationBool: bpy.props.BoolProperty(name="Email Notifications",
+                                                  description="Receive Email Notifications from Blender once a batch is finished generating")
+    sender_from: bpy.props.StringProperty(name="From", default="from@example.com")
+    email_password: bpy.props.StringProperty(name="Password", subtype='PASSWORD')
+    receiver_to: bpy.props.StringProperty(name="To", default="to@example.com")
 
     # API Panel properties:
-    apiKey: bpy.props.StringProperty(name="API Key", subtype='PASSWORD')
+    apiKey: bpy.props.StringProperty(name="API Key", subtype='PASSWORD')  # Test code for future faetures
 
 
 # ======== Main Operators ======== #
@@ -448,10 +501,11 @@ class createData(bpy.types.Operator):
 
         if input.enableLogic:
             if input.enable_Logic_Json and not input.logicFile:
-                self.report({'ERROR'}, f"No Logic.json file path set. Please set the file path to your Logic.json file.")
+                self.report({'ERROR'},
+                            f"No Logic.json file path set. Please set the file path to your Logic.json file.")
 
         Intermediate.send_To_Record_JSON(input)
-                        
+
         self.report({'INFO'}, f"NFT Data created!")
         return {"FINISHED"}
 
@@ -470,10 +524,9 @@ class exportNFTs(bpy.types.Operator):
         name="Reverse Order")
 
     def execute(self, context):
-
         input = getBMNFTData()
         # Handling Custom Fields UIList input:
-        
+
         Intermediate.render_and_save_NFTs(input)
 
         self.report({'INFO'}, f"All NFTs generated for batch {input.batchToGenerate}!")
@@ -498,42 +551,64 @@ class resume_failed_batch(bpy.types.Operator):
 
         _fail_state, _failed_batch, _failed_dna, _failed_dna_index = Checks.check_FailedBatches(_batch_json_save_path)
 
-        input = BMNFTData (
-            nftName                 = batchData["Generation Save"][-1]["Render_Settings"]["nftName"],
-            save_path               = _save_path,
-            collectionSize          = batchData["Generation Save"][-1]["Render_Settings"]["collectionSize"],
+        render_settings = batchData["Generation Save"][-1]["Render_Settings"]
 
-            Blend_My_NFTs_Output    = _Blend_My_NFTs_Output,
-            batch_json_save_path    = _batch_json_save_path,
-            nftBatch_save_path      = batchData["Generation Save"][-1]["Render_Settings"]["nftBatch_save_path"],
+        input = BMNFTData(
+            nftName=render_settings["nftName"],
+            save_path=_save_path,
+            nftsPerBatch=render_settings["nftsPerBatch"],
+            batchToGenerate=render_settings["batchToGenerate"],
+            collectionSize=render_settings["collectionSize"],
 
-            enableImages            = batchData["Generation Save"][-1]["Render_Settings"]["enableImages"],
-            imageFileFormat         = batchData["Generation Save"][-1]["Render_Settings"]["imageFileFormat"],
+            Blend_My_NFTs_Output=_Blend_My_NFTs_Output,
+            batch_json_save_path=_batch_json_save_path,
+            nftBatch_save_path=render_settings["nftBatch_save_path"],
 
-            enableAnimations        = batchData["Generation Save"][-1]["Render_Settings"]["enableAnimations"],
-            animationFileFormat     = batchData["Generation Save"][-1]["Render_Settings"]["animationFileFormat"],
+            enableImages=render_settings["enableImages"],
+            imageFileFormat=render_settings["imageFileFormat"],
 
-            enableModelsBlender     = batchData["Generation Save"][-1]["Render_Settings"]["enableModelsBlender"],
-            modelFileFormat         = batchData["Generation Save"][-1]["Render_Settings"]["modelFileFormat"],
+            enableAnimations=render_settings["enableAnimations"],
+            animationFileFormat=render_settings["animationFileFormat"],
 
-            enableCustomFields      = batchData["Generation Save"][-1]["Render_Settings"]["enableCustomFields"],
-            custom_Fields           = batchData["Generation Save"][-1]["Render_Settings"]["custom_Fields"],
+            enableModelsBlender=render_settings["enableModelsBlender"],
+            modelFileFormat=render_settings["modelFileFormat"],
 
-            cardanoMetaDataBool     = batchData["Generation Save"][-1]["Render_Settings"]["cardanoMetaDataBool"],
-            solanaMetaDataBool      = batchData["Generation Save"][-1]["Render_Settings"]["solanaMetaDataBool"],
-            erc721MetaData          = batchData["Generation Save"][-1]["Render_Settings"]["erc721MetaData"],
+            enableCustomFields=render_settings["enableCustomFields"],
 
-            cardano_description     = batchData["Generation Save"][-1]["Render_Settings"]["cardano_description"],
-            solana_description      = batchData["Generation Save"][-1]["Render_Settings"]["solana_description"],
-            erc721_description      = batchData["Generation Save"][-1]["Render_Settings"]["erc721_description"],
+            cardanoMetaDataBool=render_settings["cardanoMetaDataBool"],
+            solanaMetaDataBool=render_settings["solanaMetaDataBool"],
+            erc721MetaData=render_settings["erc721MetaData"],
 
-            enableMaterials         = batchData["Generation Save"][-1]["Render_Settings"]["enableMaterials"],
-            materialsFile           = batchData["Generation Save"][-1]["Render_Settings"]["materialsFile"],
+            cardano_description=render_settings["cardano_description"],
+            solana_description=render_settings["solana_description"],
+            erc721_description=render_settings["erc721_description"],
 
-            fail_state              = _fail_state,
-            failed_batch            = _failed_batch,
-            failed_dna              = _failed_dna,
-            failed_dna_index        = _failed_dna_index
+            enableMaterials=render_settings["enableMaterials"],
+            materialsFile=render_settings["materialsFile"],
+
+            enableLogic=render_settings["enableLogic"],
+            enable_Logic_Json=render_settings["enable_Logic_Json"],
+            logicFile=render_settings["logicFile"],
+
+            enableRarity=render_settings["enableRarity"],
+
+            enableAutoShutdown=render_settings["enableAutoShutdown"],
+
+            specify_timeBool=render_settings["specify_timeBool"],
+            hours=render_settings["hours"],
+            minutes=render_settings["minutes"],
+
+            emailNotificationBool=render_settings["emailNotificationBool"],
+            sender_from=render_settings["sender_from"],
+            email_password=render_settings["email_password"],
+            receiver_to=render_settings["receiver_to"],
+
+            fail_state=_fail_state,
+            failed_batch=_failed_batch,
+            failed_dna=_failed_dna,
+            failed_dna_index=_failed_dna_index,
+
+            custom_Fields=render_settings["custom_Fields"],
         )
 
         Exporter.render_and_save_NFTs(input)
@@ -582,51 +657,51 @@ class export_settings(bpy.types.Operator):
                 "#when running Blend_My_NFTs in a headless environment.\n"
                 "\n"
                 "#The name of your nft project\n"
-                f"nftName={                 settings.nftName                    }\n"
+                f"nftName={settings.nftName}\n"
                 "\n"
                 "#NFT Collection Size\n"
-                f"collectionSize={          settings.collectionSize             }\n"
+                f"collectionSize={settings.collectionSize}\n"
                 "\n"
                 "#The number of NFTs to generate per batch\n"
-                f"nftsPerBatch={            str(settings.nftsPerBatch)          }\n"
+                f"nftsPerBatch={str(settings.nftsPerBatch)}\n"
                 "\n"
                 "#Save path for your NFT files\n"
-                f"save_path={               settings.save_path                  }\n"
+                f"save_path={settings.save_path}\n"
                 "\n"
                 "#Enable Rarity\n"
-                f"enableRarity={            (settings.enableRarity)             }\n"
+                f"enableRarity={(settings.enableRarity)}\n"
                 "\n"
                 "#Enable Logic\n"
-                f"enableLogic={             str(settings.enableLogic)           }\n"
-                f"enableLogicJson={         str(settings.enable_Logic_Json)     }\n"
-                f"logicFilePath={           settings.logicFile                  }\n"
+                f"enableLogic={str(settings.enableLogic)}\n"
+                f"enableLogicJson={str(settings.enable_Logic_Json)}\n"
+                f"logicFilePath={settings.logicFile}\n"
                 "\n"
                 "#NFT Media output type(s):\n"
-                f"imageBool={               str(settings.imageBool)             }\n"
-                f"imageEnum={               settings.imageEnum                  }\n"
-                f"animationBool={           str(settings.animationBool)         }\n"
-                f"animationEnum={           settings.animationEnum              }\n"
-                f"modelBool={               str(settings.modelBool)             }\n"
-                f"modelEnum={               settings.modelEnum                  }\n"
+                f"imageBool={str(settings.imageBool)}\n"
+                f"imageEnum={settings.imageEnum}\n"
+                f"animationBool={str(settings.animationBool)}\n"
+                f"animationEnum={settings.animationEnum}\n"
+                f"modelBool={str(settings.modelBool)}\n"
+                f"modelEnum={settings.modelEnum}\n"
                 "\n"
                 "#Batch to generate\n"
-                f"batchToGenerate={         str(settings.batchToGenerate)       }\n"
+                f"batchToGenerate={str(settings.batchToGenerate)}\n"
                 "\n"
                 "#Metadata Format\n"
-                f"cardanoMetaDataBool={     str(settings.cardanoMetaDataBool)   }\n"
-                f"cardano_description={     settings.cardano_description        }\n"
-                f"erc721MetaData={          str(settings.erc721MetaData)        }\n"
-                f"erc721_description={      settings.erc721_description         }\n"
-                f"solanaMetaDataBool={      str(settings.solanaMetaDataBool)    }\n"
-                f"solana_description={      settings.solana_description         }\n"
+                f"cardanoMetaDataBool={str(settings.cardanoMetaDataBool)}\n"
+                f"cardano_description={settings.cardano_description}\n"
+                f"erc721MetaData={str(settings.erc721MetaData)}\n"
+                f"erc721_description={settings.erc721_description}\n"
+                f"solanaMetaDataBool={str(settings.solanaMetaDataBool)}\n"
+                f"solana_description={settings.solana_description}\n"
                 "\n"
                 "#Enable Custom Fields\n"
-                f"enableCustomFields={      str(settings.enableCustomFields)    }\n"
-                f"customfieldsFile={        settings.customfieldsFile           }\n"
+                f"enableCustomFields={str(settings.enableCustomFields)}\n"
+                f"customfieldsFile={settings.customfieldsFile}\n"
                 "\n"
                 "#Enable Materials\n"
-                f"enableMaterials={         str(settings.enableMaterials)       }\n"
-                f"materialsFile={           settings.materialsFile              }\n"
+                f"enableMaterials={str(settings.enableMaterials)}\n"
+                f"materialsFile={settings.materialsFile}\n"
             )
 
             print(output, file=config)
@@ -788,7 +863,8 @@ class BMNFTS_PT_GenerateNFTs(bpy.types.Panel):
 
             rows = 2
             row = layout.row()
-            row.template_list("CUSTOM_UL_custom_metadata_fields_items", "", scn, "custom_metadata_fields", scn, "custom_metadata_fields_index", rows=rows)
+            row.template_list("CUSTOM_UL_custom_metadata_fields_items", "", scn, "custom_metadata_fields", scn,
+                              "custom_metadata_fields_index", rows=rows)
 
             col = row.column(align=True)
             col.operator("custom_metadata_fields_uilist.list_action", icon='ZOOM_IN', text="").action = 'ADD'
@@ -843,7 +919,6 @@ class BMNFTS_PT_Refactor(bpy.types.Panel):
         layout.label(text="Ensure all batches have been created before refactoring.")
         layout.label(text="Refactoring combines all batches into one easy to manage folder.")
 
-
         row = layout.row()
         self.layout.operator("refactor.batches", icon='FOLDER_REDIRECT', text="Refactor Batches")
 
@@ -861,10 +936,59 @@ class BMNFTS_PT_Other(bpy.types.Panel):
         input_tool_scene = scene.input_tool
 
         """
+        Other:
+        A place to store miscellaneous settings, features, and external links that the user may find useful but doesn't 
+        want to get in the way of their work flow.
+        
         Export Settings:
         This panel gives the user the option to export all settings from the Blend_My_NFTs addon into a config file. Settings 
         will be read from the config file when running heedlessly.
         """
+
+        row = layout.row()
+        row.prop(input_tool_scene, "enableAutoSave")
+
+        # Auto Shutdown:
+        row = layout.row()
+        row.prop(input_tool_scene, "enableAutoShutdown")
+        row.label(text="*Must Run Blender as Admin")
+
+        if bpy.context.scene.input_tool.enableAutoShutdown:
+            row = layout.row()
+            row.prop(input_tool_scene, "specify_timeBool")
+
+            time_row1 = layout.row()
+            time_row1.label(text=f"Hours")
+            time_row1.prop(input_tool_scene, "hours", text="")
+
+            time_row2 = layout.row()
+            time_row2.label(text=f"Minutes")
+            time_row2.prop(input_tool_scene, "minutes", text="")
+
+            if not bpy.context.scene.input_tool.specify_timeBool:
+                time_row1.enabled = False
+                time_row2.enabled = False
+            else:
+                time_row1.enabled = True
+                time_row2.enabled = True
+            layout.separator()
+
+        row = layout.row()
+        row.prop(input_tool_scene, "emailNotificationBool")
+        row.label(text="*Windows 10+ only")
+
+        if bpy.context.scene.input_tool.emailNotificationBool:
+            row = layout.row()
+            row.prop(input_tool_scene, "sender_from")
+            row = layout.row()
+            row.prop(input_tool_scene, "email_password")
+
+            layout.separator()
+            row = layout.row()
+            row.prop(input_tool_scene, "receiver_to")
+
+        layout.separator()
+
         layout.label(text=f"Running Blend_My_NFTs Headless:")
 
         save_path = bpy.path.abspath(bpy.context.scene.input_tool.save_path)
@@ -898,22 +1022,22 @@ class BMNFTS_PT_Other(bpy.types.Panel):
 
 # ======== Blender add-on register/unregister handling ======== #
 classes = (
-    # Property Group Classes:
-    BMNFTS_PGT_Input_Properties,
+              # Property Group Classes:
+              BMNFTS_PGT_Input_Properties,
 
-    # Operator Classes:
-    createData,
-    exportNFTs,
-    resume_failed_batch,
-    refactor_Batches,
-    export_settings,
+              # Operator Classes:
+              createData,
+              exportNFTs,
+              resume_failed_batch,
+              refactor_Batches,
+              export_settings,
 
-    # Panel Classes:
-    BMNFTS_PT_CreateData,
-    BMNFTS_PT_GenerateNFTs,
-    BMNFTS_PT_Refactor,
-    BMNFTS_PT_Other,
-) + Custom_Metadata_UIList.classes_Custom_Metadata_UIList + Logic_UIList.classes_Logic_UIList
+              # Panel Classes:
+              BMNFTS_PT_CreateData,
+              BMNFTS_PT_GenerateNFTs,
+              BMNFTS_PT_Refactor,
+              BMNFTS_PT_Other,
+          ) + Custom_Metadata_UIList.classes_Custom_Metadata_UIList + Logic_UIList.classes_Logic_UIList
 
 
 def register():
@@ -922,11 +1046,13 @@ def register():
 
     bpy.types.Scene.input_tool = bpy.props.PointerProperty(type=BMNFTS_PGT_Input_Properties)
 
-    bpy.types.Scene.custom_metadata_fields = CollectionProperty(type=Custom_Metadata_UIList.CUSTOM_custom_metadata_fields_objectCollection)
+    bpy.types.Scene.custom_metadata_fields = CollectionProperty(
+        type=Custom_Metadata_UIList.CUSTOM_custom_metadata_fields_objectCollection)
     bpy.types.Scene.custom_metadata_fields_index = IntProperty()
 
     bpy.types.Scene.logic_fields = CollectionProperty(type=Logic_UIList.CUSTOM_logic_objectCollection)
     bpy.types.Scene.logic_fields_index = IntProperty()
+
 
 def unregister():
     for cls in reversed(classes):
