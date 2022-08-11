@@ -117,10 +117,8 @@ class CUSTOM_logic_objectCollection(PropertyGroup):
         name="Rule Type",
         description="Select the Rule Type",
         items=[
-            ('Never With', "Never With", ""),
-            ('Only With', "Only With", ""),
-            ('Always With', "Always With", ""),
-
+            ('THEN', "Then", ""),
+            ('NOT', "Not", ""),
         ]
     )
     item_list2: StringProperty(default="Item List 2")
