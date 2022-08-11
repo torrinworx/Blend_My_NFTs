@@ -11,18 +11,17 @@
 </p>
 
 ## Description
-Blend_My_NFTs is an open source, free to use Blender add on that enables you to automatically generate thousands of 3D Models, Animations, and Images. This add on's primary purpose is to aid in the creation of large generative 3D NFT collections. 
+Blend_My_NFTs is an open source, free to use Blender add-on that enables you to easily generate thousands of 3D Models, Animations, and Images. This add on's primary purpose is to aid in the creation of large generative 3D NFT collections. It is the first and easiest 3D NFT generator.
 
-For support, help, and questions, please join our wonderful Discord community: https://discord.gg/UpZt5Un57t 
+For support, help, and questions, please join our wonderful [Discord community!](https://discord.gg/UpZt5Un57t)
 
-Checkout the newest tutorial on YouTube that goes along with this documentation: https://www.youtube.com/watch?v=ygKJYz4BjRs
+[Checkout the newest YouTube tutorial!](https://youtu.be/ygKJYz4BjRs)
 
-This add on was developed to create the This Cozy Place NFT project which is now availabe to mint on [ThisCozyStudio.com](https://www.thiscozystudio.com/cozy-mint/)
-
+Blend_My_NFTs was initially developed to create Cozy Place, an NFT collection by This Cozy Studio Inc.
 
 https://user-images.githubusercontent.com/82110564/147833465-965be08b-ca5f-47ba-a159-b92ff775ee14.mov
 
-The video above illustrates the first 10 Cozy Place NFTs generated with Blend_My_NFts.
+The video above illustrates the first 10 Cozy Place NFTs generated with a very early prototype version of Blend_My_NFTs.
 
 
 ## Official Links: 
@@ -41,7 +40,7 @@ Reddit: https://www.reddit.com/r/ThisCozyPlace/
 
 
 ## Quick Disclaimer
-Blend_My_NFTs works with Blender 3.1.0+ on Windows 10 or macOS Big Sur 11.6. Linux is supported, however we haven't had the chance to test and guarantee this functionality. Any rendering engine works; Cycles, Eevee, and Octane have all been used by the community. This add-on only works in Blender, a Cinima 4D port is being investigated.
+Blend_My_NFTs works with Blender 3.2.2 on Windows 10 or macOS Big Sur 11.6. Linux is supported, however we haven't had the chance to test and guarantee this functionality. Windows 11 has not been tested as of yet. Any rendering engine works; Cycles, Eevee, and Octane have all been used by the community. This add-on only works in Blender, a Cinima 4D port is being investigated.
 
 ## Example Files
 The YouTube tutorials use three different .blend example files. This repository has all three and includes a readme.md file that outlines which videos use which files and by what date: https://github.com/torrinworx/BMNFTs_Examples
@@ -68,11 +67,7 @@ The YouTube tutorials use three different .blend example files. This repository 
   - [Custom Fields Schema](#custom-fields-schema)
 - [Logic](#logic)
   - [Logic JSON File Schema](#logic-json-schema)
-    - [Schema Definition](#schema-definition)
-    - [Rule Types](#rule-types)
   - [Example Logic.json File](#example-logicjson-file)
-    - [Never with, Logic Rule Examples](#never-with-logic-rule-examples)
-    - [Only with, Logic Rule Examples](#only-with-logic-rule-examples)
 - [Notes on Rarity and Weighted Variants](#notes-on-rarity-and-weighted-variants)
   - [.Blend File Rarity Example](#blend-file-rarity-examples)
   - [More complex Rarity Example](#more-complex-rarity-example)
