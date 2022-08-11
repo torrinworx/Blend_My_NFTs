@@ -58,7 +58,7 @@ class CUSTOM_OT_logic_actions(Operator):
         if self.action == 'ADD':
             if context.object:
                 item = scn.logic_fields.add()
-                item.name = "Rule"  # The name of each object
+                item.name = "Rule"
                 scn.logic_fields_index = len(scn.logic_fields) - 1
                 info = '"%s" added to list' % (item.name)
                 self.report({'INFO'}, info)
@@ -93,14 +93,16 @@ class CUSTOM_OT_logic_clearList(Operator):
 # ======== UILists ======== #
 class CUSTOM_UL_logic_items(UIList):
     def draw_item(self, context, layout, data, item, icon, active_data, active_propname, index):
-        split = layout.split(factor=0.1)
-        split.label(text=f"{index + 1}")
-        row = split.row()
-        row.label(text=item.name)  # avoids renaming the item by accident
-        row.prop(item, "item_list1", text="")
+        layout = layout.split(factor=0.1)
+        col = layout.column()
+        col.label(text=f" Rule {index + 1}")
 
-        row.prop(item, "rule_type", text="")
-        row.prop(item, "item_list2", text="")
+        col = layout.column()
+        col.label(text="")
+        col.prop(item, "item_list1", text="")
+
+        col.prop(item, "rule_type", text="")
+        col.prop(item, "item_list2", text="")
 
     def invoke(self, context, event):
         pass
