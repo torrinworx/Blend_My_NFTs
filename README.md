@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://user-images.githubusercontent.com/82110564/152652811-e7f7ea86-d7a8-4148-8f61-add6a5491e65.png" align="center" />
+  <img src="https://user-images.githubusercontent.com/82110564/184055444-481a472e-b8c0-4866-8a82-a038110aec8f.svg" align="center" />
   <h1 align="center">Blend_My_NFTs</h1>
 </p>
 <p align="center">
