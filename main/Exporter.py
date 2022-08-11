@@ -4,12 +4,9 @@
 
 import bpy
 import os
-import ssl
 import time
 import json
-import smtplib
 import datetime
-import platform
 from .loading_animation import Loader
 from .Constants import bcolors, removeList, remove_file_by_extension
 from .Metadata import createCardanoMetadata, createSolanaMetaData, createErc721MetaData
@@ -115,20 +112,18 @@ def render_and_save_NFTs(input):
     Renders the NFT DNA in a Batch#.json, where # is renderBatch in config.py. Turns off the viewport camera and
     the render camera for all items in hierarchy.
     """
+    print(f"\nFAILED BATCH = {input.failed_batch}\n")
+    print(f"\nBATCH TO GENERATE = {input.batchToGenerate}\n")
 
     time_start_1 = time.time()
 
-    # If failed Batch is detected and user is resuming its generation:
     if input.fail_state:
-        print(f"{bcolors.ERROR}\nResuming Failed Batch {input.failed_batch}\n{bcolors.RESET}")
         NFTs_in_Batch, hierarchy, BatchDNAList = getBatchData(input.failed_batch, input.batch_json_save_path)
         for a in range(input.failed_dna):
             del BatchDNAList[0]
         x = input.failed_dna + 1
 
-    # If user is generating the normal way:
     else:
-        print(f"\nGenerating Batch {input.batchToGenerate}\n")
         NFTs_in_Batch, hierarchy, BatchDNAList = getBatchData(input.batchToGenerate, input.batch_json_save_path)
         save_generation_state(input)
         x = 1
@@ -182,14 +177,12 @@ def render_and_save_NFTs(input):
                     if hierarchy[attribute][var]['number'] == variant:
                         variant = var
 
-                if material != '0':  # If material is not empty
+                if material != '0':
                     for variant_m in materialsFile:
                         if variant == variant_m:
-                            # Getting Materials name from Materials index in the Materials List
-                            materials_list = list(materialsFile[variant_m]["Material List"].keys())
-
-                            material = materials_list[int(material) - 1]  # Subtract 1 because '0' means empty mat
-                            break
+                            for mat in materialsFile[variant_m]["Material List"]:
+                                if mat.split('_')[1] == material:
+                                    material = mat
 
                 full_dna_dict[variant] = material
 
@@ -420,13 +413,13 @@ def render_and_save_NFTs(input):
             if not os.path.exists(solanaMetadataPath):
                 os.makedirs(solanaMetadataPath)
             createSolanaMetaData(name, Order_Num, full_single_dna, dnaDictionary, metadataMaterialDict, input.custom_Fields,
-                                 input.enableCustomFields, input.solana_description, solanaMetadataPath)
+                                 input.enableCustomFields, input.cardano_description, solanaMetadataPath)
 
         if input.erc721MetaData:
             if not os.path.exists(erc721MetadataPath):
                 os.makedirs(erc721MetadataPath)
             createErc721MetaData(name, Order_Num, full_single_dna, dnaDictionary, metadataMaterialDict, input.custom_Fields,
-                                 input.enableCustomFields, input.erc721_description, erc721MetadataPath)
+                                 input.enableCustomFields, input.cardano_description, erc721MetadataPath)
 
         if not os.path.exists(BMNFT_metaData_Folder):
             os.makedirs(BMNFT_metaData_Folder)
@@ -464,64 +457,3 @@ def render_and_save_NFTs(input):
 
     batch_infoFolder = os.path.join(input.nftBatch_save_path, "Batch" + str(input.batchToGenerate), "batch_info.json")
     save_batch(batch_info, batch_infoFolder)
-
-    # Send Email that Batch is complete:
-    if input.emailNotificationBool:
-        port = 465  # For SSL
-        smtp_server = "smtp.gmail.com"
-        sender_email = input.sender_from  # Enter your address
-        receiver_email = input.receiver_to  # Enter receiver address
-        password = input.email_password
-
-        # Get batch info for message:
-        if input.fail_state:
-            batch = input.fail_state
-            batchData = getBatchData(input.failed_batch, input.batch_json_save_path)
-
-        else:
-            batchData = getBatchData(input.batchToGenerate, input.batch_json_save_path)
-
-            batch = input.batchToGenerate
-
-        generation_time = str(datetime.timedelta(seconds=batch_complete_time))
-
-        message = f"""\
-        Subject: Batch {batch} completed {x - 1} NFTs in {generation_time} (h:m:s)
-        
-        Generation Time:
-        {generation_time.split(':')[0]} Hours, {generation_time.split(':')[1]} Minutes, {generation_time.split(':')[2]} Seconds
-        Batch Data:
-        
-            {batchData}
-        
-        This message was sent from an instance of the Blend_My_NFTs Blender add-on.
-        """
-
-        context = ssl.create_default_context()
-        with smtplib.SMTP_SSL(smtp_server, port, context=context) as server:
-            server.login(sender_email, password)
-            server.sendmail(sender_email, receiver_email, message)
-
-    # Automatic Shutdown:
-    # If user selects automatic shutdown but did not specify time after Batch completion
-    def shutdown(time):
-        plateform = platform.system()
-
-        if plateform == "Windows":
-            os.system(f"shutdown /s /t {time}")
-        if plateform == "Darwin":
-            os.system(f"shutdown /s /t {time}")
-
-    if input.enableAutoShutdown and not input.specify_timeBool:
-        shutdown(0)
-
-    # If user selects automatic shutdown and specify time after Batch completion
-    if input.enableAutoShutdown and input.specify_timeBool:
-
-        hours = (int(input.hours)/60)/60
-        minutes = int(input.minutes)/60
-        total_sleep_time = hours + minutes
-
-        # time.sleep(total_sleep_time)
-
-        shutdown(total_sleep_time)

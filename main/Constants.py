@@ -2,8 +2,7 @@
 # This file is for storing or updating constant values that may need to be changes depending on system requirements and
 # different usecases.
 import os
-import json
-import platform
+
 
 removeList = [".gitignore", ".DS_Store", "desktop.ini", ".ini"]
 
@@ -35,18 +34,3 @@ class bcolors:
     ERROR = '\033[91m'  # RED
     RESET = '\033[0m'  # RESET COLOR
 
-
-def save_result(result):
-    """
-    Saves json result to json file at the specified path.
-    """
-    file_name =  "log.json"
-    if platform.system() == "Linux" or platform.system() == "Darwin":
-        path = os.path.join(os.path.join(os.path.expanduser('~')), 'Desktop', file_name)
-
-    if platform.system() == "Windows":
-        path = os.path.join(os.environ["HOMEPATH"], "Desktop", file_name)
-
-    data = json.dumps(result, indent=1, ensure_ascii=True)
-    with open(path, 'w') as outfile:
-        outfile.write(data + '\n')
