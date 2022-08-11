@@ -19,7 +19,9 @@ For support, help, and questions, please join our wonderful [Discord community!]
 
 Blend_My_NFTs was initially developed to create Cozy Place, an NFT collection by This Cozy Studio Inc.
 
+
 https://user-images.githubusercontent.com/82110564/147833465-965be08b-ca5f-47ba-a159-b92ff775ee14.mov
+
 
 The video above illustrates the first 10 Cozy Place NFTs generated with a very early prototype version of Blend_My_NFTs.
 
@@ -50,8 +52,6 @@ The YouTube tutorials use three different .blend example files. This repository 
 - [Blend_My_NFTs](#blend_my_nfts)
   - [Description](#description)
   - [Official Links](#official-links)
-  - [Case Studies](#case-studies)
-  - [Donations](#donations)
   - [Quick Disclaimer](#quick-disclaimer)
   - [Example Files](#example-files)
   - [Table of Contents](#table-of-contents)
