@@ -1,15 +1,15 @@
 bl_info = {
     "name": "Blend_My_NFTs",
     "author": "Torrin Leonard, This Cozy Studio Inc",
-    "version": (4, 0, 2),
+    "version": (4, 4, 0),
     "blender": (3, 2, 0),
     "location": "View3D",
-    "description": "An open source, free to use Blender add-on that enables you to create thousands of unique images, animations, and 3D models.",
+    "description": "A free and opensource Blender add-on that enables you to create thousands of unique images, animations, and 3D models.",
     "category": "Development",
 }
 
-BMNFTS_VERSION = "v4.0.2"
-LAST_UPDATED = "8:19AM, May 31st, 2022"
+BMNFTS_VERSION = "v4.4.0"
+LAST_UPDATED = "2:25PM, June 18th, 2022"
 
 # ======== Import handling ======== #
 
@@ -23,8 +23,9 @@ import os
 import sys
 import json
 import importlib
-from dataclasses import dataclass
 from typing import Any
+from dataclasses import dataclass
+from datetime import datetime, timezone
 
 # "a little hacky bs" - matt159 ;)
 sys.path.append(os.path.dirname(os.path.realpath(__file__)))
@@ -74,6 +75,7 @@ if "bpy" in locals():
 # Used for updating text and buttons in UI panels
 combinations: int = 0
 recommended_limit: int = 0
+dt = datetime.now(timezone.utc).astimezone()  # Date Time in UTC local
 
 @dataclass
 class BMNFTData:
@@ -426,6 +428,21 @@ class BMNFTS_PGT_Input_Properties(bpy.types.PropertyGroup):
     )
 
     # Other Panel:
+    enableAutoSave: bpy.props.BoolProperty(name="Auto Save Before Generation", description="Automatically saves your Blender file when 'Generate NFTs & Create Metadata' button is clicked")
+
+    # Auto Shutodwn:
+    enableAutoShutdown: bpy.props.BoolProperty(name="Auto Shutdown", description="Automatically shuts down your computer after a Batch is finished Generating")
+
+    specify_timeBool: bpy.props.BoolProperty(name="Shutdown in a Given Amount of Time", description="Wait a given amount of time after a Batch is generated before Automatic Shutdown")
+    hours: bpy.props.IntProperty(default=0, min=0)
+    minutes: bpy.props.IntProperty(default=0, min=0)
+
+    # Send Batch Complete Email:
+    emailNotificationBool: bpy.props.BoolProperty(name="Email Notifications", description="Receive Email Notifications from Blender once a batch is finished generating")
+    sender_from: bpy.props.StringProperty(name="From", default="from@example.com")
+    email_password: bpy.props.StringProperty(name="Password", subtype='PASSWORD')
+    receiver_to: bpy.props.StringProperty(name="To", default="to@example.com")
+
 
     # API Panel properties:
     apiKey: bpy.props.StringProperty(name="API Key", subtype='PASSWORD')
@@ -470,7 +487,58 @@ class exportNFTs(bpy.types.Operator):
         name="Reverse Order")
 
     def execute(self, context):
+        enableAutoSave = bpy.context.scene.input_tool.enableAutoSave
+        if enableAutoSave:
+            bpy.ops.wm.save_mainfile()
 
+        class input:
+            nftName = bpy.context.scene.input_tool.nftName
+            save_path = bpy.path.abspath(bpy.context.scene.input_tool.save_path)
+            batchToGenerate = bpy.context.scene.input_tool.batchToGenerate
+            collectionSize = bpy.context.scene.input_tool.collectionSize
+
+            Blend_My_NFTs_Output, batch_json_save_path, nftBatch_save_path = make_directories(save_path)
+
+            enableImages = bpy.context.scene.input_tool.imageBool
+            imageFileFormat = bpy.context.scene.input_tool.imageEnum
+
+            enableAnimations = bpy.context.scene.input_tool.animationBool
+            animationFileFormat = bpy.context.scene.input_tool.animationEnum
+
+            enableModelsBlender = bpy.context.scene.input_tool.modelBool
+            modelFileFormat = bpy.context.scene.input_tool.modelEnum
+
+            enableCustomFields = bpy.context.scene.input_tool.enableCustomFields
+            custom_Fields = {}
+
+            cardanoMetaDataBool = bpy.context.scene.input_tool.cardanoMetaDataBool
+            solanaMetaDataBool = bpy.context.scene.input_tool.solanaMetaDataBool
+            erc721MetaData = bpy.context.scene.input_tool.erc721MetaData
+
+            cardano_description = bpy.context.scene.input_tool.cardano_description
+            solana_description = bpy.context.scene.input_tool.solana_description
+            erc721_description = bpy.context.scene.input_tool.erc721_description
+
+            enableMaterials = bpy.context.scene.input_tool.enableMaterials
+            materialsFile = bpy.path.abspath(bpy.context.scene.input_tool.materialsFile)
+
+            enableAutoShutdown = bpy.context.scene.input_tool.enableAutoShutdown
+
+            specify_timeBool = bpy.context.scene.input_tool.specify_timeBool
+            hours = bpy.context.scene.input_tool.hours
+            minutes = bpy.context.scene.input_tool.minutes
+
+            emailNotificationBool = bpy.context.scene.input_tool.emailNotificationBool
+            sender_from = bpy.context.scene.input_tool.sender_from
+            email_password = bpy.context.scene.input_tool.email_password
+            receiver_to = bpy.context.scene.input_tool.receiver_to
+
+            # fail state variables, set to no fail due to resume_failed_batch() Operator in BMNFTS_PT_GenerateNFTs Panel
+            fail_state = False
+            failed_batch = None
+            failed_dna = None
+            failed_dna_index = None
+            
         input = getBMNFTData()
         # Handling Custom Fields UIList input:
         
@@ -861,10 +929,57 @@ class BMNFTS_PT_Other(bpy.types.Panel):
         input_tool_scene = scene.input_tool
 
         """
+        Other:
+        A place to store miscellaneous settings, features, and external links that the user may find useful but doesn't 
+        want to get in the way of their work flow.
         Export Settings:
         This panel gives the user the option to export all settings from the Blend_My_NFTs addon into a config file. Settings 
         will be read from the config file when running heedlessly.
         """
+
+        row = layout.row()
+        row.prop(input_tool_scene, "enableAutoSave")
+
+        # Auto Shutdown:
+        row = layout.row()
+        row.prop(input_tool_scene, "enableAutoShutdown")
+        row.label(text="*Must Run Blender as Admin")
+
+        if bpy.context.scene.input_tool.enableAutoShutdown:
+            row = layout.row()
+            row.prop(input_tool_scene, "specify_timeBool")
+
+            time_row1 = layout.row()
+            time_row1.label(text=f"Hours")
+            time_row1.prop(input_tool_scene, "hours", text="")
+
+            time_row2 = layout.row()
+            time_row2.label(text=f"Minutes")
+            time_row2.prop(input_tool_scene, "minutes", text="")
+
+            if not bpy.context.scene.input_tool.specify_timeBool:
+                time_row1.enabled = False
+                time_row2.enabled = False
+            else:
+                time_row1.enabled = True
+                time_row2.enabled = True
+            layout.separator()
+
+        row = layout.row()
+        row.prop(input_tool_scene, "emailNotificationBool")
+        row.label(text="*Windows 10+ only")
+
+        if bpy.context.scene.input_tool.emailNotificationBool:
+            row = layout.row()
+            row.prop(input_tool_scene, "sender_from")
+            row = layout.row()
+            row.prop(input_tool_scene, "email_password")
+
+            layout.separator()
+            row = layout.row()
+            row.prop(input_tool_scene, "receiver_to")
+
+        layout.separator()
         layout.label(text=f"Running Blend_My_NFTs Headless:")
 
         save_path = bpy.path.abspath(bpy.context.scene.input_tool.save_path)

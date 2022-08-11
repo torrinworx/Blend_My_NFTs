@@ -7,36 +7,58 @@ import bpy
 
 import json
 import random
+from .Constants import bcolors, removeList, remove_file_by_extension, save_result
 
 
-def select_material(materialList):
+def select_material(materialList, variant, enableRarity):
     """Selects a material from a passed material list. """
-
-    number_List_Of_i = []
+    material_List_Of_i = []  # List of Material names instead of order numbers
     rarity_List_Of_i = []
     ifZeroBool = None
 
     for material in materialList:
+        # Material Order Number comes from index in the Material List in materials.json for a given Variant.
+        # material_order_num = list(materialList.keys()).index(material)
 
-        material_order_num = material.split("_")[1]
-        number_List_Of_i.append(material_order_num)
+        material_List_Of_i.append(material)
 
-        material_rarity_percent = material.split("_")[1]
+        material_rarity_percent = materialList[material]
         rarity_List_Of_i.append(float(material_rarity_percent))
 
-    for x in rarity_List_Of_i:
-        if x == 0:
+    print(f"MATERIAL_LIST_OF_I:{material_List_Of_i}")
+    print(f"RARITY_LIST_OF_I:{rarity_List_Of_i}")
+
+    for b in rarity_List_Of_i:
+        if b == 0:
             ifZeroBool = True
-            break
-        elif x != 0:
+        elif b != 0:
             ifZeroBool = False
 
-    if ifZeroBool:
-        selected_material = random.choices(number_List_Of_i, k=1)
-    elif not ifZeroBool:
-        selected_material = random.choices(number_List_Of_i, weights=rarity_List_Of_i, k=1)
+    if enableRarity:
+        try:
+            if ifZeroBool:
+                selected_material = random.choices(material_List_Of_i, k=1)
+            elif not ifZeroBool:
+                selected_material = random.choices(material_List_Of_i, weights=rarity_List_Of_i, k=1)
+        except IndexError:
+            raise IndexError(
+                f"\n{bcolors.ERROR}Blend_My_NFTs Error:\n"
+                f"An issue was found within the Material List of the Variant collection '{variant}'. For more information on Blend_My_NFTs compatible scenes, "
+                f"see:\n{bcolors.RESET}"
+                f"https://github.com/torrinworx/Blend_My_NFTs#blender-file-organization-and-structure\n"
+            )
+    else:
+        try:
+            selected_material = random.choices(material_List_Of_i, k=1)
+        except IndexError:
+            raise IndexError(
+                f"\n{bcolors.ERROR}Blend_My_NFTs Error:\n"
+                f"An issue was found within the Material List of the Variant collection '{variant}'. For more information on Blend_My_NFTs compatible scenes, "
+                f"see:\n{bcolors.RESET}"
+                f"https://github.com/torrinworx/Blend_My_NFTs#blender-file-organization-and-structure\n"
+            )
 
-    return selected_material[0]
+    return selected_material[0], materialList
 
 def get_variant_att_index(variant, hierarchy):
     variant_attribute = None
@@ -69,7 +91,7 @@ def match_DNA_to_Variant(hierarchy, singleDNA):
                 dnaDictionary.update({x: k})
     return dnaDictionary
 
-def apply_materials(hierarchy, singleDNA, materialsFile):
+def apply_materials(hierarchy, singleDNA, materialsFile, enableRarity):
     """
     DNA with applied material example: "1-1:1-1" <Normal DNA>:<Selected Material for each Variant>
 
@@ -85,11 +107,21 @@ def apply_materials(hierarchy, singleDNA, materialsFile):
         complete = False
         for b in materialsFile:
             if singleDNADict[a] == b:
-                mat = select_material(materialsFile[b]['Material List'])
-                deconstructed_MaterialDNA[a] = mat
+                material_name, materialList, = select_material(materialsFile[b]['Material List'], b, enableRarity)
+                material_order_num = list(materialList.keys()).index(material_name)  # Gets the Order Number of the Material
+                deconstructed_MaterialDNA[a] = str(material_order_num + 1)
                 complete = True
         if not complete:
             deconstructed_MaterialDNA[a] = "0"
+
+    # Make Attributes have the same materials:
+    # Order your Attributes alphabetically, then assign each Attribute a number, starting with 0. So Attribute 'A' = 0,
+    # Attribute 'B' = 1, 'C' = 2, 'D' = 3, etc. For each pair you want to equal another, add its number it to this list:
+    # synced_material_attributes = [1, 2]
+    #
+    # first_mat = deconstructed_MaterialDNA[synced_material_attributes[0]]
+    # for i in synced_material_attributes:
+    #     deconstructed_MaterialDNA[i] = first_mat
 
     material_DNA = ""
     for a in deconstructed_MaterialDNA:
