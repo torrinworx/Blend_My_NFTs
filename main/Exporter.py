@@ -43,9 +43,9 @@ def save_generation_state(input):
         "DNA Generated": None,
         "Generation Start Date and Time": [CURRENT_TIME, CURRENT_DATE, LOCAL_TIMEZONE],
         "Render_Settings": {
-
             "nftName": input.nftName,
             "save_path": input.save_path,
+            "nftsPerBatch": input.nftsPerBatch,
             "batchToGenerate": input.batchToGenerate,
             "collectionSize": input.collectionSize,
 
@@ -63,7 +63,6 @@ def save_generation_state(input):
             "modelFileFormat": input.modelFileFormat,
 
             "enableCustomFields": input.enableCustomFields,
-            "custom_Fields": input.custom_Fields,
 
             "cardanoMetaDataBool": input.cardanoMetaDataBool,
             "solanaMetaDataBool": input.solanaMetaDataBool,
@@ -76,6 +75,24 @@ def save_generation_state(input):
             "enableMaterials": input.enableMaterials,
             "materialsFile": input.materialsFile,
 
+            "enableLogic": input.enableLogic,
+            "enable_Logic_Json": input.enable_Logic_Json,
+            "logicFile": input.logicFile,
+
+            "enableRarity": input.enableRarity,
+
+            "enableAutoShutdown": input.enableAutoShutdown,
+
+            "specify_timeBool": input.specify_timeBool,
+            "hours": input.hours,
+            "minutes": input.minutes,
+
+            "emailNotificationBool": input.emailNotificationBool,
+            "sender_from": input.sender_from,
+            "email_password": input.email_password,
+            "receiver_to": input.receiver_to,
+
+            "custom_Fields": input.custom_Fields,
         },
     })
 
@@ -272,11 +289,23 @@ def render_and_save_NFTs(input):
         solanaMetadataPath = os.path.join(batchFolder, "Solana_metadata")
         erc721MetadataPath = os.path.join(batchFolder, "Erc721_metadata")
 
+
+        def check_failed_exists(file_path):
+            # Delete a file if a fail state is detected and if the file being re-generated already exists. Prevents
+            # animations from corrupting.
+
+            if input.fail_state:
+                if os.path.exists(file_path):
+                    os.remove(file_path)
+
         # Generation/Rendering:
         if input.enableImages:
+
             print(f"{bcolors.OK}---Image---{bcolors.RESET}")
 
             image_render_time_start = time.time()
+
+            check_failed_exists(imagePath)
 
             def render_image():
                 if not os.path.exists(imageFolder):
@@ -301,6 +330,8 @@ def render_and_save_NFTs(input):
             print(f"{bcolors.OK}---Animation---{bcolors.RESET}")
 
             animation_render_time_start = time.time()
+
+            check_failed_exists(animationPath)
 
             def render_animation():
                 if not os.path.exists(animationFolder):
@@ -373,40 +404,49 @@ def render_and_save_NFTs(input):
                 #         obj.select_set(False)
 
                 if input.modelFileFormat == 'GLB':
+                    check_failed_exists(f"{modelPath}.glb")
                     bpy.ops.export_scene.gltf(filepath=f"{modelPath}.glb",
                                               check_existing=True,
                                               export_format='GLB',
                                               export_keep_originals=True,
                                               use_selection=True)
                 if input.modelFileFormat == 'GLTF_SEPARATE':
+                    check_failed_exists(f"{modelPath}.gltf")
+                    check_failed_exists(f"{modelPath}.bin")
                     bpy.ops.export_scene.gltf(filepath=f"{modelPath}",
                                               check_existing=True,
                                               export_format='GLTF_SEPARATE',
                                               export_keep_originals=True,
                                               use_selection=True)
                 if input.modelFileFormat == 'GLTF_EMBEDDED':
+                    check_failed_exists(f"{modelPath}.gltf")
                     bpy.ops.export_scene.gltf(filepath=f"{modelPath}.gltf",
                                               check_existing=True,
                                               export_format='GLTF_EMBEDDED',
                                               export_keep_originals=True,
                                               use_selection=True)
                 elif input.modelFileFormat == 'FBX':
+                    check_failed_exists(f"{modelPath}.fbx")
                     bpy.ops.export_scene.fbx(filepath=f"{modelPath}.fbx",
                                              check_existing=True,
                                              use_selection=True)
                 elif input.modelFileFormat == 'OBJ':
+                    check_failed_exists(f"{modelPath}.obj")
                     bpy.ops.export_scene.obj(filepath=f"{modelPath}.obj",
                                              check_existing=True,
                                              use_selection=True, )
                 elif input.modelFileFormat == 'X3D':
+                    check_failed_exists(f"{modelPath}.x3d")
                     bpy.ops.export_scene.x3d(filepath=f"{modelPath}.x3d",
                                              check_existing=True,
                                              use_selection=True)
                 elif input.modelFileFormat == 'STL':
+                    check_failed_exists(f"{modelPath}.stl")
                     bpy.ops.export_mesh.stl(filepath=f"{modelPath}.stl",
                                             check_existing=True,
                                             use_selection=True)
                 elif input.modelFileFormat == 'VOX':
+                    check_failed_exists(f"{modelPath}.vox")
                     bpy.ops.export_vox.some_data(filepath=f"{modelPath}.vox")
 
             # Loading Animation:
@@ -417,7 +457,7 @@ def render_and_save_NFTs(input):
             model_generation_time_end = time.time()
 
             print(
-                f"{bcolors.OK}Generated model in {model_generation_time_end - model_generation_time_start}s.\n{bcolors.RESET}"
+                f"{bcolors.OK}Generated 3D model in {model_generation_time_end - model_generation_time_start}s.\n{bcolors.RESET}"
             )
 
         # Generating Metadata:

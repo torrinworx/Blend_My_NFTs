@@ -551,42 +551,64 @@ class resume_failed_batch(bpy.types.Operator):
 
         _fail_state, _failed_batch, _failed_dna, _failed_dna_index = Checks.check_FailedBatches(_batch_json_save_path)
 
+        render_settings = batchData["Generation Save"][-1]["Render_Settings"]
+
         input = BMNFTData(
-            nftName=batchData["Generation Save"][-1]["Render_Settings"]["nftName"],
+            nftName=render_settings["nftName"],
             save_path=_save_path,
-            collectionSize=batchData["Generation Save"][-1]["Render_Settings"]["collectionSize"],
+            nftsPerBatch=render_settings["nftsPerBatch"],
+            batchToGenerate=render_settings["batchToGenerate"],
+            collectionSize=render_settings["collectionSize"],
 
             Blend_My_NFTs_Output=_Blend_My_NFTs_Output,
             batch_json_save_path=_batch_json_save_path,
-            nftBatch_save_path=batchData["Generation Save"][-1]["Render_Settings"]["nftBatch_save_path"],
+            nftBatch_save_path=render_settings["nftBatch_save_path"],
 
-            enableImages=batchData["Generation Save"][-1]["Render_Settings"]["enableImages"],
-            imageFileFormat=batchData["Generation Save"][-1]["Render_Settings"]["imageFileFormat"],
+            enableImages=render_settings["enableImages"],
+            imageFileFormat=render_settings["imageFileFormat"],
 
-            enableAnimations=batchData["Generation Save"][-1]["Render_Settings"]["enableAnimations"],
-            animationFileFormat=batchData["Generation Save"][-1]["Render_Settings"]["animationFileFormat"],
+            enableAnimations=render_settings["enableAnimations"],
+            animationFileFormat=render_settings["animationFileFormat"],
 
-            enableModelsBlender=batchData["Generation Save"][-1]["Render_Settings"]["enableModelsBlender"],
-            modelFileFormat=batchData["Generation Save"][-1]["Render_Settings"]["modelFileFormat"],
+            enableModelsBlender=render_settings["enableModelsBlender"],
+            modelFileFormat=render_settings["modelFileFormat"],
 
-            enableCustomFields=batchData["Generation Save"][-1]["Render_Settings"]["enableCustomFields"],
-            custom_Fields=batchData["Generation Save"][-1]["Render_Settings"]["custom_Fields"],
+            enableCustomFields=render_settings["enableCustomFields"],
 
-            cardanoMetaDataBool=batchData["Generation Save"][-1]["Render_Settings"]["cardanoMetaDataBool"],
-            solanaMetaDataBool=batchData["Generation Save"][-1]["Render_Settings"]["solanaMetaDataBool"],
-            erc721MetaData=batchData["Generation Save"][-1]["Render_Settings"]["erc721MetaData"],
+            cardanoMetaDataBool=render_settings["cardanoMetaDataBool"],
+            solanaMetaDataBool=render_settings["solanaMetaDataBool"],
+            erc721MetaData=render_settings["erc721MetaData"],
 
-            cardano_description=batchData["Generation Save"][-1]["Render_Settings"]["cardano_description"],
-            solana_description=batchData["Generation Save"][-1]["Render_Settings"]["solana_description"],
-            erc721_description=batchData["Generation Save"][-1]["Render_Settings"]["erc721_description"],
+            cardano_description=render_settings["cardano_description"],
+            solana_description=render_settings["solana_description"],
+            erc721_description=render_settings["erc721_description"],
 
-            enableMaterials=batchData["Generation Save"][-1]["Render_Settings"]["enableMaterials"],
-            materialsFile=batchData["Generation Save"][-1]["Render_Settings"]["materialsFile"],
+            enableMaterials=render_settings["enableMaterials"],
+            materialsFile=render_settings["materialsFile"],
+
+            enableLogic=render_settings["enableLogic"],
+            enable_Logic_Json=render_settings["enable_Logic_Json"],
+            logicFile=render_settings["logicFile"],
+
+            enableRarity=render_settings["enableRarity"],
+
+            enableAutoShutdown=render_settings["enableAutoShutdown"],
+
+            specify_timeBool=render_settings["specify_timeBool"],
+            hours=render_settings["hours"],
+            minutes=render_settings["minutes"],
+
+            emailNotificationBool=render_settings["emailNotificationBool"],
+            sender_from=render_settings["sender_from"],
+            email_password=render_settings["email_password"],
+            receiver_to=render_settings["receiver_to"],
 
             fail_state=_fail_state,
             failed_batch=_failed_batch,
             failed_dna=_failed_dna,
-            failed_dna_index=_failed_dna_index
+            failed_dna_index=_failed_dna_index,
+
+            custom_Fields=render_settings["custom_Fields"],
         )
 
         Exporter.render_and_save_NFTs(input)
