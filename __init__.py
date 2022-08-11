@@ -12,7 +12,7 @@ bl_info = {
 }
 
 BMNFTS_VERSION = "v4.5.0"
-LAST_UPDATED = "8:19AM, Aug 11th, 2022"
+LAST_UPDATED = "12:34AM, Aug 11th, 2022"
 
 # ======== Import handling ======== #
 
