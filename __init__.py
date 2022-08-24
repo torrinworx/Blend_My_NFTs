@@ -667,6 +667,7 @@ class ResumeFailedBatch(bpy.types.Operator):
             sender_from=render_settings["sender_from"],
             email_password=render_settings["email_password"],
             receiver_to=render_settings["receiver_to"],
+
             enable_debug=render_settings["enable_debug"],
 
             fail_state=_fail_state,

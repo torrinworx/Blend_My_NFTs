@@ -95,6 +95,8 @@ def save_generation_state(input):
                     "email_password": input.email_password,
                     "receiver_to": input.receiver_to,
 
+                    "enable_debug": input.enable_debug,
+
                     "custom_fields": input.custom_fields,
             },
     })
@@ -107,8 +109,8 @@ def save_completed(full_single_dna, a, x, batch_json_save_path, batch_to_generat
 
     file_name = os.path.join(batch_json_save_path, "Batch{}.json".format(batch_to_generate))
     batch = json.load(open(file_name))
-    index = batch["BatchDNAList"].index(a)
-    batch["BatchDNAList"][index][full_single_dna]["Complete"] = True
+    index = batch["batch_dna_list"].index(a)
+    batch["batch_dna_list"][index][full_single_dna]["complete"] = True
     batch["Generation Save"][-1]["DNA Generated"] = x
 
     save_batch(batch, file_name)
@@ -315,7 +317,7 @@ def render_and_save_nfts(input):
         # Generation/Rendering:
         if input.enable_images:
 
-            print(f"{TextColors.OK}-------- Image --------{TextColors.RESET}")
+            print(f"\n{TextColors.OK}-------- Image --------{TextColors.RESET}")
 
             image_render_time_start = time.time()
 
@@ -342,7 +344,7 @@ def render_and_save_nfts(input):
             )
 
         if input.enable_animations:
-            print(f"{TextColors.OK}-------- Animation --------{TextColors.RESET}")
+            print(f"\n{TextColors.OK}-------- Animation --------{TextColors.RESET}")
 
             animation_render_time_start = time.time()
 
@@ -394,7 +396,7 @@ def render_and_save_nfts(input):
             )
 
         if input.enable_models:
-            print(f"{TextColors.OK}-------- 3D Model --------{TextColors.RESET}")
+            print(f"\n{TextColors.OK}-------- 3D Model --------{TextColors.RESET}")
 
             model_generation_time_start = time.time()
 

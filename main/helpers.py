@@ -351,7 +351,7 @@ def check_failed_batches(batch_json_save_path):
 
         for i in batch_folders:
             batch = json.load(open(os.path.join(batch_json_save_path, i)))
-            nfts_in_batch = batch["NFTs_in_Batch"]
+            nfts_in_batch = batch["nfts_in_batch"]
             if "Generation Save" in batch:
                 dna_generated = batch["Generation Save"][-1]["DNA Generated"]
                 if dna_generated is not None and dna_generated < nfts_in_batch:

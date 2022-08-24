@@ -110,7 +110,7 @@ def generate_nft_dna(
         # print(f"Rarity DNA: {single_dna}")
 
         if enable_logic:
-            single_dna = logic.logicafy_dna_single(hierarchy, single_dna, logic_file, enable_rarity, enable_materials)
+            single_dna = logic.logicafy_dna_single(hierarchy, single_dna, logic_file, enable_rarity)
         # print(f"Logic DNA: {single_dna}")
 
         if enable_materials:
@@ -310,7 +310,7 @@ def send_to_record(
 
             print(
                 f"\n{TextColors.OK}Blend_My_NFTs Success:\n"
-                f"{len(data_dictionary['DNAList'])} NFT DNA saved to {nft_record_save_path}. NFT DNA Successfully "
+                f"{len(data_dictionary['dna_list'])} NFT DNA saved to {nft_record_save_path}. NFT DNA Successfully "
                 f"created.\n{TextColors.RESET}")
 
         except Exception:
