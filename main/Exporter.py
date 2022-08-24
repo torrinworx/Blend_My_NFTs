@@ -1,6 +1,6 @@
 # Purpose:
-# This file takes a given Batch created by DNA_Generator.py and tells blender to render the image or export a 3D model to
-# the NFT_Output folder.
+# This file takes a given Batch created by DNA_Generator.py and tells blender to render the image or export a 3D model
+# to the NFT_Output folder.
 
 import bpy
 import os

@@ -44,7 +44,6 @@ from main import \
     Logic, \
     Material_Generator, \
     Metadata, \
-    Rarity, \
     Refactorer
 
 from UILists import \
@@ -61,7 +60,6 @@ if "bpy" in locals():
         "Logic": Logic,
         "Material_Generator": Material_Generator,
         "Metadata": Metadata,
-        "Rarity": Rarity,
         "Refactorer": Refactorer,
         "Custom_Metadata_UIList": Custom_Metadata_UIList,
         "Logic_UIList": Logic_UIList,
@@ -547,7 +545,7 @@ class resume_failed_batch(bpy.types.Operator):
         file_name = os.path.join(_batch_json_save_path, "Batch{}.json".format(_batchToGenerate))
         batchData = json.load(open(file_name))
 
-        _fail_state, _failed_batch, _failed_dna, _failed_dna_index = Checks.check_FailedBatches(_batch_json_save_path)
+        _fail_state, _failed_batch, _failed_dna, _failed_dna_index = Helpers.check_FailedBatches(_batch_json_save_path)
 
         render_settings = batchData["Generation Save"][-1]["Render_Settings"]
 
@@ -887,7 +885,7 @@ class BMNFTS_PT_GenerateNFTs(bpy.types.Panel):
         batch_json_save_path = os.path.join(Blend_My_NFTs_Output, "Batch_Data")
         nftBatch_save_path = os.path.join(save_path, "Blend_My_NFTs Output", "Generated NFT Batches")
 
-        fail_state, failed_batch, failed_dna, failed_dna_index = Checks.check_FailedBatches(batch_json_save_path)
+        fail_state, failed_batch, failed_dna, failed_dna_index = Helpers.check_FailedBatches(batch_json_save_path)
 
         if fail_state:
             row = layout.row()

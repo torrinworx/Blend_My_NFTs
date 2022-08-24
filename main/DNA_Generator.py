@@ -3,123 +3,11 @@
 
 import bpy
 import os
-import copy
 import time
 import json
 import random
 from functools import partial
-from . import Rarity, Logic, Material_Generator, Helpers
-from .Helpers import bcolors, Loader
-
-
-def get_hierarchy():
-    """
-    Returns the hierarchy of a given Blender scene.
-    """
-
-    coll = bpy.context.scene.collection
-
-    scriptIgnoreCollection = bpy.data.collections["Script_Ignore"]
-
-    listAllCollInScene = []
-    listAllCollections = []
-
-    def traverse_tree(t):
-        yield t
-        for child in t.children:
-            yield from traverse_tree(child)
-
-    for c in traverse_tree(coll):
-        listAllCollInScene.append(c)
-
-    for i in listAllCollInScene:
-        listAllCollections.append(i.name)
-
-    listAllCollections.remove(scriptIgnoreCollection.name)
-
-    if "Scene Collection" in listAllCollections:
-        listAllCollections.remove("Scene Collection")
-
-    if "Master Collection" in listAllCollections:
-        listAllCollections.remove("Master Collection")
-
-    def allScriptIgnore(scriptIgnoreCollection):
-        # Removes all collections, sub collections in Script_Ignore collection from listAllCollections.
-
-        for coll in list(scriptIgnoreCollection.children):
-            listAllCollections.remove(coll.name)
-            listColl = list(coll.children)
-            if len(listColl) > 0:
-                allScriptIgnore(coll)
-
-    allScriptIgnore(scriptIgnoreCollection)
-    listAllCollections.sort()
-
-    exclude = ["_"]  # Excluding characters that identify a Variant
-    attributeCollections = copy.deepcopy(listAllCollections)
-
-    def filter_num():
-        """
-        This function removes items from 'attributeCollections' if they include values from the 'exclude' variable.
-        It removes child collections from the parent collections in from the "listAllCollections" list.
-        """
-        for x in attributeCollections:
-            if any(a in x for a in exclude):
-                attributeCollections.remove(x)
-
-    for i in range(len(listAllCollections)):
-        filter_num()
-
-    attributeVariants = [x for x in listAllCollections if x not in attributeCollections]
-    attributeCollections1 = copy.deepcopy(attributeCollections)
-
-    def attributeData(attributeVariants):
-        """
-      Creates a dictionary of each attribute
-      """
-        allAttDataList = {}
-        for i in attributeVariants:
-            # Check if name follows naming conventions:
-            if int(i.count("_")) > 2 and int(i.split("_")[1]) > 0:
-                raise Exception(
-                    f"\n{bcolors.ERROR}Blend_My_NFTs Error:\n"
-                    f"There is a naming issue with the following Attribute/Variant: '{i}'\n"
-                    f"Review the naming convention of Attribute and Variant collections here:\n{bcolors.RESET}"
-                    f"https://github.com/torrinworx/Blend_My_NFTs#blender-file-organization-and-structure\n"
-                )
-
-            try:
-                number = i.split("_")[1]
-                name = i.split("_")[0]
-                rarity = i.split("_")[2]
-            except IndexError:
-                raise Exception(
-                    f"\n{bcolors.ERROR}Blend_My_NFTs Error:\n"
-                    f"There is a naming issue with the following Attribute/Variant: '{i}'\n"
-                    f"Review the naming convention of Attribute and Variant collections here:\n{bcolors.RESET}"
-                    f"https://github.com/torrinworx/Blend_My_NFTs#blender-file-organization-and-structure\n"
-                )
-
-            allAttDataList[i] = {"name": name, "number": number, "rarity": rarity}
-        return allAttDataList
-
-    variantMetaData = attributeData(attributeVariants)
-
-    hierarchy = {}
-    for i in attributeCollections1:
-        colParLong = list(bpy.data.collections[str(i)].children)
-        colParShort = {}
-        for x in colParLong:
-            colParShort[x.name] = None
-        hierarchy[i] = colParShort
-
-    for a in hierarchy:
-        for b in hierarchy[a]:
-            for x in variantMetaData:
-                if str(x) == str(b):
-                    (hierarchy[a])[b] = variantMetaData[x]
-
-    return hierarchy
+from . import Logic, Material_Generator, Helpers
 
 
 def generateNFT_DNA(collectionSize, enableRarity, enableLogic, logicFile, enableMaterials, materialsFile, enable_debug):
@@ -127,7 +15,7 @@ def generateNFT_DNA(collectionSize, enableRarity, enableLogic, logicFile, enable
     Returns batchDataDictionary containing the number of NFT combinations, hierarchy, and the DNAList.
     """
 
-    hierarchy = get_hierarchy()
+    hierarchy = Helpers.get_hierarchy()
 
     # DNA random, Rarity and Logic methods:
     DataDictionary = {}
@@ -156,6 +44,48 @@ def generateNFT_DNA(collectionSize, enableRarity, enableLogic, logicFile, enable
 
         return str(dna)
 
+    def createDNArarity(hierarchy):
+        """
+        Sorts through DataDictionary and appropriately weights each variant based on their rarity percentage set in Blender
+        ("rarity" in DNA_Generator). Then
+        """
+        singleDNA = ""
+
+        for i in hierarchy:
+            number_List_Of_i = []
+            rarity_List_Of_i = []
+            ifZeroBool = None
+
+            for k in hierarchy[i]:
+                number = hierarchy[i][k]["number"]
+                number_List_Of_i.append(number)
+
+                rarity = hierarchy[i][k]["rarity"]
+                rarity_List_Of_i.append(float(rarity))
+
+            for x in rarity_List_Of_i:
+                if x == 0:
+                    ifZeroBool = True
+                elif x != 0:
+                    ifZeroBool = False
+
+            try:
+                if ifZeroBool:
+                    variantByNum = random.choices(number_List_Of_i, k=1)
+                elif not ifZeroBool:
+                    variantByNum = random.choices(number_List_Of_i, weights=rarity_List_Of_i, k=1)
+            except IndexError:
+                raise IndexError(
+                    f"\n{Helpers.bcolors.ERROR}Blend_My_NFTs Error:\n"
+                    f"An issue was found within the Attribute collection '{i}'. For more information on Blend_My_NFTs compatible scenes, "
+                    f"see:\n{Helpers.bcolors.RESET}"
+                    f"https://github.com/torrinworx/Blend_My_NFTs#blender-file-organization-and-structure\n"
+                )
+
+            singleDNA += "-" + str(variantByNum[0])
+        singleDNA = ''.join(singleDNA.split('-', 1))
+        return singleDNA
+
     def singleCompleteDNA():
         """
         This function applies Rarity and Logic to a single DNA created by createDNASingle() if Rarity or Logic specified
@@ -167,7 +97,7 @@ def generateNFT_DNA(collectionSize, enableRarity, enableLogic, logicFile, enable
         # print("============")
         # print(f"Original DNA: {singleDNA}")
         if enableRarity:
-            singleDNA = Rarity.createDNArarity(hierarchy)
+            singleDNA = createDNArarity(hierarchy)
         # print(f"Rarity DNA: {singleDNA}")
 
         if enableLogic:
@@ -297,13 +227,13 @@ def send_To_Record_JSON(collectionSize, nftsPerBatch, save_path, enableRarity, e
 
     if not enableRarity and not enableLogic:
         print(
-            f"{bcolors.OK}NFT DNA will be determined randomly, no special properties or parameters are applied.\n{bcolors.RESET}")
+            f"{Helpers.bcolors.OK}NFT DNA will be determined randomly, no special properties or parameters are applied.\n{Helpers.bcolors.RESET}")
 
     if enableRarity:
-        print(f"{bcolors.OK}Rarity is ON. Weights listed in .blend scene will be taken into account.\n{bcolors.RESET}")
+        print(f"{Helpers.bcolors.OK}Rarity is ON. Weights listed in .blend scene will be taken into account.\n{Helpers.bcolors.RESET}")
 
     if enableLogic:
-        print(f"{bcolors.OK}Logic is ON. {len(list(logicFile.keys()))} rules detected and applied.\n{bcolors.RESET}")
+        print(f"{Helpers.bcolors.OK}Logic is ON. {len(list(logicFile.keys()))} rules detected and applied.\n{Helpers.bcolors.RESET}")
 
     time_start = time.time()
 
@@ -325,10 +255,10 @@ def send_To_Record_JSON(collectionSize, nftsPerBatch, save_path, enableRarity, e
 
         except FileNotFoundError:
             raise FileNotFoundError(
-                f"\n{bcolors.ERROR}Blend_My_NFTs Error:\n"
+                f"\n{Helpers.bcolors.ERROR}Blend_My_NFTs Error:\n"
                 f"Data not saved to NFTRecord.json. Please review your Blender scene and ensure it follows "
                 f"the naming conventions and scene structure. For more information, "
-                f"see:\n{bcolors.RESET}"
+                f"see:\n{Helpers.bcolors.RESET}"
                 f"https://github.com/torrinworx/Blend_My_NFTs#blender-file-organization-and-structure\n"
             )
         finally:
@@ -340,20 +270,20 @@ def send_To_Record_JSON(collectionSize, nftsPerBatch, save_path, enableRarity, e
                 outfile.write(ledger + '\n')
 
             print(
-                f"\n{bcolors.OK}Blend_My_NFTs Success:\n"
-                f"{len(DataDictionary['DNAList'])} NFT DNA saved to {NFTRecord_save_path}. NFT DNA Successfully created.\n{bcolors.RESET}")
+                f"\n{Helpers.bcolors.OK}Blend_My_NFTs Success:\n"
+                f"{len(DataDictionary['DNAList'])} NFT DNA saved to {NFTRecord_save_path}. NFT DNA Successfully created.\n{Helpers.bcolors.RESET}")
 
         except:
             raise (
-                f"\n{bcolors.ERROR}Blend_My_NFTs Error:\n"
+                f"\n{Helpers.bcolors.ERROR}Blend_My_NFTs Error:\n"
                 f"Data not saved to NFTRecord.json. Please review your Blender scene and ensure it follows "
                 f"the naming conventions and scene structure. For more information, "
-                f"see:\n{bcolors.RESET}"
+                f"see:\n{Helpers.bcolors.RESET}"
                 f"https://github.com/torrinworx/Blend_My_NFTs#blender-file-organization-and-structure\n"
             )
 
     # Loading Animation:
-    loading = Loader(f'Creating NFT DNA...', '').start()
+    loading = Helpers.Loader(f'Creating NFT DNA...', '').start()
     create_nft_data()
     makeBatches(collectionSize, nftsPerBatch, save_path, batch_json_save_path)
     loading.stop()
@@ -361,5 +291,5 @@ def send_To_Record_JSON(collectionSize, nftsPerBatch, save_path, enableRarity, e
     time_end = time.time()
 
     print(
-        f"{bcolors.OK}Created and saved NFT DNA in {time_end - time_start}s.\n{bcolors.RESET}"
+        f"{Helpers.bcolors.OK}Created and saved NFT DNA in {time_end - time_start}s.\n{Helpers.bcolors.RESET}"
     )

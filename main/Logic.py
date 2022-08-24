@@ -194,7 +194,9 @@ def get_rule_break_type(hierarchy, deconstructed_DNA, if_dict, result_dict, resu
 
 
 def create_dicts(hierarchy, rule_list_items, result_dict_type):
-    # Example of output structure:
+    """
+    Example of output structure:
+
     structure = {
         "attribute1": {
             "variant1": [
@@ -229,6 +231,7 @@ def create_dicts(hierarchy, rule_list_items, result_dict_type):
             ]
         }
     }
+    """
 
     items_returned = collections.defaultdict(dict)
     for a in rule_list_items:

@@ -1,15 +1,13 @@
 import bpy
 import os
 import json
+import copy
 import platform
 from time import sleep
 from itertools import cycle
 from threading import Thread
 from shutil import get_terminal_size
 from collections import Counter, defaultdict
-
-from . import DNA_Generator
-
 
 # ======== ENABLE DEBUG ======== #
 
@@ -83,6 +81,121 @@ def save_result(result):
 
 # ======== GET COMBINATIONS ======== #
 
+# This section retrieves the Scene hierarchy from the current Blender file.
+
+
+def get_hierarchy():
+    """
+    Returns the hierarchy of a given Blender scene.
+    """
+
+    coll = bpy.context.scene.collection
+
+    scriptIgnoreCollection = bpy.data.collections["Script_Ignore"]
+
+    listAllCollInScene = []
+    listAllCollections = []
+
+    def traverse_tree(t):
+        yield t
+        for child in t.children:
+            yield from traverse_tree(child)
+
+    for c in traverse_tree(coll):
+        listAllCollInScene.append(c)
+
+    for i in listAllCollInScene:
+        listAllCollections.append(i.name)
+
+    listAllCollections.remove(scriptIgnoreCollection.name)
+
+    if "Scene Collection" in listAllCollections:
+        listAllCollections.remove("Scene Collection")
+
+    if "Master Collection" in listAllCollections:
+        listAllCollections.remove("Master Collection")
+
+    def allScriptIgnore(scriptIgnoreCollection):
+        # Removes all collections, sub collections in Script_Ignore collection from listAllCollections.
+
+        for coll in list(scriptIgnoreCollection.children):
+            listAllCollections.remove(coll.name)
+            listColl = list(coll.children)
+            if len(listColl) > 0:
+                allScriptIgnore(coll)
+
+    allScriptIgnore(scriptIgnoreCollection)
+    listAllCollections.sort()
+
+    exclude = ["_"]  # Excluding characters that identify a Variant
+    attributeCollections = copy.deepcopy(listAllCollections)
+
+    def filter_num():
+        """
+        This function removes items from 'attributeCollections' if they include values from the 'exclude' variable.
+        It removes child collections from the parent collections in from the "listAllCollections" list.
+        """
+        for x in attributeCollections:
+            if any(a in x for a in exclude):
+                attributeCollections.remove(x)
+
+    for i in range(len(listAllCollections)):
+        filter_num()
+
+    attributeVariants = [x for x in listAllCollections if x not in attributeCollections]
+    attributeCollections1 = copy.deepcopy(attributeCollections)
+
+    def attributeData(attributeVariants):
+        """
+      Creates a dictionary of each attribute
+      """
+        allAttDataList = {}
+        for i in attributeVariants:
+            # Check if name follows naming conventions:
+            if int(i.count("_")) > 2 and int(i.split("_")[1]) > 0:
+                raise Exception(
+                    f"\n{bcolors.ERROR}Blend_My_NFTs Error:\n"
+                    f"There is a naming issue with the following Attribute/Variant: '{i}'\n"
+                    f"Review the naming convention of Attribute and Variant collections here:\n{bcolors.RESET}"
+                    f"https://github.com/torrinworx/Blend_My_NFTs#blender-file-organization-and-structure\n"
+                )
+
+            try:
+                number = i.split("_")[1]
+                name = i.split("_")[0]
+                rarity = i.split("_")[2]
+            except IndexError:
+                raise Exception(
+                    f"\n{bcolors.ERROR}Blend_My_NFTs Error:\n"
+                    f"There is a naming issue with the following Attribute/Variant: '{i}'\n"
+                    f"Review the naming convention of Attribute and Variant collections here:\n{bcolors.RESET}"
+                    f"https://github.com/torrinworx/Blend_My_NFTs#blender-file-organization-and-structure\n"
+                )
+
+            allAttDataList[i] = {"name": name, "number": number, "rarity": rarity}
+        return allAttDataList
+
+    variantMetaData = attributeData(attributeVariants)
+
+    hierarchy = {}
+    for i in attributeCollections1:
+        colParLong = list(bpy.data.collections[str(i)].children)
+        colParShort = {}
+        for x in colParLong:
+            colParShort[x.name] = None
+        hierarchy[i] = colParShort
+
+    for a in hierarchy:
+        for b in hierarchy[a]:
+            for x in variantMetaData:
+                if str(x) == str(b):
+                    (hierarchy[a])[b] = variantMetaData[x]
+
+    return hierarchy
+
+
+# ======== GET COMBINATIONS ======== #
+
 # This section is used to get the number of combinations for checks and the UI display
 
 def get_combinations():
@@ -91,7 +204,7 @@ def get_combinations():
     combinations.
     """
 
-    hierarchy = DNA_Generator.get_hierarchy()
+    hierarchy = get_hierarchy()
     hierarchyByNum = []
 
     for i in hierarchy:
@@ -140,7 +253,7 @@ def check_Scene():  # Not complete
             f"\nhttps://github.com/torrinworx/Blend_My_NFTs#blender-file-organization-and-structure\n{bcolors.RESET}"
         )
 
-    hierarchy = DNA_Generator.get_hierarchy()
+    hierarchy = get_hierarchy()
     collections = bpy.context.scene.collection
 
     # attribute_naming_conventions
