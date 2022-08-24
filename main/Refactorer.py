@@ -6,7 +6,7 @@ import os
 import json
 import shutil
 
-from .Constants import bcolors, removeList, remove_file_by_extension
+from .Helpers import bcolors, removeList, remove_file_by_extension
 
 
 def reformatNFTCollection(refactor_panel_input):

@@ -53,7 +53,8 @@ def send_To_Record_JSON(input, reverse_order=False):
                                       input.enableMaterials,
                                       input.materialsFile,
                                       input.Blend_My_NFTs_Output,
-                                      input.batch_json_save_path
+                                      input.batch_json_save_path,
+                                      input.enable_debug,
                                       )
 
 

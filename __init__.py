@@ -36,13 +36,11 @@ sys.path.append(os.path.dirname(os.path.realpath(__file__)))
 
 # Local file imports:
 from main import \
-    Checks, \
+    Helpers, \
     DNA_Generator, \
     Exporter, \
-    get_combinations, \
     HeadlessUtil, \
     Intermediate, \
-    loading_animation, \
     Logic, \
     Material_Generator, \
     Metadata, \
@@ -55,12 +53,10 @@ from UILists import \
 
 if "bpy" in locals():
     modules = {
-        "Checks": Checks,
+        "Helpers": Helpers,
         "DNA_Generator": DNA_Generator,
         "Exporter": Exporter,
-        "get_combinations": get_combinations,
         "HeadlessUtil": HeadlessUtil,
-        "loading_animation": loading_animation,
         "Intermediate": Intermediate,
         "Logic": Logic,
         "Material_Generator": Material_Generator,
@@ -75,9 +71,9 @@ if "bpy" in locals():
         if i in locals():
             importlib.reload(modules[i])
 
-# ======== Persistant UI Refresh ======== #
-
+# ======== Persistent UI Refresh ======== #
 # Used for updating text and buttons in UI panels
+
 combinations: int = 0
 recommended_limit: int = 0
 dt = datetime.now(timezone.utc).astimezone()  # Date Time in UTC local
@@ -92,7 +88,7 @@ def Refresh_UI(dummy1, dummy2):
     global combinations
     global recommended_limit
 
-    combinations = (get_combinations.get_combinations())
+    combinations = (Helpers.get_combinations())
     recommended_limit = int(round(combinations / 2))
 
     # Add panel classes that require refresh to this refresh_panels tuple:
@@ -165,6 +161,7 @@ class BMNFTData:
     sender_from: str
     email_password: str
     receiver_to: str
+    enable_debug: bool
 
     custom_Fields: dict = None
     fail_state: Any = False
@@ -229,6 +226,7 @@ def getBMNFTData():
         sender_from=bpy.context.scene.input_tool.sender_from,
         email_password=bpy.context.scene.input_tool.email_password,
         receiver_to=bpy.context.scene.input_tool.receiver_to,
+        enable_debug=bpy.context.scene.input_tool.enable_debug
     )
 
     return data
@@ -464,7 +462,6 @@ class BMNFTS_PGT_Input_Properties(bpy.types.PropertyGroup):
     enableAutoSave: bpy.props.BoolProperty(name="Auto Save Before Generation",
                                            description="Automatically saves your Blender file when 'Generate NFTs & Create Metadata' button is clicked")
 
-    # Auto Shutdown:
     enableAutoShutdown: bpy.props.BoolProperty(name="Auto Shutdown",
                                                description="Automatically shuts down your computer after a Batch is finished Generating")
 
@@ -473,15 +470,16 @@ class BMNFTS_PGT_Input_Properties(bpy.types.PropertyGroup):
     hours: bpy.props.IntProperty(default=0, min=0)
     minutes: bpy.props.IntProperty(default=0, min=0)
 
-    # Send Batch Complete Email:
     emailNotificationBool: bpy.props.BoolProperty(name="Email Notifications",
                                                   description="Receive Email Notifications from Blender once a batch is finished generating")
     sender_from: bpy.props.StringProperty(name="From", default="from@example.com")
     email_password: bpy.props.StringProperty(name="Password", subtype='PASSWORD')
     receiver_to: bpy.props.StringProperty(name="To", default="to@example.com")
 
+    enable_debug: bpy.props.BoolProperty(name="Enable Debug Mode", description="Allows you to run Blend_My_NFTs without generating any content files and includes more console information.")
+
     # API Panel properties:
-    apiKey: bpy.props.StringProperty(name="API Key", subtype='PASSWORD')  # Test code for future faetures
+    apiKey: bpy.props.StringProperty(name="API Key", subtype='PASSWORD')  # Test code for future features
 
 
 # ======== Main Operators ======== #
@@ -602,6 +600,7 @@ class resume_failed_batch(bpy.types.Operator):
             sender_from=render_settings["sender_from"],
             email_password=render_settings["email_password"],
             receiver_to=render_settings["receiver_to"],
+            enable_debug=render_settings["enable_debug"],
 
             fail_state=_fail_state,
             failed_batch=_failed_batch,
@@ -999,6 +998,9 @@ class BMNFTS_PT_Other(bpy.types.Panel):
         else:
             row = layout.row()
             layout.label(text=f"**Set a Save Path in Create NFT Data to Export Settings")
+
+        row = layout.row()
+        row.prop(input_tool_scene, "enable_debug")
 
         row = layout.row()
 

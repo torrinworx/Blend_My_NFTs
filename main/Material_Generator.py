@@ -7,7 +7,7 @@ import bpy
 
 import json
 import random
-from .Constants import bcolors, removeList, remove_file_by_extension, save_result
+from .Helpers import bcolors, removeList, remove_file_by_extension, save_result
 
 
 def select_material(materialList, variant, enableRarity):

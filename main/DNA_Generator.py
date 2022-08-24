@@ -3,15 +3,13 @@
 
 import bpy
 import os
-import re
 import copy
 import time
 import json
 import random
 from functools import partial
-from .loading_animation import Loader
-from . import Rarity, Logic, Checks, Material_Generator
-from .Constants import bcolors, removeList, remove_file_by_extension
+from . import Rarity, Logic, Material_Generator, Helpers
+from .Helpers import bcolors, Loader
 
 
 def get_hierarchy():
@@ -124,10 +122,10 @@ def get_hierarchy():
     return hierarchy
 
 
-def generateNFT_DNA(collectionSize, enableRarity, enableLogic, logicFile, enableMaterials, materialsFile):
+def generateNFT_DNA(collectionSize, enableRarity, enableLogic, logicFile, enableMaterials, materialsFile, enable_debug):
     """
-   Returns batchDataDictionary containing the number of NFT combinations, hierarchy, and the DNAList.
-   """
+    Returns batchDataDictionary containing the number of NFT combinations, hierarchy, and the DNAList.
+    """
 
     hierarchy = get_hierarchy()
 
@@ -164,7 +162,6 @@ def generateNFT_DNA(collectionSize, enableRarity, enableLogic, logicFile, enable
         """
 
         singleDNA = ""
-        # Comments for debugging random, rarity, logic, and materials.
         if not enableRarity:
             singleDNA = createDNArandom(hierarchy)
         # print("============")
@@ -214,7 +211,7 @@ def generateNFT_DNA(collectionSize, enableRarity, enableLogic, logicFile, enable
 
     # Messages:
 
-    Checks.raise_Warning_collectionSize(DNAList, collectionSize)
+    Helpers.raise_Warning_collectionSize(DNAList, collectionSize)
 
     # Data stored in batchDataDictionary:
     DataDictionary["numNFTsGenerated"] = len(DNAList)
@@ -281,7 +278,7 @@ def makeBatches(collectionSize, nftsPerBatch, save_path, batch_json_save_path):
 
 
 def send_To_Record_JSON(collectionSize, nftsPerBatch, save_path, enableRarity, enableLogic, logicFile, enableMaterials,
-                        materialsFile, Blend_My_NFTs_Output, batch_json_save_path):
+                        materialsFile, Blend_My_NFTs_Output, batch_json_save_path, enable_debug):
     """
    Creates NFTRecord.json file and sends "batchDataDictionary" to it. NFTRecord.json is a permanent record of all DNA
    you've generated with all attribute variants. If you add new variants or attributes to your .blend file, other scripts
@@ -290,7 +287,7 @@ def send_To_Record_JSON(collectionSize, nftsPerBatch, save_path, enableRarity, e
    """
 
     # Checking Scene is compatible with BMNFTs:
-    Checks.check_Scene()
+    Helpers.check_Scene()
 
     # Messages:
     print(
@@ -313,18 +310,18 @@ def send_To_Record_JSON(collectionSize, nftsPerBatch, save_path, enableRarity, e
     def create_nft_data():
         try:
             DataDictionary = generateNFT_DNA(collectionSize, enableRarity, enableLogic, logicFile, enableMaterials,
-                                             materialsFile)
+                                             materialsFile, enable_debug)
             NFTRecord_save_path = os.path.join(Blend_My_NFTs_Output, "NFTRecord.json")
 
             # Checks:
 
-            Checks.raise_Warning_maxNFTs(nftsPerBatch, collectionSize)
-            Checks.check_Duplicates(DataDictionary["DNAList"])
-            Checks.raise_Error_ZeroCombinations()
+            Helpers.raise_Warning_maxNFTs(nftsPerBatch, collectionSize)
+            Helpers.check_Duplicates(DataDictionary["DNAList"])
+            Helpers.raise_Error_ZeroCombinations()
 
             if enableRarity:
-                Checks.check_Rarity(DataDictionary["hierarchy"], DataDictionary["DNAList"],
-                                    os.path.join(save_path, "Blend_My_NFTs Output/NFT_Data"))
+                Helpers.check_Rarity(DataDictionary["hierarchy"], DataDictionary["DNAList"],
+                                     os.path.join(save_path, "Blend_My_NFTs Output/NFT_Data"))
 
         except FileNotFoundError:
             raise FileNotFoundError(

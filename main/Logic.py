@@ -5,7 +5,7 @@ import bpy
 import random
 import collections
 
-from .Constants import bcolors, removeList, remove_file_by_extension, save_result
+from .Helpers import bcolors, removeList, remove_file_by_extension, save_result
 
 
 def reconstructDNA(deconstructedDNA):

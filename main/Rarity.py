@@ -4,7 +4,7 @@
 import bpy
 import random
 
-from .Constants import bcolors, removeList, remove_file_by_extension
+from .Helpers import bcolors, removeList, remove_file_by_extension
 
 
 def createDNArarity(hierarchy):
