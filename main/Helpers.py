@@ -11,7 +11,7 @@ from collections import Counter, defaultdict
 from . import DNA_Generator
 
 
-# ======== CONSTANTS ======== #
+# ======== ENABLE DEBUG ======== #
 
 # This section is used for debugging, coding, or general testing purposes.
 

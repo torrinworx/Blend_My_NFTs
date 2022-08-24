@@ -137,7 +137,7 @@ def render_and_save_NFTs(input):
 
     # If failed Batch is detected and user is resuming its generation:
     if input.fail_state:
-        print(f"{bcolors.ERROR}\nResuming Failed Batch {input.failed_batch}\n{bcolors.RESET}")
+        print(f"{bcolors.ERROR}\nResuming Batch #{input.failed_batch}\n{bcolors.RESET}")
         NFTs_in_Batch, hierarchy, BatchDNAList = getBatchData(input.failed_batch, input.batch_json_save_path)
         for a in range(input.failed_dna):
             del BatchDNAList[0]
@@ -145,7 +145,7 @@ def render_and_save_NFTs(input):
 
     # If user is generating the normal way:
     else:
-        print(f"\nGenerating Batch {input.batchToGenerate}\n")
+        print(f"\nGenerating Batch #{input.batchToGenerate}\n")
         NFTs_in_Batch, hierarchy, BatchDNAList = getBatchData(input.batchToGenerate, input.batch_json_save_path)
         save_generation_state(input)
         x = 1
@@ -262,8 +262,14 @@ def render_and_save_NFTs(input):
         # ob = bpy.data.objects['Text']  # Object name
         # ob.data.body = str(f"DNA: {full_single_dna}")  # Set text of Text Object ob
 
-        print(f"\n{bcolors.OK}|--- Generating NFT {x}/{NFTs_in_Batch}: {name} ---|{bcolors.RESET}")
-        print(f"DNA attribute list:\n{dnaDictionary}\nDNA Code:{single_dna}")
+        print(f"\n{bcolors.OK}======== Generating NFT {x}/{NFTs_in_Batch}: {name} ========{bcolors.RESET}")
+        print(f"Variants selected:")
+        print(f"{dnaDictionary}")
+        if input.enableMaterials:
+            print(f"Materials selected:")
+            print(f"{materialdnaDictionary}")
+
+        print(f"DNA Code:{full_single_dna}")
 
         for c in dnaDictionary:
             collection = dnaDictionary[c]
