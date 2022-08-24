@@ -44,7 +44,7 @@ def send_To_Record_JSON(input, reverse_order=False):
 
                     num += 1
 
-    DNA_Generator.send_To_Record_JSON(input.collectionSize,
+    DNA_Generator.send_to_record(input.collectionSize,
                                       input.nftsPerBatch,
                                       input.save_path,
                                       input.enableRarity,
