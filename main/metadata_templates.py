@@ -3,26 +3,37 @@
 # https://discord.gg/QTT7dzcuVs
 
 # Purpose:
-# This file returns the specified meta data format to the exporter.py for a given NFT DNA.
+# This file returns the specified metadata format to the exporter.py for a given NFT DNA.
 
-import bpy
 import os
 import json
 
-def sendMetaDataToJson(metaDataDict, save_path, file_name):
-    jsonMetaData = json.dumps(metaDataDict, indent=1, ensure_ascii=True)
-    with open(os.path.join(save_path, f"{file_name}.json"), 'w') as outfile:
-        outfile.write(jsonMetaData + '\n')
 
-def stripNums(variant):
+def send_metadata_to_json(meta_data_dict, save_path, file_name):
+    json_metadata = json.dumps(meta_data_dict, indent=1, ensure_ascii=True)
+    with open(os.path.join(save_path, f"{file_name}.json"), 'w') as outfile:
+        outfile.write(json_metadata + '\n')
+
+
+def strip_nums(variant):
     variant = str(variant).split('_')[0]
     return variant
 
-# Cardano Template
-def createCardanoMetadata(name, Order_Num, NFT_DNA, NFT_Variants, Material_Attributes,
-                          custom_Fields, enableCustomFields, cardano_description, cardanoMetadataPath):
 
-    metaDataDictCardano = {"721": {
+# Cardano Template
+def create_cardano_metadata(
+        name,
+        order_num,
+        nft_dna,
+        nft_variants,
+        material_attributes,
+        custom_fields,
+        enable_custom_fields,
+        cardano_description,
+        cardano_metadata_path
+):
+
+    meta_data_dict_cardano = {"721": {
         "<policy_id>": {
             name: {
                 "name": name,
@@ -35,73 +46,107 @@ def createCardanoMetadata(name, Order_Num, NFT_DNA, NFT_Variants, Material_Attri
     }}
 
     # Variants and Attributes:
-    for i in NFT_Variants:
-        metaDataDictCardano["721"]["<policy_id>"][name][i] = stripNums(NFT_Variants[i])
+    for i in nft_variants:
+        meta_data_dict_cardano["721"]["<policy_id>"][name][i] = strip_nums(nft_variants[i])
 
     # Material Variants and Attributes:
-    for i in Material_Attributes:
-        metaDataDictCardano["721"]["<policy_id>"][name][i] = Material_Attributes[i]
+    for i in material_attributes:
+        meta_data_dict_cardano["721"]["<policy_id>"][name][i] = material_attributes[i]
 
     # Custom Fields:
-    if enableCustomFields:
-        for i in custom_Fields:
-            metaDataDictCardano["721"]["<policy_id>"][name][i] = custom_Fields[i]
+    if enable_custom_fields:
+        for i in custom_fields:
+            meta_data_dict_cardano["721"]["<policy_id>"][name][i] = custom_fields[i]
 
-    sendMetaDataToJson(metaDataDictCardano, cardanoMetadataPath, name)
+    send_metadata_to_json(
+            meta_data_dict_cardano,
+            cardano_metadata_path,
+            name
+    )
 
 
 # Solana Template
-def createSolanaMetaData(name, Order_Num, NFT_DNA, NFT_Variants, Material_Attributes, custom_Fields, enableCustomFields,
-                         solana_description, solanaMetadataPath):
-    metaDataDictSolana = {"name": name, "symbol": "", "description": solana_description, "seller_fee_basis_points": None,
-                          "image": "", "animation_url": "", "external_url": ""}
+def createSolanaMetaData(
+        name,
+        order_num,
+        nft_dna,
+        nft_variants,
+        material_attributes,
+        custom_fields,
+        enable_custom_fields,
+        solana_description,
+        solana_metadata_path
+):
+    metadata_dict_solana = {
+            "name": name,
+            "symbol": "",
+            "description": solana_description,
+            "seller_fee_basis_points": None,
+            "image": "",
+            "animation_url": "",
+            "external_url": ""
+    }
 
     attributes = []
 
     # Variant and Attributes:
-    for i in NFT_Variants:
+    for i in nft_variants:
         dictionary = {
             "trait_type": i,
-            "value": stripNums(NFT_Variants[i])
+            "value": strip_nums(nft_variants[i])
         }
         attributes.append(dictionary)
 
     # Material Variants and Attributes:
-    for i in Material_Attributes:
+    for i in material_attributes:
         dictionary = {
             "trait_type": i,
-            "value": Material_Attributes[i]
+            "value": material_attributes[i]
         }
         attributes.append(dictionary)
 
     # Custom Fields:
-    if enableCustomFields:
-        for i in custom_Fields:
+    if enable_custom_fields:
+        for i in custom_fields:
             dictionary = {
                 "trait_type": i,
-                "value": custom_Fields[i]
+                "value": custom_fields[i]
             }
             attributes.append(dictionary)
 
-    metaDataDictSolana["attributes"] = attributes
-    metaDataDictSolana["collection"] = {
+    metadata_dict_solana["attributes"] = attributes
+    metadata_dict_solana["collection"] = {
         "name": "",
         "family": ""
     }
 
-    metaDataDictSolana["properties"] = {
+    metadata_dict_solana["properties"] = {
         "files": [{"uri": "", "type": ""}],
         "category": "",
         "creators": [{"address": "", "share": None}]
     }
 
-    sendMetaDataToJson(metaDataDictSolana, solanaMetadataPath, name)
+    send_metadata_to_json(
+            metadata_dict_solana,
+            solana_metadata_path,
+            name
+    )
 
 
 # ERC721 Template
-def createErc721MetaData(name, Order_Num, NFT_DNA, NFT_Variants, Material_Attributes, custom_Fields, enableCustomFields,
-                         erc721_description, erc721MetadataPath):
-    metaDataDictErc721 = {
+def create_erc721_meta_data(
+        name,
+        order_num,
+        nft_dna,
+        nft_variants,
+        material_attributes,
+        custom_fields,
+        enable_custom_fields,
+        erc721_description,
+        erc721_metadata_path
+):
+
+    metadata_dict_erc721 = {
         "name": name,
         "description": erc721_description,
         "image": "",
@@ -111,33 +156,36 @@ def createErc721MetaData(name, Order_Num, NFT_DNA, NFT_Variants, Material_Attrib
     attributes = []
 
     # Variants and Attributes:
-    for i in NFT_Variants:
+    for i in nft_variants:
         dictionary = {
             "trait_type": i,
-            "value": stripNums(NFT_Variants[i])
+            "value": strip_nums(nft_variants[i])
         }
 
         attributes.append(dictionary)
 
     # Material Variants and Attributes:
-    for i in Material_Attributes:
+    for i in material_attributes:
         dictionary = {
             "trait_type": i,
-            "value": Material_Attributes[i]
+            "value": material_attributes[i]
         }
 
         attributes.append(dictionary)
 
     # Custom Fields:
-    if enableCustomFields:
-        for i in custom_Fields:
+    if enable_custom_fields:
+        for i in custom_fields:
             dictionary = {
                 "trait_type": i,
-                "value": custom_Fields[i]
+                "value": custom_fields[i]
             }
             attributes.append(dictionary)
 
-    metaDataDictErc721["attributes"] = attributes
+    metadata_dict_erc721["attributes"] = attributes
 
-    sendMetaDataToJson(metaDataDictErc721, erc721MetadataPath, name)
-
+    send_metadata_to_json(
+            metadata_dict_erc721,
+            erc721_metadata_path,
+            name
+    )

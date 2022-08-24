@@ -5,7 +5,8 @@
 import sys
 import argparse
 
-def getPythonArgs():
+
+def get_python_args():
 
     argv = sys.argv
 
@@ -15,7 +16,7 @@ def getPythonArgs():
         argv = argv[argv.index("--") + 1:]  # get all args after "--"
 
     usage_text = (
-        "Run Blend_My_NFTs headlessly from the command line\n"
+        "Run Blend_My_NFTs heedlessly from the command line\n"
         "usage:\n"
         "blender -background --python <Path to BMNFTs __init__.py> -- --config-file <path to config file>"
     )
@@ -64,4 +65,4 @@ def getPythonArgs():
                         help="Overwrite the logic file path in the config file"
                         )
 
-    return (parser.parse_args(argv), parser)
+    return parser.parse_args(argv), parser

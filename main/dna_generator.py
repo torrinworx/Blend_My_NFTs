@@ -110,7 +110,7 @@ def generate_nft_dna(
         # print(f"Rarity DNA: {single_dna}")
 
         if enable_logic:
-            single_dna = logic.logicafyDNAsingle(hierarchy, single_dna, logic_file, enable_rarity, enable_materials)
+            single_dna = logic.logicafy_dna_single(hierarchy, single_dna, logic_file, enable_rarity, enable_materials)
         # print(f"Logic DNA: {single_dna}")
 
         if enable_materials:
@@ -170,7 +170,7 @@ def make_batches(
         batch_json_save_path
 ):
     """
-   Sorts through all the batches and outputs a given number of batches depending on collectionSize and nftsPerBatch.
+   Sorts through all the batches and outputs a given number of batches depending on collection_size and nfts_per_batch.
    These files are then saved as Batch#.json files to batch_json_save_path
    """
 

@@ -408,7 +408,7 @@ def raise_error_num_batches_greater_then(num_batches):
 # Raise Warnings:
 def raise_warning_max_nfts(nfts_per_batch, collection_size):
     """
-    Prints warning if nftsPerBatch is greater than collectionSize.
+    Prints warning if nfts_per_batch is greater than collection_size.
     """
 
     if nfts_per_batch > collection_size:
@@ -421,7 +421,7 @@ def raise_warning_max_nfts(nfts_per_batch, collection_size):
 
 def raise_warning_collection_size(dna_list, collection_size):
     """
-    Prints warning if BMNFTs cannot generate requested number of NFTs from a given collectionSize.
+    Prints warning if BMNFTs cannot generate requested number of NFTs from a given collection_size.
     """
 
     if len(dna_list) < collection_size:

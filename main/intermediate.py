@@ -1,21 +1,23 @@
-import json
 import bpy
+import json
 
 from main import dna_generator, exporter
 
+# TODO: migrate this code to the exporter.py to simplify render process into one file.
 
-def send_To_Record_JSON(input, reverse_order=False):
-    if input.enableLogic:
-        if input.enable_Logic_Json and input.logicFile:
-            input.logicFile = json.load(open(input.logicFile))
 
-        if input.enable_Logic_Json and not input.logicFile:
+def send_to_record(input, reverse_order=False):
+    if input.enable_logic:
+        if input.enable_logic_json and input.logic_file:
+            input.logic_file = json.load(open(input.logic_file))
+
+        if input.enable_logic_json and not input.logic_file:
             print({'ERROR'}, f"No Logic.json file path set. Please set the file path to your Logic.json file.")
 
-        if not input.enable_Logic_Json:
+        if not input.enable_logic_json:
             scn = bpy.context.scene
             if reverse_order:
-                input.logicFile = {}
+                input.logic_file = {}
                 num = 1
                 for i in range(scn.logic_fields_index, -1, -1):
                     item = scn.logic_fields[i]
@@ -23,20 +25,20 @@ def send_To_Record_JSON(input, reverse_order=False):
                     item_list1 = item.item_list1
                     rule_type = item.rule_type
                     item_list2 = item.item_list2
-                    input.logicFile[f"Rule-{num}"] = {
+                    input.logic_file[f"Rule-{num}"] = {
                         "IF": item_list1.split(','),
                         rule_type: item_list2.split(',')
                     }
                     print(rule_type)
                     num += 1
             else:
-                input.logicFile = {}
+                input.logic_file = {}
                 num = 1
                 for item in scn.logic_fields:
                     item_list1 = item.item_list1
                     rule_type = item.rule_type
                     item_list2 = item.item_list2
-                    input.logicFile[f"Rule-{num}"] = {
+                    input.logic_file[f"Rule-{num}"] = {
                         "IF": item_list1.split(','),
                         rule_type: item_list2.split(',')
                     }
@@ -44,37 +46,42 @@ def send_To_Record_JSON(input, reverse_order=False):
 
                     num += 1
 
-    dna_generator.send_to_record(input.collectionSize,
-                                      input.nftsPerBatch,
-                                      input.save_path,
-                                      input.enableRarity,
-                                      input.enableLogic,
-                                      input.logicFile,
-                                      input.enableMaterials,
-                                      input.materialsFile,
-                                      input.Blend_My_NFTs_Output,
-                                      input.batch_json_save_path,
-                                      input.enable_debug,
-                                      )
+    dna_generator.send_to_record(
+            input.collection_size,
+            input.nfts_per_batch,
+            input.save_path,
+            input.enable_rarity,
+            input.enable_logic,
+            input.logic_file,
+            input.enable_materials,
+            input.materials_file,
+            input.blend_my_nfts_output,
+            input.batch_json_save_path,
+            input.enable_debug,
+    )
 
 
-def render_and_save_NFTs(input, reverse_order=False):
-    if input.enableCustomFields:
+def render_and_save_nfts(input, reverse_order=False):
+    if input.enable_custom_fields:
         scn = bpy.context.scene
         if reverse_order:
             for i in range(scn.custom_metadata_fields_index, -1, -1):
                 item = scn.custom_metadata_fields[i]
-                if item.field_name in list(input.custom_Fields.keys()):
+                if item.field_name in list(input.custom_fields.keys()):
                     raise ValueError(
-                        f"A duplicate of '{item.field_name}' was found. Please ensure all Custom Metadata field Names are unique.")
+                        f"A duplicate of '{item.field_name}' was found. Please ensure all Custom Metadata field Names "
+                        f"are unique."
+                    )
                 else:
-                    input.custom_Fields[item.field_name] = item.field_value
+                    input.custom_fields[item.field_name] = item.field_value
         else:
             for item in scn.custom_metadata_fields:
-                if item.field_name in list(input.custom_Fields.keys()):
+                if item.field_name in list(input.custom_fields.keys()):
                     raise ValueError(
-                        f"A duplicate of '{item.field_name}' was found. Please ensure all Custom Metadata field Names are unique.")
+                        f"A duplicate of '{item.field_name}' was found. Please ensure all Custom Metadata field Names "
+                        f"are unique."
+                    )
                 else:
-                    input.custom_Fields[item.field_name] = item.field_value
+                    input.custom_fields[item.field_name] = item.field_value
 
-    Exporter.render_and_save_nfts(input)
+    exporter.render_and_save_nfts(input)
