@@ -3,7 +3,7 @@
 # https://discord.gg/QTT7dzcuVs
 
 # Purpose:
-# This file returns the specified meta data format to the Exporter.py for a given NFT DNA.
+# This file returns the specified meta data format to the exporter.py for a given NFT DNA.
 
 import bpy
 import os

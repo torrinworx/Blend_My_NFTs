@@ -7,7 +7,7 @@ import bpy
 
 import json
 import random
-from .Helpers import TextColors
+from .helpers import TextColors
 
 
 def select_material(materialList, variant, enableRarity):

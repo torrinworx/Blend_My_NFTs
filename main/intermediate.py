@@ -1,7 +1,7 @@
 import json
 import bpy
 
-from main import DNA_Generator, Exporter
+from main import dna_generator, exporter
 
 
 def send_To_Record_JSON(input, reverse_order=False):
@@ -44,7 +44,7 @@ def send_To_Record_JSON(input, reverse_order=False):
 
                     num += 1
 
-    DNA_Generator.send_to_record(input.collectionSize,
+    dna_generator.send_to_record(input.collectionSize,
                                       input.nftsPerBatch,
                                       input.save_path,
                                       input.enableRarity,
@@ -77,4 +77,4 @@ def render_and_save_NFTs(input, reverse_order=False):
                 else:
                     input.custom_Fields[item.field_name] = item.field_value
 
-    Exporter.render_and_save_NFTs(input)
+    Exporter.render_and_save_nfts(input)

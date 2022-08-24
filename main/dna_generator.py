@@ -7,8 +7,8 @@ import json
 import random
 import traceback
 from functools import partial
-from . import Logic, Material_Generator, Helpers
-from .Helpers import TextColors
+from . import logic, material_generator, helpers
+from .helpers import TextColors
 
 
 def generate_nft_dna(
@@ -24,7 +24,7 @@ def generate_nft_dna(
     Returns batchDataDictionary containing the number of NFT combinations, hierarchy, and the dna_list.
     """
 
-    hierarchy = Helpers.get_hierarchy()
+    hierarchy = helpers.get_hierarchy()
 
     # DNA random, Rarity and Logic methods:
     data_dictionary = {}
@@ -110,11 +110,11 @@ def generate_nft_dna(
         # print(f"Rarity DNA: {single_dna}")
 
         if enable_logic:
-            single_dna = Logic.logicafyDNAsingle(hierarchy, single_dna, logic_file, enable_rarity, enable_materials)
+            single_dna = logic.logicafyDNAsingle(hierarchy, single_dna, logic_file, enable_rarity, enable_materials)
         # print(f"Logic DNA: {single_dna}")
 
         if enable_materials:
-            single_dna = Material_Generator.apply_materials(hierarchy, single_dna, materials_file, enable_rarity)
+            single_dna = material_generator.apply_materials(hierarchy, single_dna, materials_file, enable_rarity)
         # print(f"Materials DNA: {single_dna}")
 
         # print("============\n")
@@ -153,7 +153,7 @@ def generate_nft_dna(
 
     # Messages:
 
-    Helpers.raise_warning_collection_size(dna_list, collection_size)
+    helpers.raise_warning_collection_size(dna_list, collection_size)
 
     # Data stored in batchDataDictionary:
     data_dictionary["num_nfts_generated"] = len(dna_list)
@@ -244,7 +244,7 @@ def send_to_record(
    """
 
     # Checking Scene is compatible with BMNFTs:
-    Helpers.check_scene()
+    helpers.check_scene()
 
     # Messages:
     print(
@@ -285,12 +285,12 @@ def send_to_record(
             nft_record_save_path = os.path.join(blend_my_nfts_output, "NFTRecord.json")
 
             # Checks:
-            Helpers.raise_warning_max_nfts(nfts_per_batch, collection_size)
-            Helpers.check_duplicates(data_dictionary["dna_list"])
-            Helpers.raise_error_zero_combinations()
+            helpers.raise_warning_max_nfts(nfts_per_batch, collection_size)
+            helpers.check_duplicates(data_dictionary["dna_list"])
+            helpers.raise_error_zero_combinations()
 
             if enable_rarity:
-                Helpers.check_rarity(data_dictionary["hierarchy"], data_dictionary["dna_list"],
+                helpers.check_rarity(data_dictionary["hierarchy"], data_dictionary["dna_list"],
                                      os.path.join(save_path, "Blend_My_NFTs Output/NFT_Data"))
 
         except FileNotFoundError:
@@ -316,15 +316,15 @@ def send_to_record(
         except Exception:
             traceback.print_exc()
             raise (
-                f"\n{Helpers.TextColors.ERROR}Blend_My_NFTs Error:\n"
+                f"\n{TextColors.ERROR}Blend_My_NFTs Error:\n"
                 f"Data not saved to NFTRecord.json. Please review your Blender scene and ensure it follows "
                 f"the naming conventions and scene structure. For more information, "
-                f"see:\n{Helpers.TextColors.RESET}"
+                f"see:\n{TextColors.RESET}"
                 f"https://github.com/torrinworx/Blend_My_NFTs#blender-file-organization-and-structure\n"
             )
 
     # Loading Animation:
-    loading = Helpers.Loader(f'Creating NFT DNA...', '').start()
+    loading = helpers.Loader(f'Creating NFT DNA...', '').start()
     create_nft_data()
     make_batches(collection_size, nfts_per_batch, save_path, batch_json_save_path)
     loading.stop()
@@ -332,5 +332,5 @@ def send_to_record(
     time_end = time.time()
 
     print(
-        f"{Helpers.TextColors.OK}Created and saved NFT DNA in {time_end - time_start}s.\n{Helpers.TextColors.RESET}"
+        f"{TextColors.OK}Created and saved NFT DNA in {time_end - time_start}s.\n{TextColors.RESET}"
     )

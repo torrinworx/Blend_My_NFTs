@@ -1,11 +1,11 @@
 # Purpose:
-# The purpose of this file is to add logic and rules to the DNA that are sent to the NFTRecord.json file in DNA_Generator.py
+# The purpose of this file is to add logic and rules to the DNA that are sent to the NFTRecord.json file in dna_generator.py
 
 import bpy
 import random
 import collections
 
-from .Helpers import TextColors, removeList, remove_file_by_extension, save_result
+from .helpers import TextColors, removeList, remove_file_by_extension, save_result
 
 
 def reconstructDNA(deconstructedDNA):
