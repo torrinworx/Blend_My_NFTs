@@ -5,7 +5,7 @@ import bpy
 import random
 import collections
 
-from .Helpers import bcolors, removeList, remove_file_by_extension, save_result
+from .Helpers import TextColors, removeList, remove_file_by_extension, save_result
 
 
 def reconstructDNA(deconstructedDNA):
@@ -117,9 +117,9 @@ def apply_rules_to_dna(hierarchy, deconstructed_DNA, if_dict, result_dict, resul
                             variantNum = random.choices(number_List_Of_i, weights=rarity_List_Of_i, k=1)
                     except IndexError:
                         raise IndexError(
-                            f"\n{bcolors.ERROR}Blend_My_NFTs Error:\n"
+                            f"\n{TextColors.ERROR}Blend_My_NFTs Error:\n"
                             f"An issue was found within the Attribute collection '{a}'. For more information on Blend_My_NFTs compatible scenes, "
-                            f"see:\n{bcolors.RESET}"
+                            f"see:\n{TextColors.RESET}"
                             f"https://github.com/torrinworx/Blend_My_NFTs#blender-file-organization-and-structure\n"
                         )
                 else:
@@ -127,9 +127,9 @@ def apply_rules_to_dna(hierarchy, deconstructed_DNA, if_dict, result_dict, resul
                         variantNum = random.choices(number_List_Of_i, k=1)
                     except IndexError:
                         raise IndexError(
-                            f"\n{bcolors.ERROR}Blend_My_NFTs Error:\n"
+                            f"\n{TextColors.ERROR}Blend_My_NFTs Error:\n"
                             f"An issue was found within the Attribute collection '{a}'. For more information on Blend_My_NFTs compatible scenes, "
-                            f"see:\n{bcolors.RESET}"
+                            f"see:\n{TextColors.RESET}"
                             f"https://github.com/torrinworx/Blend_My_NFTs#blender-file-organization-and-structure\n"
                         )
                 deconstructed_DNA[int(attribute_index)] = str(variantNum[0])

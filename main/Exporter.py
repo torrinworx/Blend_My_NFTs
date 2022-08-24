@@ -11,7 +11,7 @@ import smtplib
 import datetime
 import platform
 
-from .Helpers import bcolors, Loader
+from .Helpers import TextColors, Loader
 from .Metadata import createCardanoMetadata, createSolanaMetaData, createErc721MetaData
 
 
@@ -137,7 +137,7 @@ def render_and_save_NFTs(input):
 
     # If failed Batch is detected and user is resuming its generation:
     if input.fail_state:
-        print(f"{bcolors.ERROR}\nResuming Batch #{input.failed_batch}\n{bcolors.RESET}")
+        print(f"{TextColors.ERROR}\nResuming Batch #{input.failed_batch}\n{TextColors.RESET}")
         NFTs_in_Batch, hierarchy, BatchDNAList = getBatchData(input.failed_batch, input.batch_json_save_path)
         for a in range(input.failed_dna):
             del BatchDNAList[0]
@@ -247,10 +247,10 @@ def render_and_save_NFTs(input):
                     bpy.data.collections[j].hide_viewport = True
                 except KeyError:
                     raise TypeError(
-                        f"\n{bcolors.ERROR}Blend_My_NFTs Error:\n"
+                        f"\n{TextColors.ERROR}Blend_My_NFTs Error:\n"
                         f"The Collection '{j}' appears to be missing or has been renamed. If you made any changes to "
                         f"your .blned file scene, ensure you re-create your NFT Data so Blend_My_NFTs can read your scene."
-                        f"For more information see:{bcolors.RESET}"
+                        f"For more information see:{TextColors.RESET}"
                         f"\nhttps://github.com/torrinworx/Blend_My_NFTs#blender-file-organization-and-structure\n"
                     )
 
@@ -262,7 +262,7 @@ def render_and_save_NFTs(input):
         # ob = bpy.data.objects['Text']  # Object name
         # ob.data.body = str(f"DNA: {full_single_dna}")  # Set text of Text Object ob
 
-        print(f"\n{bcolors.OK}======== Generating NFT {x}/{NFTs_in_Batch}: {name} ========{bcolors.RESET}")
+        print(f"\n{TextColors.OK}======== Generating NFT {x}/{NFTs_in_Batch}: {name} ========{TextColors.RESET}")
         print(f"\nVariants selected:")
         print(f"{dnaDictionary}")
         if input.enableMaterials:
@@ -279,7 +279,7 @@ def render_and_save_NFTs(input):
 
         time_start_2 = time.time()
 
-        # Main paths for batch subfolders:
+        # Main paths for batch sub-folders:
         batchFolder = os.path.join(input.nftBatch_save_path, "Batch" + str(input.batchToGenerate))
 
         imageFolder = os.path.join(batchFolder, "Images")
@@ -307,7 +307,7 @@ def render_and_save_NFTs(input):
         # Generation/Rendering:
         if input.enableImages:
 
-            print(f"{bcolors.OK}---Image---{bcolors.RESET}")
+            print(f"{TextColors.OK}---Image---{TextColors.RESET}")
 
             image_render_time_start = time.time()
 
@@ -329,11 +329,11 @@ def render_and_save_NFTs(input):
             image_render_time_end = time.time()
 
             print(
-                f"{bcolors.OK}Rendered image in {image_render_time_end - image_render_time_start}s.\n{bcolors.RESET}"
+                f"{TextColors.OK}Rendered image in {image_render_time_end - image_render_time_start}s.\n{TextColors.RESET}"
             )
 
         if input.enableAnimations:
-            print(f"{bcolors.OK}---Animation---{bcolors.RESET}")
+            print(f"{TextColors.OK}---Animation---{TextColors.RESET}")
 
             animation_render_time_start = time.time()
 
@@ -380,11 +380,11 @@ def render_and_save_NFTs(input):
             animation_render_time_end = time.time()
 
             print(
-                f"{bcolors.OK}Rendered animation in {animation_render_time_end - animation_render_time_start}s.\n{bcolors.RESET}"
+                f"{TextColors.OK}Rendered animation in {animation_render_time_end - animation_render_time_start}s.\n{TextColors.RESET}"
             )
 
         if input.enableModelsBlender:
-            print(f"{bcolors.OK}---3D Model---{bcolors.RESET}")
+            print(f"{TextColors.OK}---3D Model---{TextColors.RESET}")
 
             model_generation_time_start = time.time()
 
@@ -463,7 +463,7 @@ def render_and_save_NFTs(input):
             model_generation_time_end = time.time()
 
             print(
-                f"{bcolors.OK}Generated 3D model in {model_generation_time_end - model_generation_time_start}s.\n{bcolors.RESET}"
+                f"{TextColors.OK}Generated 3D model in {model_generation_time_end - model_generation_time_start}s.\n{TextColors.RESET}"
             )
 
         # Generating Metadata:

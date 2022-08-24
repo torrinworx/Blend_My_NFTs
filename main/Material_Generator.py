@@ -7,7 +7,7 @@ import bpy
 
 import json
 import random
-from .Helpers import bcolors, removeList, remove_file_by_extension, save_result
+from .Helpers import TextColors
 
 
 def select_material(materialList, variant, enableRarity):
@@ -25,8 +25,8 @@ def select_material(materialList, variant, enableRarity):
         material_rarity_percent = materialList[material]
         rarity_List_Of_i.append(float(material_rarity_percent))
 
-    print(f"MATERIAL_LIST_OF_I:{material_List_Of_i}")
-    print(f"RARITY_LIST_OF_I:{rarity_List_Of_i}")
+    # print(f"MATERIAL_LIST_OF_I:{material_List_Of_i}")
+    # print(f"RARITY_LIST_OF_I:{rarity_List_Of_i}")
 
     for b in rarity_List_Of_i:
         if b == 0:
@@ -42,9 +42,9 @@ def select_material(materialList, variant, enableRarity):
                 selected_material = random.choices(material_List_Of_i, weights=rarity_List_Of_i, k=1)
         except IndexError:
             raise IndexError(
-                f"\n{bcolors.ERROR}Blend_My_NFTs Error:\n"
+                f"\n{TextColors.ERROR}Blend_My_NFTs Error:\n"
                 f"An issue was found within the Material List of the Variant collection '{variant}'. For more information on Blend_My_NFTs compatible scenes, "
-                f"see:\n{bcolors.RESET}"
+                f"see:\n{TextColors.RESET}"
                 f"https://github.com/torrinworx/Blend_My_NFTs#blender-file-organization-and-structure\n"
             )
     else:
@@ -52,9 +52,9 @@ def select_material(materialList, variant, enableRarity):
             selected_material = random.choices(material_List_Of_i, k=1)
         except IndexError:
             raise IndexError(
-                f"\n{bcolors.ERROR}Blend_My_NFTs Error:\n"
+                f"\n{TextColors.ERROR}Blend_My_NFTs Error:\n"
                 f"An issue was found within the Material List of the Variant collection '{variant}'. For more information on Blend_My_NFTs compatible scenes, "
-                f"see:\n{bcolors.RESET}"
+                f"see:\n{TextColors.RESET}"
                 f"https://github.com/torrinworx/Blend_My_NFTs#blender-file-organization-and-structure\n"
             )
 

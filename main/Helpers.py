@@ -9,6 +9,7 @@ from threading import Thread
 from shutil import get_terminal_size
 from collections import Counter, defaultdict
 
+
 # ======== ENABLE DEBUG ======== #
 
 # This section is used for debugging, coding, or general testing purposes.
@@ -19,10 +20,10 @@ def enable_debug(enable_debug_bool):
         import logging
 
         logging.basicConfig(
-            filename="./log.txt",
-            level=logging.DEBUG,
-            format='[%(levelname)s][%(asctime)s]\n%(message)s\n',
-            datefmt='%Y-%m-%d %H:%M:%S'
+                filename="./log.txt",
+                level=logging.DEBUG,
+                format='[%(levelname)s][%(asctime)s]\n%(message)s\n',
+                datefmt='%Y-%m-%d %H:%M:%S'
         )
 
 
@@ -36,9 +37,9 @@ removeList = [".gitignore", ".DS_Store", "desktop.ini", ".ini"]
 
 def remove_file_by_extension(dirlist):
     """
-    Checks if a given directory list contains any of the files or file extensions listed above, if so, remove them from
-    list and return a clean dir list. These files interfer with BMNFTs operations and should be removed whenever dealing
-    with directories.
+    Checks if a given directory list contains any of the files or file extensions listed above, if so, remove them
+    from list and return a clean dir list. These files interfere with BMNFTs operations and should be removed
+    whenever dealing with directories.
     """
 
     if str(type(dirlist)) == "<class 'list'>":
@@ -52,7 +53,7 @@ def remove_file_by_extension(dirlist):
     return return_dirs
 
 
-class bcolors:
+class TextColors:
     """
     The colour of console messages.
     """
@@ -91,10 +92,10 @@ def get_hierarchy():
 
     coll = bpy.context.scene.collection
 
-    scriptIgnoreCollection = bpy.data.collections["Script_Ignore"]
+    script_ignore_collection = bpy.data.collections["Script_Ignore"]
 
-    listAllCollInScene = []
-    listAllCollections = []
+    list_all_coll_in_scene = []
+    list_all_collections = []
 
     def traverse_tree(t):
         yield t
@@ -102,62 +103,62 @@ def get_hierarchy():
             yield from traverse_tree(child)
 
     for c in traverse_tree(coll):
-        listAllCollInScene.append(c)
+        list_all_coll_in_scene.append(c)
 
-    for i in listAllCollInScene:
-        listAllCollections.append(i.name)
+    for i in list_all_coll_in_scene:
+        list_all_collections.append(i.name)
 
-    listAllCollections.remove(scriptIgnoreCollection.name)
+    list_all_collections.remove(script_ignore_collection.name)
 
-    if "Scene Collection" in listAllCollections:
-        listAllCollections.remove("Scene Collection")
+    if "Scene Collection" in list_all_collections:
+        list_all_collections.remove("Scene Collection")
 
-    if "Master Collection" in listAllCollections:
-        listAllCollections.remove("Master Collection")
+    if "Master Collection" in list_all_collections:
+        list_all_collections.remove("Master Collection")
 
-    def allScriptIgnore(scriptIgnoreCollection):
-        # Removes all collections, sub collections in Script_Ignore collection from listAllCollections.
+    def all_script_ignore(script_ignore_coll):
+        # Removes all collections, sub collections in Script_Ignore collection from list_all_collections.
 
-        for coll in list(scriptIgnoreCollection.children):
-            listAllCollections.remove(coll.name)
-            listColl = list(coll.children)
-            if len(listColl) > 0:
-                allScriptIgnore(coll)
+        for collection in list(script_ignore_coll.children):
+            list_all_collections.remove(collection.name)
+            list_coll = list(collection.children)
+            if len(list_coll) > 0:
+                all_script_ignore(collection)
 
-    allScriptIgnore(scriptIgnoreCollection)
-    listAllCollections.sort()
+    all_script_ignore(script_ignore_collection)
+    list_all_collections.sort()
 
     exclude = ["_"]  # Excluding characters that identify a Variant
-    attributeCollections = copy.deepcopy(listAllCollections)
+    attribute_collections = copy.deepcopy(list_all_collections)
 
     def filter_num():
         """
-        This function removes items from 'attributeCollections' if they include values from the 'exclude' variable.
-        It removes child collections from the parent collections in from the "listAllCollections" list.
+        This function removes items from 'attribute_collections' if they include values from the 'exclude' variable.
+        It removes child collections from the parent collections in from the "list_all_collections" list.
         """
-        for x in attributeCollections:
-            if any(a in x for a in exclude):
-                attributeCollections.remove(x)
+        for x in attribute_collections:
+            if any(i in x for i in exclude):
+                attribute_collections.remove(x)
 
-    for i in range(len(listAllCollections)):
+    for i in range(len(list_all_collections)):
         filter_num()
 
-    attributeVariants = [x for x in listAllCollections if x not in attributeCollections]
-    attributeCollections1 = copy.deepcopy(attributeCollections)
+    attribute_variants = [x for x in list_all_collections if x not in attribute_collections]
+    attribute_collections1 = copy.deepcopy(attribute_collections)
 
-    def attributeData(attributeVariants):
+    def attribute_data(att_vars):
         """
-      Creates a dictionary of each attribute
-      """
-        allAttDataList = {}
-        for i in attributeVariants:
+        Creates a dictionary of each attribute
+        """
+        all_att_data_list = {}
+        for i in att_vars:
             # Check if name follows naming conventions:
             if int(i.count("_")) > 2 and int(i.split("_")[1]) > 0:
                 raise Exception(
-                    f"\n{bcolors.ERROR}Blend_My_NFTs Error:\n"
-                    f"There is a naming issue with the following Attribute/Variant: '{i}'\n"
-                    f"Review the naming convention of Attribute and Variant collections here:\n{bcolors.RESET}"
-                    f"https://github.com/torrinworx/Blend_My_NFTs#blender-file-organization-and-structure\n"
+                        f"\n{TextColors.ERROR}Blend_My_NFTs Error:\n"
+                        f"There is a naming issue with the following Attribute/Variant: '{i}'\n"
+                        f"Review the naming convention of Attribute and Variant collections here:\n{TextColors.RESET}"
+                        f"https://github.com/torrinworx/Blend_My_NFTs#blender-file-organization-and-structure\n"
                 )
 
             try:
@@ -166,30 +167,30 @@ def get_hierarchy():
                 rarity = i.split("_")[2]
             except IndexError:
                 raise Exception(
-                    f"\n{bcolors.ERROR}Blend_My_NFTs Error:\n"
-                    f"There is a naming issue with the following Attribute/Variant: '{i}'\n"
-                    f"Review the naming convention of Attribute and Variant collections here:\n{bcolors.RESET}"
-                    f"https://github.com/torrinworx/Blend_My_NFTs#blender-file-organization-and-structure\n"
+                        f"\n{TextColors.ERROR}Blend_My_NFTs Error:\n"
+                        f"There is a naming issue with the following Attribute/Variant: '{i}'\n"
+                        f"Review the naming convention of Attribute and Variant collections here:\n{TextColors.RESET}"
+                        f"https://github.com/torrinworx/Blend_My_NFTs#blender-file-organization-and-structure\n"
                 )
 
-            allAttDataList[i] = {"name": name, "number": number, "rarity": rarity}
-        return allAttDataList
+            all_att_data_list[i] = {"name": name, "number": number, "rarity": rarity}
+        return all_att_data_list
 
-    variantMetaData = attributeData(attributeVariants)
+    variant_meta_data = attribute_data(attribute_variants)
 
     hierarchy = {}
-    for i in attributeCollections1:
-        colParLong = list(bpy.data.collections[str(i)].children)
-        colParShort = {}
-        for x in colParLong:
-            colParShort[x.name] = None
-        hierarchy[i] = colParShort
+    for i in attribute_collections1:
+        col_par_long = list(bpy.data.collections[str(i)].children)
+        col_par_short = {}
+        for x in col_par_long:
+            col_par_short[x.name] = None
+        hierarchy[i] = col_par_short
 
     for a in hierarchy:
         for b in hierarchy[a]:
-            for x in variantMetaData:
-                if str(x) == str(b):
-                    (hierarchy[a])[b] = variantMetaData[x]
+            for x in variant_meta_data:
+                if str(x)==str(b):
+                    (hierarchy[a])[b] = variant_meta_data[x]
 
     return hierarchy
 
@@ -205,17 +206,17 @@ def get_combinations():
     """
 
     hierarchy = get_hierarchy()
-    hierarchyByNum = []
+    hierarchy_by_num = []
 
     for i in hierarchy:
         # Ignore Collections with nothing in them
-        if len(hierarchy[i]) != 0:
-            hierarchyByNum.append(len(hierarchy[i]))
+        if len(hierarchy[i])!=0:
+            hierarchy_by_num.append(len(hierarchy[i]))
         else:
             print(f"The following collection has been identified as empty: {i}")
 
     combinations = 1
-    for i in hierarchyByNum:
+    for i in hierarchy_by_num:
         combinations = combinations * i
 
     return combinations
@@ -230,7 +231,7 @@ def get_combinations():
 # This section is provided for transparency. The accuracy of the rarity values you set in your .blend file as outlined
 # in the README.md file are dependent on the maxNFTs, and the maximum number of combinations of your NFT collection.
 
-def check_Scene():  # Not complete
+def check_scene():  # Not complete
     """
     Checks if Blender file Scene follows the Blend_My_NFTs conventions. If not, raises error with all instances of
     violations.
@@ -247,10 +248,11 @@ def check_Scene():  # Not complete
         script_ignore_exists = True
     except KeyError:
         raise TypeError(
-            f"\n{bcolors.ERROR}Blend_My_NFTs Error:\n"
-            f"Add a Script_Ignore collection to your Blender scene and ensure the name is exactly 'Script_Ignore'. For more information, "
-            f"see:"
-            f"\nhttps://github.com/torrinworx/Blend_My_NFTs#blender-file-organization-and-structure\n{bcolors.RESET}"
+                f"\n{TextColors.ERROR}Blend_My_NFTs Error:\n"
+                f"Add a Script_Ignore collection to your Blender scene and ensure the name is exactly 'Script_Ignore'. "
+                f"For more information, "
+                f"see:"
+                f"\nhttps://github.com/torrinworx/Blend_My_NFTs#blender-file-organization-and-structure\n{TextColors.RESET}"
         )
 
     hierarchy = get_hierarchy()
@@ -259,84 +261,77 @@ def check_Scene():  # Not complete
     # attribute_naming_conventions
 
 
-def check_Rarity(hierarchy, DNAListFormatted, save_path):
+def check_rarity(hierarchy, dna_list_formatted, save_path):
     """Checks rarity percentage of each Variant, then sends it to RarityData.json in NFT_Data folder."""
 
-    DNAList = []
-    for i in DNAListFormatted:
-        DNAList.append(list(i.keys())[0])
-
-    numNFTsGenerated = len(DNAList)
-
-    numDict = defaultdict(list)
-
+    dna_list = [list(i.keys())[0] for i in dna_list_formatted]
+    num_nfts_generated = len(dna_list)
+    num_dict = defaultdict(list)
     hierarchy.keys()
 
-    for i in DNAList:
-        dnaSplitList = i.split("-")
+    for i in dna_list:
+        dna_split_list = i.split("-")
 
-        for j, k in zip(dnaSplitList, hierarchy.keys()):
-            numDict[k].append(j)
+        for j, k in zip(dna_split_list, hierarchy.keys()):
+            num_dict[k].append(j)
 
-    numDict = dict(numDict)
+    num_dict = dict(num_dict)
 
-    for i in numDict:
-        count = dict(Counter(numDict[i]))
-        numDict[i] = count
+    for i in num_dict:
+        count = dict(Counter(num_dict[i]))
+        num_dict[i] = count
 
-    fullNumName = {}
+    full_num_name = {}
 
     for i in hierarchy:
-        fullNumName[i] = {}
+        full_num_name[i] = {}
         for j in hierarchy[i]:
-            variantNum = hierarchy[i][j]["number"]
+            variant_num = hierarchy[i][j]["number"]
 
-            fullNumName[i][variantNum] = j
+            full_num_name[i][variant_num] = j
 
-    completeData = {}
+    complete_data = {}
 
-    for i, j in zip(fullNumName, numDict):
+    for i, j in zip(full_num_name, num_dict):
         x = {}
-
-        for k in fullNumName[i]:
-
-            for l in numDict[j]:
+        for k in full_num_name[i]:
+            for l in num_dict[j]:
                 if l == k:
-                    name = fullNumName[i][k]
-                    num = numDict[j][l]
-                    x[name] = [(str(round(((num / numNFTsGenerated) * 100), 2)) + "%"), str(num)]
+                    name = full_num_name[i][k]
+                    num = num_dict[j][l]
+                    x[name] = [(str(round(((num / num_nfts_generated) * 100), 2)) + "%"), str(num)]
 
-        completeData[i] = x
+        complete_data[i] = x
 
     print(
-        f"\n{bcolors.OK}\n"
-        f"Rarity Checker is active. These are the percentages for each variant per attribute you set in your .blend file:"
-        f"\n{bcolors.RESET}"
+            f"\n{TextColors.OK}\n"
+            f"Rarity Checker is active. These are the percentages for each variant per attribute you set in your .blend"
+            f" file: \n{TextColors.RESET}"
     )
 
-    for i in completeData:
+    for i in complete_data:
         print(i + ":")
-        for j in completeData[i]:
-            print("   " + j + ": " + completeData[i][j][0] + "   Occurrences: " + completeData[i][j][1])
+        for j in complete_data[i]:
+            print("   " + j + ": " + complete_data[i][j][0] + "   Occurrences: " + complete_data[i][j][1])
 
-    jsonMetaData = json.dumps(completeData, indent=1, ensure_ascii=True)
+    json_meta_data = json.dumps(complete_data, indent=1, ensure_ascii=True)
 
     with open(os.path.join(save_path, "RarityData.json"), 'w') as outfile:
-        outfile.write(jsonMetaData + '\n')
+        outfile.write(json_meta_data + '\n')
     path = os.path.join(save_path, "RarityData.json")
-    print(bcolors.OK + f"Rarity Data has been saved to {path}." + bcolors.RESET)
+    print(TextColors.OK + f"Rarity Data has been saved to {path}." + TextColors.RESET)
 
 
-def check_Duplicates(DNAListFormatted):
-    """Checks if there are duplicates in DNAList before NFTRecord.json is sent to JSON file."""
-    DNAList = []
-    for i in DNAListFormatted:
-        DNAList.append(list(i.keys())[0])
+def check_duplicates(dna_list_formatted):
+    """Checks if there are duplicates in dna_list before NFTRecord.json is sent to JSON file."""
+    dna_list = []
+    for i in dna_list_formatted:
+        dna_list.append(list(i.keys())[0])
 
     duplicates = 0
     seen = set()
 
-    for x in DNAList:
+    for x in dna_list:
         if x in seen:
             print(x)
             duplicates += 1
@@ -345,7 +340,7 @@ def check_Duplicates(DNAListFormatted):
     print(f"\nNFTRecord.json contains {duplicates} duplicate NFT DNA.")
 
 
-def check_FailedBatches(batch_json_save_path):
+def check_failed_batches(batch_json_save_path):
     fail_state = False
     failed_batch = None
     failed_dna = None
@@ -356,10 +351,10 @@ def check_FailedBatches(batch_json_save_path):
 
         for i in batch_folders:
             batch = json.load(open(os.path.join(batch_json_save_path, i)))
-            NFTs_in_Batch = batch["NFTs_in_Batch"]
+            nfts_in_batch = batch["NFTs_in_Batch"]
             if "Generation Save" in batch:
                 dna_generated = batch["Generation Save"][-1]["DNA Generated"]
-                if dna_generated is not None and dna_generated < NFTs_in_Batch:
+                if dna_generated is not None and dna_generated < nfts_in_batch:
                     fail_state = True
                     failed_batch = int(i.removeprefix("Batch").removesuffix(".json"))
                     failed_dna = dna_generated
@@ -368,74 +363,80 @@ def check_FailedBatches(batch_json_save_path):
 
 
 # Raise Errors:
-def raise_Error_numBatches(maxNFTs, nftsPerBatch):
+def raise_error_num_batches(max_nfts, nfts_per_batch):
     """Checks if number of Batches is less than maxNFTs, if not raises error."""
 
     try:
-        numBatches = maxNFTs / nftsPerBatch
-        return numBatches
+        num_batches = max_nfts / nfts_per_batch
+        return num_batches
     except ZeroDivisionError:
         raise ZeroDivisionError(
-            f"\n{bcolors.ERROR}Blend_My_NFTs Error:\n"
-            f"The number of NFTs per Batch must be greater than ZERO."
-            f"Please review your Blender scene and ensure it follows "
-            f"the naming conventions and scene structure. For more information, "
-            f"see:\n{bcolors.RESET}"
-            f"https://github.com/torrinworx/Blend_My_NFTs#blender-file-organization-and-structure\n{bcolors.RESET}"
+                f"\n{TextColors.ERROR}Blend_My_NFTs Error:\n"
+                f"The number of NFTs per Batch must be greater than ZERO."
+                f"Please review your Blender scene and ensure it follows "
+                f"the naming conventions and scene structure. For more information, "
+                f"see:\n{TextColors.RESET}"
+                f"https://github.com/torrinworx/Blend_My_NFTs#blender-file-organization-and-structure"
+                f"\n{TextColors.RESET}"
         )
 
 
-def raise_Error_ZeroCombinations():
+def raise_error_zero_combinations():
     """Checks if combinations is greater than 0, if so, raises error."""
     if get_combinations() == 0:
         raise ValueError(
-            f"\n{bcolors.ERROR}Blend_My_NFTs Error:\n"
-            f"The number of all possible combinations is ZERO. Please review your Blender scene and ensure it follows "
-            f"the naming conventions and scene structure. For more information, "
-            f"see:\n{bcolors.RESET}"
-            f"https://github.com/torrinworx/Blend_My_NFTs#blender-file-organization-and-structure\n{bcolors.RESET}"
+                f"\n{TextColors.ERROR}Blend_My_NFTs Error:\n"
+                f"The number of all possible combinations is ZERO. Please review your Blender scene and ensure it "
+                f"follows the naming conventions and scene structure. For more information, see:\n{TextColors.RESET}"
+                f"https://github.com/torrinworx/Blend_My_NFTs#blender-file-organization-and-structure"
+                f"\n{TextColors.RESET}"
         )
 
 
-def raise_Error_numBatchesGreaterThan(numBatches):
-    if numBatches < 1:
+def raise_error_num_batches_greater_then(num_batches):
+    if num_batches < 1:
         raise ValueError(
-            f"\n{bcolors.ERROR}Blend_My_NFTs Error:\n"
-            f"The number of Batches is less than 1. Please review your Blender scene and ensure it follows "
-            f"the naming conventions and scene structure. For more information, "
-            f"see:\n{bcolors.RESET}"
-            f"https://github.com/torrinworx/Blend_My_NFTs#blender-file-organization-and-structure\n{bcolors.RESET}"
+                f"\n{TextColors.ERROR}Blend_My_NFTs Error:\n"
+                f"The number of Batches is less than 1. Please review your Blender scene and ensure it follows "
+                f"the naming conventions and scene structure. For more information, "
+                f"see:\n{TextColors.RESET}"
+                f"https://github.com/torrinworx/Blend_My_NFTs#blender-file-organization-and-structure"
+                f"\n{TextColors.RESET}"
         )
 
 
 # Raise Warnings:
-def raise_Warning_maxNFTs(nftsPerBatch, collectionSize):
+def raise_warning_max_nfts(nfts_per_batch, collection_size):
     """
     Prints warning if nftsPerBatch is greater than collectionSize.
     """
 
-    if nftsPerBatch > collectionSize:
+    if nfts_per_batch > collection_size:
         raise ValueError(
-            f"\n{bcolors.WARNING}Blend_My_NFTs Warning:\n"
-            f"The number of NFTs Per Batch you set is smaller than the NFT Collection Size you set.\n{bcolors.RESET}"
+                f"\n{TextColors.WARNING}Blend_My_NFTs Warning:\n"
+                f"The number of NFTs Per Batch you set is smaller than the NFT Collection Size you set."
+                f"\n{TextColors.RESET}"
         )
 
 
-def raise_Warning_collectionSize(DNAList, collectionSize):
+def raise_warning_collection_size(dna_list, collection_size):
     """
     Prints warning if BMNFTs cannot generate requested number of NFTs from a given collectionSize.
     """
 
-    if len(DNAList) < collectionSize:
-        print(f"\n{bcolors.WARNING} \nWARNING: \n"
-              f"Blend_My_NFTs cannot generate {collectionSize} NFTs."
-              f" Only {len(DNAList)} NFT DNA were generated."
+    if len(dna_list) < collection_size:
+        print(f"\n{TextColors.WARNING} \nWARNING: \n"
+              f"Blend_My_NFTs cannot generate {collection_size} NFTs."
+              f" Only {len(dna_list)} NFT DNA were generated."
 
               f"\nThis might be for a number of reasons:"
-              f"\n  a) Rarity is preventing combinations from being generated (See https://github.com/torrinworx/Blend_My_NFTs#notes-on-rarity-and-weighted-variants).\n"
-              f"\n  b) Logic is preventing combinations from being generated (See https://github.com/torrinworx/Blend_My_NFTs#logic).\n"
-              f"\n  c) The number of possible combinations of your NFT collection is too low. Add more Variants or Attributes to increase the recommended collection size.\n"
-              f"\n{bcolors.RESET}")
+              f"\n  a) Rarity is preventing combinations from being generated (See "
+              f"https://github.com/torrinworx/Blend_My_NFTs#notes-on-rarity-and-weighted-variants).\n "
+              f"\n  b) Logic is preventing combinations from being generated (See "
+              f"https://github.com/torrinworx/Blend_My_NFTs#logic).\n "
+              f"\n  c) The number of possible combinations of your NFT collection is too low. Add more Variants or "
+              f"Attributes to increase the recommended collection size.\n "
+              f"\n{TextColors.RESET}")
 
 
 # ======== LOADING ANIMATION ======== #
@@ -458,16 +459,16 @@ class Loader:
 
         self._thread = Thread(target=self._animate, daemon=True)
         self.steps = [
-            " [==     ]",
-            " [ ==    ]",
-            " [  ==   ]",
-            " [   ==  ]",
-            " [    == ]",
-            " [     ==]",
-            " [    == ]",
-            " [   ==  ]",
-            " [  ==   ]",
-            " [ ==    ]",
+                " [==     ]",
+                " [ ==    ]",
+                " [  ==   ]",
+                " [   ==  ]",
+                " [    == ]",
+                " [     ==]",
+                " [    == ]",
+                " [   ==  ]",
+                " [  ==   ]",
+                " [ ==    ]",
         ]
         self.done = False
 

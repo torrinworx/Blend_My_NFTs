@@ -76,9 +76,9 @@ def generateNFT_DNA(collectionSize, enableRarity, enableLogic, logicFile, enable
                     variantByNum = random.choices(number_List_Of_i, weights=rarity_List_Of_i, k=1)
             except IndexError:
                 raise IndexError(
-                    f"\n{Helpers.bcolors.ERROR}Blend_My_NFTs Error:\n"
+                    f"\n{Helpers.TextColors.ERROR}Blend_My_NFTs Error:\n"
                     f"An issue was found within the Attribute collection '{i}'. For more information on Blend_My_NFTs compatible scenes, "
-                    f"see:\n{Helpers.bcolors.RESET}"
+                    f"see:\n{Helpers.TextColors.RESET}"
                     f"https://github.com/torrinworx/Blend_My_NFTs#blender-file-organization-and-structure\n"
                 )
 
@@ -141,7 +141,7 @@ def generateNFT_DNA(collectionSize, enableRarity, enableLogic, logicFile, enable
 
     # Messages:
 
-    Helpers.raise_Warning_collectionSize(DNAList, collectionSize)
+    Helpers.raise_warning_collection_size(DNAList, collectionSize)
 
     # Data stored in batchDataDictionary:
     DataDictionary["numNFTsGenerated"] = len(DNAList)
@@ -217,23 +217,30 @@ def send_To_Record_JSON(collectionSize, nftsPerBatch, save_path, enableRarity, e
    """
 
     # Checking Scene is compatible with BMNFTs:
-    Helpers.check_Scene()
+    Helpers.check_scene()
 
     # Messages:
     print(
-        f"\n========================================\n"
-        f"Creating NFT Data. Generating {collectionSize} NFT DNA.\n"
+        f"\n{Helpers.TextColors.OK}======== Creating NFT Data ========{Helpers.TextColors.RESET}"
+        f"\nGenerating {collectionSize} NFT DNA"
     )
 
     if not enableRarity and not enableLogic:
         print(
-            f"{Helpers.bcolors.OK}NFT DNA will be determined randomly, no special properties or parameters are applied.\n{Helpers.bcolors.RESET}")
+            f"{Helpers.TextColors.OK}NFT DNA will be determined randomly, no special properties or parameters are "
+            f"applied.\n{Helpers.TextColors.RESET}")
 
     if enableRarity:
-        print(f"{Helpers.bcolors.OK}Rarity is ON. Weights listed in .blend scene will be taken into account.\n{Helpers.bcolors.RESET}")
+        print(
+                f"{Helpers.TextColors.OK}Rarity is ON. Weights listed in .blend scene will be taken into account."
+                f"{Helpers.TextColors.RESET}"
+        )
 
     if enableLogic:
-        print(f"{Helpers.bcolors.OK}Logic is ON. {len(list(logicFile.keys()))} rules detected and applied.\n{Helpers.bcolors.RESET}")
+        print(
+                f"{Helpers.TextColors.OK}Logic is ON. {len(list(logicFile.keys()))} rules detected and applied."
+                f"{Helpers.TextColors.RESET}"
+        )
 
     time_start = time.time()
 
@@ -245,20 +252,20 @@ def send_To_Record_JSON(collectionSize, nftsPerBatch, save_path, enableRarity, e
 
             # Checks:
 
-            Helpers.raise_Warning_maxNFTs(nftsPerBatch, collectionSize)
-            Helpers.check_Duplicates(DataDictionary["DNAList"])
-            Helpers.raise_Error_ZeroCombinations()
+            Helpers.raise_warning_max_nfts(nftsPerBatch, collectionSize)
+            Helpers.check_duplicates(DataDictionary["DNAList"])
+            Helpers.raise_error_zero_combinations()
 
             if enableRarity:
-                Helpers.check_Rarity(DataDictionary["hierarchy"], DataDictionary["DNAList"],
+                Helpers.check_rarity(DataDictionary["hierarchy"], DataDictionary["DNAList"],
                                      os.path.join(save_path, "Blend_My_NFTs Output/NFT_Data"))
 
         except FileNotFoundError:
             raise FileNotFoundError(
-                f"\n{Helpers.bcolors.ERROR}Blend_My_NFTs Error:\n"
+                f"\n{Helpers.TextColors.ERROR}Blend_My_NFTs Error:\n"
                 f"Data not saved to NFTRecord.json. Please review your Blender scene and ensure it follows "
                 f"the naming conventions and scene structure. For more information, "
-                f"see:\n{Helpers.bcolors.RESET}"
+                f"see:\n{Helpers.TextColors.RESET}"
                 f"https://github.com/torrinworx/Blend_My_NFTs#blender-file-organization-and-structure\n"
             )
         finally:
@@ -270,15 +277,15 @@ def send_To_Record_JSON(collectionSize, nftsPerBatch, save_path, enableRarity, e
                 outfile.write(ledger + '\n')
 
             print(
-                f"\n{Helpers.bcolors.OK}Blend_My_NFTs Success:\n"
-                f"{len(DataDictionary['DNAList'])} NFT DNA saved to {NFTRecord_save_path}. NFT DNA Successfully created.\n{Helpers.bcolors.RESET}")
+                f"\n{Helpers.TextColors.OK}Blend_My_NFTs Success:\n"
+                f"{len(DataDictionary['DNAList'])} NFT DNA saved to {NFTRecord_save_path}. NFT DNA Successfully created.\n{Helpers.TextColors.RESET}")
 
         except:
             raise (
-                f"\n{Helpers.bcolors.ERROR}Blend_My_NFTs Error:\n"
+                f"\n{Helpers.TextColors.ERROR}Blend_My_NFTs Error:\n"
                 f"Data not saved to NFTRecord.json. Please review your Blender scene and ensure it follows "
                 f"the naming conventions and scene structure. For more information, "
-                f"see:\n{Helpers.bcolors.RESET}"
+                f"see:\n{Helpers.TextColors.RESET}"
                 f"https://github.com/torrinworx/Blend_My_NFTs#blender-file-organization-and-structure\n"
             )
 
@@ -291,5 +298,5 @@ def send_To_Record_JSON(collectionSize, nftsPerBatch, save_path, enableRarity, e
     time_end = time.time()
 
     print(
-        f"{Helpers.bcolors.OK}Created and saved NFT DNA in {time_end - time_start}s.\n{Helpers.bcolors.RESET}"
+        f"{Helpers.TextColors.OK}Created and saved NFT DNA in {time_end - time_start}s.\n{Helpers.TextColors.RESET}"
     )
