@@ -263,13 +263,13 @@ def render_and_save_NFTs(input):
         # ob.data.body = str(f"DNA: {full_single_dna}")  # Set text of Text Object ob
 
         print(f"\n{bcolors.OK}======== Generating NFT {x}/{NFTs_in_Batch}: {name} ========{bcolors.RESET}")
-        print(f"Variants selected:")
+        print(f"\nVariants selected:")
         print(f"{dnaDictionary}")
         if input.enableMaterials:
-            print(f"Materials selected:")
+            print(f"\nMaterials selected:")
             print(f"{materialdnaDictionary}")
 
-        print(f"DNA Code:{full_single_dna}")
+        print(f"\nDNA Code:{full_single_dna}")
 
         for c in dnaDictionary:
             collection = dnaDictionary[c]
