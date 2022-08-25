@@ -160,7 +160,9 @@ class BMNFTData:
     sender_from: str
     email_password: str
     receiver_to: str
+
     enable_debug: bool
+    log_path: str
 
     custom_fields: dict = None
     fail_state: Any = False
@@ -225,7 +227,9 @@ def getBMNFTData():
         sender_from=bpy.context.scene.input_tool.sender_from,
         email_password=bpy.context.scene.input_tool.email_password,
         receiver_to=bpy.context.scene.input_tool.receiver_to,
-        enable_debug=bpy.context.scene.input_tool.enable_debug
+
+        enable_debug=bpy.context.scene.input_tool.enable_debug,
+        log_path=bpy.context.scene.input_tool.log_path,
     )
 
     return data
@@ -540,6 +544,13 @@ class BMNFTS_PGT_Input_Properties(bpy.types.PropertyGroup):
             description="Allows you to run Blend_My_NFTs without generating any content files and includes more "
                         "console information."
     )
+    log_path: bpy.props.StringProperty(
+        name="Debug Log Path",
+        description="Path where BMNFT_Log.txt is located.",
+        default="",
+        maxlen=1024,
+        subtype="FILE_PATH"
+    )
 
     # API Panel properties:
     api_key: bpy.props.StringProperty(
@@ -669,6 +680,7 @@ class ResumeFailedBatch(bpy.types.Operator):
             receiver_to=render_settings["receiver_to"],
 
             enable_debug=render_settings["enable_debug"],
+            log_path=render_settings["log_path"],
 
             fail_state=_fail_state,
             failed_batch=_failed_batch,
@@ -1069,6 +1081,8 @@ class BMNFTS_PT_Other(bpy.types.Panel):
 
         row = layout.row()
         row.prop(input_tool_scene, "enable_debug")
+        if bpy.context.scene.input_tool.enable_debug:
+            row.prop(input_tool_scene, "log_path")
 
         row = layout.row()
 
@@ -1080,8 +1094,12 @@ class BMNFTS_PT_Other(bpy.types.Panel):
                      icon='URL').url = "https://github.com/torrinworx/Blend_My_NFTs"
 
         row = layout.row()
-        row.operator("wm.url_open", text="YouTube Tutorials",
-                     icon='URL').url = "https://www.youtube.com/watch?v=ygKJYz4BjRs&list=PLuVvzaanutXcYtWmPVKu2bx83EYNxLRsX"
+        row.operator(
+                "wm.url_open",
+                text="YouTube Tutorials",
+                icon='URL'
+        ).url = "https://www.youtube.com/watch?v=ygKJYz4BjRs&list=PLuVvzaanutXcYtWmPVKu2bx83EYNxLRsX"
+
         row = layout.row()
         row.operator("wm.url_open", text="Join Our Discord Community!",
                      icon='URL').url = "https://discord.gg/UpZt5Un57t"

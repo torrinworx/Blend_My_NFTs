@@ -5,10 +5,18 @@ import os
 import time
 import json
 import random
+import logging
 import traceback
 from functools import partial
+
 from . import logic, material_generator, helpers
 from .helpers import TextColors
+
+logging.basicConfig(
+        level=logging.INFO,
+        format='[%(levelname)s][%(asctime)s]\n%(message)s\n',
+        datefmt='%Y-%m-%d %H:%M:%S'
+)
 
 
 def generate_nft_dna(
@@ -18,7 +26,6 @@ def generate_nft_dna(
         logic_file,
         enable_materials,
         materials_file,
-        enable_debug
 ):
     """
     Returns batchDataDictionary containing the number of NFT combinations, hierarchy, and the dna_list.
@@ -95,7 +102,7 @@ def generate_nft_dna(
         single_dna = ''.join(single_dna.split('-', 1))
         return single_dna
 
-    def singleCompleteDNA():
+    def single_complete_dna():
         """
         This function applies Rarity and Logic to a single DNA created by createDNASingle() if Rarity or Logic specified
         """
@@ -103,21 +110,25 @@ def generate_nft_dna(
         single_dna = ""
         if not enable_rarity:
             single_dna = create_dna_random(hierarchy)
-        # print("============")
-        # print(f"Original DNA: {single_dna}")
+            logging.debug(f"============\nOriginal DNA: {single_dna}")
+            print("============")
+            print(f"Original DNA: {single_dna}")
+
         if enable_rarity:
             single_dna = create_dna_rarity(hierarchy)
-        # print(f"Rarity DNA: {single_dna}")
+            logging.debug(f"Rarity DNA: {single_dna}")
+            print(f"Rarity DNA: {single_dna}")
 
         if enable_logic:
             single_dna = logic.logicafy_dna_single(hierarchy, single_dna, logic_file, enable_rarity)
-        # print(f"Logic DNA: {single_dna}")
+            logging.debug(f"Logic DNA: {single_dna}")
+            print(f"Logic DNA: {single_dna}")
 
         if enable_materials:
             single_dna = material_generator.apply_materials(hierarchy, single_dna, materials_file, enable_rarity)
-        # print(f"Materials DNA: {single_dna}")
-
-        # print("============\n")
+            logging.debug(f"Materials DNA: {single_dna}\n============\n")
+            print(f"Materials DNA: {single_dna}")
+            print("============\n")
 
         return single_dna
 
@@ -129,7 +140,7 @@ def generate_nft_dna(
         dna_set_return = set()
 
         for i in range(collection_size):
-            dna_push_to_list = partial(singleCompleteDNA)
+            dna_push_to_list = partial(single_complete_dna)
 
             dna_set_return |= {''.join([dna_push_to_list()]) for _ in range(collection_size - len(dna_set_return))}
 
@@ -150,8 +161,6 @@ def generate_nft_dna(
         return dna_list_formatted
 
     dna_list = create_dna_list()
-
-    # Messages:
 
     helpers.raise_warning_collection_size(dna_list, collection_size)
 
@@ -234,7 +243,8 @@ def send_to_record(
         materials_file,
         blend_my_nfts_output,
         batch_json_save_path,
-        enable_debug
+        enable_debug,
+        log_path
 ):
     """
    Creates NFTRecord.json file and sends "batch_data_dictionary" to it. NFTRecord.json is a permanent record of all DNA
@@ -242,6 +252,12 @@ def send_to_record(
    need to reference this .json file to generate new DNA and make note of the new attributes and variants to prevent
    repeat DNA.
    """
+
+    if enable_debug:
+        logging.basicConfig(
+                filename=os.path.join(log_path, "BMNFTS_Log.txt"),
+                level=logging.DEBUG
+        )
 
     # Checking Scene is compatible with BMNFTs:
     helpers.check_scene()
@@ -280,7 +296,6 @@ def send_to_record(
                     logic_file,
                     enable_materials,
                     materials_file,
-                    enable_debug,
             )
             nft_record_save_path = os.path.join(blend_my_nfts_output, "NFTRecord.json")
 

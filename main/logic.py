@@ -261,7 +261,6 @@ def logicafy_dna_single(hierarchy, single_dna, logic_file, enable_rarity):
         did_reconstruct = False
         for rule in logic_file:
             # Items from 'IF' key for a given rule
-            print(logic_file)
             if_dict = create_dicts(hierarchy, logic_file[rule]["IF"], "IF")
 
             result_dict_type = ""

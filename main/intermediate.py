@@ -29,7 +29,6 @@ def send_to_record(input, reverse_order=False):
                         "IF": item_list1.split(','),
                         rule_type: item_list2.split(',')
                     }
-                    print(rule_type)
                     num += 1
             else:
                 input.logic_file = {}
@@ -42,8 +41,6 @@ def send_to_record(input, reverse_order=False):
                         "IF": item_list1.split(','),
                         rule_type: item_list2.split(',')
                     }
-                    print(rule_type)
-
                     num += 1
 
     dna_generator.send_to_record(
@@ -58,6 +55,7 @@ def send_to_record(input, reverse_order=False):
             input.blend_my_nfts_output,
             input.batch_json_save_path,
             input.enable_debug,
+            input.log_path
     )
 
 

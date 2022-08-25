@@ -10,23 +10,6 @@ from shutil import get_terminal_size
 from collections import Counter, defaultdict
 
 
-# ======== ENABLE DEBUG ======== #
-
-# This section is used for debugging, coding, or general testing purposes.
-
-
-def enable_debug(enable_debug_bool):
-    if enable_debug_bool:
-        import logging
-
-        logging.basicConfig(
-                filename="./log.txt",
-                level=logging.DEBUG,
-                format='[%(levelname)s][%(asctime)s]\n%(message)s\n',
-                datefmt='%Y-%m-%d %H:%M:%S'
-        )
-
-
 # ======== CONSTANTS ======== #
 
 # Constants are used for storing or updating constant values that may need to be changes depending on system
