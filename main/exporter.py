@@ -98,6 +98,8 @@ def save_generation_state(input):
                     "enable_debug": input.enable_debug,
                     "log_path": input.log_path,
 
+                    "enable_dry_run": input.enable_dry_run,
+
                     "custom_fields": input.custom_fields,
             },
     })

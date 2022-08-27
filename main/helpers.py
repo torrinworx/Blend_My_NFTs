@@ -36,6 +36,8 @@ def remove_file_by_extension(dirlist):
     return return_dirs
 
 
+# TODO: fix colours in console logs and find a way to include coloured text in .txt file.
+
 class TextColors:
     """
     The colour of console messages.

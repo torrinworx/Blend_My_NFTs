@@ -12,11 +12,7 @@ from functools import partial
 from . import logic, material_generator, helpers
 from .helpers import TextColors
 
-logging.basicConfig(
-        level=logging.INFO,
-        format='[%(levelname)s][%(asctime)s]\n%(message)s\n',
-        datefmt='%Y-%m-%d %H:%M:%S'
-)
+log = logging.getLogger(__name__)
 
 
 def generate_nft_dna(
@@ -110,25 +106,33 @@ def generate_nft_dna(
         single_dna = ""
         if not enable_rarity:
             single_dna = create_dna_random(hierarchy)
-            logging.debug(f"============\nOriginal DNA: {single_dna}")
-            print("============")
-            print(f"Original DNA: {single_dna}")
+            log.debug(
+                    f"\n================"
+                    f"\nOriginal DNA: {single_dna}"
+            )
 
         if enable_rarity:
             single_dna = create_dna_rarity(hierarchy)
-            logging.debug(f"Rarity DNA: {single_dna}")
-            print(f"Rarity DNA: {single_dna}")
+            log.debug(
+                    f"\n================"
+                    f"\nRarity DNA: {single_dna}"
+            )
 
         if enable_logic:
             single_dna = logic.logicafy_dna_single(hierarchy, single_dna, logic_file, enable_rarity)
-            logging.debug(f"Logic DNA: {single_dna}")
-            print(f"Logic DNA: {single_dna}")
+            log.debug(
+                    f"\n================"
+                    f"\nLogic DNA: {single_dna}"
+            )
 
         if enable_materials:
             single_dna = material_generator.apply_materials(hierarchy, single_dna, materials_file, enable_rarity)
-            logging.debug(f"Materials DNA: {single_dna}\n============\n")
-            print(f"Materials DNA: {single_dna}")
-            print("============\n")
+            log.debug(
+                    f"\n================"
+                    f"\nMaterials DNA: {single_dna}"
+                    f"\n================\n"
+
+            )
 
         return single_dna
 
@@ -179,9 +183,9 @@ def make_batches(
         batch_json_save_path
 ):
     """
-   Sorts through all the batches and outputs a given number of batches depending on collection_size and nfts_per_batch.
-   These files are then saved as Batch#.json files to batch_json_save_path
-   """
+    Sorts through all the batches and outputs a given number of batches depending on collection_size and nfts_per_batch.
+    These files are then saved as Batch#.json files to batch_json_save_path
+    """
 
     # Clears the Batch Data folder of Batches:
     batch_list = os.listdir(batch_json_save_path)
@@ -197,7 +201,6 @@ def make_batches(
     nft_record_save_path = os.path.join(blend_my_nf_ts_output, "NFTRecord.json")
     data_dictionary = json.load(open(nft_record_save_path))
 
-    num_nfts_generated = data_dictionary["num_nfts_generated"]
     hierarchy = data_dictionary["hierarchy"]
     dna_list = data_dictionary["dna_list"]
 
@@ -206,8 +209,10 @@ def make_batches(
     if remainder_dna > 0:
         num_batches += 1
 
-    print(f"To generate batches of {nfts_per_batch} DNA sequences per batch, with a total of {num_nfts_generated}"
-          f" possible NFT DNA sequences, the number of batches generated will be {num_batches}")
+    log.info(
+            f"\nGenerating {num_batches} batch files. If the last batch isn't filled all the way the program will "
+            f"operate normally."
+    )
 
     batches_dna_list = []
 
@@ -253,38 +258,37 @@ def send_to_record(
    repeat DNA.
    """
 
-    if enable_debug:
-        logging.basicConfig(
-                filename=os.path.join(log_path, "BMNFTS_Log.txt"),
-                level=logging.DEBUG
-        )
-
     # Checking Scene is compatible with BMNFTs:
     helpers.check_scene()
 
     # Messages:
-    print(
-        f"\n{TextColors.OK}======== Creating NFT Data ========{TextColors.RESET}"
-        f"\nGenerating {collection_size} NFT DNA"
+    log.info(
+            f"\n{TextColors.OK}======== Creating NFT Data ({collection_size} DNA) ========{TextColors.RESET}"
     )
 
     if not enable_rarity and not enable_logic:
-        print(
-            f"{TextColors.OK}NFT DNA will be determined randomly, no special properties or parameters are "
-            f"applied.\n{TextColors.RESET}")
+        log.info(
+                f"\n - NFT DNA will be determined randomly, no special properties or parameters are "
+                f"applied."
+        )
 
     if enable_rarity:
-        print(
-                f"{TextColors.OK}Rarity is ON. Weights listed in .blend scene will be taken into account."
-                f"{TextColors.RESET}"
+        log.info(
+                f"\n - Rarity is ON. Weights listed in .blend scene will be taken into account."
+                f""
         )
 
     if enable_logic:
-        print(
-                f"{TextColors.OK}Logic is ON. {len(list(logic_file.keys()))} rules detected and applied."
-                f"{TextColors.RESET}"
+        log.info(
+                f"\n - Logic is ON. {len(list(logic_file.keys()))} rules detected, implementation will "
+                f"be attempted."
         )
 
+    if enable_materials:
+        log.info(
+                f"\n - Materials are ON. {len(list(json.load(open(materials_file)).keys()))} materials "
+                f"instances detected, implementation will be attempted."
+        )
     time_start = time.time()
 
     def create_nft_data():
@@ -339,7 +343,7 @@ def send_to_record(
             )
 
     # Loading Animation:
-    loading = helpers.Loader(f'Creating NFT DNA...', '').start()
+    loading = helpers.Loader(f'\nCreating NFT DNA...', '').start()
     create_nft_data()
     make_batches(collection_size, nfts_per_batch, save_path, batch_json_save_path)
     loading.stop()
@@ -347,5 +351,5 @@ def send_to_record(
     time_end = time.time()
 
     print(
-        f"{TextColors.OK}Created and saved NFT DNA in {time_end - time_start}s.\n{TextColors.RESET}"
+        f"\n{TextColors.OK}Created and saved NFT DNA in {time_end - time_start}s.\n{TextColors.RESET}"
     )
