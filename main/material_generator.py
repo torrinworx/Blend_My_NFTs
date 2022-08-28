@@ -121,7 +121,7 @@ def apply_materials(hierarchy, single_dna, materials_file, enable_rarity):
                 # Gets the Order Number of the Material
                 material_order_num = list(material_list.keys()).index(material_name)
 
-                deconstructed_material_dna[a] = str(material_order_num + 1)
+                deconstructed_material_dna[a] = str(material_order_num)
                 complete = True
         if not complete:
             deconstructed_material_dna[a] = "0"
