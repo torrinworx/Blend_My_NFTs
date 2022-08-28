@@ -4,8 +4,11 @@
 import os
 import json
 import shutil
+import logging
 
 from .helpers import remove_file_by_extension
+
+log = logging.getLogger(__name__)
 
 
 def reformat_nft_collection(refactor_panel_input):
@@ -41,6 +44,6 @@ def reformat_nft_collection(refactor_panel_input):
     with open(os.path.join(complete_coll_path, "collection_info.json"), 'w') as outfile:
         outfile.write(collection_info + '\n')
 
-    print(f"All NFT files stored and sorted to the Complete_Collection folder in {refactor_panel_input.save_path}")
+    log.info(f"All NFT files stored and sorted to the Complete_Collection folder in {refactor_panel_input.save_path}")
 
     shutil.rmtree(refactor_panel_input.nft_batch_save_path)
