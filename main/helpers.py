@@ -1,13 +1,19 @@
 import bpy
 import os
+import sys
 import json
 import copy
+import logging
+import tempfile
 import platform
+import traceback
 from time import sleep
 from itertools import cycle
 from threading import Thread
 from shutil import get_terminal_size
 from collections import Counter, defaultdict
+
+log = logging.getLogger(__name__)
 
 
 # ======== CONSTANTS ======== #
@@ -139,24 +145,28 @@ def get_hierarchy():
         for i in att_vars:
             # Check if name follows naming conventions:
             if int(i.count("_")) > 2 and int(i.split("_")[1]) > 0:
-                raise Exception(
+                log.error(
+                        f"\n{traceback.format_exc()}"
                         f"\n{TextColors.ERROR}Blend_My_NFTs Error:\n"
                         f"There is a naming issue with the following Attribute/Variant: '{i}'\n"
                         f"Review the naming convention of Attribute and Variant collections here:\n{TextColors.RESET}"
                         f"https://github.com/torrinworx/Blend_My_NFTs#blender-file-organization-and-structure\n"
                 )
+                raise Exception()
 
             try:
                 number = i.split("_")[1]
                 name = i.split("_")[0]
                 rarity = i.split("_")[2]
             except IndexError:
-                raise Exception(
+                log.error(
+                        f"\n{traceback.format_exc()}"
                         f"\n{TextColors.ERROR}Blend_My_NFTs Error:\n"
                         f"There is a naming issue with the following Attribute/Variant: '{i}'\n"
                         f"Review the naming convention of Attribute and Variant collections here:\n{TextColors.RESET}"
                         f"https://github.com/torrinworx/Blend_My_NFTs#blender-file-organization-and-structure\n"
                 )
+                raise Exception()
 
             all_att_data_list[i] = {"name": name, "number": number, "rarity": rarity}
         return all_att_data_list
@@ -174,7 +184,7 @@ def get_hierarchy():
     for a in hierarchy:
         for b in hierarchy[a]:
             for x in variant_meta_data:
-                if str(x)==str(b):
+                if str(x) == str(b):
                     (hierarchy[a])[b] = variant_meta_data[x]
 
     return hierarchy
@@ -195,10 +205,10 @@ def get_combinations():
 
     for i in hierarchy:
         # Ignore Collections with nothing in them
-        if len(hierarchy[i])!=0:
+        if len(hierarchy[i]) != 0:
             hierarchy_by_num.append(len(hierarchy[i]))
         else:
-            print(f"The following collection has been identified as empty: {i}")
+            log.warning(f"\nThe following collection has been identified as empty: {i}")
 
     combinations = 1
     for i in hierarchy_by_num:
@@ -232,13 +242,14 @@ def check_scene():  # Not complete
         scriptIgnoreCollection = bpy.data.collections["Script_Ignore"]
         script_ignore_exists = True
     except KeyError:
-        raise TypeError(
+        log.error(
+                f"\n{traceback.format_exc()}"
                 f"\n{TextColors.ERROR}Blend_My_NFTs Error:\n"
                 f"Add a Script_Ignore collection to your Blender scene and ensure the name is exactly 'Script_Ignore'. "
-                f"For more information, "
-                f"see:"
+                f"For more information, see:"
                 f"\nhttps://github.com/torrinworx/Blend_My_NFTs#blender-file-organization-and-structure\n{TextColors.RESET}"
         )
+        raise
 
     hierarchy = get_hierarchy()
     collections = bpy.context.scene.collection
@@ -288,23 +299,27 @@ def check_rarity(hierarchy, dna_list_formatted, save_path):
 
         complete_data[i] = x
 
-    print(
-            f"\n{TextColors.OK}\n"
-            f"Rarity Checker is active. These are the percentages for each variant per attribute you set in your .blend"
-            f" file: \n{TextColors.RESET}"
-    )
-
+    # Saving Rarity data to console and log:
+    x = f"\nPercentages for each Variant per Attribute:"
     for i in complete_data:
-        print(i + ":")
-        for j in complete_data[i]:
-            print("   " + j + ": " + complete_data[i][j][0] + "   Occurrences: " + complete_data[i][j][1])
+        x += f"\n\n{i}:"
+        if complete_data[i]:
+            for j in complete_data[i]:
+                x += f"\n - {j}: {complete_data[i][j][0]} occurs {complete_data[i][j][1]} times."
+        else:
+            x += f"\n - Variants not selected."
+
+    log.info(x)
 
     json_meta_data = json.dumps(complete_data, indent=1, ensure_ascii=True)
 
     with open(os.path.join(save_path, "RarityData.json"), 'w') as outfile:
         outfile.write(json_meta_data + '\n')
     path = os.path.join(save_path, "RarityData.json")
-    print(TextColors.OK + f"Rarity Data has been saved to {path}." + TextColors.RESET)
+
+    log.info(
+            f"\nRarity data has been saved to:\n{path}"
+    )
 
 
 def check_duplicates(dna_list_formatted):
@@ -318,11 +333,18 @@ def check_duplicates(dna_list_formatted):
 
     for x in dna_list:
         if x in seen:
-            print(x)
             duplicates += 1
         seen.add(x)
 
-    print(f"\nNFTRecord.json contains {duplicates} duplicate NFT DNA.")
+    if duplicates > 0:
+        log.warning(
+                f"\n{TextColors.WARNING}Blend_My_NFTs Warning:\n"
+                f"{duplicates} duplicate NFT DNA was detected. This should not be possible. For more information, see:"
+                f"\nhttps://github.com/torrinworx/Blend_My_NFTs#blender-file-organization-and-structure"
+                f"\n{TextColors.RESET}"
+        )
+
+    log.info(f"\n\nDuplicate NFT DNA found: {duplicates}")
 
 
 def check_failed_batches(batch_json_save_path):
@@ -355,7 +377,8 @@ def raise_error_num_batches(max_nfts, nfts_per_batch):
         num_batches = max_nfts / nfts_per_batch
         return num_batches
     except ZeroDivisionError:
-        raise ZeroDivisionError(
+        log.error(
+                f"\n{traceback.format_exc()}"
                 f"\n{TextColors.ERROR}Blend_My_NFTs Error:\n"
                 f"The number of NFTs per Batch must be greater than ZERO."
                 f"Please review your Blender scene and ensure it follows "
@@ -364,12 +387,14 @@ def raise_error_num_batches(max_nfts, nfts_per_batch):
                 f"https://github.com/torrinworx/Blend_My_NFTs#blender-file-organization-and-structure"
                 f"\n{TextColors.RESET}"
         )
+        raise ZeroDivisionError()
 
 
 def raise_error_zero_combinations():
     """Checks if combinations is greater than 0, if so, raises error."""
     if get_combinations() == 0:
-        raise ValueError(
+        log.error(
+                f"\n{traceback.format_exc()}"
                 f"\n{TextColors.ERROR}Blend_My_NFTs Error:\n"
                 f"The number of all possible combinations is ZERO. Please review your Blender scene and ensure it "
                 f"follows the naming conventions and scene structure. For more information, see:\n{TextColors.RESET}"
@@ -377,10 +402,13 @@ def raise_error_zero_combinations():
                 f"\n{TextColors.RESET}"
         )
 
+        raise ValueError()
+
 
 def raise_error_num_batches_greater_then(num_batches):
     if num_batches < 1:
-        raise ValueError(
+        log.error(
+                f"\n{traceback.format_exc()}"
                 f"\n{TextColors.ERROR}Blend_My_NFTs Error:\n"
                 f"The number of Batches is less than 1. Please review your Blender scene and ensure it follows "
                 f"the naming conventions and scene structure. For more information, "
@@ -388,6 +416,7 @@ def raise_error_num_batches_greater_then(num_batches):
                 f"https://github.com/torrinworx/Blend_My_NFTs#blender-file-organization-and-structure"
                 f"\n{TextColors.RESET}"
         )
+        raise ValueError()
 
 
 # Raise Warnings:
@@ -397,11 +426,14 @@ def raise_warning_max_nfts(nfts_per_batch, collection_size):
     """
 
     if nfts_per_batch > collection_size:
-        raise ValueError(
+        log.error(
+                f"\n{traceback.format_exc()}"
                 f"\n{TextColors.WARNING}Blend_My_NFTs Warning:\n"
                 f"The number of NFTs Per Batch you set is smaller than the NFT Collection Size you set."
                 f"\n{TextColors.RESET}"
         )
+
+        raise ValueError()
 
 
 def raise_warning_collection_size(dna_list, collection_size):
@@ -410,18 +442,21 @@ def raise_warning_collection_size(dna_list, collection_size):
     """
 
     if len(dna_list) < collection_size:
-        print(f"\n{TextColors.WARNING} \nWARNING: \n"
-              f"Blend_My_NFTs cannot generate {collection_size} NFTs."
-              f" Only {len(dna_list)} NFT DNA were generated."
+        log.warning(
+                f"\n{traceback.format_exc()}"
+                f"\n{TextColors.WARNING} \nWARNING: \n"
+                f"Blend_My_NFTs cannot generate {collection_size} NFTs."
+                f" Only {len(dna_list)} NFT DNA were generated."
 
-              f"\nThis might be for a number of reasons:"
-              f"\n  a) Rarity is preventing combinations from being generated (See "
-              f"https://github.com/torrinworx/Blend_My_NFTs#notes-on-rarity-and-weighted-variants).\n "
-              f"\n  b) Logic is preventing combinations from being generated (See "
-              f"https://github.com/torrinworx/Blend_My_NFTs#logic).\n "
-              f"\n  c) The number of possible combinations of your NFT collection is too low. Add more Variants or "
-              f"Attributes to increase the recommended collection size.\n "
-              f"\n{TextColors.RESET}")
+                f"\nThis might be for a number of reasons:"
+                f"\n  a) Rarity is preventing combinations from being generated (See "
+                f"https://github.com/torrinworx/Blend_My_NFTs#notes-on-rarity-and-weighted-variants).\n "
+                f"\n  b) Logic is preventing combinations from being generated (See "
+                f"https://github.com/torrinworx/Blend_My_NFTs#logic).\n "
+                f"\n  c) The number of possible combinations of your NFT collection is too low. Add more Variants or "
+                f"Attributes to increase the recommended collection size.\n "
+                f"\n{TextColors.RESET}"
+        )
 
 
 # ======== LOADING ANIMATION ======== #
@@ -480,3 +515,39 @@ class Loader:
     def __exit__(self, exc_type, exc_value, tb):
         # handle exceptions with those variables ^
         self.stop()
+
+
+def activate_logging():
+    """
+    Used as an intermediate activated at runtime of the following operators: CreateData, ExportNFTs, ResumeFailedBatch,
+    RefactorBatches, and ExportSettings. Must be independent of 'input' class to be safe, gets variables directly from
+    bpy.
+    """
+
+    log_path = bpy.context.scene.input_tool.log_path
+    if log_path:
+        file_handler = logging.FileHandler(os.path.join(log_path, 'BMNFTs_Log.txt'), 'a')
+    else:
+        file_handler = logging.FileHandler(os.path.join(tempfile.gettempdir(), 'BMNFTs_Log.txt'), 'a')
+
+    formatter = logging.Formatter(
+            '[%(asctime)s] [%(levelname)s] [%(filename)s > %(funcName)s() > Line:%(lineno)d]\n%(message)s\n'
+    )
+    file_handler.setFormatter(formatter)
+
+    log = logging.getLogger()
+    for handler in log.handlers[:]:
+        if isinstance(handler, logging.FileHandler):
+            log.removeHandler(handler)
+        if isinstance(handler, logging.StreamHandler):
+            log.removeHandler(handler)
+    log.addHandler(file_handler)
+
+    # Record log to console:
+    console_handler = logging.StreamHandler(sys.stdout)
+    log.addHandler(console_handler)
+
+    if bpy.context.scene.input_tool.enable_debug:
+        logging.getLogger().setLevel(logging.DEBUG)
+    else:
+        logging.getLogger().setLevel(logging.INFO)

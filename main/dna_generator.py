@@ -313,12 +313,15 @@ def send_to_record(
                                      os.path.join(save_path, "Blend_My_NFTs Output/NFT_Data"))
 
         except FileNotFoundError:
-            raise FileNotFoundError(
-                f"\n{TextColors.ERROR}Blend_My_NFTs Error:\n"
-                f"Data not saved to NFTRecord.json. Please review your Blender scene and ensure it follows "
-                f"the naming conventions and scene structure. For more information, see:\n{TextColors.RESET}"
-                f"https://github.com/torrinworx/Blend_My_NFTs#blender-file-organization-and-structure\n"
+            log.error(
+                    f"\n{traceback.format_exc()}"
+                    f"\n{TextColors.ERROR}Blend_My_NFTs Error:\n"
+                    f"Data not saved to NFTRecord.json, file not found. Check that your save path, logic file path, or "
+                    f"materials file path is correct. For more information, see:\n{TextColors.RESET}"
+                    f"https://github.com/torrinworx/Blend_My_NFTs#blender-file-organization-and-structure\n"
             )
+            raise
+
         finally:
             loading.stop()
 
@@ -327,20 +330,21 @@ def send_to_record(
             with open(nft_record_save_path, 'w') as outfile:
                 outfile.write(ledger + '\n')
 
-            print(
-                f"\n{TextColors.OK}Blend_My_NFTs Success:\n"
-                f"{len(data_dictionary['dna_list'])} NFT DNA saved to {nft_record_save_path}. NFT DNA Successfully "
-                f"created.\n{TextColors.RESET}")
+            log.info(
+                    f"\n{TextColors.OK}{len(data_dictionary['dna_list'])} NFT data successfully saved to:"
+                    f"\n{nft_record_save_path}{TextColors.RESET}"
+            )
 
         except Exception:
-            traceback.print_exc()
-            raise (
-                f"\n{TextColors.ERROR}Blend_My_NFTs Error:\n"
-                f"Data not saved to NFTRecord.json. Please review your Blender scene and ensure it follows "
-                f"the naming conventions and scene structure. For more information, "
-                f"see:\n{TextColors.RESET}"
-                f"https://github.com/torrinworx/Blend_My_NFTs#blender-file-organization-and-structure\n"
+            log.error(
+                    f"\n{traceback.format_exc()}"
+                    f"\n{TextColors.ERROR}Blend_My_NFTs Error:\n"
+                    f"Data not saved to NFTRecord.json. Please review your Blender scene and ensure it follows "
+                    f"the naming conventions and scene structure. For more information, "
+                    f"see:\n{TextColors.RESET}"
+                    f"https://github.com/torrinworx/Blend_My_NFTs#blender-file-organization-and-structure\n"
             )
+            raise
 
     # Loading Animation:
     loading = helpers.Loader(f'\nCreating NFT DNA...', '').start()
@@ -350,6 +354,6 @@ def send_to_record(
 
     time_end = time.time()
 
-    print(
-        f"\n{TextColors.OK}Created and saved NFT DNA in {time_end - time_start}s.\n{TextColors.RESET}"
+    log.info(
+        f"\n{TextColors.OK}TIME [Created and Saved NFT data]: {time_end - time_start}s.\n{TextColors.RESET}"
     )

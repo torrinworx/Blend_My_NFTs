@@ -5,7 +5,11 @@
 
 import json
 import random
+import logging
+import traceback
 from .helpers import TextColors
+
+log = logging.getLogger(__name__)
 
 
 def select_material(material_list, variant, enable_rarity):
@@ -39,22 +43,26 @@ def select_material(material_list, variant, enable_rarity):
             elif not if_zero_bool:
                 selected_material = random.choices(material_list_of_i, weights=rarity_list_of_i, k=1)
         except IndexError:
-            raise IndexError(
-                f"\n{TextColors.ERROR}Blend_My_NFTs Error:\n"
-                f"An issue was found within the Material List of the Variant collection '{variant}'. For more "
-                f"information on Blend_My_NFTs compatible scenes, see:\n{TextColors.RESET}"
-                f"https://github.com/torrinworx/Blend_My_NFTs#blender-file-organization-and-structure\n"
+            log.error(
+                    f"\n{traceback.format_exc()}"
+                    f"\n{TextColors.ERROR}Blend_My_NFTs Error:\n"
+                    f"An issue was found within the Material List of the Variant collection '{variant}'. For more "
+                    f"information on Blend_My_NFTs compatible scenes, see:\n{TextColors.RESET}"
+                    f"https://github.com/torrinworx/Blend_My_NFTs#blender-file-organization-and-structure\n"
             )
+            raise IndexError()
     else:
         try:
             selected_material = random.choices(material_list_of_i, k=1)
         except IndexError:
-            raise IndexError(
-                f"\n{TextColors.ERROR}Blend_My_NFTs Error:\n"
-                f"An issue was found within the Material List of the Variant collection '{variant}'. For more "
-                f"information on Blend_My_NFTs compatible scenes, see:\n{TextColors.RESET}"
-                f"https://github.com/torrinworx/Blend_My_NFTs#blender-file-organization-and-structure\n"
+            log.error(
+                    f"\n{traceback.format_exc()}"
+                    f"\n{TextColors.ERROR}Blend_My_NFTs Error:\n"
+                    f"An issue was found within the Material List of the Variant collection '{variant}'. For more "
+                    f"information on Blend_My_NFTs compatible scenes, see:\n{TextColors.RESET}"
+                    f"https://github.com/torrinworx/Blend_My_NFTs#blender-file-organization-and-structure\n"
             )
+            raise IndexError()
 
     return selected_material[0], material_list
 

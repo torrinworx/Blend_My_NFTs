@@ -26,8 +26,6 @@ from bpy.props import (IntProperty, BoolProperty, CollectionProperty)
 import os
 import sys
 import json
-import logging
-import tempfile
 import importlib
 import traceback
 from typing import Any
@@ -364,42 +362,6 @@ def run_as_headless():
         refactorer.reformat_nft_collection(input)
 
 
-def activate_logging():
-    """
-    Used as an intermediate activated at runtime of the following operators: CreateData, ExportNFTs, ResumeFailedBatch,
-    RefactorBatches, and ExportSettings. Must be independent of 'input' class to be safe, gets variables directly from
-    bpy.
-    """
-
-    log_path = bpy.context.scene.input_tool.log_path
-    if log_path:
-        file_handler = logging.FileHandler(os.path.join(log_path, 'BMNFTs_Log.txt'), 'a')
-    else:
-        file_handler = logging.FileHandler(os.path.join(tempfile.gettempdir(), 'BMNFTs_Log.txt'), 'a')
-
-    formatter = logging.Formatter(
-            '[%(asctime)s] [%(levelname)s] [%(filename)s > %(funcName)s() > Line:%(lineno)d]\n%(message)s\n'
-    )
-    file_handler.setFormatter(formatter)
-
-    log = logging.getLogger()
-    for handler in log.handlers[:]:
-        if isinstance(handler, logging.FileHandler):
-            log.removeHandler(handler)
-        if isinstance(handler, logging.StreamHandler):
-            log.removeHandler(handler)
-    log.addHandler(file_handler)
-
-    # Record log to console:
-    console_handler = logging.StreamHandler(sys.stdout)
-    log.addHandler(console_handler)
-
-    if bpy.context.scene.input_tool.enable_debug:
-        logging.getLogger().setLevel(logging.DEBUG)
-    else:
-        logging.getLogger().setLevel(logging.INFO)
-
-
 # ======== User input Property Group ======== #
 class BMNFTS_PGT_Input_Properties(bpy.types.PropertyGroup):
     # Create NFT Data Panel:
@@ -583,8 +545,8 @@ class BMNFTS_PGT_Input_Properties(bpy.types.PropertyGroup):
 
     enable_debug: bpy.props.BoolProperty(
             name="Enable Debug Mode",
-            description="Allows you to run Blend_My_NFTs with debugging console messages saved to a BMNFTs_Log.txt "
-                        "file."
+            description="Allows you to run Blend_My_NFTs without generating any content files and enables debugging "
+                        "console messages saved to a BMNFTs_Log.txt file."
     )
     log_path: bpy.props.StringProperty(
         name="Debug Log Path",
@@ -619,7 +581,7 @@ class CreateData(bpy.types.Operator):
         name="Reverse Order")
 
     def execute(self, context):
-        activate_logging()
+        helpers.activate_logging()
 
         # Handling Custom Fields UIList input:
         input = get_bmnft_data()
@@ -649,7 +611,7 @@ class ExportNFTs(bpy.types.Operator):
         name="Reverse Order")
 
     def execute(self, context):
-        activate_logging()
+        helpers.activate_logging()
 
         input = get_bmnft_data()
 
@@ -667,7 +629,7 @@ class ResumeFailedBatch(bpy.types.Operator):
     bl_options = {"REGISTER", "UNDO"}
 
     def execute(self, context):
-        activate_logging()
+        helpers.activate_logging()
 
         _save_path = bpy.path.abspath(bpy.context.scene.input_tool.save_path)
         _Blend_My_NFTs_Output, _batch_json_save_path, _nftBatch_save_path = make_directories(_save_path)
@@ -763,7 +725,7 @@ class RefactorBatches(bpy.types.Operator):
         name="Reverse Order")
 
     def execute(self, context):
-        activate_logging()
+        helpers.activate_logging()
 
         refactorer.reformat_nft_collection(get_bmnft_data())
         return {"FINISHED"}
@@ -780,7 +742,7 @@ class ExportSettings(bpy.types.Operator):
     bl_options = {"REGISTER", "UNDO"}
 
     def execute(self, context):
-        activate_logging()
+        helpers.activate_logging()
 
         save_path = bpy.path.abspath(bpy.context.scene.input_tool.save_path)
         filename = "config.cfg"
@@ -1141,8 +1103,6 @@ class BMNFTS_PT_Other(bpy.types.Panel):
         if bpy.context.scene.input_tool.enable_debug:
             row = layout.row()
             row.prop(input_tool_scene, "log_path")
-            row = layout.row()
-            row.prop(input_tool_scene, "enable_dry_run")
         row = layout.row()
 
         row = layout.row()

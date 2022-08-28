@@ -3,9 +3,13 @@
 # dna_generator.py
 
 import random
+import logging
+import traceback
 import collections
 
 from .helpers import TextColors
+
+log = logging.getLogger(__name__)
 
 
 def reconstruct_dna(deconstructed_dna):
@@ -116,22 +120,26 @@ def apply_rules_to_dna(hierarchy, deconstructed_dna, if_dict, result_dict, resul
                         elif not if_zero_bool:
                             variant_num = random.choices(number_list_of_i, weights=rarity_list_of_i, k=1)
                     except IndexError:
-                        raise IndexError(
-                            f"\n{TextColors.ERROR}Blend_My_NFTs Error:\n"
-                            f"An issue was found within the Attribute collection '{a}'. For more information on "
-                            f"Blend_My_NFTs compatible scenes, see:\n{TextColors.RESET}"
-                            f"https://github.com/torrinworx/Blend_My_NFTs#blender-file-organization-and-structure\n"
+                        log.error(
+                                f"\n{traceback.format_exc()}"
+                                f"\n{TextColors.ERROR}Blend_My_NFTs Error:\n"
+                                f"An issue was found within the Attribute collection '{a}'. For more information on "
+                                f"Blend_My_NFTs compatible scenes, see:\n{TextColors.RESET}"
+                                f"https://github.com/torrinworx/Blend_My_NFTs#blender-file-organization-and-structure\n"
                         )
+                        raise IndexError()
                 else:
                     try:
                         variant_num = random.choices(number_list_of_i, k=1)
                     except IndexError:
-                        raise IndexError(
-                            f"\n{TextColors.ERROR}Blend_My_NFTs Error:\n"
-                            f"An issue was found within the Attribute collection '{a}'. For more information on "
-                            f"Blend_My_NFTs compatible scenes, see:\n{TextColors.RESET}"
-                            f"https://github.com/torrinworx/Blend_My_NFTs#blender-file-organization-and-structure\n"
+                        log.error(
+                                f"\n{traceback.format_exc()}"
+                                f"\n{TextColors.ERROR}Blend_My_NFTs Error:\n"
+                                f"An issue was found within the Attribute collection '{a}'. For more information on "
+                                f"Blend_My_NFTs compatible scenes, see:\n{TextColors.RESET}"
+                                f"https://github.com/torrinworx/Blend_My_NFTs#blender-file-organization-and-structure\n"
                         )
+                        raise IndexError()
                 deconstructed_dna[int(attribute_index)] = str(variant_num[0])
 
     return deconstructed_dna
@@ -281,7 +289,7 @@ def logicafy_dna_single(hierarchy, single_dna, logic_file, enable_rarity):
                     result_dict_type,
             )
             if violates_rule:
-                # print(f"======={deconstructed_dna} VIOLATES RULE======")
+                log.debug(f"======={deconstructed_dna} VIOLATES RULE======")
 
                 deconstructed_dna = apply_rules_to_dna(
                     hierarchy,

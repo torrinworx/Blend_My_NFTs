@@ -8,11 +8,15 @@ import ssl
 import time
 import json
 import smtplib
+import logging
 import datetime
 import platform
+import traceback
 
 from .helpers import TextColors, Loader
 from .metadata_templates import create_cardano_metadata, createSolanaMetaData, create_erc721_meta_data
+
+log = logging.getLogger(__name__)
 
 
 # Save info
@@ -145,7 +149,9 @@ def render_and_save_nfts(input):
 
     # If failed Batch is detected and user is resuming its generation:
     if input.fail_state:
-        print(f"{TextColors.ERROR}\nResuming Batch #{input.failed_batch}\n{TextColors.RESET}")
+        log.info(
+                f"{TextColors.OK}\nResuming Batch #{input.failed_batch}{TextColors.RESET}"
+        )
         nfts_in_batch, hierarchy, batch_dna_list = get_batch_data(input.failed_batch, input.batch_json_save_path)
         for a in range(input.failed_dna):
             del batch_dna_list[0]
@@ -153,7 +159,9 @@ def render_and_save_nfts(input):
 
     # If user is generating the normal way:
     else:
-        print(f"\nGenerating Batch #{input.batch_to_generate}\n")
+        log.info(
+                f"{TextColors.OK}\n======== Generating Batch #{input.batch_to_generate} ========{TextColors.RESET}"
+        )
         nfts_in_batch, hierarchy, batch_dna_list = get_batch_data(input.batch_to_generate, input.batch_json_save_path)
         save_generation_state(input)
         x = 1
@@ -259,13 +267,15 @@ def render_and_save_nfts(input):
                     bpy.data.collections[j].hide_render = True
                     bpy.data.collections[j].hide_viewport = True
                 except KeyError:
-                    raise TypeError(
+                    log.error(
+                            f"\n{traceback.format_exc()}"
                             f"\n{TextColors.ERROR}Blend_My_NFTs Error:\n"
                             f"The Collection '{j}' appears to be missing or has been renamed. If you made any changes "
                             f"to your .blend file scene, ensure you re-create your NFT Data so Blend_My_NFTs can read "
                             f"your scene. For more information see:{TextColors.RESET}"
                             f"\nhttps://github.com/torrinworx/Blend_My_NFTs#blender-file-organization-and-structure\n"
                     )
+                    raise TypeError()
 
         dna_dictionary = match_dna_to_variant(single_dna)
         name = input.nft_name + "_" + str(order_num)
@@ -275,14 +285,18 @@ def render_and_save_nfts(input):
         # ob = bpy.data.objects['Text']  # Object name
         # ob.data.body = str(f"DNA: {full_single_dna}")  # Set text of Text Object ob
 
-        print(f"\n{TextColors.OK}======== Generating NFT {x}/{nfts_in_batch}: {name} ========{TextColors.RESET}")
-        print(f"\nVariants selected:")
-        print(f"{dna_dictionary}")
+        log.info(
+                f"\n{TextColors.OK}======== Generating NFT {x}/{nfts_in_batch}: {name} ========{TextColors.RESET}"
+                f"\nVariants selected:"
+                f"\n{dna_dictionary}"
+        )
         if input.enable_materials:
-            print(f"\nMaterials selected:")
-            print(f"{material_dna_dictionary}")
+            log.info(
+                    f"\nMaterials selected:"
+                    f"\n{material_dna_dictionary}"
+            )
 
-        print(f"\nDNA Code:{full_single_dna}")
+        log.info(f"\nDNA Code:{full_single_dna}")
 
         for c in dna_dictionary:
             collection = dna_dictionary[c]
@@ -320,7 +334,7 @@ def render_and_save_nfts(input):
         # Generation/Rendering:
         if input.enable_images:
 
-            print(f"\n{TextColors.OK}-------- Image --------{TextColors.RESET}")
+            log.info(f"\n{TextColors.OK}-------- Image --------{TextColors.RESET}")
 
             image_render_time_start = time.time()
 
@@ -332,7 +346,9 @@ def render_and_save_nfts(input):
 
                 bpy.context.scene.render.filepath = image_path
                 bpy.context.scene.render.image_settings.file_format = input.image_file_format
-                bpy.ops.render.render(write_still=True)
+
+                if not input.enable_debug:
+                    bpy.ops.render.render(write_still=True)
 
             # Loading Animation:
             loading = Loader(f'Rendering Image {x}/{nfts_in_batch}...', '').start()
@@ -341,13 +357,13 @@ def render_and_save_nfts(input):
 
             image_render_time_end = time.time()
 
-            print(
-                    f"{TextColors.OK}Rendered image in {image_render_time_end - image_render_time_start}s."
+            log.info(
+                    f"{TextColors.OK}TIME [Rendered Image]: {image_render_time_end - image_render_time_start}s."
                     f"\n{TextColors.RESET}"
             )
 
         if input.enable_animations:
-            print(f"\n{TextColors.OK}-------- Animation --------{TextColors.RESET}")
+            log.info(f"\n{TextColors.OK}-------- Animation --------{TextColors.RESET}")
 
             animation_render_time_start = time.time()
 
@@ -357,34 +373,35 @@ def render_and_save_nfts(input):
                 if not os.path.exists(animation_folder):
                     os.makedirs(animation_folder)
 
-                if input.animation_file_format == 'MP4':
-                    bpy.context.scene.render.filepath = animation_path
-                    bpy.context.scene.render.image_settings.file_format = "FFMPEG"
+                if not input.enable_debug:
+                    if input.animation_file_format == 'MP4':
+                        bpy.context.scene.render.filepath = animation_path
+                        bpy.context.scene.render.image_settings.file_format = "FFMPEG"
 
-                    bpy.context.scene.render.ffmpeg.format = 'MPEG4'
-                    bpy.context.scene.render.ffmpeg.codec = 'H264'
-                    bpy.ops.render.render(animation=True)
+                        bpy.context.scene.render.ffmpeg.format = 'MPEG4'
+                        bpy.context.scene.render.ffmpeg.codec = 'H264'
+                        bpy.ops.render.render(animation=True)
 
-                elif input.animation_file_format == 'PNG':
-                    if not os.path.exists(animation_path):
-                        os.makedirs(animation_path)
+                    elif input.animation_file_format == 'PNG':
+                        if not os.path.exists(animation_path):
+                            os.makedirs(animation_path)
 
-                    bpy.context.scene.render.filepath = os.path.join(animation_path, name)
-                    bpy.context.scene.render.image_settings.file_format = input.animation_file_format
-                    bpy.ops.render.render(animation=True)
+                        bpy.context.scene.render.filepath = os.path.join(animation_path, name)
+                        bpy.context.scene.render.image_settings.file_format = input.animation_file_format
+                        bpy.ops.render.render(animation=True)
 
-                elif input.animation_file_format == 'TIFF':
-                    if not os.path.exists(animation_path):
-                        os.makedirs(animation_path)
+                    elif input.animation_file_format == 'TIFF':
+                        if not os.path.exists(animation_path):
+                            os.makedirs(animation_path)
 
-                    bpy.context.scene.render.filepath = os.path.join(animation_path, name)
-                    bpy.context.scene.render.image_settings.file_format = input.animation_file_format
-                    bpy.ops.render.render(animation=True)
+                        bpy.context.scene.render.filepath = os.path.join(animation_path, name)
+                        bpy.context.scene.render.image_settings.file_format = input.animation_file_format
+                        bpy.ops.render.render(animation=True)
 
-                else:
-                    bpy.context.scene.render.filepath = animation_path
-                    bpy.context.scene.render.image_settings.file_format = input.animation_file_format
-                    bpy.ops.render.render(animation=True)
+                    else:
+                        bpy.context.scene.render.filepath = animation_path
+                        bpy.context.scene.render.image_settings.file_format = input.animation_file_format
+                        bpy.ops.render.render(animation=True)
 
             # Loading Animation:
             loading = Loader(f'Rendering Animation {x}/{nfts_in_batch}...', '').start()
@@ -393,13 +410,13 @@ def render_and_save_nfts(input):
 
             animation_render_time_end = time.time()
 
-            print(
-                    f"{TextColors.OK}Rendered animation in {animation_render_time_end - animation_render_time_start}s."
-                    f"\n{TextColors.RESET}"
+            log.info(
+                    f"\n{TextColors.OK}TIME [Rendered Animation]: "
+                    f"{animation_render_time_end - animation_render_time_start}s.{TextColors.RESET}"
             )
 
         if input.enable_models:
-            print(f"\n{TextColors.OK}-------- 3D Model --------{TextColors.RESET}")
+            log.info(f"\n{TextColors.OK}-------- 3D Model --------{TextColors.RESET}")
 
             model_generation_time_start = time.time()
 
@@ -424,65 +441,66 @@ def render_and_save_nfts(input):
                 #     if obj.name in remove_objects:
                 #         obj.select_set(False)
 
-                if input.model_file_format == 'GLB':
-                    check_failed_exists(f"{model_path}.glb")
-                    bpy.ops.export_scene.gltf(
-                            filepath=f"{model_path}.glb",
-                            check_existing=True,
-                            export_format='GLB',
-                            export_keep_originals=True,
-                            use_selection=True
-                    )
-                if input.model_file_format == 'GLTF_SEPARATE':
-                    check_failed_exists(f"{model_path}.gltf")
-                    check_failed_exists(f"{model_path}.bin")
-                    bpy.ops.export_scene.gltf(
-                            filepath=f"{model_path}",
-                            check_existing=True,
-                            export_format='GLTF_SEPARATE',
-                            export_keep_originals=True,
-                            use_selection=True
-                    )
-                if input.model_file_format == 'GLTF_EMBEDDED':
-                    check_failed_exists(f"{model_path}.gltf")
-                    bpy.ops.export_scene.gltf(
-                            filepath=f"{model_path}.gltf",
-                            check_existing=True,
-                            export_format='GLTF_EMBEDDED',
-                            export_keep_originals=True,
-                            use_selection=True
-                    )
-                elif input.model_file_format == 'FBX':
-                    check_failed_exists(f"{model_path}.fbx")
-                    bpy.ops.export_scene.fbx(
-                            filepath=f"{model_path}.fbx",
-                            check_existing=True,
-                            use_selection=True
-                    )
-                elif input.model_file_format == 'OBJ':
-                    check_failed_exists(f"{model_path}.obj")
-                    bpy.ops.export_scene.obj(
-                            filepath=f"{model_path}.obj",
-                            check_existing=True,
-                            use_selection=True,
-                    )
-                elif input.model_file_format == 'X3D':
-                    check_failed_exists(f"{model_path}.x3d")
-                    bpy.ops.export_scene.x3d(
-                            filepath=f"{model_path}.x3d",
-                            check_existing=True,
-                            use_selection=True
-                    )
-                elif input.model_file_format == 'STL':
-                    check_failed_exists(f"{model_path}.stl")
-                    bpy.ops.export_mesh.stl(
-                            filepath=f"{model_path}.stl",
-                            check_existing=True,
-                            use_selection=True
-                    )
-                elif input.model_file_format == 'VOX':
-                    check_failed_exists(f"{model_path}.vox")
-                    bpy.ops.export_vox.some_data(filepath=f"{model_path}.vox")
+                if not input.enable_debug:
+                    if input.model_file_format == 'GLB':
+                        check_failed_exists(f"{model_path}.glb")
+                        bpy.ops.export_scene.gltf(
+                                filepath=f"{model_path}.glb",
+                                check_existing=True,
+                                export_format='GLB',
+                                export_keep_originals=True,
+                                use_selection=True
+                        )
+                    if input.model_file_format == 'GLTF_SEPARATE':
+                        check_failed_exists(f"{model_path}.gltf")
+                        check_failed_exists(f"{model_path}.bin")
+                        bpy.ops.export_scene.gltf(
+                                filepath=f"{model_path}",
+                                check_existing=True,
+                                export_format='GLTF_SEPARATE',
+                                export_keep_originals=True,
+                                use_selection=True
+                        )
+                    if input.model_file_format == 'GLTF_EMBEDDED':
+                        check_failed_exists(f"{model_path}.gltf")
+                        bpy.ops.export_scene.gltf(
+                                filepath=f"{model_path}.gltf",
+                                check_existing=True,
+                                export_format='GLTF_EMBEDDED',
+                                export_keep_originals=True,
+                                use_selection=True
+                        )
+                    elif input.model_file_format == 'FBX':
+                        check_failed_exists(f"{model_path}.fbx")
+                        bpy.ops.export_scene.fbx(
+                                filepath=f"{model_path}.fbx",
+                                check_existing=True,
+                                use_selection=True
+                        )
+                    elif input.model_file_format == 'OBJ':
+                        check_failed_exists(f"{model_path}.obj")
+                        bpy.ops.export_scene.obj(
+                                filepath=f"{model_path}.obj",
+                                check_existing=True,
+                                use_selection=True,
+                        )
+                    elif input.model_file_format == 'X3D':
+                        check_failed_exists(f"{model_path}.x3d")
+                        bpy.ops.export_scene.x3d(
+                                filepath=f"{model_path}.x3d",
+                                check_existing=True,
+                                use_selection=True
+                        )
+                    elif input.model_file_format == 'STL':
+                        check_failed_exists(f"{model_path}.stl")
+                        bpy.ops.export_mesh.stl(
+                                filepath=f"{model_path}.stl",
+                                check_existing=True,
+                                use_selection=True
+                        )
+                    elif input.model_file_format == 'VOX':
+                        check_failed_exists(f"{model_path}.vox")
+                        bpy.ops.export_vox.some_data(filepath=f"{model_path}.vox")
 
             # Loading Animation:
             loading = Loader(f'Generating 3D model {x}/{nfts_in_batch}...', '').start()
@@ -491,9 +509,9 @@ def render_and_save_nfts(input):
 
             model_generation_time_end = time.time()
 
-            print(
-                    f"{TextColors.OK}Generated 3D model in {model_generation_time_end - model_generation_time_start}s."
-                    f"\n{TextColors.RESET}"
+            log.info(
+                    f"\n{TextColors.OK}TIME [Generated 3D Model]: "
+                    f"{model_generation_time_end - model_generation_time_start}s.{TextColors.RESET}"
             )
 
         # Generating Metadata:
@@ -561,7 +579,7 @@ def render_and_save_nfts(input):
         with open(os.path.join(bmnft_data_folder, "Data_" + name + ".json"), 'w') as outfile:
             outfile.write(json_meta_data + '\n')
 
-        print(f"Completed {name} render in {time.time() - time_start_2}s")
+        log.info(f"{TextColors.OK}\nTIME [NFT {name} Generated]: {time.time() - time_start_2}s")
 
         save_completed(full_single_dna, a, x, input.batch_json_save_path, input.batch_to_generate)
 
@@ -574,8 +592,11 @@ def render_and_save_nfts(input):
 
     batch_complete_time = time.time() - time_start_1
 
-    print(f"\nAll NFTs successfully generated and sent to {input.nft_batch_save_path}"
-          f"\nCompleted all renders in Batch{input.batch_to_generate}.json in {batch_complete_time}s\n")
+    log.info(
+            f"\nAll NFTs in Batch {input.batch_to_generate} successfully generated and saved at:"
+            f"\n{input.nft_batch_save_path}"
+            f"\nTIME [Batch {input.batch_to_generate} Generated]: {batch_complete_time}s\n"
+    )
 
     batch_info = {"Batch Render Time": batch_complete_time, "Number of NFTs generated in Batch": x - 1,
                   "Average time per generation": batch_complete_time / x - 1}
@@ -630,11 +651,9 @@ def render_and_save_nfts(input):
     # Automatic Shutdown:
     # If user selects automatic shutdown but did not specify time after Batch completion
     def shutdown(time):
-        plateform = platform.system()
-
-        if plateform == "Windows":
+        if platform.system() == "Windows":
             os.system(f"shutdown /s /t {time}")
-        if plateform == "Darwin":
+        if platform.system() == "Darwin":
             os.system(f"shutdown /s /t {time}")
 
     if input.enable_auto_shutdown and not input.specify_time_bool:
