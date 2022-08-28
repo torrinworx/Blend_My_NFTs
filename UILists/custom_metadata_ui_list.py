@@ -11,6 +11,7 @@ from bpy.types import (Operator,
                        PropertyGroup,
                        UIList)
 
+
 # ======== Operators ======== #
 class CUSTOM_OT_custom_metadata_fields_actions(Operator):
     """Move items up and down, add and remove"""
@@ -102,6 +103,7 @@ class CUSTOM_UL_custom_metadata_fields_items(UIList):
 
     def invoke(self, context, event):
         pass
+
 
 # ======== Property Collection ======== #
 class CUSTOM_custom_metadata_fields_objectCollection(PropertyGroup):
