@@ -119,7 +119,10 @@ def apply_materials(hierarchy, single_dna, materials_file, enable_rarity):
                 material_name, material_list, = select_material(materials_file[b]['Material List'], b, enable_rarity)
 
                 # Gets the Order Number of the Material
-                material_order_num = list(material_list.keys()).index(material_name)
+				# We add 1 to the index because 0 is what we return on an invalid lookup. 
+				# If we don't add 1 then when material index 0 is chosen randomly we will not change materials, 
+				# and conversly the last material in the list will never show up
+                material_order_num = (list(material_list.keys()).index(material_name))+1
 
                 deconstructed_material_dna[a] = str(material_order_num)
                 complete = True
