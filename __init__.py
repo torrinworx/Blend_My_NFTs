@@ -353,7 +353,7 @@ def run_as_headless():
         input.batch_json_save_path = args.batch_data_path
 
     if args.resume_failed_batch:
-        _fail_state, _failed_batch, _failed_dna, _failed_dna_index = helpers.check_failed_batches(_batch_json_save_path)
+        _fail_state, _failed_batch, _failed_dna, _failed_dna_index = helpers.check_failed_batches(input.batch_json_save_path)
 
         input.fail_state=_fail_state,
         input.failed_batch=_failed_batch,
