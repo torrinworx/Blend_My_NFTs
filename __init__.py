@@ -355,10 +355,10 @@ def run_as_headless():
     if args.resume_failed_batch:
         _fail_state, _failed_batch, _failed_dna, _failed_dna_index = helpers.check_failed_batches(input.batch_json_save_path)
 
-        input.fail_state=_fail_state,
-        input.failed_batch=_failed_batch,
-        input.failed_dna=_failed_dna,
-        input.failed_dna_index=_failed_dna_index,
+        input.fail_state = _fail_state
+        input.failed_batch = _failed_batch
+        input.failed_dna= _failed_dna
+        input.failed_dna_index = _failed_dna_index
 
     if args.operation == 'create-dna':
         intermediate.send_to_record(input)
