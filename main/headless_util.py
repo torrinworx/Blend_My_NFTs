@@ -67,7 +67,7 @@ def get_python_args():
 
     parser.add_argument("--resume-failed-batch",
                         dest="resume_failed_batch",
-                        type=bool,
+                        action="store_true",
                         required=False,
                         help="Resume failed batch"
                         )
