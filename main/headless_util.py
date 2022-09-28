@@ -65,4 +65,10 @@ def get_python_args():
                         help="Overwrite the logic file path in the config file"
                         )
 
+    parser.add_argument("--resume-failed-batch",
+                        dest="resume_failed_batch",
+                        action="store_true",
+                        required=False,
+                        help="Resume failed batch"
+                        )
     return parser.parse_args(argv), parser

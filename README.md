@@ -727,6 +727,12 @@ There are also additional optional arguments that you can use:
     Use batch data from a separate folder rather than the folder Blend My NFTs uses by default.
     
     `--batch-data`
+      
+  - Try to resume a failed batch
+  
+    Resume a failed batch from where it stopped
+    
+    `--resume-failed-batch`
 
 You can also view this information from your terminal/command line by running:
 
