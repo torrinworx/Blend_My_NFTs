@@ -44,6 +44,8 @@ Reddit: https://www.reddit.com/r/ThisCozyPlace/
 ## Quick Disclaimer
 Blend_My_NFTs works with Blender 3.2.2 on Windows 10 or macOS Big Sur 11.6. Linux is supported, however we haven't had the chance to test and guarantee this functionality. Windows 11 has not been tested as of yet. Any rendering engine works; Cycles, Eevee, and Octane have all been used by the community. This add-on only works in Blender, a Cinima 4D port is being investigated.
 
+If you experience an issue installing a specific version of Blend_My_NFTs, make sure to change the .zip file name, and the name of the folder directly within the .zip file to `Blend_My_NFTs-main`. Otherwise you might get an error while installing.
+
 ## Example Files
 The YouTube tutorials use three different .blend example files. This repository has all three and includes a readme.md file that outlines which videos use which files and by what date: https://github.com/torrinworx/BMNFTs_Examples
 
