@@ -164,6 +164,7 @@ def get_rule_break_type(hierarchy, deconstructed_dna, if_dict, result_dict, resu
     # Check if Variants in 'result_dict' found in deconstructed_dna:
     full_att_bool = False
     result_bool = False  # True if Variant in 'deconstructed_dna' found in 'result_dict'
+    then_bool = False
     for a in result_dict:  # Attribute in 'result_dict'
         for b in result_dict[a]:  # Variant in if_dict[Attribute]
             var_order_num = str(result_dict[a][b][1])  # Order number of 'b' (Variant)
@@ -173,7 +174,9 @@ def get_rule_break_type(hierarchy, deconstructed_dna, if_dict, result_dict, resu
                 if list(result_dict[a].keys()) == list(hierarchy[a].keys()):
                     full_att_bool = True
                 result_bool = True
-                break
+                # break
+            else:
+                then_bool = True
         else:
             continue
         break
@@ -182,7 +185,7 @@ def get_rule_break_type(hierarchy, deconstructed_dna, if_dict, result_dict, resu
     violates_rule = False
 
     # If Variants in 'if_dict' found in deconstructed_dna and Variants in 'result_dict' not found in deconstructed_dna:
-    if if_bool and not result_bool:
+    if if_bool and then_bool:
         violates_rule = True
 
     elif if_bool and result_bool and result_dict_type == "NOT":
