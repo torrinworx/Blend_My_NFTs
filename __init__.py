@@ -1,7 +1,7 @@
 bl_info = {
     "name": "Blend_My_NFTs",
     "author": "Torrin Leonard, This Cozy Studio Inc.",
-    "version": (4, 5, 1),
+    "version": (4, 5, 2),
     "blender": (3, 2, 2),
     "location": "View3D",
     "description": "A free and opensource Blender add-on that enables you to create thousands of unique images, "
@@ -12,8 +12,8 @@ bl_info = {
     "category": "Development",
 }
 
-BMNFTS_VERSION = "v4.5.1"
-LAST_UPDATED = "10:03PM, Aug 27th, 2022"
+BMNFTS_VERSION = "v4.5.2"
+LAST_UPDATED = "10:03PM, Dec 13th, 2022"
 
 # ======== Import handling ======== #
 
