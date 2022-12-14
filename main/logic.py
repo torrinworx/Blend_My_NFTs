@@ -40,7 +40,7 @@ def get_var_info(variant, hierarchy):
 def apply_rules_to_dna(hierarchy, deconstructed_dna, if_dict, result_dict, result_dict_type, enable_rarity):
     # Check if Variants in if_dict are in deconstructed_dna, if so return if_list_selected = True:
     if_list_selected = False
-    for a in deconstructed_dna:
+    for attribute_index, a in enumerate(deconstructed_dna):
         attribute_index = deconstructed_dna.index(a)
         attribute = list(hierarchy.keys())[attribute_index]
 
