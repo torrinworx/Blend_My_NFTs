@@ -41,7 +41,6 @@ def apply_rules_to_dna(hierarchy, deconstructed_dna, if_dict, result_dict, resul
     # Check if Variants in if_dict are in deconstructed_dna, if so return if_list_selected = True:
     if_list_selected = False
     for attribute_index, a in enumerate(deconstructed_dna):
-        attribute_index = deconstructed_dna.index(a)
         attribute = list(hierarchy.keys())[attribute_index]
 
         for b in hierarchy[attribute]:
@@ -53,8 +52,7 @@ def apply_rules_to_dna(hierarchy, deconstructed_dna, if_dict, result_dict, resul
                 if_list_selected = True
 
     # Apply changes in accordance to Variants in 'result_dict' and 'if_list_selected' bool above:
-    for a in deconstructed_dna:
-        attribute_index = deconstructed_dna.index(a)
+    for attribute_index, a in enumerate(deconstructed_dna):
         attribute = list(hierarchy.keys())[attribute_index]
 
         if attribute in result_dict:  # Check if Attribute from DNA is in 'result_dict'
