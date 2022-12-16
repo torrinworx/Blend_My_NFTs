@@ -58,12 +58,7 @@ def apply_rules_to_dna(hierarchy, deconstructed_dna, if_dict, result_dict, resul
         if attribute in result_dict:  # Check if Attribute from DNA is in 'result_dict'
 
             # If 'a' is a full Attribute and Variants in if_dict not selected, set 'a' to empty (0):
-            if list(result_dict[attribute].keys()) == list(hierarchy[attribute].keys()) and not if_list_selected:
-                deconstructed_dna[attribute_index] = "0"
-
-            # If 'a' is a full Attribute and result_dict_type = "NOT", set 'a' to empty (0):
-            if list(result_dict[attribute].keys()) == list(
-                    hierarchy[attribute].keys()) and if_list_selected and result_dict_type == "NOT":
+            if list(result_dict[attribute].keys()) == list(hierarchy[attribute].keys()) and if_list_selected and result_dict_type == "NOT":
                 deconstructed_dna[attribute_index] = "0"
 
     # If Variants in if_dict are selected, set each attribute in 'result_dict' to a random or rarity selected Variant
@@ -84,61 +79,61 @@ def apply_rules_to_dna(hierarchy, deconstructed_dna, if_dict, result_dict, resul
                     for i in var_selected_list:
                         var_selected_list_complete[i] = get_var_info(i, hierarchy)
                     result_dict[a] = var_selected_list_complete
+        else:
+            for a in result_dict:
+                attribute_index = list(hierarchy.keys()).index(a)
+                attribute = list(hierarchy.keys())[attribute_index]
 
-        for a in result_dict:
-            attribute_index = list(hierarchy.keys()).index(a)
-            attribute = list(hierarchy.keys())[attribute_index]
+                variant_list = list(result_dict[a].keys())
 
-            variant_list = list(result_dict[a].keys())
+                if attribute in result_dict:  # Check if Attribute from DNA is in 'then_dict'
 
-            if attribute in result_dict:  # Check if Attribute from DNA is in 'then_dict'
+                    number_list_of_i = []
+                    rarity_list_of_i = []
+                    if_zero_bool = None
+                    variant_num = None
 
-                number_list_of_i = []
-                rarity_list_of_i = []
-                if_zero_bool = None
-                variant_num = None
+                    for b in variant_list:
+                        number = b.split("_")[1]
+                        rarity = b.split("_")[2]
 
-                for b in variant_list:
-                    number = b.split("_")[1]
-                    rarity = b.split("_")[2]
+                        number_list_of_i.append(int(number))
+                        rarity_list_of_i.append(float(rarity))
 
-                    number_list_of_i.append(int(number))
-                    rarity_list_of_i.append(float(rarity))
+                    for b in rarity_list_of_i:
+                        if b == 0:
+                            if_zero_bool = True
+                        elif b != 0:
+                            if_zero_bool = False
 
-                for b in rarity_list_of_i:
-                    if b == 0:
-                        if_zero_bool = True
-                    elif b != 0:
-                        if_zero_bool = False
-
-                if enable_rarity:
-                    try:
-                        if if_zero_bool:
+                    if enable_rarity:
+                        try:
+                            if if_zero_bool:
+                                variant_num = random.choices(number_list_of_i, k=1)
+                            elif not if_zero_bool:
+                                variant_num = random.choices(number_list_of_i, weights=rarity_list_of_i, k=1)
+                        except IndexError:
+                            log.error(
+                                    f"\n{traceback.format_exc()}"
+                                    f"\n{TextColors.ERROR}Blend_My_NFTs Error:\n"
+                                    f"An issue was found within the Attribute collection '{a}'. For more information on "
+                                    f"Blend_My_NFTs compatible scenes, see:\n{TextColors.RESET}"
+                                    f"https://github.com/torrinworx/Blend_My_NFTs#blender-file-organization-and-structure\n"
+                            )
+                            raise IndexError()
+                    else:
+                        try:
                             variant_num = random.choices(number_list_of_i, k=1)
-                        elif not if_zero_bool:
-                            variant_num = random.choices(number_list_of_i, weights=rarity_list_of_i, k=1)
-                    except IndexError:
-                        log.error(
-                                f"\n{traceback.format_exc()}"
-                                f"\n{TextColors.ERROR}Blend_My_NFTs Error:\n"
-                                f"An issue was found within the Attribute collection '{a}'. For more information on "
-                                f"Blend_My_NFTs compatible scenes, see:\n{TextColors.RESET}"
-                                f"https://github.com/torrinworx/Blend_My_NFTs#blender-file-organization-and-structure\n"
-                        )
-                        raise IndexError()
-                else:
-                    try:
-                        variant_num = random.choices(number_list_of_i, k=1)
-                    except IndexError:
-                        log.error(
-                                f"\n{traceback.format_exc()}"
-                                f"\n{TextColors.ERROR}Blend_My_NFTs Error:\n"
-                                f"An issue was found within the Attribute collection '{a}'. For more information on "
-                                f"Blend_My_NFTs compatible scenes, see:\n{TextColors.RESET}"
-                                f"https://github.com/torrinworx/Blend_My_NFTs#blender-file-organization-and-structure\n"
-                        )
-                        raise IndexError()
-                deconstructed_dna[int(attribute_index)] = str(variant_num[0])
+                        except IndexError:
+                            log.error(
+                                    f"\n{traceback.format_exc()}"
+                                    f"\n{TextColors.ERROR}Blend_My_NFTs Error:\n"
+                                    f"An issue was found within the Attribute collection '{a}'. For more information on "
+                                    f"Blend_My_NFTs compatible scenes, see:\n{TextColors.RESET}"
+                                    f"https://github.com/torrinworx/Blend_My_NFTs#blender-file-organization-and-structure\n"
+                            )
+                            raise IndexError()
+                    deconstructed_dna[int(attribute_index)] = str(variant_num[0])
 
     return deconstructed_dna
 
@@ -272,39 +267,87 @@ def logicafy_dna_single(hierarchy, single_dna, logic_file, enable_rarity):
             # Items from 'IF' key for a given rule
             if_dict = create_dicts(hierarchy, logic_file[rule]["IF"], "IF")
 
-            result_dict_type = ""
+            # TODO: This needs to be made more efficient with less repeating code, but it works I guess:
             if "THEN" in logic_file[rule]:
                 result_dict_type = "THEN"
+                result_dict = create_dicts(hierarchy, logic_file[rule][result_dict_type], result_dict_type)
+
+                # Change 'then_bool' to 'result_bool'
+                violates_rule, if_bool, then_bool, full_att_bool = get_rule_break_type(
+                    hierarchy,
+                    deconstructed_dna,
+                    if_dict,
+                    result_dict,
+                    result_dict_type,
+                )
+
+                # Check THEN rule again but swap IF and THEN dicts.
+                if not violates_rule:
+                    violates_rule, if_bool, then_bool, full_att_bool = get_rule_break_type(
+                        hierarchy,
+                        deconstructed_dna,
+                        result_dict,
+                        if_dict,
+                        result_dict_type,
+                    )
+
+                if violates_rule:
+                    log.debug(f"======={deconstructed_dna} VIOLATES RULE======")
+
+                    deconstructed_dna = apply_rules_to_dna(
+                        hierarchy,
+                        deconstructed_dna,
+                        if_dict,
+                        result_dict,
+                        result_dict_type,
+                        enable_rarity
+                    )
+
+                    new_dna = reconstruct_dna(deconstructed_dna)
+                    if new_dna != original_dna:
+                        original_dna = str(new_dna)
+                        did_reconstruct = True
+                        break
 
             if "NOT" in logic_file[rule]:
                 result_dict_type = "NOT"
+                result_dict = create_dicts(hierarchy, logic_file[rule][result_dict_type], result_dict_type)
 
-            result_dict = create_dicts(hierarchy, logic_file[rule][result_dict_type], result_dict_type)
-
-            # Change 'then_bool' to 'result_bool'
-            violates_rule, if_bool, then_bool, full_att_bool = get_rule_break_type(
+                # Change 'then_bool' to 'result_bool'
+                violates_rule, if_bool, then_bool, full_att_bool = get_rule_break_type(
                     hierarchy,
                     deconstructed_dna,
                     if_dict,
                     result_dict,
                     result_dict_type,
-            )
-            if violates_rule:
-                log.debug(f"======={deconstructed_dna} VIOLATES RULE======")
-
-                deconstructed_dna = apply_rules_to_dna(
-                    hierarchy,
-                    deconstructed_dna,
-                    if_dict,
-                    result_dict,
-                    result_dict_type,
-                    enable_rarity
                 )
 
-                new_dna = reconstruct_dna(deconstructed_dna)
-                if new_dna != original_dna:
-                    original_dna = str(new_dna)
-                    did_reconstruct = True
-                    break
+                # Check NOT rule again but swap IF and NOT dicts.
+                if not violates_rule:
+                    violates_rule, if_bool, then_bool, full_att_bool = get_rule_break_type(
+                        hierarchy,
+                        deconstructed_dna,
+                        result_dict,
+                        if_dict,
+                        result_dict_type,
+                    )
+
+                if violates_rule:
+                    log.debug(f"======={deconstructed_dna} VIOLATES RULE======")
+
+                    deconstructed_dna = apply_rules_to_dna(
+                        hierarchy,
+                        deconstructed_dna,
+                        if_dict,
+                        result_dict,
+                        result_dict_type,
+                        enable_rarity
+                    )
+
+                    new_dna = reconstruct_dna(deconstructed_dna)
+                    if new_dna != original_dna:
+                        original_dna = str(new_dna)
+                        did_reconstruct = True
+                        break
 
     return str(reconstruct_dna(deconstructed_dna))
