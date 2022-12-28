@@ -37,29 +37,69 @@ def get_var_info(variant, hierarchy):
     return [name, order_number, rarity_number, attribute, attribute_index]  # list of Var info sent back
 
 
+def logic_rarity(variant_list, enable_rarity, a):
+    number_list_of_i = []
+    rarity_list_of_i = []
+    if_zero_bool = None
+    variant_num = None
+
+    for b in variant_list:
+        number = b.split("_")[1]
+        rarity = b.split("_")[2]
+
+        number_list_of_i.append(int(number))
+        rarity_list_of_i.append(float(rarity))
+
+    for b in rarity_list_of_i:
+        if b == 0:
+            if_zero_bool = True
+        elif b != 0:
+            if_zero_bool = False
+
+    if enable_rarity:
+        try:
+            if if_zero_bool:
+                variant_num = random.choices(number_list_of_i, k=1)
+            elif not if_zero_bool:
+                variant_num = random.choices(number_list_of_i, weights=rarity_list_of_i, k=1)
+        except IndexError:
+            log.error(
+                f"\n{traceback.format_exc()}"
+                f"\n{TextColors.ERROR}Blend_My_NFTs Error:\n"
+                f"An issue was found within the Attribute collection '{a}'. For more information on "
+                f"Blend_My_NFTs compatible scenes, see:\n{TextColors.RESET}"
+                f"https://github.com/torrinworx/Blend_My_NFTs#blender-file-organization-and-structure\n"
+            )
+            raise IndexError()
+    else:
+        try:
+            variant_num = random.choices(number_list_of_i, k=1)
+        except IndexError:
+            log.error(
+                f"\n{traceback.format_exc()}"
+                f"\n{TextColors.ERROR}Blend_My_NFTs Error:\n"
+                f"An issue was found within the Attribute collection '{a}'. For more information on "
+                f"Blend_My_NFTs compatible scenes, see:\n{TextColors.RESET}"
+                f"https://github.com/torrinworx/Blend_My_NFTs#blender-file-organization-and-structure\n"
+            )
+            raise IndexError()
+    return str(variant_num[0])
+
+
 def apply_rules_to_dna(hierarchy, deconstructed_dna, if_dict, result_dict, result_dict_type, enable_rarity):
     # Check if Variants in if_dict are in deconstructed_dna, if so return if_list_selected = True:
-    if_list_selected = False
+    if_list_selected = False  # True if item in the if_dict (items in the IF dictionary of a rule) are selected
     for attribute_index, a in enumerate(deconstructed_dna):
         attribute = list(hierarchy.keys())[attribute_index]
 
         for b in hierarchy[attribute]:
             if hierarchy[attribute][b]["number"] == a:
                 a_dna_var = b
+                continue
 
         if attribute in if_dict:
             if a_dna_var in list(if_dict[attribute].keys()):
                 if_list_selected = True
-
-    # Apply changes in accordance to Variants in 'result_dict' and 'if_list_selected' bool above:
-    for attribute_index, a in enumerate(deconstructed_dna):
-        attribute = list(hierarchy.keys())[attribute_index]
-
-        if attribute in result_dict:  # Check if Attribute from DNA is in 'result_dict'
-
-            # If 'a' is a full Attribute and Variants in if_dict not selected, set 'a' to empty (0):
-            if list(result_dict[attribute].keys()) == list(hierarchy[attribute].keys()) and if_list_selected and result_dict_type == "NOT":
-                deconstructed_dna[attribute_index] = "0"
 
     # If Variants in if_dict are selected, set each attribute in 'result_dict' to a random or rarity selected Variant
     # from 'result_dict[attribute]' variant_list:
@@ -67,19 +107,35 @@ def apply_rules_to_dna(hierarchy, deconstructed_dna, if_dict, result_dict, resul
 
         # Invert 'items_returned' if 'NOT' rule is selected:
         if result_dict_type == "NOT":
-            for a in result_dict:
-                var_selected_list = list(result_dict[a].keys())  # list of variants from 'NOT'
-                att_selected_list = list(hierarchy[a].keys())  # full list of variants from hierarchy attribute
+            for a in result_dict:  # For each Attribute in the NOT rule dictionary
+                attribute_index = list(hierarchy.keys()).index(a)
+                attribute = list(hierarchy.keys())[attribute_index]
+                full_att = list(result_dict[attribute].keys()) == list(
+                    hierarchy[attribute].keys())  # True if full attribute in rules
 
-                # If 'a' is not a full Attribute, invert the variants:
-                if len(var_selected_list) != len(att_selected_list):
+
+                # Not a full Attribute, invert the variants selected so that we get a list
+                # of just variants that can be selected. Because the NOT variants are what we don't want selected:
+                if not full_att:
+                    var_selected_list = list(result_dict[a].keys())  # list of variants from 'NOT'
+                    att_selected_list = list(hierarchy[a].keys())  # full list of variants from hierarchy attribute
+
                     var_selected_list = [i for i in att_selected_list if i not in var_selected_list]
 
                     var_selected_list_complete = {}
                     for i in var_selected_list:
                         var_selected_list_complete[i] = get_var_info(i, hierarchy)
                     result_dict[a] = var_selected_list_complete
-        else:
+
+                    # TODO: Select random or rarity from new result_dict with inverted variants if attribute is not full
+                    variant_list = list(result_dict[a].keys())
+                    deconstructed_dna[int(attribute_index)] = logic_rarity(variant_list, enable_rarity, a)
+
+                # If 'a' is a full Attribute and Variants in if_dict selected, set 'a' to empty (0):
+                if full_att:  # Check if Attribute from DNA is in 'result_dict'
+                    deconstructed_dna[attribute_index] = "0"
+
+        else:  # if result_dict_type == "THEN" basically
             for a in result_dict:
                 attribute_index = list(hierarchy.keys()).index(a)
                 attribute = list(hierarchy.keys())[attribute_index]
@@ -88,52 +144,7 @@ def apply_rules_to_dna(hierarchy, deconstructed_dna, if_dict, result_dict, resul
 
                 if attribute in result_dict:  # Check if Attribute from DNA is in 'then_dict'
 
-                    number_list_of_i = []
-                    rarity_list_of_i = []
-                    if_zero_bool = None
-                    variant_num = None
-
-                    for b in variant_list:
-                        number = b.split("_")[1]
-                        rarity = b.split("_")[2]
-
-                        number_list_of_i.append(int(number))
-                        rarity_list_of_i.append(float(rarity))
-
-                    for b in rarity_list_of_i:
-                        if b == 0:
-                            if_zero_bool = True
-                        elif b != 0:
-                            if_zero_bool = False
-
-                    if enable_rarity:
-                        try:
-                            if if_zero_bool:
-                                variant_num = random.choices(number_list_of_i, k=1)
-                            elif not if_zero_bool:
-                                variant_num = random.choices(number_list_of_i, weights=rarity_list_of_i, k=1)
-                        except IndexError:
-                            log.error(
-                                    f"\n{traceback.format_exc()}"
-                                    f"\n{TextColors.ERROR}Blend_My_NFTs Error:\n"
-                                    f"An issue was found within the Attribute collection '{a}'. For more information on "
-                                    f"Blend_My_NFTs compatible scenes, see:\n{TextColors.RESET}"
-                                    f"https://github.com/torrinworx/Blend_My_NFTs#blender-file-organization-and-structure\n"
-                            )
-                            raise IndexError()
-                    else:
-                        try:
-                            variant_num = random.choices(number_list_of_i, k=1)
-                        except IndexError:
-                            log.error(
-                                    f"\n{traceback.format_exc()}"
-                                    f"\n{TextColors.ERROR}Blend_My_NFTs Error:\n"
-                                    f"An issue was found within the Attribute collection '{a}'. For more information on "
-                                    f"Blend_My_NFTs compatible scenes, see:\n{TextColors.RESET}"
-                                    f"https://github.com/torrinworx/Blend_My_NFTs#blender-file-organization-and-structure\n"
-                            )
-                            raise IndexError()
-                    deconstructed_dna[int(attribute_index)] = str(variant_num[0])
+                    deconstructed_dna[int(attribute_index)] = logic_rarity(variant_list, enable_rarity, a)
 
     return deconstructed_dna
 
