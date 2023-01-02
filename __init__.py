@@ -1,7 +1,7 @@
 bl_info = {
-    "name": "Blend_My_NFTs",
+    "name": "Blend_My_NFTs - BeastHood Version",
     "author": "Torrin Leonard, This Cozy Studio Inc.",
-    "version": (4, 5, 2),
+    "version": (4, 6, 0),
     "blender": (3, 2, 2),
     "location": "View3D",
     "description": "A free and opensource Blender add-on that enables you to create thousands of unique images, "
@@ -12,8 +12,8 @@ bl_info = {
     "category": "Development",
 }
 
-BMNFTS_VERSION = "v4.5.2"
-LAST_UPDATED = "10:03PM, Dec 13th, 2022"
+BMNFTS_VERSION = "v4.6.0"
+LAST_UPDATED = "08:31PM, Jan 1st, 2023"
 
 # ======== Import handling ======== #
 
@@ -167,6 +167,8 @@ class BMNFTData:
 
     enable_dry_run: str
 
+    order_num_offset: int
+
     custom_fields: dict = None
     fail_state: Any = False
     failed_batch: Any = None
@@ -233,6 +235,7 @@ def get_bmnft_data():
         receiver_to=bpy.context.scene.input_tool.receiver_to,
 
         enable_debug=bpy.context.scene.input_tool.enable_debug,
+        order_num_offset=bpy.context.scene.input_tool.order_num_offset,
         log_path=bpy.path.abspath(bpy.context.scene.input_tool.log_path),
 
         enable_dry_run=bpy.context.scene.input_tool.enable_dry_run
@@ -352,14 +355,6 @@ def run_as_headless():
     if args.batch_data_path:
         input.batch_json_save_path = args.batch_data_path
 
-    if args.resume_failed_batch:
-        _fail_state, _failed_batch, _failed_dna, _failed_dna_index = helpers.check_failed_batches(input.batch_json_save_path)
-
-        input.fail_state = _fail_state
-        input.failed_batch = _failed_batch
-        input.failed_dna= _failed_dna
-        input.failed_dna_index = _failed_dna_index
-
     if args.operation == 'create-dna':
         intermediate.send_to_record(input)
 
@@ -377,14 +372,14 @@ class BMNFTS_PGT_Input_Properties(bpy.types.PropertyGroup):
     nft_name: bpy.props.StringProperty(name="NFT Name")
 
     collection_size: bpy.props.IntProperty(
-            name="NFT Collection Size",
-            default=1,
-            min=1
+        name="NFT Collection Size",
+        default=1,
+        min=1
     )  # max=(combinations - offset)
     nfts_per_batch: bpy.props.IntProperty(
-            name="NFTs Per Batch",
-            default=1,
-            min=1
+        name="NFTs Per Batch",
+        default=1,
+        min=1
     )  # max=(combinations - offset)
 
     save_path: bpy.props.StringProperty(
@@ -396,14 +391,14 @@ class BMNFTS_PGT_Input_Properties(bpy.types.PropertyGroup):
     )
 
     enable_rarity: bpy.props.BoolProperty(
-            name="Enable Rarity"
+        name="Enable Rarity"
     )
 
     enable_logic: bpy.props.BoolProperty(
-            name="Enable Logic"
+        name="Enable Logic"
     )
     enable_logic_json: bpy.props.BoolProperty(
-            name="Use Logic.json instead"
+        name="Use Logic.json instead"
     )
     logic_file: bpy.props.StringProperty(
         name="Logic File Path",
@@ -414,7 +409,7 @@ class BMNFTS_PGT_Input_Properties(bpy.types.PropertyGroup):
     )
 
     enable_materials: bpy.props.BoolProperty(
-            name="Enable Materials"
+        name="Enable Materials"
     )
     materials_file: bpy.props.StringProperty(
         name="Materials File",
@@ -426,7 +421,7 @@ class BMNFTS_PGT_Input_Properties(bpy.types.PropertyGroup):
 
     # Generate NFTs Panel:
     image_bool: bpy.props.BoolProperty(
-            name="Image"
+        name="Image"
     )
     image_enum: bpy.props.EnumProperty(
         name="Image File Format",
@@ -438,7 +433,7 @@ class BMNFTS_PGT_Input_Properties(bpy.types.PropertyGroup):
     )
 
     animation_bool: bpy.props.BoolProperty(
-            name="Animation"
+        name="Animation"
     )
     animation_enum: bpy.props.EnumProperty(
         name="Animation File Format",
@@ -454,7 +449,7 @@ class BMNFTS_PGT_Input_Properties(bpy.types.PropertyGroup):
     )
 
     model_bool: bpy.props.BoolProperty(
-            name="3D Model"
+        name="3D Model"
     )
     model_enum: bpy.props.EnumProperty(
         name="3D Model File Format",
@@ -474,35 +469,35 @@ class BMNFTS_PGT_Input_Properties(bpy.types.PropertyGroup):
     )
 
     batch_to_generate: bpy.props.IntProperty(
-            name="Batch To Generate",
-            default=1,
-            min=1
+        name="Batch To Generate",
+        default=1,
+        min=1
     )
 
     # Refactor Batches & Create Metadata Panel:
     cardano_metadata_bool: bpy.props.BoolProperty(
-            name="Cardano Cip"
+        name="Cardano Cip"
     )
     cardano_description: bpy.props.StringProperty(
-            name="Cardano description"
+        name="Cardano description"
     )
 
     solana_metadata_bool: bpy.props.BoolProperty(
-            name="Solana Metaplex"
+        name="Solana Metaplex"
     )
     solana_description: bpy.props.StringProperty(
-            name="Solana description"
+        name="Solana description"
     )
 
     erc721_metadata: bpy.props.BoolProperty(
-            name="ERC721"
+        name="ERC721"
     )
     erc721_description: bpy.props.StringProperty(
-            name="ERC721 description"
+        name="ERC721 description"
     )
 
     enable_custom_fields: bpy.props.BoolProperty(
-            name="Enable Custom Metadata Fields"
+        name="Enable Custom Metadata Fields"
     )
     custom_fields_file: bpy.props.StringProperty(
         name="Custom Fields File",
@@ -514,47 +509,50 @@ class BMNFTS_PGT_Input_Properties(bpy.types.PropertyGroup):
 
     # Other Panel:
     enable_auto_save: bpy.props.BoolProperty(
-            name="Auto Save Before Generation",
-            description="Automatically saves your Blender file when 'Generate NFTs & Create Metadata' button is clicked"
+        name="Auto Save Before Generation",
+        description="Automatically saves your Blender file when 'Generate NFTs & Create Metadata' button is clicked"
     )
 
     enable_auto_shutdown: bpy.props.BoolProperty(
-            name="Auto Shutdown",
-            description="Automatically shuts down your computer after a Batch is finished Generating"
+        name="Auto Shutdown",
+        description="Automatically shuts down your computer after a Batch is finished Generating"
     )
 
     specify_time_bool: bpy.props.BoolProperty(
-            name="Shutdown in a Given Amount of Time",
-            description="Wait a given amount of time after a Batch is generated before Automatic Shutdown"
+        name="Shutdown in a Given Amount of Time",
+        description="Wait a given amount of time after a Batch is generated before Automatic Shutdown"
     )
     hours: bpy.props.IntProperty(
-            default=0, min=0
+        default=0, min=0
     )
     minutes: bpy.props.IntProperty(
-            default=0, min=0
+        default=0, min=0
     )
 
     email_notification_bool: bpy.props.BoolProperty(
-            name="Email Notifications",
-            description="Receive Email Notifications from Blender once a batch is finished generating"
+        name="Email Notifications",
+        description="Receive Email Notifications from Blender once a batch is finished generating"
     )
     sender_from: bpy.props.StringProperty(
-            name="From",
-            default="from@example.com"
+        name="From",
+        default="from@example.com"
     )
     email_password: bpy.props.StringProperty(
-            name="Password",
-            subtype='PASSWORD'
+        name="Password",
+        subtype='PASSWORD'
     )
     receiver_to: bpy.props.StringProperty(
-            name="To",
-            default="to@example.com"
+        name="To",
+        default="to@example.com"
     )
 
     enable_debug: bpy.props.BoolProperty(
-            name="Enable Debug Mode",
-            description="Allows you to run Blend_My_NFTs without generating any content files and enables debugging "
-                        "console messages saved to a BMNFTs_Log.txt file."
+        name="Enable Debug Mode",
+        description="Allows you to run Blend_My_NFTs without generating any content files and enables debugging "
+                    "console messages saved to a BMNFTs_Log.txt file."
+    )
+    order_num_offset: bpy.props.IntProperty(
+        default=0, min=0
     )
     log_path: bpy.props.StringProperty(
         name="Debug Log Path",
@@ -565,14 +563,14 @@ class BMNFTS_PGT_Input_Properties(bpy.types.PropertyGroup):
     )
 
     enable_dry_run: bpy.props.BoolProperty(
-            name="Enable Dry Run",
-            description="Allows you to run Blend_My_NFTs without generating any content files."
+        name="Enable Dry Run",
+        description="Allows you to run Blend_My_NFTs without generating any content files."
     )
 
     # API Panel properties:
     api_key: bpy.props.StringProperty(
-            name="API Key",
-            subtype='PASSWORD'
+        name="API Key",
+        subtype='PASSWORD'
     )  # Test code for future features
 
 
@@ -702,6 +700,7 @@ class ResumeFailedBatch(bpy.types.Operator):
             receiver_to=render_settings["receiver_to"],
 
             enable_debug=render_settings["enable_debug"],
+            order_num_offset=render_settings["order_num_offset"],
             log_path=render_settings["log_path"],
 
             enable_dry_run=render_settings["enable_dry_run"],
@@ -1045,7 +1044,7 @@ class BMNFTS_PT_Other(bpy.types.Panel):
         Other:
         A place to store miscellaneous settings, features, and external links that the user may find useful but doesn't 
         want to get in the way of their work flow.
-        
+
         Export Settings:
         This panel gives the user the option to export all settings from the Blend_My_NFTs addon into a config file. Settings 
         will be read from the config file when running heedlessly.
@@ -1114,6 +1113,9 @@ class BMNFTS_PT_Other(bpy.types.Panel):
         row = layout.row()
 
         row = layout.row()
+        row.prop(input_tool_scene, "order_num_offset")
+
+        row = layout.row()
         layout.label(text=f"Looking for help?")
 
         row = layout.row()
@@ -1122,9 +1124,9 @@ class BMNFTS_PT_Other(bpy.types.Panel):
 
         row = layout.row()
         row.operator(
-                "wm.url_open",
-                text="YouTube Tutorials",
-                icon='URL'
+            "wm.url_open",
+            text="YouTube Tutorials",
+            icon='URL'
         ).url = "https://www.youtube.com/watch?v=ygKJYz4BjRs&list=PLuVvzaanutXcYtWmPVKu2bx83EYNxLRsX"
 
         row = layout.row()
@@ -1137,22 +1139,22 @@ class BMNFTS_PT_Other(bpy.types.Panel):
 
 # ======== Blender add-on register/unregister handling ======== #
 classes = (
-      # Property Group Classes:
-                  BMNFTS_PGT_Input_Properties,
+              # Property Group Classes:
+              BMNFTS_PGT_Input_Properties,
 
-                  # Operator Classes:
-                  CreateData,
-                  ExportNFTs,
-                  ResumeFailedBatch,
-                  RefactorBatches,
-                  ExportSettings,
+              # Operator Classes:
+              CreateData,
+              ExportNFTs,
+              ResumeFailedBatch,
+              RefactorBatches,
+              ExportSettings,
 
-                  # Panel Classes:
-                  BMNFTS_PT_CreateData,
-                  BMNFTS_PT_GenerateNFTs,
-                  BMNFTS_PT_Refactor,
-                  BMNFTS_PT_Other,
-) + custom_metadata_ui_list.classes_Custom_Metadata_UIList + logic_ui_list.classes_Logic_UIList
+              # Panel Classes:
+              BMNFTS_PT_CreateData,
+              BMNFTS_PT_GenerateNFTs,
+              BMNFTS_PT_Refactor,
+              BMNFTS_PT_Other,
+          ) + custom_metadata_ui_list.classes_Custom_Metadata_UIList + logic_ui_list.classes_Logic_UIList
 
 
 def register():
