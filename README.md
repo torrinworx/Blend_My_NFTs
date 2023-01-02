@@ -434,25 +434,45 @@ You can add and remove Rules in this list using the two + and - buttons: <img wi
 
 Each item in the list will have two text fields labled `Item List 1` and `Item List 2` and a drop down menu where you can select the type of rule:
 
-<img width="552" alt="Screen Shot 2022-04-24 at 3 37 03 PM" src="https://user-images.githubusercontent.com/82110564/164993481-335bcc86-1fd1-4a7f-9e82-58c4a4b31642.png">
+![Screenshot 2023-01-01 184011](https://user-images.githubusercontent.com/82110564/210187622-c139346b-fd0c-446f-af71-75cf0b08bd95.png)
 
-The best way to understand how Logic works is to think of it as a sentence, example: ``"Items List 1 Never goes With Items List 2"`` or ``"Items List 1 Only goes With Items List 2"``.
+The best way to understand how Logic works is to think of it as a sentence, example: ``"Items List 1 does NOT go with Items List 2"`` or ``"Items List 1 THEN goes with Items List 2"``.
 
-Both `Item Lists` can contain either multiple Variants or Attributes, however this is limited depending on the type of Rule that is selected (See [Rule Types](#rule-types)). All items in the `Item Lists` are seperated by a comma (`,`), NO SPACES!
+Both `Item Lists` can contain either multiple Variants or Attributes. However, keep in mind that rules containing Attributes drastically reduce the amount of combinations of a given NFT collection. Likewise with rules that contain large amounts of variants of a given Attribute
 
-It's reccomended if you have a large NFT collection to create a Logic.json file so that your Rules are stored safely. See [Logic JSON Schema](#logic-json-schema).
+All items in the `Item Lists` are seperated by a comma (`,`), NO SPACES!
+
+It's reccomended if you have a large NFT collection to create a Logic.json file so that your Rules are stored safely. When using Blender, the settings stored in the Blend_My_NFTs add-on may get lost for various reasons. See [Logic JSON Schema](#logic-json-schema) to learn how to create a Logic.json file.
 
 
 ## Rule Types
 
-There are three rule types:
-- ``Never With`` --> If selected, ``Items List 1`` will never appear if ``Items List 2`` are selected. For each NFT DNA that is generated, either ``Items List 1`` or ``Items List 2`` are randomly selected. That selected ``Items List`` is then acted upon depending on if the items in the list are Attributes or Variants: 
-  - If ``Items List`` contains complete Attribute(s), those Attribute(s) will be set to Empty automatically.
-  - If ``Items List`` contains Variant(s), the other Variants in that Variants Attribute will be randomly or weightedly selected depending on if you have ``Enable Rarity`` selected when you create NFT data.
+There are two rule types you can select:
+- ``THEN`` --> Items (both Attributes and Variants) in ``Items List 1`` will always appear with Items in ``Item List 2``. The THEN rule works forwards and backwords so if an element in either list are detected, the system will select a Variant from all attributes contained in the other list.
  
-- ``Only With`` --> If selected, ``Items List 1`` will only appear if ``Items List 2`` are selected. If ``Items List 1`` contains complete Attribute(s), those Attribute(s) will be set to Empty automatically. Meaning they will not appear if you export images, animations, or 3D models.
+- ``NOT`` --> Items (both Attributes and Variants) in ``Items List 1`` will never appear with Items in ``Item List 2``. The NOT rule works forwards and backwords so if an element in either list are detected, the system will select 
 
-- ``Always With`` --> If selected, ``Items List 1`` will always appear if ``Items List 2`` are selected.``Items List 1`` CANNOT contain complete Attribute(s) and is limited to single Variants. The list can contain multiple Variants, however they must be from seperate Attributes.
+### What Can Item Lists contain?
+Item Lists can contain both Attributes and Variants, there is no limitations to which can be selected for Items List 1 or Items List 2.
+
+### Can Item Lists contain Variants from multiple Attributes?
+Yes. You can mix and match Variants from different Attributes for a given rule. Behind the scenes the Logic system keeps track of which Variants in a given list by sorting them under their parent Attribute, this way if you select a full Attribute, or multiple Variants of the same Attribute the Logic system will be able to apply rules to them.
+
+### How are attributes handled?
+The Logic system handles Attributes in two different ways depending on the Rule type selected:
+  - ``THEN`` --> If a THEN rule states that ``IF <Variant> THEN <Attribute>`` and Variant is selected for a given DNA, a Variant from the Attribute will be selected. However, if the Variant is not selected for a given DNA, the Variants from the stated Attribute will still be selected. THEN rules are more built for situations where you want a given Variant to always appear with another Variant or group of Variants, adding Attributes to this rule is possible, but doesn't really do anything so it's reccommended to keep the THEN rule Attribute-free.
+  - ``NOT`` --> If a NOT rule states that ``IF <Variant> NOT <Attribute>`` and Variant is selected for a given NFT DNA, the Attribute will be given an "Empty" state, and the DNA slot will be set to 0. This will tell Blend_My_NFTs not to render any Varaint within the Attribute stated in the Rule. If instead the rule is ``IF <Attribute> NOT <Attribute>``
+
+### What is the most important thing to understand about Logic?
+Rules now work forwards and backwords, meaning that ``Items List 1`` and ``Items List 2`` are checked twice with each rule, but swapped. This allows for example, the NOT rule to exclude all combinations of two variants, for example if we create a rule ``IF <Variant 1> NOT <Variant 2>`` then Variant 1 will never appear with Variant 2 if either are selected first. This stops all instances of Variants 1 and 2 from appearing with eachother. This was not the case with the old Logic systems, in order to get the same affect you needed two rules, one with first ``IF <Variant 1> NOT <Variant 2>``, then ``IF <Variant 2> NOT <Variant 1>``. This also applies with the THEN rules, for example with the rule ``IF <Variant 1> THEN <Variant 2>``, Variant 2 will always appear with Variant 1, and Variant 1 will always appear with Variant 2.
+
+It's also important to undertsand that the more rules you add to your collection, the less combinations you leave Blend_My_NFTs to generate from. The number of combinations is the total theoretical number of NFTs you could generate with your collection, the more rules you add reduce the number of bossible combinations depending on how they are setup. If the system is not able to find combinations it can get stuck in a never ending loop which can only be stopped by restarting Blender or pressing CTRL + C in the Blender System Console.
+
+### How complicated was it to code the Logic system?
+Very complicated. It took about 4 complete overhauls of building it from the ground up before the current system was built. And even then it took me months of testing to modify and perfect it so that it works the way users expect it to work. I (Torrin Leonard) spent a lot of time creating the Logic system the way I understood it would work, the way a programmer would use it. However this was very problematic as it caused a lot of confusion in our community about how the individual rules actually opperate. The current Logic system is a simple IF THEN and IF NOT model that makes it easy for people to understand and implement their NFT collection. Creating this system tested my sanity and my ability to understand what people want and build it in a way they can use a very complicated system easily. It was a very fullfilling learning experience. I'm also honestly releaved with the state it is in now and want to never look at the logic.py file ever again.
+
+ 
+  - If ``Items List`` contains Variant(s), the other Variants in that Variants Attribute will be randomly or weightedly selected depending on if you have ``Enable Rarity`` selected when you create NFT data.
 
 **Important:** The more rules you add the higher the chance a rule conflict may arise, and you may see Attribute and Variant behaviour that you do not desire.
 
