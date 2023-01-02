@@ -458,6 +458,14 @@ Item Lists can contain both Attributes and Variants, there is no limitations to 
 ### Can Item Lists contain Variants from multiple Attributes?
 Yes. You can mix and match Variants from different Attributes for a given rule. Behind the scenes the Logic system keeps track of which Variants in a given list by sorting them under their parent Attribute, this way if you select a full Attribute, or multiple Variants of the same Attribute the Logic system will be able to apply rules to them.
 
+### Is there a limit to the number of Rules I can create?
+Yes, the limit isn't a solid number however. It depends on the number of combinations in your collection, the number of rules you have, how many Variants and or Attributes those rules encompase, and if you have Rarity/Materials enabled. 
+
+The following makes it easier to understand: Rarity and Logic rules reduce the number of combinations the script can generate, while adding more Variants and Attributes and adding Materials using the Material Randomizer increase the number of combinations the script can generate.
+
+### Can rules conflict with each other?
+Yes, I need to come up with examples, however the new system is far less prone to this issue arising. Just keep the rules simple, straightforward and easy to understand and you should be good. Also keep in mind that the more rules you add the higher the chance a rule conflict may arise, and you may see Attribute and Variant behaviour that you do not desire. (This section needs an example)
+
 ### How are attributes handled?
 The Logic system handles Attributes in two different ways depending on the Rule type selected:
   - ``THEN`` --> If a THEN rule states that ``IF <Variant> THEN <Attribute>`` and Variant is selected for a given DNA, a Variant from the Attribute will be selected. However, if the Variant is not selected for a given DNA, the Variants from the stated Attribute will still be selected. THEN rules are more built for situations where you want a given Variant to always appear with another Variant or group of Variants, adding Attributes to this rule is possible, but doesn't really do anything so it's reccommended to keep the THEN rule Attribute-free.
@@ -471,10 +479,6 @@ It's also important to undertsand that the more rules you add to your collection
 ### How complicated was it to code the Logic system?
 Very complicated. It took about 4 complete overhauls of building it from the ground up before the current system was built. And even then it took me months of testing to modify and perfect it so that it works the way users expect it to work. I (Torrin Leonard) spent a lot of time creating the Logic system the way I understood it would work, the way a programmer would use it. However this was very problematic as it caused a lot of confusion in our community about how the individual rules actually opperate. The current Logic system is a simple IF THEN and IF NOT model that makes it easy for people to understand and implement their NFT collection. Creating this system tested my sanity and my ability to understand what people want and build it in a way they can use a very complicated system easily. It was a very fullfilling learning experience. I'm also honestly releaved with the state it is in now and want to never look at the logic.py file ever again.
 
- 
-  - If ``Items List`` contains Variant(s), the other Variants in that Variants Attribute will be randomly or weightedly selected depending on if you have ``Enable Rarity`` selected when you create NFT data.
-
-**Important:** The more rules you add the higher the chance a rule conflict may arise, and you may see Attribute and Variant behaviour that you do not desire.
 
 ## Logic JSON Schema
 
@@ -489,18 +493,22 @@ If you'd like, copy and paste this template into the JSON file you created above
 {
     "Rule-1":{
         "IF": [
-            "<Variant collection name>"
+            "<Variant or Attribute collection name>",
+            "<Variant or Attribute collection name 2>"
         ],
         "THEN":[
-            "<Attribute or Variant collection name>", "<Attribute or Variant collection name 2>"
+            "<Attribute or Variant collection name>", 
+            "<Attribute or Variant collection name 2>"
         ]
-    }
+    },
     "Rule-2":{
             "IF": [
-                "<Variant collection name>"
+                "<Attribute or Variant collection name>", 
+                "<Attribute or Variant collection name 2>"
             ],
             "NOT":[
-                "<Attribute or Variant collection name>", "<Attribute or Variant collection name 2>"
+                "<Attribute or Variant collection name>", 
+                "<Attribute or Variant collection name 2>"
             ]
         }
 }
@@ -511,8 +519,6 @@ If you'd like, copy and paste this template into the JSON file you created above
 - ``IF`` A single String in a list representing the Variant the rule is based off of.
 - ``THEN`` A list of Attributes or Variants that always appear IF the ``IF`` Variant is selected.
 - ``NOT`` A list of Attributes or Variants that never appear IF the ``IF`` Variant is selected.
-
-* Note: ``NOT`` is not currently stable, it's recommended to only use a Single variant per NOT rule to see consistant results.
 
 
 ## Example Logic.json File
