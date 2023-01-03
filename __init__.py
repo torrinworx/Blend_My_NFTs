@@ -1,5 +1,5 @@
 bl_info = {
-    "name": "Blend_My_NFTs - BeastHood Version",
+    "name": "Blend_My_NFTs",
     "author": "Torrin Leonard, This Cozy Studio Inc.",
     "version": (4, 6, 0),
     "blender": (3, 2, 2),
