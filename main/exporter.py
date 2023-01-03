@@ -171,7 +171,8 @@ def render_and_save_nfts(input):
 
     for a in batch_dna_list:
         full_single_dna = list(a.keys())[0]
-        order_num = a[full_single_dna]['order_num']
+        order_num_offset = input.order_num_offset
+        order_num = a[full_single_dna]['order_num'] + order_num_offset
 
         # Material handling:
         if input.enable_materials:
