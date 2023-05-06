@@ -175,6 +175,14 @@ class BMNFTData:
     failed_dna: Any = None
     failed_dna_index: Any = None
 
+    gifski_path: str = ""
+    gifski_quality: int = 90
+    gifski_fps: int = 24
+    gifski_loop: int = 0
+    gifski_width: int = ""
+    gifski_height: int = ""
+    gifski_delete_frames: bool = True
+
     def __post_init__(self):
         self.custom_fields = {}
 
@@ -238,7 +246,15 @@ def get_bmnft_data():
         order_num_offset=bpy.context.scene.input_tool.order_num_offset,
         log_path=bpy.path.abspath(bpy.context.scene.input_tool.log_path),
 
-        enable_dry_run=bpy.context.scene.input_tool.enable_dry_run
+        enable_dry_run=bpy.context.scene.input_tool.enable_dry_run,
+
+        gifski_path=bpy.context.scene.input_tool.gifski_path,
+        gifski_quality=bpy.context.scene.input_tool.gifski_quality,
+        gifski_fps=bpy.context.scene.input_tool.gifski_fps,
+        gifski_loop=bpy.context.scene.input_tool.gifski_loop,
+        gifski_width=bpy.context.scene.input_tool.gifski_width,
+        gifski_height=bpy.context.scene.input_tool.gifski_height,
+        gifski_delete_frames=bpy.context.scene.input_tool.gifski_delete_frames,
     )
 
     return data
@@ -344,6 +360,14 @@ def run_as_headless():
         settings.enable_materials = pairs[23][1] == 'True'
         settings.materials_file = pairs[24][1]
 
+        settings.gifski_path = pairs[25][1]
+        settings.gifski_quality = pairs[26][1]
+        settings.gifski_fps= pairs[27][1]
+        settings.gifski_loop= pairs[28][1]
+        settings.gifski_width= pairs[29][1]
+        settings.gifski_height= pairs[30][1]
+        settings.gifski_delete_frames = pairs[31][1] == 'True'
+
     if args.save_path:
         settings.save_path = args.save_path
 
@@ -444,8 +468,55 @@ class BMNFTS_PGT_Input_Properties(bpy.types.PropertyGroup):
             ('FFMPEG', '.mkv (FFMPEG)', 'Export NFT as FFMPEG'),
             ('MP4', '.mp4', 'Export NFT as .mp4'),
             ('PNG', '.png', 'Export NFT as PNG'),
-            ('TIFF', '.tiff', 'Export NFT as TIFF')
+            ('TIFF', '.tiff', 'Export NFT as TIFF'),
+            ('GIF', '.gif (GifSki)', 'Export NFT as GIF')
         ]
+    )
+
+    gifski_path: bpy.props.StringProperty(
+        name="Gifski Path",
+        description="Define path to the executable for gifski.",
+        subtype="FILE_PATH",
+        )
+
+    gifski_quality: bpy.props.IntProperty(
+        name="Quality",
+        description="Lower quality may give smaller file [default: 90]",
+        default=90,
+        max=100,
+        min=1,
+        )
+
+    gifski_fps: bpy.props.IntProperty(
+        name="FPS",
+        description="Frame rate of animation. [default: 24]",
+        default=24,
+        max=100,
+        min=1,
+        )
+
+    gifski_width: bpy.props.IntProperty(
+        name="Width",
+        description="Maximum width. by default anims are limited to 800x600",
+        min=1,
+        )
+    
+    gifski_height: bpy.props.IntProperty(
+        name="Height",
+        description="Maximum height. by default anims are limited to 800x600",
+        min=1,
+        )
+    
+    gifski_loop: bpy.props.IntProperty(
+        name="Loop Count",
+        description="Loop x number of times; 0 = loop forever; -1 no loop",
+        default=0,
+        min=-1
+        )
+    
+    gifski_delete_frames: bpy.props.BoolProperty(
+        description="Delete the PNG frames folder after GIF is complete",
+        default=True
     )
 
     model_bool: bpy.props.BoolProperty(
@@ -711,6 +782,14 @@ class ResumeFailedBatch(bpy.types.Operator):
             failed_dna_index=_failed_dna_index,
 
             custom_fields=render_settings["custom_fields"],
+
+            gifski_path=render_settings["gifski_path"],
+            gifski_quality=render_settings["gifski_quality"],
+            gifski_fps=render_settings["gifski_fps"],
+            gifski_loop=render_settings["gifski_loop"],
+            gifski_width=render_settings["gifski_width"],
+            gifski_height=render_settings["gifski_height"],
+            gifski_delete_frames=render_settings["gifski_delete_frames"],
         )
 
         exporter.render_and_save_nfts(input)
@@ -807,6 +886,15 @@ class ExportSettings(bpy.types.Operator):
                 "#Enable Materials\n"
                 f"enable_materials={str(settings.enable_materials)}\n"
                 f"materials_file={settings.materials_file}\n"
+                "\n"
+                "#GifSki Settings\n"
+                f"gifski_path={settings.gifski_path}\n"
+                f"gifski_quality={settings.gifski_quality}\n"
+                f"gifski_fps={settings.gifski_fps}\n"
+                f"gifski_loop={settings.gifski_loop}\n"
+                f"gifski_width={settings.gifski_width}\n"
+                f"gifski_height={settings.gifski_height}\n"
+                f"gifski_delete_frames={str(settings.gifski_delete_frames)}\n"
             )
 
             print(output, file=config)
@@ -919,6 +1007,32 @@ class BMNFTS_PT_GenerateNFTs(bpy.types.Panel):
         row.prop(input_tool_scene, "animation_bool")
         if bpy.context.scene.input_tool.animation_bool:
             row.prop(input_tool_scene, "animation_enum")
+
+            if bpy.context.scene.input_tool.animation_enum == 'GIF':
+                row = layout.row()
+
+                row = layout.row()
+                row.prop(input_tool_scene, "gifski_path", text="GifSki Executable Path")
+
+                row = layout.row()
+                row.prop(input_tool_scene, "gifski_quality", text="Quality")
+
+                row = layout.row()
+                row.prop(input_tool_scene, "gifski_fps", text="FPS")
+
+                row = layout.row()
+                row.prop(input_tool_scene, "gifski_loop", text="Loop")
+
+                row = layout.row()
+                row.prop(input_tool_scene, "gifski_width", text="Width")
+
+                row = layout.row()
+                row.prop(input_tool_scene, "gifski_height", text="Height")
+
+                row = layout.row()
+                row.prop(input_tool_scene, "gifski_delete_frames", text="Cleanup on Completion?")
+                row = layout.row()
+
 
         row = layout.row()
         row.prop(input_tool_scene, "model_bool")

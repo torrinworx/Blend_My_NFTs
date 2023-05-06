@@ -12,6 +12,8 @@ import logging
 import datetime
 import platform
 import traceback
+import subprocess
+import shutil
 
 from .helpers import TextColors, Loader
 from .metadata_templates import create_cardano_metadata, createSolanaMetaData, create_erc721_meta_data
@@ -137,6 +139,48 @@ def get_batch_data(batch_to_generate, batch_json_save_path):
     batch_dna_list = batch["batch_dna_list"]
 
     return nfts_in_batch, hierarchy, batch_dna_list
+
+
+# Convert PNG's into GIF using Gifski
+def pngs_2_gifs(context, abspath, frames_folder):
+    """Convert the PNGs to Animated GIF"""
+
+    o_file = ''.join([abspath])
+    gifski = "gifski"
+    if not context.gifski_path.strip() == "":
+        gifski = bpy.path.abspath(context.gifski_path.strip())
+
+    command = [gifski]
+
+    if context.gifski_quality:
+        command.append("--quality")
+        command.append(str(context.gifski_quality))
+
+    if context.gifski_fps:
+        command.append("--fps")
+        command.append(str(context.gifski_fps))
+
+    if context.gifski_loop:
+        command.append("--repeat")
+        command.append(str(context.gifski_loop)) 
+
+    if context.gifski_width:
+        command.append("-W")
+        command.append(str(context.gifski_width))
+
+    if context.gifski_height:
+        command.append("-H")
+        command.append(str(context.gifski_height))       
+
+    command.append("-o")
+    command.append(o_file)
+
+    # Need to figure out why subprocess hates *.png calls and remove this manual file injection
+    for file in os.listdir(frames_folder):
+        if file.endswith(".png"):
+            command.append(os.path.join(frames_folder, file))
+
+    subprocess.call(command)
 
 
 def render_and_save_nfts(input):
@@ -398,6 +442,22 @@ def render_and_save_nfts(input):
                         bpy.context.scene.render.filepath = os.path.join(animation_path, name)
                         bpy.context.scene.render.image_settings.file_format = input.animation_file_format
                         bpy.ops.render.render(animation=True)
+
+                    elif input.animation_file_format == 'GIF':
+                        if not os.path.exists(animation_path):
+                            os.makedirs(animation_path)
+
+                        bpy.context.scene.render.filepath = os.path.join(animation_path, name)
+                        bpy.context.scene.render.image_settings.file_format = 'PNG'
+                        bpy.ops.render.render(animation=True)
+
+                        i_file = os.path.join(animation_folder, name + '.gif')
+
+                        # Not sure where to store / add the generated image path to?
+                        pngs_2_gifs(input, i_file, animation_path)
+
+                        if input.gifski_delete_frames:
+                            shutil.rmtree(animation_path)
 
                     else:
                         bpy.context.scene.render.filepath = animation_path
