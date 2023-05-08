@@ -14,6 +14,8 @@ import platform
 import traceback
 import subprocess
 import shutil
+from subprocess import run
+from glob import glob
 
 from .helpers import TextColors, Loader
 from .metadata_templates import create_cardano_metadata, createSolanaMetaData, create_erc721_meta_data
@@ -172,15 +174,13 @@ def pngs_2_gifs(context, abspath, frames_folder):
         command.append("-H")
         command.append(str(context.gifski_height))       
 
-    command.append("-o")
-    command.append(o_file)
-
     # Need to figure out why subprocess hates *.png calls and remove this manual file injection
-    for file in os.listdir(frames_folder):
-        if file.endswith(".png"):
-            command.append(os.path.join(frames_folder, file))
-
-    subprocess.call(command)
+    # for file in os.listdir(frames_folder): 
+    #     if file.endswith(".png"):
+    #         command.append(os.path.join(frames_folder, file))
+    # subprocess.call(command)
+    
+    run(' '.join(command) + ' -o "' + o_file + '" "' + frames_folder + '/"*.png')
 
 
 def render_and_save_nfts(input):
