@@ -299,11 +299,17 @@ def render_and_save_nfts(input):
 
         log.info(f"\nDNA Code:{full_single_dna}")
 
+        active_camera = False
         for c in dna_dictionary:
             collection = dna_dictionary[c]
             if collection != '0':
                 bpy.data.collections[collection].hide_render = False
                 bpy.data.collections[collection].hide_viewport = False
+
+                # Detect camera in collection
+                for ob in bpy.data.collections[collection].objects:
+                    if ob.type == 'CAMERA':
+                        active_camera = ob
 
         time_start_2 = time.time()
 
@@ -331,6 +337,10 @@ def render_and_save_nfts(input):
             if input.fail_state:
                 if os.path.exists(file_path):
                     os.remove(file_path)
+
+        # Switching Camera
+        if active_camera:
+            bpy.context.scene.camera = active_camera
 
         # Generation/Rendering:
         if input.enable_images:
