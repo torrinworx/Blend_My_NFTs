@@ -12,7 +12,6 @@ import logging
 import datetime
 import platform
 import traceback
-import subprocess
 import shutil
 from subprocess import run
 from glob import glob
@@ -109,6 +108,15 @@ def save_generation_state(input):
                     "enable_dry_run": input.enable_dry_run,
 
                     "custom_fields": input.custom_fields,
+
+                    "gifski_path": input.gifski_path,
+                    "gifski_quality": input.gifski_quality,
+                    "gifski_fps": input.gifski_fps,
+                    "gifski_loop": input.gifski_loop,
+                    "gifski_width": input.gifski_width,
+                    "gifski_height": input.gifski_height,
+                    "gifski_delete_frames": input.gifski_delete_frames,
+
             },
     })
 
@@ -173,12 +181,6 @@ def pngs_2_gifs(context, abspath, frames_folder):
     if context.gifski_height:
         command.append("-H")
         command.append(str(context.gifski_height))       
-
-    # Need to figure out why subprocess hates *.png calls and remove this manual file injection
-    # for file in os.listdir(frames_folder): 
-    #     if file.endswith(".png"):
-    #         command.append(os.path.join(frames_folder, file))
-    # subprocess.call(command)
     
     run(' '.join(command) + ' -o "' + o_file + '" "' + frames_folder + '/"*.png')
 
