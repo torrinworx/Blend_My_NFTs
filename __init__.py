@@ -261,21 +261,55 @@ def make_directories(save_path):
     return Blend_My_NFTs_Output, batch_json_save_path, nftBatch_save_path
 
 
-def run_as_headless():
+def force_optix_or_cuda():
     """
-    For use when running from the command line.
+    Force OptiX or CUDA. Preferably OptiX
     """
 
-    # force CUDA device usage with cycles renderer
+    # Force Optix device usage with cycles renderer
     cprefs = bpy.context.preferences.addons['cycles'].preferences
+    bpy.context.preferences.addons['cycles'].preferences.compute_device_type = 'OPTIX'
+    bpy.context.preferences.addons['cycles'].preferences.refresh_devices()
+    print(bpy.context.preferences.addons['cycles'].preferences.devices.keys())
+
+    for key in bpy.context.preferences.addons['cycles'].preferences.devices.keys():
+        bpy.context.preferences.addons['cycles'].preferences.devices[key].use = True
+
+    bpy.context.scene.cycles.device = 'GPU'
+
+    if cprefs.get_num_gpu_devices() > 0:
+        print('Using {} OptiX GPUs for rendering!'.format(cprefs.get_num_gpu_devices()))
+        return
+
+    print("no luck with OptiX! let's try CUDA instead!", end="\n")
+
     cprefs.compute_device_type = 'CUDA'
-    cprefs.get_devices()
+    cprefs.refresh_devices()
     print(cprefs.devices.keys())
 
     for key in cprefs.devices.keys():
         cprefs.devices[key].use = True
 
-    print('Using {} devices for rendering!'.format(cprefs.get_num_gpu_devices()))
+    bpy.context.scene.cycles.device = 'GPU'
+
+    if cprefs.get_num_gpu_devices() > 0:
+        print('Using {} CUDA GPUs for rendering!'.format(cprefs.get_num_gpu_devices()))
+        return
+
+
+    print("you're doomed! no CUDA or OptiX GPUs found!", end="\n")
+    bpy.context.scene.render.engine = 'CYCLES'
+    bpy.context.scene.cycles.device = 'CPU'
+    print("enjoy slow CPU ;)", end="\n")
+
+def run_as_headless():
+    """
+    For use when running from the command line.
+    """
+
+    # if user want's the Eevee pass this
+    if bpy.context.scene.render.engine == 'CYCLES':
+        force_optix_or_cuda()
 
     # def dumpSettings(settings):
     #     output = (
