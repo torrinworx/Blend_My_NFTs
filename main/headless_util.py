@@ -57,7 +57,7 @@ def get_python_args():
                         required=False,
                         help="Use pre-existing batch data for rendering"
                         )
-    
+
     parser.add_argument("--logic-file",
                         dest="logic_file",
                         metavar='FILE',
@@ -71,4 +71,12 @@ def get_python_args():
                         required=False,
                         help="Resume failed batch"
                         )
+
+    parser.add_argument("--cycles-device",
+                        dest="cycles-device",
+                        choices=["OPTIX", "CUDA"],
+                        required=False,
+                        help="set cycles device to either OptiX or CUDA"
+                        )
+
     return parser.parse_args(argv), parser
